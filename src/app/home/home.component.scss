@@ -1,0 +1,32 @@
+
+  .card-wrapper {
+    position: relative;
+    .container {
+        position: absolute;
+        top: 20%;
+        color: black;
+        font-size: 34px;
+      }
+  }
+  .homeCard {
+    background: rgba(255,255,255,0.9);
+    box-shadow: none;
+    // position: absolute;
+    background: none;
+  }
+  h2{
+    color: #841618;
+  }
+  p{
+    font-family: 'Saira';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    width: 62%;
+  }
+  .homeBtn{
+    background: #841618;
+    color: #FFF;
+    width: 100px;
+    height: 37px;
+  }

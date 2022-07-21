@@ -7,6 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatCardModule} from '@angular/material/card';
+
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 @NgModule({
@@ -21,7 +24,9 @@ import { AboutComponent } from './about/about.component';
     BrowserAnimationsModule,
     MatTabsModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatDividerModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
