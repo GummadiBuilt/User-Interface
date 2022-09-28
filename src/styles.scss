@@ -1,4 +1,146 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+    margin: 0;
+    height: 100%;
+}
+body { margin: 0; 
+    font-family: 'Saira', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 0.6em;
+    line-height: 19px; }
+
+.mat-sidenav-container  {
+  height: 100vh;
+  font-family: 'Saira', sans-serif;
+   font-style: normal;
+   font-weight: 400;
+   font-size: 0.6em;
+   line-height: 19px;
+}
+ nav.mainContent a:not(:last-child):after {
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 25%;
+    /* right: 6px; */
+    background: #841618;
+    top: 41%;
+    transform: translate(13px, -50%);
+ }
+//  nav a:last-child{
+//      background: #fff;
+//  }
+//  nav a:before {
+//     position: absolute;
+//     content: "";
+//     width: 2px;
+//     height: 60%;
+//     // left: 0;
+//     background: white;
+//     top: 50%;
+//     transform: translate(0, -50%);
+//   }
+.mat-sidenav-container .mat-sidenav {
+  background-color: #FFFFFF;
+  padding: 10px;
+  min-width: 150px;
+}
+
+.mat-sidenav-container .mat-sidenav label {
+  color: #841618;
+  font: 500 20px/32px 'Saira', sans-serif;
+}
+
+.mat-sidenav-container .mat-sidenav nav  {
+  margin-top: 15px;
+}
+
+.mat-sidenav-container .mat-sidenav nav a {
+  display: block;
+  outline: 0px;
+  margin: 5px 0px;
+  text-decoration: none;
+  color: #841618;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+.mat-sidenav-container .mat-sidenav nav a:hover {
+  color: #841618;
+}
+.mat-sidenav-container .mat-sidenav nav a.active {
+  color: #841618;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.mat-sidenav-container .mat-sidenav-content .mat-toolbar {
+  height: 60px;
+  padding: 12px;
+}
+
+.mat-sidenav-container .mat-sidenav-content .mat-toolbar header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mat-sidenav-container .mat-sidenav-content .mat-toolbar header .mat-icon {
+  display: none;
+  cursor: pointer;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.mat-sidenav-container .mat-sidenav-content .mat-toolbar header nav a {
+  color: #841618;
+  padding: 5px 10px;
+  margin-left: 5px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-family: 'Saira', sans-serif;
+  font-weight: 400;
+}
+
+.mat-sidenav-container .mat-sidenav-content .mat-toolbar header nav a:hover {
+  color: #841618;
+}
+.mat-sidenav-container .mat-sidenav-content .mat-toolbar header nav a.active {
+  color: #841618;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 1023px) {
+  .mat-sidenav-container .mat-sidenav-content .mat-toolbar {
+    padding-right: 10px;
+    padding-left: 5px;
+  }  
+  .mat-sidenav-container .mat-sidenav-content .mat-toolbar header .mat-icon {
+    display: block;
+    cursor: pointer;
+  }
+  .mat-sidenav-container .mat-sidenav-content .mat-toolbar header nav {
+    display: none;
+  }
+  .mat-sidenav-container .mat-sidenav-content section {
+    margin: 0 10px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .mat-sidenav-container .mat-sidenav-content .mat-toolbar header {
+    max-width: auto;
+    margin: 0 auto;
+  }
+  .mat-sidenav-container .mat-sidenav-content section {
+    max-width: auto;
+    margin: 0 auto;
+  }
+}
+
+
+
+
+

@@ -1,31 +1,14 @@
- .example-small-box,
- .example-large-box {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   margin: 16px;
-   padding: 16px;
-   border-radius: 8px;
- }
 
- .example-small-box {
-   height: 100px;
-   width: 100px;
- }
-
- .example-large-box {
-   height: 300px;
-   width: 300px;
- }
-
- a:link {
-   text-decoration: none;
- }
-
- a.active {
-   background-color: rgba(0, 0, 0, 0.3);
- }
-
+.login{
+  background: #841618;
+    color: #FFF!important;
+    width: 31px!important;
+    height: 27px!important;
+    font-family: "Saira", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18.89px;
+}
  mat-toolbar {
    position: sticky;
    position: -webkit-sticky;
@@ -37,48 +20,16 @@
    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
    background: #FFF;
  }
-
- .menu {
-   width: 6%;
-   font-family: 'Saira';
-   font-style: normal;
-   font-weight: 400;
-   font-size: 0.7em;
-   line-height: 19px;
-   display: flex;
-   align-items: center;
-   color: #841618;
-   margin: 0 20px 0 20px;
- }
-
- #home {
-   margin-left: 50%;
- }
-
- .divider {
-   height: 20%;
-   border: 1px solid #841618;
- }
-
- .spacer {
-   flex: 1 1 auto;
- }
-
- a.active {
-   background-color: rgba(0, 0, 0, 0.3);
- }
-
- h1 {
-   margin: 0;
- }
-
- h1 .light {
-   font-weight: 100;
- }
-
- /*1280 x 720*/
- @media screen and (max-width: 1280px) and (max-height: 720px) and (min-height:300px) {
-   #home {
-     margin-left: 45%;
-   }
- }
+ .divider-vertical-second-menu{
+  height: 40px;
+  width: 1px;
+  margin: 0 5px;
+  overflow: hidden;
+  border-right: 2px solid #FFF;
+}
+.mat-divider.mat-divider-vertical{
+  height: 30%;
+  width: 0px !important;
+  position: inherit !important;
+  border-right-width: 4px;
+}

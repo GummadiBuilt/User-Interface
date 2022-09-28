@@ -1,13 +1,37 @@
-<mat-toolbar>
-  <img src="../assets/logo.png" alt="image">
-  <a id='home' class="menu" routerLink="/home">Home</a><mat-divider vertical class="divider"></mat-divider>
-  <a class="menu" routerLink="/about">About Us</a><mat-divider vertical class="divider"></mat-divider>
-  <a class="menu" routerLink="/home">Service</a><mat-divider vertical class="divider"></mat-divider>
-  <a class="menu" routerLink="/about">Projects</a><mat-divider vertical class="divider"></mat-divider>
-  <a class="menu" routerLink="/home">Core Values</a><mat-divider vertical class="divider"></mat-divider>
-  <a class="menu" routerLink="/about">Contact Us</a><mat-divider vertical class="divider"></mat-divider>
-  <a class="menu" routerLink="/home">Login</a>
+<mat-sidenav-container>
 
-</mat-toolbar>
+  <mat-sidenav #sidenav mode="over">
+    <img src="../assets/logo.png" alt="image">
+    <hr />
+    <nav>
+      <a routerLink="home" (click)="clickHandler()" routerLinkActive="active">Home</a>
+      <a routerLink="about" (click)="clickHandler()" routerLinkActive="active">About Us</a>
+      <a routerLink="service" (click)="clickHandler()" routerLinkActive="active">Service</a>
+      <a routerLink="projects" (click)="clickHandler()" routerLinkActive="active">Projects</a>
+      <a routerLink="corevalues" (click)="clickHandler()" routerLinkActive="active">Core Values</a>
+      <a routerLink="contact" (click)="clickHandler()" routerLinkActive="active">Contact Us</a>
+      <a routerLink="login" (click)="clickHandler()" routerLinkActive="active">Login</a>
+    </nav>
+  </mat-sidenav>
 
-<router-outlet></router-outlet>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <header>
+        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+        <img src="../assets/logo.png" alt="image">
+        <nav class="mainContent">
+          <a routerLink="home" (click)="clickHandler()" routerLinkActive="active">Home</a>
+          <a routerLink="about" (click)="clickHandler()" routerLinkActive="active">About Us</a>
+          <a routerLink="service" (click)="clickHandler()" routerLinkActive="active">Service</a>
+          <a routerLink="projects" (click)="clickHandler()" routerLinkActive="active">Projects</a>
+          <a routerLink="corevalues" (click)="clickHandler()" routerLinkActive="active">Core Values</a>
+          <a routerLink="contact" (click)="clickHandler()" routerLinkActive="active">Contact Us</a>
+          <a routerLink="login" (click)="clickHandler()" routerLinkActive="active">Login</a>
+        </nav>
+      </header>
+    </mat-toolbar>
+    <section>
+      <router-outlet></router-outlet>
+    </section>
+  </mat-sidenav-content>
+</mat-sidenav-container>

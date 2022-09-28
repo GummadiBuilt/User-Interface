@@ -1,4 +1,8 @@
-
+@font-face {
+  font-family: 'Saira';
+  src: url(/assets/font/Saira/Saira-VariableFont_wdth,wght.ttf) format("truetype");
+  font-weight:300;
+}
   .card-wrapper {
     position: relative;
     .container {
@@ -6,6 +10,7 @@
         top: 20%;
         color: black;
         font-size: 34px;
+        padding: 16px;
       }
   }
   .homeCard {
@@ -18,15 +23,38 @@
     color: #841618;
   }
   p{
-    font-family: 'Saira';
+    font-family: "Saira", sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    width: 62%;
+    font-size: 25px;
+    width: 60%;
+    line-height: 39.35px;
   }
   .homeBtn{
     background: #841618;
     color: #FFF;
     width: 100px;
     height: 37px;
+    font-family: "Saira",sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 31.48px;
   }
+  #headingGummadi{
+    font-size: 50px;
+    font-family:'Saira', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 78.7px;
+   }
+   #background-image{
+    object-fit: cover; /*this makes the image in src fit to the size specified below*/
+    width: 100%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
+    height: 80%;
+   }
+   .mat-card-image:first-child{
+    margin: 0 !important;
+   }
+   .mat-card{
+    padding: 0!important;
+   }

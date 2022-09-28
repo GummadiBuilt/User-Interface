@@ -1,4 +1,5 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild,HostListener } from '@angular/core';
+import {MatSidenav} from '@angular/material/sidenav';
 import { FormControl } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 
@@ -7,7 +8,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'gummadi-constructions';
   //public currentTabIndex = 1 
   currentTabIndex = new FormControl(0);
@@ -25,4 +26,16 @@ onWindowScroll($event) {
   this.currentTabIndex.setValue(this.currentTabIndex.value+1);
   console.log('scroll next', this.currentTabIndex);
 }
+@ViewChild('sidenav') sidenav: MatSidenav;
+
+  opened: boolean;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  clickHandler() {
+    this.sidenav.close();
+  }
 }
