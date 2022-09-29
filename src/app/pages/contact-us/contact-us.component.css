@@ -1,0 +1,25 @@
+.contactus-page {
+    width: 100%;
+    height: 100%;
+}
+
+.large-footer {
+    background-color: #841618;
+    color: white;
+    padding: 80px;
+}
+
+.large-footer h5 {
+    font-size: 14px;
+}
+
+.small-footer {
+    background-color: #545554;
+    color: white;
+}
+
+.maps {
+    width: 32%;
+    height: 100%;
+    background-color: white;
+}

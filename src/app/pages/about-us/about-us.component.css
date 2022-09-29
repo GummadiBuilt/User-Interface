@@ -1,0 +1,89 @@
+.about-us-page {
+    width: 100%;
+    height: 100%;
+    background-image: url('^assets/images/aboutus.png');
+    background-size: 100% 100%;
+}
+
+.about-us-page-body {
+    padding-top: 80px;
+    padding-left: 40px;
+}
+
+.about-us-page h1 {
+    font-family: 'Saira';
+    color: #841618;
+    font-size: 25px;
+    font-weight: 700;
+    padding-bottom: 4px;
+    border-bottom: 3px solid #841618;
+    line-height: 40px;
+    width: 120px;
+}
+
+.about-us-page h5 {
+    font-family: 'Saira';
+    font-size: 16px;
+    font-weight: 300;
+    max-width: 547px;
+    text-align: justify;
+    line-height: 28px;
+}
+
+.about-us-footer {
+    background-color: #841618;
+    height: 94px;
+    margin-top: auto;
+    mix-blend-mode: multiply;
+}
+
+.about-us-bg {
+    position: absolute;
+    background-image: url('^assets/images/aboutus.png');
+    width: 50vw;
+    height: 90vh;
+    background-size: 100% 100%;
+    right: 0;
+    bottom: 0;
+}
+
+.whatwedo-page {
+    width: 100%;
+    height: 100%;
+}
+
+.whatwedo-bg {
+    background-image: url('^assets/images/whatwedo.png');
+    width: 55vw;
+    height: 100%;
+    background-size: 100% 100%;
+    left: 0;
+}
+
+.whatwedo-page h1 {
+    font-family: 'Saira';
+    color: white;
+    font-size: 25px;
+    font-weight: 700;
+    padding-bottom: 4px;
+    border-bottom: 3px solid white;
+    line-height: 40px;
+    width: 160px;
+}
+
+.whatwedo-page h5 {
+    font-family: 'Saira';
+    color: white;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 28px;
+    text-align: justify;
+}
+
+.whatwedo-content {
+    position: absolute;
+    background-color: #841618;
+    padding: 40px;
+    right: 0;
+    width: 50%;
+}

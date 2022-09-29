@@ -1,0 +1,59 @@
+<div class="nav-bar">
+    <mat-toolbar class="mat-elevation-z6">
+        <mat-toolbar-row>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
+                <div fxShow="true" fxHide.gt-sm="true">
+                    <button mat-icon-button (click)="sidenav.toggle()">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+                </div>
+                <a routerLink="home">
+                    <img class="logo" src="assets/images/logo.png">
+                </a>
+            </div>
+
+            <span class="menu-spacer"></span>
+            <div fxShow="true" fxHide.lt-md *ngFor="let link of links; index as i" fxLayoutAlign="center center">
+                <a class="nav-links" mat-button [routerLink]="link"
+                    routerLinkActive="router-link-active">{{titles[i]}}</a>
+                <span class="nav-divider">|</span>
+            </div>
+            <button class="login-button" fxShow="true" fxHide.lt-md *ngIf="!isSignedIn" mat-button routerLink="login">
+                Login
+            </button>
+            <div *ngIf="isSignedIn" class="user-menu" fxLayout="row" fxLayoutAlign="center center">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>account_circle</mat-icon>
+                </button>
+            </div>
+            <mat-menu #menu="matMenu">
+                <div mat-menu-item class="user-image">
+                    <label class="hoverable" for="fileInput">
+                        <img class="avatar" [src]="url ? url : 'https://www.w3schools.com/howto/img_avatar.png'"> 
+                        <div class="hover-text">Choose file</div>
+                        <div class="background"></div>
+                      </label>
+                      <br/>
+                      <input id="fileInput" type='file'>
+                      <!-- <button *ngIf="url" (click)="delete()" >delete</button> -->
+                </div>
+                <a mat-menu-item [routerLink]="['/user-profile']" *ngIf="isSignedIn"> User Profile </a>
+                <a mat-menu-item routerLink="/dashboard" *ngIf="isSignedIn"> Dash Board </a>
+                <a mat-menu-item (click)="signOut()" *ngIf="isSignedIn"> Logout </a>
+            </mat-menu>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-sidenav-container fxFlexFill>
+        <mat-sidenav #sidenav>
+            <mat-nav-list>
+                <a (click)="sidenav.toggle()" mat-list-item>Close <mat-icon>close</mat-icon></a>
+                <a *ngFor="let link of links; index as i" mat-list-item [routerLink]="link">{{titles[i]}}</a>
+                <a mat-list-item routerLink="login">Login</a>
+            </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content fxFlexFill class="sidenav-container">
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

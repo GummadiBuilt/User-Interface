@@ -1,0 +1,35 @@
+<div class="dashboard">
+    <div class="dashboard-body">
+        <div class="fixed-header" fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle class="toggle-tenders" routerLink="tenders" routerLinkActive="router-active">Tenders
+                </mat-button-toggle>
+                <mat-button-toggle routerLink="clients" routerLinkActive="router-active">Clients
+                </mat-button-toggle>
+                <mat-button-toggle class="toggle-contractors" routerLink="contractors"
+                    routerLinkActive="router-active">
+                    Contractors</mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <div fxLayoutAlign="center center">
+                <form class="example-form" fxLayoutGap="12px">
+                    <mat-form-field appearance="outline">
+                        <input type="text" matInput placeholder="Search">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Filter by Status</mat-label>
+                        <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{option.status}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+        <div class="dashboard-content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

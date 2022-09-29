@@ -1,0 +1,35 @@
+.corevalues-page {
+    width: 100%;
+    height: 100%;
+    background-image: url("^assets/images/corevalues-bg.png");
+    background-size: 100% 100%;
+}
+
+.corevalues-body {
+    width: 100vh;
+    min-height: 50vh;
+    border: #841618 1px solid;
+}
+
+.corevalues-content {
+    padding: 40px 40px 40px 40px !important;
+}
+
+.corevalues-page h1 {
+    font-family: 'Saira';
+    color: #841618;
+    font-size: 25px;
+    font-weight: 700;
+    padding-bottom: 4px;
+    border-bottom: 3px solid #841618;
+    line-height: 40px;
+}
+
+.corevalues-page h5 {
+    font-family: 'Saira';
+    color: #841618;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: justify;
+    line-height: 28px;
+}

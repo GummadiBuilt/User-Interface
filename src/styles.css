@@ -1,0 +1,103 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@fontsource/saira";
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.menu-spacer {
+    flex: 1 1 auto;
+}
+
+.sidenav-container {
+    height: calc(100vh - 64px) !important;
+    background-size: 100% 100%;
+}
+
+mat-toolbar {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 1000;
+    height: 64px !important;
+}
+
+.mat-elevation-z6 {
+    box-shadow: 0 3px 5px -1px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
+}
+
+mat-toolbar a {
+    font-size: 12px;
+}
+
+.nav-divider {
+    color: #841618;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.mat-list-item {
+    color: #841618;
+}
+
+a {
+    text-decoration: none;
+    color: #841618;
+    font-size: 12p;
+    font-weight: 500;
+}
+
+.nav-links {
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+}
+
+.logo {
+    height: 44px !important;
+    margin-top: 4px !important;
+    padding-left: 12px !important;
+}
+
+::ng-deep .mat-menu {
+    border-radius: 10px !important;
+    font-size: 12px !important;
+}
+
+.nav-bar .router-link-active {
+    color: white;
+    background: linear-gradient(#e73a3d, #841618);
+}
+
+.login-button {
+    font-size: 14px !important;
+    color: white;
+    background: linear-gradient(#e73a3d, #841618);
+    font-weight: 500;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+}
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0.25em 0 !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 1.34375em !important;
+}
+
+.submit-form a {
+    color: #841618;
+    font-size: 12px;
+    cursor: pointer;
+}

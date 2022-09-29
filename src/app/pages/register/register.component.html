@@ -1,0 +1,124 @@
+<div class="register-form" fxLayoutAlign="center center">
+    <mat-card *ngIf="step == 1" class="form-matcard">
+        <form [formGroup]="companyDetails" fxLayout="column">
+            <h3><span>Company Details</span>
+            </h3>
+            <mat-label>Name</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Company Name" maxlength="15" inputmode="tel" formControlName="company_name"
+                    #nameInput>
+                <mat-error>Company Name is required</mat-error>
+            </mat-form-field>
+            <mat-label>Year of Establishment</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Year of Establishment" formControlName="year_of_establishment">
+                <mat-error>Year of Establishment is required</mat-error>
+            </mat-form-field>
+            <mat-label>Type of Establishment</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Type of Establishment" formControlName="type_of_establishment">
+                <mat-error>Type of Establishment is required</mat-error>
+            </mat-form-field>
+            <mat-label>Address</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Address" formControlName="address">
+                <mat-error>Address is required</mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row" fxLayoutAlign="center">
+                <button name="next" mat-raised-button color="primary">
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <mat-icon>keyboard_arrow_left</mat-icon>
+                        <span (click)="next()">Next</span>
+                        <mat-icon>keyboard_arrow_right</mat-icon>
+                    </div>
+                </button>
+            </div>
+        </form>
+    </mat-card>
+
+    <mat-card *ngIf="step == 2" class="form-matcard">
+        <form [formGroup]="personalDetails" fxLayout="column">
+            <h3><span>Contact Person Information</span>
+            </h3>
+            <mat-label>Name</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Name" maxlength="15" inputmode="tel" formControlName="name" #nameInput>
+                <mat-error>Name is required</mat-error>
+                <mat-error *ngIf="personalDetails.controls['name'].errors?.['minlength']">
+                    Please enter more than 10 character
+                </mat-error>
+            </mat-form-field>
+            <mat-label>Designation</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Designation" formControlName="designation">
+                <mat-error>Designation is required
+                </mat-error>
+            </mat-form-field>
+            <mat-label>Mobile</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Mobile" formControlName="phone">
+                <mat-icon matSuffix>phone</mat-icon>
+                <mat-error *ngIf="personalDetails.controls['phone'].errors?.['required']">Mobile Number is
+                    required
+                </mat-error>
+                <mat-error *ngIf="personalDetails.controls['phone'].errors?.['pattern']">Please enter valid
+                    mobile number
+                </mat-error>
+            </mat-form-field>
+            <mat-label>Email Id</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Email Id" formControlName="email">
+                <mat-icon matSuffix>mail_outline</mat-icon>
+                <mat-error *ngIf="personalDetails.controls['email'].errors?.['required']">Email ID is required
+                </mat-error>
+                <mat-error *ngIf="personalDetails.controls['email'].errors?.['pattern']">Please enter valid
+                    email
+                </mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row" fxLayoutAlign="center">
+                <button name="next" mat-raised-button color="primary">
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <mat-icon><span (click)="previous()">keyboard_arrow_left</span></mat-icon>
+                        <span (click)="next()">Next</span>
+                        <mat-icon><span (click)="next()">keyboard_arrow_right</span></mat-icon>
+                    </div>
+                </button>
+            </div>
+        </form>
+    </mat-card>
+
+    <form class="submit-form" *ngIf="step == 3" [formGroup]="projectDetails" fxLayout="column"
+        fxLayoutAlign="center center">
+        <mat-card class="submit-matcard" fxLayout="column">
+            <h3><span>Regional Head & Project Coordinator</span></h3>
+            <mat-label>Name</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Name" maxlength="15" inputmode="tel" formControlName="name" #nameInput>
+                <mat-error>Name is required</mat-error>
+                <mat-error *ngIf="projectDetails.controls['name'].errors?.['minlength']">
+                    Please enter more than 10 character
+                </mat-error>
+            </mat-form-field>
+            <mat-label>Mobile</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Mobile" formControlName="phone">
+                <mat-icon matSuffix>phone</mat-icon>
+                <mat-error *ngIf="projectDetails.controls['phone'].errors?.['required']">Mobile Number is
+                    required
+                </mat-error>
+                <mat-error *ngIf="projectDetails.controls['phone'].errors?.['pattern']">Please enter valid
+                    mobile number
+                </mat-error>
+            </mat-form-field>
+        </mat-card>
+        <div class="actions-div" fxLayout="row" fxLayoutAlign="space-between">
+            <button (click)="previous()" name="previous" mat-raised-button color="primary">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <button class="submit-button" (click)="submit()" type="submit" name="submit" mat-raised-button
+                color="primary">Create</button>
+        </div>
+    </form>
+</div>

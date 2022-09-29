@@ -1,0 +1,64 @@
+.dashboard {
+    width: 100%;
+    min-height: 100%;
+    /* background-image: url('^assets/images/tendersbg.jpg');
+    background-size: 100% 100%;
+    mix-blend-mode: multiply; */
+    background-color: rgb(231, 231, 231);
+}
+
+.dashboard-body {
+    padding: 24px;
+}
+
+.dashboard-content {
+    padding-top: 12px;
+}
+
+.dashboard-body .mat-button {
+    background-color: #841618;
+    color: white;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0.25em 0 !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 1.34375em !important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 32px !important;
+}
+
+.dashboard-body .router-active {
+    color: #841618;
+    background-color: white;
+}
+
+.dashboard-body mat-button-toggle {
+    color: white;
+    background-color: #841618;
+    width: 120px;
+    border: #841618 1px solid;
+}
+
+.toggle-tenders {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.toggle-contractors {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
