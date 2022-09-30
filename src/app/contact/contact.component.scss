@@ -1,0 +1,42 @@
+.contactus-page {
+    width: 100%;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+}
+
+.contactus-content {
+    height: 60px;
+}
+
+.large-footer {
+    height: calc(100% - 140px);
+    background-color: #841618;
+    color: white;
+    padding: 80px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.contact-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.large-footer h5 {
+    font-size: 14px;
+}
+
+.small-footer {
+    height: 80px;
+    background-color: #545554;
+    color: white;
+}
+
+.maps {
+    width: 300px;
+    height: 200px;
+    background-color: white;
+}

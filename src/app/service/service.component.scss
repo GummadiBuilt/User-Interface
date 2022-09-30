@@ -1,0 +1,119 @@
+@font-face {
+    font-family: 'Saira';
+    src: url(/assets/font/Saira/Saira-VariableFont_wdth,wght.ttf) format("truetype");
+}
+
+.services-page {
+    width: 100%;
+    height: calc(100% - 60px);
+}
+
+.services-page-outline {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 28px;
+    height: calc(100vh - 60px);
+}
+
+.services-footer-bg {
+    background-image: url('^assets/images/servicesfooterbg.png');
+    background-size: 100% 100%;
+}
+
+.services-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: space-between;
+    row-gap: 28px;
+}
+
+.services-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: center;
+    column-gap: 28px;
+    row-gap: 28px;
+}
+
+.matcard-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: space-between;
+    row-gap: 20px;
+}
+
+.footer-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 160px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.services-body h1 {
+    font-family: 'Saira';
+    color: #841618;
+    font-size: 25px;
+    font-weight: 700;
+    padding-top: 24px;
+    padding-bottom: 4px;
+    border-bottom: 3px solid #841618;
+    line-height: 40px;
+    width: 120px;
+    text-align: center;
+}
+
+.services-footer {
+    background-color: #841618;
+    min-height: 140px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.services-matcard {
+    width: 240px;
+    height: 220px;
+    border-radius: 10px;
+    background-color: #F3F3F3;
+}
+
+.services-matcard img {
+    width: 220px;
+    height: 120px;
+}
+
+.services-matcard h3 {
+    font-family: 'Saira';
+    color: #841618;
+    font-weight: 900;
+    text-align: center;
+}
+
+.services-footer h1 {
+    font-family: 'Saira';
+    color: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-weight: 700;
+}
+
+.services-footer h3 {
+    font-family: 'Saira';
+    color: white !important;
+    padding: 0;
+    font-weight: 500;
+}
