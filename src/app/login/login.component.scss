@@ -1,0 +1,70 @@
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0.25em 0 !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 1.34375em !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color:#841618 !important;
+    // opacity: 1!important;
+}
+
+/* login page */
+.login-page {
+    width: 100%;
+    height: 100%;
+    padding-top: 40px !important;
+    background-image: url('^assets/images/loginbg.jpg');
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    column-gap: 12px;
+}
+
+.login-page mat-card {
+    border-radius: 20px;
+    min-width: 300px;
+    max-width: 800px;
+    padding: 40px 60px 40px 60px !important;
+}
+.buttons-row {
+    display: flex;
+    flex-direction: row;
+    row-gap: 12px;
+    column-gap: 12px;
+    justify-content: space-between;
+}
+
+.login-page mat-card h2 {
+    color: #841618;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login-page mat-card mat-label {
+    color: #841618;
+}
+
+.login-page mat-card .mat-raised-button {
+    background-color: #841618;
+    min-width: 42%;
+}
+
+.login-page mat-card .mat-stroked-button {
+    color: #841618;
+    border: #841618 1px solid;
+    min-width: 42%;
+}

@@ -20,6 +20,9 @@ import { ProjectsComponent } from './projects/projects.component';
 import { CorevaluesComponent } from './corevalues/corevalues.component';
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +45,11 @@ import { LoginComponent } from './login/login.component';
     MatCardModule,
     MatSidenavModule,
     MatButtonModule,
-    MatListModule
+    MatListModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
