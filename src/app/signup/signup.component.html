@@ -1,0 +1,111 @@
+<div class="register-form" fxLayoutAlign="center center">
+    <mat-stepper linear #stepper>
+        <mat-step [stepControl]="companyDetails">
+            <form [formGroup]="companyDetails" fxLayout="column">
+                <ng-template matStepLabel>Company Details</ng-template>
+                <mat-label>Name</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Company Name" maxlength="15" inputmode="tel"
+                        formControlName="company_name" #nameInput>
+                    <mat-error *ngIf="companyDetails.controls['company_name'].errors?.['required']">Company Name is
+                        required</mat-error>
+                </mat-form-field>
+                <mat-label>Year of Establishment</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Year of Establishment" formControlName="year_of_establishment">
+                    <mat-error *ngIf="companyDetails.controls['year_of_establishment'].errors?.['required']">Year of
+                        Establishment is required</mat-error>
+                </mat-form-field>
+                <mat-label>Type of Establishment</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Type of Establishment" formControlName="type_of_establishment">
+                    <mat-error *ngIf="companyDetails.controls['type_of_establishment'].errors?.['required']">Type of
+                        Establishment is required</mat-error>
+                </mat-form-field>
+                <mat-label>Address</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Address" formControlName="address">
+                    <mat-error *ngIf="companyDetails.controls['address'].errors?.['required']">Address is required
+                    </mat-error>
+                </mat-form-field>
+                <div fxLayoutAlign="center">
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="personalDetails">
+            <form [formGroup]="personalDetails" fxLayout="column">
+                <ng-template matStepLabel>Contact Person Information</ng-template>
+                <mat-label>Name</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Name" maxlength="15" inputmode="tel" formControlName="name" #nameInput>
+                    <mat-error *ngIf="personalDetails.controls['name'].errors?.['required']">Name is required
+                    </mat-error>
+                    <mat-error *ngIf="personalDetails.controls['name'].errors?.['minlength']">
+                        Please enter more than 10 character
+                    </mat-error>
+                </mat-form-field>
+                <mat-label>Designation</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Designation" formControlName="designation">
+                    <mat-error *ngIf="personalDetails.controls['designation'].errors?.['required']">Designation is
+                        required
+                    </mat-error>
+                </mat-form-field>
+                <mat-label>Mobile</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Mobile" formControlName="phone">
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <mat-error *ngIf="personalDetails.controls['phone'].errors?.['required']">Mobile Number is
+                        required
+                    </mat-error>
+                    <mat-error *ngIf="personalDetails.controls['phone'].errors?.['pattern']">Please enter valid
+                        mobile number
+                    </mat-error>
+                </mat-form-field>
+                <mat-label>Email Id</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Email Id" formControlName="email">
+                    <mat-icon matSuffix>mail_outline</mat-icon>
+                    <mat-error *ngIf="personalDetails.controls['email'].errors?.['required']">Email ID is required
+                    </mat-error>
+                    <mat-error *ngIf="personalDetails.controls['email'].errors?.['pattern']">Please enter valid
+                        email
+                    </mat-error>
+                </mat-form-field>
+                <div fxLayout="row" fxLayoutAlign="space-evenly">
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <form [formGroup]="projectDetails" fxLayout="column">
+                <ng-template matStepLabel>Regional Head & Project Coordinator</ng-template>
+                <mat-label>Name</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Name" maxlength="15" inputmode="tel" formControlName="name" #nameInput>
+                    <mat-error>Name is required</mat-error>
+                    <mat-error *ngIf="projectDetails.controls['name'].errors?.['minlength']">
+                        Please enter more than 10 character
+                    </mat-error>
+                </mat-form-field>
+                <mat-label>Mobile</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Mobile" formControlName="phone">
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <mat-error *ngIf="projectDetails.controls['phone'].errors?.['required']">Mobile Number is
+                        required
+                    </mat-error>
+                    <mat-error *ngIf="projectDetails.controls['phone'].errors?.['pattern']">Please enter valid
+                        mobile number
+                    </mat-error>
+                </mat-form-field>
+                <div fxLayout="row" fxLayoutAlign="space-evenly">
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button type="submit">Submit</button>
+                </div>
+            </form>
+        </mat-step>
+    </mat-stepper>
+</div>

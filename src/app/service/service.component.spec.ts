@@ -11,9 +11,7 @@ describe('ServiceComponent', () => {
       declarations: [ ServiceComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ServiceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
