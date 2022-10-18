@@ -23,15 +23,18 @@
 
 .services-footer {
     background-color: #841618;
-    height: 140px;
+    min-height: 140px;
     /* mix-blend-mode: multiply; */
     opacity: 0.7;
 }
 .services-footer-bg {
-    height: 140px;
+    min-height: 140px;
     margin-top: auto;
     background-image: url('^assets/images/servicesfooterbg.png');
-    background-size: 100%;
+    // background-size: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .services-matcard {

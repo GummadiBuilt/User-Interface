@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,10 @@ export class AppComponent {
   links = ['home', 'about', 'service', 'projects', 'corevalues', 'contact'];
   titles = ['Home', 'About Us', 'Service', 'Projects', 'Core Values', 'Contact Us'];
   activeLink = this.links[0];
+
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+  opened!: boolean;
+  clickHandler() {
+    this.sidenav.close();
+  }
 }

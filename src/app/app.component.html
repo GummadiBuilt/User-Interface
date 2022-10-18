@@ -26,9 +26,9 @@
   <mat-sidenav-container fxFlexFill>
     <mat-sidenav #sidenav>
       <mat-nav-list>
-        <a (click)="sidenav.toggle()" mat-list-item>Close <mat-icon>close</mat-icon></a>
-        <a *ngFor="let link of links; index as i" mat-list-item [routerLink]="link">{{titles[i]}}</a>
-        <a mat-list-item routerLink="login">Login</a>
+        <!-- <a (click)="sidenav.toggle()" mat-list-item>Close <mat-icon>close</mat-icon></a> -->
+        <a (click)="clickHandler()" class="nav-links" *ngFor="let link of links; index as i" mat-list-item [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
+        <a (click)="clickHandler()" class="login-button" mat-list-item routerLink="login">Login</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content fxFlexFill class="sidenav-container">
