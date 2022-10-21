@@ -7,7 +7,7 @@
             <mat-icon>menu</mat-icon>
           </button>
         </div>
-        <a routerLink="home">
+        <a routerLink="home" fxShow="true" fxHide.lt-md>
           <img class="logo" src="assets/images/logo.png">
         </a>
       </div>
@@ -20,6 +20,9 @@
       <button class="login-button" fxShow="true" fxHide.lt-md mat-button routerLink="login">
         Login
       </button>
+      <a routerLink="home" fxShow="true" fxHide.gt-sm="true">
+        <img class="logo" src="assets/images/logo.png">
+      </a>
     </mat-toolbar-row>
   </mat-toolbar>
 

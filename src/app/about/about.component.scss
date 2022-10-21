@@ -9,7 +9,9 @@
     background-image: url('^assets/images/aboutus.png');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center center;
+    // background-position: center center;
+    background-attachment: fixed;
+    background-position: top 64px;
 }
 
 @media screen and (max-width: 600px) {
@@ -45,21 +47,31 @@
     line-height: 28px;
 }
 
+// @media screen and (min-width: 2160px) {
+//     .about-us-page-body {
+//         padding-top: 180px;
+//         padding-left: 140px;
+//         padding-right: 140px;
+//         padding-bottom: 140px;
+//     }
+//     .about-us-page h1 {
+//         font-size: 100px !important;
+//         width: 12% !important;
+//         line-height: 100px;
+//     }
+//     .about-us-page h5 {
+//         font-size: 62px !important;
+//         width: 50% !important;
+//         line-height: 100px;
+//         max-width: 60%;
+//     }
+// }
+
 .about-us-footer {
     background-color: #841618;
     height: 94px;
     margin-top: auto;
     mix-blend-mode: multiply;
-}
-
-.about-us-bg {
-    position: absolute;
-    background-image: url('^assets/images/aboutus.png');
-    width: 50vw;
-    height: 90vh;
-    background-size: 100% 100%;
-    right: 0;
-    bottom: 0;
 }
 
 .whatwedo-page {
