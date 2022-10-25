@@ -7,7 +7,10 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { StepperOrientation } from '@angular/material/stepper';
 import { map, Observable, startWith } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
+export interface State {
+  flag: string;
+  name: string;
+}
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -23,25 +26,77 @@ export class SignupComponent implements OnInit {
   companyDetails!: FormGroup;
   personalDetails!: FormGroup;
   projectDetails!: FormGroup;
-  // typeOfEstablishmentsList: string[] = ['Private Limited Company', 'Public Limited Company', 'Partnership',
-  //   'Limited Liability Partnership', 'One Person Company'];
+  address!: FormGroup;
 
-  myControl = new FormControl('');
-  states: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
+  stateCtrl = new FormControl('');
+  states: State[] = [
+    {
+      name: 'Arkansas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arkansas.svg',
+    },
+    {
+      name: 'California',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg',
+    },
+    {
+      name: 'Florida',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Florida.svg',
+    },
+    {
+      name: 'Texas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Texas.svg',
+    },
+    {
+      name: 'Arkansas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arkansas.svg',
+    },
+    {
+      name: 'California',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg',
+    },
+    {
+      name: 'Florida',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Florida.svg',
+    },
+    {
+      name: 'Texas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Texas.svg',
+    },
+    {
+      name: 'Arkansas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arkansas.svg',
+    },
+    {
+      name: 'California',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg',
+    },
+    {
+      name: 'Florida',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Florida.svg',
+    },
+    {
+      name: 'Texas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Texas.svg',
+    },
+    {
+      name: 'Arkansas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Arkansas.svg',
+    },
+    {
+      name: 'California',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg',
+    },
+    {
+      name: 'Florida',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Florida.svg',
+    },
+    {
+      name: 'Texas',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Flag_of_Texas.svg',
+    }
   ];
-  filteredStates!: Observable<string[]>;
+  filteredStates!: Observable<State[]>;
 
-
-  countries: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-  ];
   typeOfEstablishmentList: string[] = [
     'Civil',
     'Electrical',
@@ -59,28 +114,26 @@ export class SignupComponent implements OnInit {
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
     // Add our typeOfEstablishment
     if (value) {
       this.typeOfEstablishments.push(value);
     }
-
     // Clear the input value
     event.chipInput!.clear();
-
     this.typeOfEstablishmentCtrl.setValue(null);
   }
 
   remove(typeOfEstablishment: string): void {
     const index = this.typeOfEstablishments.indexOf(typeOfEstablishment);
-
     if (index >= 0) {
       this.typeOfEstablishments.splice(index, 1);
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.typeOfEstablishments.push(event.option.viewValue);
+    if (!this.typeOfEstablishments.includes(event.option.viewValue)) {
+      this.typeOfEstablishments.push(event.option.viewValue);
+    }
     this.typeOfEstablishmentInput.nativeElement.value = '';
     this.typeOfEstablishmentCtrl.setValue(null);
   }
@@ -89,8 +142,6 @@ export class SignupComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.allTypeOfEstablishments.filter(typeOfEstablishment => typeOfEstablishment.toLowerCase().includes(filterValue));
   }
-
-
 
   stepperOrientation!: Observable<StepperOrientation>;
   constructor(private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver) {
@@ -103,38 +154,45 @@ export class SignupComponent implements OnInit {
       startWith(null),
       map((typeOfEstablishment: string | null) => (typeOfEstablishment ? this._filter(typeOfEstablishment) : this.allTypeOfEstablishments.slice())),
     );
+
+    //states
+    this.filteredStates = this.stateCtrl.valueChanges.pipe(
+      startWith(''),
+      map(state => (state ? this._filterStates(state) : this.states.slice())),
+    );
   }
 
   ngOnInit(): void {
     this.companyDetails = this._formBuilder.group({
       users: ['', Validators.required],
-      company_name: ['', [Validators.required, Validators.maxLength(20)]],
-      year_of_establishment: ['', Validators.required],
+      company_name: ['', [Validators.required, Validators.maxLength(50)]],
+      year_of_establishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
+      Validators.minLength(4), Validators.maxLength(4)]],
       type_of_establishment: ['', Validators.required],
-      address: ['', [Validators.required, Validators.maxLength(200)]],
+      // address: ['', Validators.required],
+      address: this._formBuilder.group({
+        address: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        country: ['', Validators.required]
+      }),
     });
     this.personalDetails = this._formBuilder.group({
       name: ['', Validators.required],
       designation: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
+      phone: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
     });
     this.projectDetails = this._formBuilder.group({
       name: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"),
+      phone: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
     });
-
-    //states
-    this.filteredStates = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(valueState => this._filteredStates(valueState || '')),
-    );
   }
   //state
-  private _filteredStates(valueState: string): string[] {
+  private _filterStates(valueState: string): State[] {
     const filterState = valueState.toLowerCase();
-    return this.states.filter(state => state.toLowerCase().includes(filterState));
+    return this.states.filter(state => state.name.toLowerCase().includes(filterState));
   }
 }

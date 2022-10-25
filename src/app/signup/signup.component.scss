@@ -69,3 +69,22 @@ form mat-label {
 ::ng-deep .mat-primary .mat-pseudo-checkbox-checked {
     background: #841618 !important;
 }
+
+.action-btn {
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+::ng-deep .arrow-icons {
+    font-size: 22px !important;
+}
+
+.example-option-img {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+[dir='rtl'] .example-option-img {
+    margin-right: 0;
+    margin-left: 8px;
+}
