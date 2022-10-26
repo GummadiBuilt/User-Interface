@@ -4,7 +4,7 @@
             <mat-step [stepControl]="companyDetails" errorMessage="Fill required company details.">
                 <form [formGroup]="companyDetails">
                     <ng-template matStepLabel>Company Details</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Registering as</mat-label>
@@ -14,7 +14,7 @@
                                     <mat-option value="client">Client</mat-option>
                                     <mat-option value="customer">Customer</mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="companyDetails.controls['users'].errors?.['required']">You must
+                                <mat-error *ngIf="companyDetails.get('users')?.errors?.['required']">You must
                                     make a selection
                                 </mat-error>
                             </mat-form-field>
@@ -23,10 +23,12 @@
                             fxLayout="column">
                             <mat-label>Name</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Company Name" maxlength="15" inputmode="tel"
+                                <input matInput placeholder="Company Name" minlength="3" maxlength="50" inputmode="tel"
                                     formControlName="company_name" #nameInput>
-                                <mat-error *ngIf="companyDetails.controls['company_name'].errors?.['required']">
-                                    Company Name is required</mat-error>
+                                <mat-error *ngIf="companyDetails.get('company_name')?.errors?.['required']">Company Name
+                                    is required</mat-error>
+                                <mat-error *ngIf="companyDetails.get('company_name')?.errors?.['minlength']">Name should
+                                    be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
@@ -35,18 +37,13 @@
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Year of Establishment"
                                     formControlName="year_of_establishment">
-                                <mat-hint>Year must be 4 digits</mat-hint>
-                                <mat-error
-                                    *ngIf="companyDetails.controls['year_of_establishment'].errors?.['required']">
+                                <mat-error *ngIf="companyDetails.get('year_of_establishment')?.errors?.['required']">
                                     Year of Establishment is required</mat-error>
-                                <mat-error *ngIf="companyDetails.controls['year_of_establishment'].errors?.['pattern']">
+                                <mat-error *ngIf="companyDetails.get('year_of_establishment')?.errors?.['pattern']">
                                     Please enter valid year</mat-error>
                                 <mat-error
-                                    *ngIf="companyDetails.controls['year_of_establishment'].errors?.['minlength']">
-                                    Year must be atleast 4 digits</mat-error>
-                                <mat-error
-                                    *ngIf="companyDetails.controls['year_of_establishment'].errors?.['maxlength']">
-                                    Year must be atleast 4 digits</mat-error>
+                                    *ngIf="(companyDetails.get('year_of_establishment')?.errors?.['minlength'] || companyDetails.get('year_of_establishment')?.errors?.['maxlength']) && !companyDetails.controls['year_of_establishment'].errors?.['pattern']">
+                                    Year must be 4 digits</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
@@ -73,58 +70,59 @@
                                         {{typeOfEstablishment}}
                                     </mat-option>
                                 </mat-autocomplete>
+                                <!-- <mat-error *ngIf="companyDetails.get('type_of_establishment')?.errors?.['required']">
+                                    Atleast 1 type should be selected
+                                </mat-error> -->
                             </mat-form-field>
                         </div>
-                        <div formGroupName="address" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
+                        <div formGroupName="addressGroup" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
+                            fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>Address</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Address" formControlName="address">
-                                <mat-error *ngIf="companyDetails.controls['address'].errors?.['required']">Address
-                                    is required
+                                <mat-error *ngIf="companyDetails.get('addressGroup.address')?.errors?.['required']">
+                                    Address is required
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="address" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
+                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column" fxLayoutGap="2px">
                             <mat-label>Country</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input aria-label="State" matInput [matAutocomplete]="autoCountry"
-                                    [formControl]="stateCtrl" formControlName="country">
-                                <mat-autocomplete #autoCountry="matAutocomplete">
-                                    <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
-                                        <img class="example-option-img" aria-hidden [src]="state.flag" height="20">
-                                        {{state.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
+                            <p-dropdown appendTo="body" [options]="countries" optionLabel="name" [filter]="true" filterBy="name"
+                                [showClear]="true" placeholder="Select a Country" formControlName="country"
+                                optionValue="code">
+                                <ng-template let-country pTemplate="item">
+                                    <div class="country-item">
+                                        <div>{{ country.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
                         </div>
-                        <div formGroupName="address" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
+                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
+                            fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column" fxLayoutGap="2px">
                             <mat-label>State</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input aria-label="State" matInput [matAutocomplete]="autoState"
-                                    [formControl]="stateCtrl" formControlName="state">
-                                <mat-autocomplete #autoState="matAutocomplete">
-                                    <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
-                                        <img class="example-option-img" aria-hidden [src]="state.flag" height="20">
-                                        {{state.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
+                            <p-dropdown appendTo="body" [options]="states" optionLabel="name" [filter]="true" filterBy="name"
+                                [showClear]="true" placeholder="Select a State" formControlName="state"
+                                optionValue="code">
+                                <ng-template let-state pTemplate="item">
+                                    <div class="state-item">
+                                        <div>{{ state.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
                         </div>
-                        <div formGroupName="address" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
+                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
+                            fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column" fxLayoutGap="2px">
                             <mat-label>City</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input aria-label="State" matInput [matAutocomplete]="autoCity"
-                                    [formControl]="stateCtrl" formControlName="city">
-                                <mat-autocomplete #autoCity="matAutocomplete">
-                                    <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
-                                        {{state.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
+                            <p-dropdown appendTo="body" [options]="cities" optionLabel="name" [filter]="true" filterBy="name"
+                                [showClear]="true" placeholder="Select a City" formControlName="city"
+                                optionValue="code">
+                                <ng-template let-city pTemplate="item">
+                                    <div class="city-item">
+                                        <div>{{ city.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
                         </div>
                     </div>
                     <div class="action-btn" fxLayoutAlign="end">
@@ -140,19 +138,18 @@
             <mat-step [stepControl]="personalDetails" errorMessage="Fill required contact details.">
                 <form [formGroup]="personalDetails">
                     <ng-template matStepLabel>Contact Person Information</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Name</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name" maxlength="15" inputmode="tel" formControlName="name"
+                                <input matInput placeholder="Name" minlength="3" inputmode="tel" formControlName="name"
                                     #nameInput>
                                 <mat-error *ngIf="personalDetails.controls['name'].errors?.['required']">Name is
                                     required
                                 </mat-error>
-                                <mat-error *ngIf="personalDetails.controls['name'].errors?.['minlength']">
-                                    Please enter more than 10 character
-                                </mat-error>
+                                <mat-error *ngIf="personalDetails.get('name')?.errors?.['minlength']">Name should
+                                    be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
@@ -213,17 +210,17 @@
             <mat-step [stepControl]="projectDetails" errorMessage="Fill required project details.">
                 <form [formGroup]="projectDetails">
                     <ng-template matStepLabel>Regional Head & Project Coordinator</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Name</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name" maxlength="15" inputmode="tel" formControlName="name"
-                                    #nameInput>
+                                <input matInput placeholder="Name" minlength="3" maxlength="50" inputmode="tel"
+                                    formControlName="name" #nameInput>
                                 <mat-error>Name is required</mat-error>
-                                <mat-error *ngIf="projectDetails.controls['name'].errors?.['minlength']">
-                                    Please enter more than 10 character
-                                </mat-error>
+                                <!-- <mat-error *ngIf="projectDetails.controls['name'].errors?.['minlength']">
+                                    Name should be 3 character.
+                                </mat-error> -->
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"

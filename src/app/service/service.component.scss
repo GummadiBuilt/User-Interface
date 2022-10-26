@@ -9,6 +9,10 @@
     padding-top: 24px;
 }
 
+.services-body {
+    padding-bottom: 20px;
+}
+
 .services-body h1 {
     font-family: "Saira", sans-serif;
     color: #841618;
@@ -23,12 +27,13 @@
 
 .services-footer {
     background-color: #841618;
-    min-height: 140px;
+    min-height: 120px;
     /* mix-blend-mode: multiply; */
     opacity: 0.7;
 }
+
 .services-footer-bg {
-    min-height: 140px;
+    min-height: 120px;
     margin-top: auto;
     background-image: url('^assets/images/servicesfooterbg.png');
     // background-size: 100% 100%;
@@ -38,11 +43,12 @@
 }
 
 .services-matcard {
-    width: 240px;
-    height: 220px;
+    width: 280px;
+    height: 260px;
     border-radius: 10px;
     background-color: #F3F3F3;
 }
+
 
 .services-matcard img {
     width: 220px;
