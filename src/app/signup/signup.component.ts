@@ -26,7 +26,6 @@ export class SignupComponent implements OnInit {
   countries: any[];
   states: any[];
   cities: any[];
-
   typeOfEstablishmentList: string[] = [
     'Civil',
     'Electrical',
@@ -41,6 +40,10 @@ export class SignupComponent implements OnInit {
   allTypeOfEstablishments: string[] = ['Civil', 'Electrical', 'Mechanical'];
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
+  
+  countryList: any[];
+  statesList: any[];
+  citiesList: any[];
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -113,6 +116,9 @@ export class SignupComponent implements OnInit {
       { name: 'Istanbul', code: 'IST' },
       { name: 'Paris', code: 'PRS' }
     ];
+    this.countryList = this.countries.slice();
+    this.statesList = this.states.slice();
+    this.citiesList = this.cities.slice();
   }
 
   ngOnInit(): void {
@@ -123,9 +129,9 @@ export class SignupComponent implements OnInit {
       Validators.minLength(4), Validators.maxLength(4)]],
       addressGroup: this._formBuilder.group({
         address: ['', [Validators.required, Validators.maxLength(4)]],
-        city: [''],
-        state: [''],
-        country: ['']
+        city: ['', [Validators.required]],
+        state: ['', [Validators.required]],
+        country: ['', [Validators.required, Validators.maxLength(4)]]
       }),
     });
     this.personalDetails = this._formBuilder.group({

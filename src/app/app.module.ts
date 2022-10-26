@@ -15,7 +15,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-
+import { MatSelectFilterModule } from 'mat-select-filter';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +36,8 @@ import { DropdownModule } from 'primeng/dropdown';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    DropdownModule
+    DropdownModule,
+    MatSelectFilterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
