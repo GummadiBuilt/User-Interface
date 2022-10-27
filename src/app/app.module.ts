@@ -21,6 +21,7 @@ import { ContractorsComponent } from './components/contractors/contractors.compo
 import { TendersComponent } from './components/tenders/tenders.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +48,8 @@ import { AuditApprovalsComponent } from './components/audit-approvals/audit-appr
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

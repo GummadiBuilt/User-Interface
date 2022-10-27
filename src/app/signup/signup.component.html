@@ -10,9 +10,12 @@
                             <mat-label>Registering as</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select formControlName="users">
-                                    <mat-option>- - None - -</mat-option>
+                                    <!-- <mat-option>- - None - -</mat-option>
                                     <mat-option value="client">Client</mat-option>
-                                    <mat-option value="customer">Customer</mat-option>
+                                    <mat-option value="customer">Customer</mat-option> -->
+                                    <mat-option *ngFor="let role of applicationRoles" [value]="role.roleName">
+                                        {{role.roleName}}
+                                      </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="companyDetails.get('users')?.errors?.['required']">You must
                                     make a selection
@@ -93,11 +96,11 @@
                             fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>Country</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select a Country" formControlName="country">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'"
+                                <mat-select placeholder="Select a Country" formControlName="country" (selectionChange)="onCountrySelectEvent($event.value)">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'countryName'"
                                         [array]="countries" (filteredReturn)="countryList =$event"></mat-select-filter>
                                     <mat-option *ngFor="let item of countryList" [value]="item">
-                                        {{item.name}}
+                                        {{item.countryName}}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="companyDetails.get('addressGroup.country')?.errors?.['required']">
@@ -109,11 +112,11 @@
                             fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>State</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select a State" formControlName="state">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'"
+                                <mat-select placeholder="Select a State" formControlName="state" (selectionChange)="onStateSelectEvent($event.value)">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'stateName'"
                                         [array]="states" (filteredReturn)="statesList =$event"></mat-select-filter>
                                     <mat-option *ngFor="let item of statesList" [value]="item">
-                                        {{item.name}}
+                                        {{item.stateName}}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="companyDetails.get('addressGroup.state')?.errors?.['required']">
@@ -126,10 +129,10 @@
                             <mat-label>City</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select a City" formControlName="city">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'"
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'cityName'"
                                         [array]="cities" (filteredReturn)="citiesList =$event"></mat-select-filter>
                                     <mat-option *ngFor="let item of citiesList" [value]="item">
-                                        {{item.name}}
+                                        {{item.cityName}}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="companyDetails.get('addressGroup.city')?.errors?.['required']">

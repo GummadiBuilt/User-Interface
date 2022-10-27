@@ -7,7 +7,11 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { StepperOrientation } from '@angular/material/stepper';
 import { map, Observable, startWith } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
+import { ApiServicesService } from '../shared/api-services.service';
+import { registrationMasterData, registrationStatesData, registrationCitiesData, applicationRoles } from '../shared/responses';
+import { typeOfEstablishment } from '../shared/responses';
+import { countries } from '../shared/responses';
+import { StatementVisitor } from '@angular/compiler';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -23,27 +27,24 @@ export class SignupComponent implements OnInit {
   companyDetails!: FormGroup;
   personalDetails!: FormGroup;
   projectDetails!: FormGroup;
-  countries: any[];
-  states: any[];
-  cities: any[];
-  typeOfEstablishmentList: string[] = [
-    'Civil',
-    'Electrical',
-    'Mechanical'
-  ];
+  countries = new Array<countries>();
+  applicationRoles = new Array<applicationRoles>();
+  states = new Array<registrationStatesData>();
+  cities = new Array<registrationCitiesData>();
+  typeOfEstablishmentList = new Array<typeOfEstablishment>();
 
   //matchips
   separatorKeysCodes: number[] = [ENTER, COMMA];
   typeOfEstablishmentCtrl = new FormControl('');
   filteredTypeOfEstablishments: Observable<string[]>;
   typeOfEstablishments: string[] = [];
-  allTypeOfEstablishments: string[] = ['Civil', 'Electrical', 'Mechanical'];
+  allTypeOfEstablishments: string[] = [];
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
 
-  countryList: any[];
-  statesList: any[];
-  citiesList: any[];
+  countryList = new Array<countries>();;
+  statesList = new Array<registrationStatesData>();
+  citiesList = new Array<registrationCitiesData>();
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -77,7 +78,8 @@ export class SignupComponent implements OnInit {
   }
 
   stepperOrientation!: Observable<StepperOrientation>;
-  constructor(private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver) {
+  constructor(private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
+    private ApiServicesService: ApiServicesService) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -87,38 +89,6 @@ export class SignupComponent implements OnInit {
       startWith(null),
       map((typeOfEstablishment: string | null) => (typeOfEstablishment ? this._filter(typeOfEstablishment) : this.allTypeOfEstablishments.slice())),
     );
-
-
-
-    this.countries = [
-      { name: 'Australia', code: 'AU' },
-      { name: 'Brazil', code: 'BR' },
-      { name: 'China', code: 'CN' },
-      { name: 'Egypt', code: 'EG' },
-      { name: 'France', code: 'FR' },
-      { name: 'Germany', code: 'DE' },
-      { name: 'India', code: 'IN' },
-      { name: 'Japan', code: 'JP' },
-      { name: 'Spain', code: 'ES' },
-      { name: 'United States', code: 'US' }
-    ];
-    this.states = [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-    ];
-    this.cities = [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-    ];
-    this.countryList = this.countries.slice();
-    this.statesList = this.states.slice();
-    this.citiesList = this.cities.slice();
   }
 
   ngOnInit(): void {
@@ -147,5 +117,34 @@ export class SignupComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
     });
+    this.getMasterdata();
   }
+  getMasterdata() {
+    this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
+      this.typeOfEstablishmentList = data.typeOfEstablishments;
+      this.allTypeOfEstablishments = this.typeOfEstablishmentList.map(item => item.establishmentDescription);
+      this.countries = data.countries;
+      this.countryList = this.countries.slice();
+      this.applicationRoles = data.applicationRoles.filter(item=>item.displayToAll===true);
+    });
+
+  }
+  onCountrySelectEvent(id: any) {
+    //console.log(id.countryIsoCode);
+
+    this.ApiServicesService.getRegistrationStatesData(id.countryIsoCode).subscribe((data: registrationStatesData[]) => {
+      this.states = data;
+      this.statesList = this.states.slice();
+    });
+  }
+  onStateSelectEvent(value: any) {
+    debugger;
+    console.log(value);
+
+    this.ApiServicesService.getRegistrationCitiesData(value.stateIsoCode).subscribe((data: registrationCitiesData[]) => {
+      this.cities = data;
+      this.citiesList = this.cities.slice();
+    });
+  }
+
 }
