@@ -15,6 +15,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ClientsComponent } from './components/clients/clients.component';
+import { ContractorsComponent } from './components/contractors/contractors.component';
+import { TendersComponent } from './components/tenders/tenders.component';
+import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
+import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +31,13 @@ import { MatSelectFilterModule } from 'mat-select-filter';
     ProjectsComponent,
     AboutComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    DashboardComponent,
+    ClientsComponent,
+    ContractorsComponent,
+    TendersComponent,
+    PendingApprovalsComponent,
+    AuditApprovalsComponent
   ],
   imports: [
     BrowserModule,
