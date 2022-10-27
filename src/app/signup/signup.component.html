@@ -50,7 +50,8 @@
                             fxLayout="column">
                             <mat-label>Type of Establishment</mat-label>
                             <mat-form-field class="example-chip-list" appearance="outline">
-                                <mat-chip-list #chipList aria-label="Type of Establishment selection">
+                                <mat-chip-list #chipList aria-label="Type of Establishment selection"
+                                    formControlName="typeOfEstablishments">
                                     <mat-chip *ngFor="let typeOfEstablishment of typeOfEstablishments"
                                         (removed)="remove(typeOfEstablishment)">
                                         {{typeOfEstablishment}}
@@ -70,9 +71,12 @@
                                         {{typeOfEstablishment}}
                                     </mat-option>
                                 </mat-autocomplete>
-                                <!-- <mat-error *ngIf="companyDetails.get('type_of_establishment')?.errors?.['required']">
+                                <!-- <mat-error *ngIf="companyDetails.get('typeOfEstablishments')?.errors?.['required']">
                                     Atleast 1 type should be selected
                                 </mat-error> -->
+                                <mat-error *ngIf="typeOfEstablishments.length == 0">
+                                    Atleast 1 type should be selected
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div formGroupName="addressGroup" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
@@ -85,40 +89,52 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
+                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
+                            fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>Country</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select a Country">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'" [array]="countries" (filteredReturn)="countryList =$event"></mat-select-filter>
+                                <mat-select placeholder="Select a Country" formControlName="country">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'"
+                                        [array]="countries" (filteredReturn)="countryList =$event"></mat-select-filter>
                                     <mat-option *ngFor="let item of countryList" [value]="item">
                                         {{item.name}}
                                     </mat-option>
                                 </mat-select>
+                                <mat-error *ngIf="companyDetails.get('addressGroup.country')?.errors?.['required']">
+                                    Country is required
+                                </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
-                            fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
+                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
+                            fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>State</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select a State">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'" [array]="states" (filteredReturn)="statesList =$event"></mat-select-filter>
+                                <mat-select placeholder="Select a State" formControlName="state">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'"
+                                        [array]="states" (filteredReturn)="statesList =$event"></mat-select-filter>
                                     <mat-option *ngFor="let item of statesList" [value]="item">
                                         {{item.name}}
                                     </mat-option>
                                 </mat-select>
+                                <mat-error *ngIf="companyDetails.get('addressGroup.state')?.errors?.['required']">
+                                    State is required
+                                </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
-                            fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
+                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
+                            fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>City</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select a City">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'" [array]="cities" (filteredReturn)="citiesList =$event"></mat-select-filter>
+                                <mat-select placeholder="Select a City" formControlName="city">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'"
+                                        [array]="cities" (filteredReturn)="citiesList =$event"></mat-select-filter>
                                     <mat-option *ngFor="let item of citiesList" [value]="item">
                                         {{item.name}}
                                     </mat-option>
                                 </mat-select>
+                                <mat-error *ngIf="companyDetails.get('addressGroup.city')?.errors?.['required']">
+                                    City is required
+                                </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
@@ -170,6 +186,10 @@
                                 </mat-error>
                                 <mat-error *ngIf="personalDetails.controls['phone'].errors?.['pattern']">Please enter
                                     valid mobile number
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="personalDetails.controls['phone'].errors?.['minlength'] || personalDetails.controls['phone'].errors?.['maxlength']">
+                                    Mobile number should be 10 digits
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -231,6 +251,10 @@
                                 </mat-error>
                                 <mat-error *ngIf="projectDetails.controls['phone'].errors?.['pattern']">Please enter
                                     valid mobile number
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="projectDetails.controls['phone'].errors?.['minlength'] || personalDetails.controls['phone'].errors?.['maxlength']">
+                                    Mobile number should be 10 digits
                                 </mat-error>
                             </mat-form-field>
                         </div>

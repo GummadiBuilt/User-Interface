@@ -40,7 +40,7 @@ export class SignupComponent implements OnInit {
   allTypeOfEstablishments: string[] = ['Civil', 'Electrical', 'Mechanical'];
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
-  
+
   countryList: any[];
   statesList: any[];
   citiesList: any[];
@@ -127,11 +127,12 @@ export class SignupComponent implements OnInit {
       company_name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       year_of_establishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
+      typeOfEstablishments: ['', Validators.required],
       addressGroup: this._formBuilder.group({
-        address: ['', [Validators.required, Validators.maxLength(4)]],
+        address: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
-        country: ['', [Validators.required, Validators.maxLength(4)]]
+        country: ['', [Validators.required]]
       }),
     });
     this.personalDetails = this._formBuilder.group({
