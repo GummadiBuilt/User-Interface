@@ -75,40 +75,15 @@ form mat-label {
     padding-right: 4%;
 }
 
-::ng-deep .arrow-icons {
-    font-size: 22px !important;
-}
-
-:host ::ng-deep .p-dropdown {
-    width: 100%;
-}
-
-:host ::ng-deep .p-inputtext {
-    padding-top: 0.4em;
-    padding-bottom: 0.8em;
-    font-size: 12px;
-}
-
-:host ::ng-deep .p-dropdown .p-dropdown-clear-icon {
-    font-size: 12px;
-}
-
-::ng-deep .p-dropdown .pi {
-    font-size: 12px !important;
-}
-
-.dependency-field {
-    margin-bottom: 24px !important;
-}
-
 ::ng-deep .mat-select-arrow-wrapper {
     height: 0px !important;
 }
 
-::ng-deep .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
-    height: 36px !important;
-}
-
 ::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline {
     color: #3B82F6 !important;
+}
+
+::ng-deep .mat-select-panel {
+    margin-left: 8px !important;
+    border-radius: 10px !important;
 }
