@@ -1,0 +1,16 @@
+table {
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 12px !important;
+}
+
+::ng-deep .search-filter {
+    width: 100% !important;
+}

@@ -22,6 +22,7 @@ import { TendersComponent } from './components/tenders/tenders.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
     ContractorsComponent,
     TendersComponent,
     PendingApprovalsComponent,
-    AuditApprovalsComponent
+    AuditApprovalsComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

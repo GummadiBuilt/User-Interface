@@ -4,6 +4,7 @@ import { AboutComponent } from './about/about.component';
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { ContractorsComponent } from './components/contractors/contractors.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
 import { TendersComponent } from './components/tenders/tenders.component';
 import { ContactComponent } from './contact/contact.component';
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'service', component: ServiceComponent },
