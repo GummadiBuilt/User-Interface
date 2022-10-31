@@ -2,11 +2,6 @@ table {
     width: 100%;
 }
 
-td,
-th {
-    width: 25%;
-}
-
 .column-select {
     width: 10%;
 }
@@ -26,4 +21,47 @@ th {
 ::ng-deep .button-small {
     line-height: 30px !important;
     padding-left: 0 8px 0 8px !important;
+}
+
+::ng-deep .button-approve {
+    color: #841618;
+    background-color: white;
+}
+
+.button-reject {
+    background-color: #841618;
+    color: white;
+}
+
+.icon-approve {
+    color: #841618;
+}
+
+.icon-reject {
+    color: #841618;
+}
+
+.icon-filter:hover {
+    color: #841618;
+}
+
+::ng-deep .mat-tooltip {
+    background-color: #841618 !important;
+}
+
+.mat-row:nth-child(2n+1) {
+    background-color: #e4f0ec;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: #841618 !important;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: #841618;
+}
+
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #841618;
 }

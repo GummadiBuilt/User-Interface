@@ -1,16 +1,12 @@
 table {
     width: 100%;
+    margin-top: 24px;
 }
 
-td,
-th {
-    width: 25%;
+.mat-row:nth-child(2n+1) {
+    background-color: #e4f0ec;
 }
 
-::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 12px !important;
-}
-
-::ng-deep .search-filter {
-    width: 100% !important;
+.icon-filter:hover {
+    color: #841618;
 }
