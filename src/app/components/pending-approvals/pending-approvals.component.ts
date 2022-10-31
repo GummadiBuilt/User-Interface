@@ -48,6 +48,13 @@ const ELEMENT_DATA: UserData[] = [
     company_name: 'Stirling Pvt Ltd',
     address: 'Hyderabad, India'
   },
+  {
+    id: '6',
+    first_name: 'Markram',
+    last_name: 'Aiden',
+    company_name: 'Markram Pvt Ltd',
+    address: 'Hyderabad, India'
+  },
 ];
 
 @Component({
@@ -56,6 +63,7 @@ const ELEMENT_DATA: UserData[] = [
   styleUrls: ['./pending-approvals.component.scss']
 })
 export class PendingApprovalsComponent implements OnInit, AfterViewInit {
+  [x: string]: any;
 
   displayedColumns: string[] = ['select', 'id', 'first_name', 'last_name', 'company_name', 'address', 'actions'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
@@ -156,5 +164,9 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
   //     this.dataSource.paginator.firstPage();
   //   }
   // }
+
+  clearFilters() {
+    this.dataSource.filter = '';
+  }
 
 }
