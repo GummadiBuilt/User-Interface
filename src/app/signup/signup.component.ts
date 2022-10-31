@@ -138,7 +138,7 @@ export class SignupComponent implements OnInit {
     });
   }
   onStateSelectEvent(value: any) {
-    debugger;
+    // debugger;
     console.log(value);
 
     this.ApiServicesService.getRegistrationCitiesData(value.stateIsoCode).subscribe((data: registrationCitiesData[]) => {

@@ -6,6 +6,7 @@ import { ClientsComponent } from './components/clients/clients.component';
 import { ContractorsComponent } from './components/contractors/contractors.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TendersComponent } from './components/tenders/tenders.component';
 import { ContactComponent } from './contact/contact.component';
 import { CorevaluesComponent } from './corevalues/corevalues.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'service', component: ServiceComponent },

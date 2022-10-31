@@ -23,6 +23,7 @@ import { PendingApprovalsComponent } from './components/pending-approvals/pendin
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     TendersComponent,
     PendingApprovalsComponent,
     AuditApprovalsComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
