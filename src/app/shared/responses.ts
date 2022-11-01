@@ -41,3 +41,4 @@ export interface registrationMasterData extends typeOfEstablishment, countries, 
     typeOfEstablishments: Array<typeOfEstablishment>,
     applicationRoles: Array<applicationRoles>
 }
+

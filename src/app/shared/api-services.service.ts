@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { ConnectableObservable, Observable, throwError } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { registrationMasterData, typeOfEstablishment, countries, changeTracking, registrationStatesData, registrationCitiesData } from './responses';
-
+import { userRegistrationResopnse } from '../signup/signResponses';
+import { ErrorServiceService } from './error-service.service';
+import { registrationApprovalResopnse } from '../components/commonservices/approvalsUserData';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiServicesService {
 
   private url: string = 'http://localhost:9001';
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService) { }
 
   public getRegistrationMasterData(): Observable<registrationMasterData> {
     return this.httpClient.get<registrationMasterData>(this.url + '/api/registration-master-data')
@@ -33,15 +35,48 @@ export class ApiServicesService {
         catchError(this.errorHandl)
       )
   }
+  //Save Registration postAPI
+  public userRegistration(data: any) {
+    return this.httpClient.post(this.url + '/api/user-registration', data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      observe: "response"
+
+    })
+      .pipe(
+        retry(1),
+        catchError(this.errorHandl)
+      )
+  }
+  //pending approval getAPI
+
+  // public getRegistrationPendingApproval(): Observable<registrationApprovalResopnse[]> {
+  //   return this.httpClient.get<registrationApprovalResopnse[]>(this.url + '/api/user-registration')
+  //     .pipe(
+  //       retry(1),
+  //       catchError(this.errorHandl)
+  //     )
+  // }
   // Error handling
   errorHandl(error: HttpErrorResponse) {
     let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    if (
+      error.error &&
+      error.error.type &&
+      error.error.type === 'validation'
+    ) {
+      errorMessage = 'Validation Error'
     }
-    console.log(errorMessage);
+    else if(error.error && typeof error.error === 'string') {
+      errorMessage =
+      error.error 
+        ? error.error
+        : 'Invalid value for parameter.';
+    }else {
+      errorMessage = 'Something went wrong.';
+    }
+   // console.log(errorMessage);
     return throwError(errorMessage);
   }
 }

@@ -13,7 +13,7 @@
                                     <!-- <mat-option>- - None - -</mat-option>
                                     <mat-option value="client">Client</mat-option>
                                     <mat-option value="customer">Customer</mat-option> -->
-                                    <mat-option *ngFor="let role of applicationRoles" [value]="role.roleName">
+                                    <mat-option *ngFor="let role of applicationRoles" [value]="role.id">
                                         {{role.roleName}}
                                       </mat-option>
                                 </mat-select>
@@ -24,13 +24,54 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Name</mat-label>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>First Name</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="First Name" minlength="3" maxlength="50" inputmode="tel"
+                                    formControlName="firstName" #nameInput>
+                                <mat-error *ngIf="companyDetails.get('firstName')?.errors?.['required']">First Name
+                                    is required</mat-error>
+                                <mat-error *ngIf="companyDetails.get('firstName')?.errors?.['minlength']">Name should
+                                    be 3 character.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Last Name</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Last Name" minlength="3" maxlength="50" inputmode="tel"
+                                    formControlName="lastName" #nameInput>
+                                <mat-error *ngIf="companyDetails.get('lastName')?.errors?.['required']">Last Name
+                                    is required</mat-error>
+                                <mat-error *ngIf="companyDetails.get('lastName')?.errors?.['minlength']">Name should
+                                    be 3 character.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Email Id</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Email Id" formControlName="email">
+                                <mat-icon matSuffix>mail_outline</mat-icon>
+                                <mat-error *ngIf="companyDetails.controls['email'].errors?.['required']">Email ID is
+                                    required
+                                </mat-error>
+                                <mat-error *ngIf="companyDetails.controls['email'].errors?.['pattern']">Please enter
+                                    valid email
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Company Name</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Company Name" minlength="3" maxlength="50" inputmode="tel"
-                                    formControlName="company_name" #nameInput>
-                                <mat-error *ngIf="companyDetails.get('company_name')?.errors?.['required']">Company Name
+                                    formControlName="companyName" #nameInput>
+                                <mat-error *ngIf="companyDetails.get('companyName')?.errors?.['required']">Company Name
                                     is required</mat-error>
-                                <mat-error *ngIf="companyDetails.get('company_name')?.errors?.['minlength']">Name should
+                                <mat-error *ngIf="companyDetails.get('companyName')?.errors?.['minlength']">Name should
                                     be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
@@ -39,13 +80,13 @@
                             <mat-label>Year of Establishment</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Year of Establishment"
-                                    formControlName="year_of_establishment">
-                                <mat-error *ngIf="companyDetails.get('year_of_establishment')?.errors?.['required']">
+                                    formControlName="yearOfEstablishment">
+                                <mat-error *ngIf="companyDetails.get('yearOfEstablishment')?.errors?.['required']">
                                     Year of Establishment is required</mat-error>
-                                <mat-error *ngIf="companyDetails.get('year_of_establishment')?.errors?.['pattern']">
+                                <mat-error *ngIf="companyDetails.get('yearOfEstablishment')?.errors?.['pattern']">
                                     Please enter valid year</mat-error>
                                 <mat-error
-                                    *ngIf="(companyDetails.get('year_of_establishment')?.errors?.['minlength'] || companyDetails.get('year_of_establishment')?.errors?.['maxlength']) && !companyDetails.controls['year_of_establishment'].errors?.['pattern']">
+                                    *ngIf="(companyDetails.get('yearOfEstablishment')?.errors?.['minlength'] || companyDetails.get('yearOfEstablishment')?.errors?.['maxlength']) && !companyDetails.controls['yearOfEstablishment'].errors?.['pattern']">
                                     Year must be 4 digits</mat-error>
                             </mat-form-field>
                         </div>
@@ -54,9 +95,9 @@
                             <mat-label>Type of Establishment</mat-label>
                             <mat-form-field class="example-chip-list" appearance="outline">
                                 <mat-chip-list #chipList aria-label="Type of Establishment selection"
-                                    formControlName="typeOfEstablishments">
-                                    <mat-chip *ngFor="let typeOfEstablishment of typeOfEstablishments"
-                                        (removed)="remove(typeOfEstablishment)">
+                                    formControlName="typeOfEstablishment">
+                                    <mat-chip *ngFor="let typeOfEstablishment of typeOfEstablishment"
+                                        (removed)="remove(typeOfEstablishment)" [value]="typeOfEstablishment">
                                         {{typeOfEstablishment}}
                                         <button matChipRemove>
                                             <mat-icon>cancel</mat-icon>
@@ -66,7 +107,8 @@
                                         [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
                                         [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        (matChipInputTokenEnd)="add($event)">
+                                        (matChipInputTokenEnd)="add($event)"
+                                        (blur)="addOnBlur($event)" [value]="typeOfEstablishment">
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                                     <mat-option *ngFor="let typeOfEstablishment of filteredTypeOfEstablishments | async"
@@ -77,22 +119,22 @@
                                 <!-- <mat-error *ngIf="companyDetails.get('typeOfEstablishments')?.errors?.['required']">
                                     Atleast 1 type should be selected
                                 </mat-error> -->
-                                <mat-error *ngIf="typeOfEstablishments.length == 0">
+                                <mat-error *ngIf="typeOfEstablishment.length == 0">
                                     Atleast 1 type should be selected
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%"
                             fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>Address</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Address" formControlName="address">
-                                <mat-error *ngIf="companyDetails.get('addressGroup.address')?.errors?.['required']">
+                                <mat-error *ngIf="companyDetails.get('address')?.errors?.['required']">
                                     Address is required
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
+                        <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
                             fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>Country</mat-label>
                             <mat-form-field appearance="outline">
@@ -103,12 +145,12 @@
                                         {{item.countryName}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="companyDetails.get('addressGroup.country')?.errors?.['required']">
+                                <mat-error *ngIf="companyDetails.get('country')?.errors?.['required']">
                                     Country is required
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
+                        <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
                             fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>State</mat-label>
                             <mat-form-field appearance="outline">
@@ -119,12 +161,12 @@
                                         {{item.stateName}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="companyDetails.get('addressGroup.state')?.errors?.['required']">
+                                <mat-error *ngIf="companyDetails.get('state')?.errors?.['required']">
                                     State is required
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div formGroupName="addressGroup" class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
+                        <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%"
                             fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%" fxLayout="column">
                             <mat-label>City</mat-label>
                             <mat-form-field appearance="outline">
@@ -135,7 +177,7 @@
                                         {{item.cityName}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="companyDetails.get('addressGroup.city')?.errors?.['required']">
+                                <mat-error *ngIf="companyDetails.get('city')?.errors?.['required']">
                                     City is required
                                 </mat-error>
                             </mat-form-field>
@@ -159,12 +201,12 @@
                             fxLayout="column">
                             <mat-label>Name</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name" minlength="3" inputmode="tel" formControlName="name"
+                                <input matInput placeholder="Name" minlength="3" inputmode="tel" formControlName="contactName"
                                     #nameInput>
-                                <mat-error *ngIf="personalDetails.controls['name'].errors?.['required']">Name is
+                                <mat-error *ngIf="personalDetails.controls['contactName'].errors?.['required']">Name is
                                     required
                                 </mat-error>
-                                <mat-error *ngIf="personalDetails.get('name')?.errors?.['minlength']">Name should
+                                <mat-error *ngIf="personalDetails.get('contactName')?.errors?.['minlength']">Name should
                                     be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
@@ -172,8 +214,8 @@
                             fxLayout="column">
                             <mat-label>Designation</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Designation" formControlName="designation">
-                                <mat-error *ngIf="personalDetails.controls['designation'].errors?.['required']">
+                                <input matInput placeholder="Designation" formControlName="contactDesignation">
+                                <mat-error *ngIf="personalDetails.controls['contactDesignation'].errors?.['required']">
                                     Designation is required
                                 </mat-error>
                             </mat-form-field>
@@ -182,16 +224,16 @@
                             fxLayout="column">
                             <mat-label>Mobile</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Mobile" formControlName="phone">
+                                <input matInput placeholder="Mobile" formControlName="contactPhoneNumber">
                                 <mat-icon matSuffix>phone</mat-icon>
-                                <mat-error *ngIf="personalDetails.controls['phone'].errors?.['required']">Mobile Number
+                                <mat-error *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['required']">Mobile Number
                                     is required
                                 </mat-error>
-                                <mat-error *ngIf="personalDetails.controls['phone'].errors?.['pattern']">Please enter
+                                <mat-error *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['pattern']">Please enter
                                     valid mobile number
                                 </mat-error>
                                 <mat-error
-                                    *ngIf="personalDetails.controls['phone'].errors?.['minlength'] || personalDetails.controls['phone'].errors?.['maxlength']">
+                                    *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['minlength'] || personalDetails.controls['contactPhoneNumber'].errors?.['maxlength']">
                                     Mobile number should be 10 digits
                                 </mat-error>
                             </mat-form-field>
@@ -200,12 +242,12 @@
                             fxLayout="column">
                             <mat-label>Email Id</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Email Id" formControlName="email">
+                                <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
                                 <mat-icon matSuffix>mail_outline</mat-icon>
-                                <mat-error *ngIf="personalDetails.controls['email'].errors?.['required']">Email ID is
+                                <mat-error *ngIf="personalDetails.controls['contactEmailAddress'].errors?.['required']">Email ID is
                                     required
                                 </mat-error>
-                                <mat-error *ngIf="personalDetails.controls['email'].errors?.['pattern']">Please enter
+                                <mat-error *ngIf="personalDetails.controls['contactEmailAddress'].errors?.['pattern']">Please enter
                                     valid email
                                 </mat-error>
                             </mat-form-field>
@@ -236,7 +278,7 @@
                             <mat-label>Name</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Name" minlength="3" maxlength="50" inputmode="tel"
-                                    formControlName="name" #nameInput>
+                                    formControlName="coordinatorName" #nameInput>
                                 <mat-error>Name is required</mat-error>
                                 <!-- <mat-error *ngIf="projectDetails.controls['name'].errors?.['minlength']">
                                     Name should be 3 character.
@@ -247,16 +289,16 @@
                             fxLayout="column">
                             <mat-label>Mobile</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Mobile" formControlName="phone">
+                                <input matInput placeholder="Mobile" formControlName="coordinatorMobileNumber">
                                 <mat-icon matSuffix>phone</mat-icon>
-                                <mat-error *ngIf="projectDetails.controls['phone'].errors?.['required']">Mobile Number
+                                <mat-error *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['required']">Mobile Number
                                     is required
                                 </mat-error>
-                                <mat-error *ngIf="projectDetails.controls['phone'].errors?.['pattern']">Please enter
+                                <mat-error *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['pattern']">Please enter
                                     valid mobile number
                                 </mat-error>
                                 <mat-error
-                                    *ngIf="projectDetails.controls['phone'].errors?.['minlength'] || personalDetails.controls['phone'].errors?.['maxlength']">
+                                    *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['minlength'] || projectDetails.controls['coordinatorMobileNumber'].errors?.['maxlength']">
                                     Mobile number should be 10 digits
                                 </mat-error>
                             </mat-form-field>
@@ -269,7 +311,7 @@
                                 <span>Previous</span>
                             </div>
                         </button>
-                        <button mat-raised-button color="primary" type="submit">Submit</button>
+                        <button mat-raised-button color="primary"  [disabled]="!personalDetails.valid && !projectDetails.valid" (click)="onSubmit()">Submit</button>
                     </div>
                 </form>
             </mat-step>

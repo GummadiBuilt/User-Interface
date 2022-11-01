@@ -18,6 +18,7 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { ContractorsComponent } from './components/contractors/contractors.component';
+import { ToastrModule } from 'ngx-toastr';
 import { TendersComponent } from './components/tenders/tenders.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
@@ -53,6 +54,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     FormsModule,
     ReactiveFormsModule,
     MatSelectFilterModule,
+    ToastrModule.forRoot(),
     HttpClientModule
   ],
   providers: [],
