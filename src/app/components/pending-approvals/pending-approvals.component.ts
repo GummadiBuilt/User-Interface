@@ -4,58 +4,9 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface UserData {
-  id: string;
-  first_name: string;
-  last_name: string;
-  company_name: string;
-  address: string;
-}
-const ELEMENT_DATA: UserData[] = [
-  {
-    id: '1',
-    first_name: 'John',
-    last_name: 'Kate',
-    company_name: 'Jhon Pvt Ltd',
-    address: 'Hyderabad, India'
-  },
-  {
-    id: '2',
-    first_name: 'Philip',
-    last_name: 'Cross',
-    company_name: 'Philip Pvt Ltd',
-    address: 'Delhi, India'
-  },
-  {
-    id: '3',
-    first_name: 'Wade',
-    last_name: 'Mathew',
-    company_name: 'Wade Pvt Ltd',
-    address: 'Bangalore, India'
-  },
-  {
-    id: '4',
-    first_name: 'Faulkner',
-    last_name: 'Daniel',
-    company_name: 'Daniel Pvt Ltd',
-    address: 'Chennai, India'
-  },
-  {
-    id: '5',
-    first_name: 'Stirling',
-    last_name: 'Paul',
-    company_name: 'Stirling Pvt Ltd',
-    address: 'Hyderabad, India'
-  },
-  {
-    id: '6',
-    first_name: 'Markram',
-    last_name: 'Aiden',
-    company_name: 'Markram Pvt Ltd',
-    address: 'Hyderabad, India'
-  },
-];
+import { ToastrService } from 'ngx-toastr';
+import { ApiServicesService } from 'src/app/shared/api-services.service';
+import { registrationApprovalResopnse } from '../commonservices/approvalsUserData';
 
 @Component({
   selector: 'app-pending-approvals',
@@ -63,20 +14,25 @@ const ELEMENT_DATA: UserData[] = [
   styleUrls: ['./pending-approvals.component.scss']
 })
 export class PendingApprovalsComponent implements OnInit, AfterViewInit {
-  [x: string]: any;
 
-  displayedColumns: string[] = ['select', 'id', 'first_name', 'last_name', 'company_name', 'address', 'actions'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  displayedColumns: string[] = ['select', 'applicationRoleId', 'firstName', 'lastName', 'email', 'companyName',
+    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactName', 'contactDesignation',
+    'contactPhoneNumber', 'contactEmailAddress', 'coordinatorName', 'coordinatorMobileNumber'
+    , 'actions'];
+
+  allPendingApprovals: any = [];
+  dataSource = new MatTableDataSource<registrationApprovalResopnse>();
 
   idFilter = new FormControl();
   firstNameFilter = new FormControl();
   lastNameFilter = new FormControl();
   companyNameFilter = new FormControl();
-  addressFilter = new FormControl();
+  contactNameFilter = new FormControl();
+  contactPhoneFilter = new FormControl();
 
-  filteredValues = { id: '', first_name: '', last_name: '', company_name: '', address: '' };
+  filteredValues = { id: '', firstName: '', lastName: '', companyName: '', contactName: '', contactPhoneNumber: '' };
 
-  selection = new SelectionModel<UserData>(true, []);
+  selection = new SelectionModel<registrationApprovalResopnse>(true, []);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -84,6 +40,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
+    // console.log(this.selection.selected.map(({id})=>this.requestId));
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
@@ -98,14 +55,14 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: UserData): string {
+  checkboxLabel(row?: registrationApprovalResopnse): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.applicationRoleId + 1}`;
   }
 
-  constructor() {
+  constructor(private ApiServicesService: ApiServicesService, private toastr: ToastrService) {
 
   }
 
@@ -115,40 +72,118 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.firstNameFilter.valueChanges.subscribe((firstNameFilterValue) => {
-      this.filteredValues['first_name'] = firstNameFilterValue;
+      this.filteredValues['firstName'] = firstNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
 
     this.lastNameFilter.valueChanges.subscribe((lastNameFilterValue) => {
-      this.filteredValues['last_name'] = lastNameFilterValue;
+      this.filteredValues['lastName'] = lastNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.companyNameFilter.valueChanges.subscribe((companyNameFilterValue) => {
-      this.filteredValues['company_name'] = companyNameFilterValue;
+      this.filteredValues['companyName'] = companyNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-    this.addressFilter.valueChanges.subscribe((addressFilterValue) => {
-      this.filteredValues['address'] = addressFilterValue;
+    this.contactNameFilter.valueChanges.subscribe((contactNameFilterValue) => {
+      this.filteredValues['contactName'] = contactNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-
+    this.contactPhoneFilter.valueChanges.subscribe((contactPhoneFilterValue) => {
+      this.filteredValues['contactPhoneNumber'] = contactPhoneFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.getPendingApprovalsdata();
     this.dataSource.filterPredicate = this.customFilterPredicate();
   }
   customFilterPredicate() {
-    const myFilterPredicate = function (data: UserData, filter: string): boolean {
+    const myFilterPredicate = function (data: registrationApprovalResopnse, filter: string): boolean {
       let searchString = JSON.parse(filter);
-      let firstNameFound = data.first_name.toString().trim().toLowerCase().indexOf(searchString.first_name.toLowerCase()) !== -1
-      let idFound = data.id.toString().trim().indexOf(searchString.id) !== -1
-      let lastNameFound = data.last_name.toString().trim().toLowerCase().indexOf(searchString.last_name) !== -1
-      let companyNameFound = data.company_name.toString().trim().toLowerCase().indexOf(searchString.company_name) !== -1
-      let addressFound = data.address.toString().trim().toLowerCase().indexOf(searchString.address) !== -1
+      let firstNameFound = data.firstName.toString().trim().toLowerCase().indexOf(searchString.firstName.toLowerCase()) !== -1
+      let applicationRoleIdFound = data.applicationRoleId.toString().trim().indexOf(searchString.applicationRoleId) !== -1
+      let lastNameFound = data.lastName.toString().trim().toLowerCase().indexOf(searchString.lastName) !== -1
+      let companyNameFound = data.companyName.toString().trim().toLowerCase().indexOf(searchString.companyName) !== -1
+      let contactNameFound = data.contactName.toString().trim().toLowerCase().indexOf(searchString.contactName) !== -1
+      let contactPhoneFound = data.contactPhoneNumber.toString().trim().toLowerCase().indexOf(searchString.contactPhoneNumber) !== -1
       if (searchString.topFilter) {
-        return firstNameFound || idFound || lastNameFound || companyNameFound || addressFound
+        return firstNameFound || applicationRoleIdFound || lastNameFound || companyNameFound || contactNameFound || contactPhoneFound
       } else {
-        return firstNameFound && idFound && lastNameFound && companyNameFound && addressFound
+        return firstNameFound && applicationRoleIdFound && lastNameFound && companyNameFound && contactNameFound && contactPhoneFound
       }
     }
     return myFilterPredicate;
+  }
+
+  applyFilterById(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
+  //get list of data
+  getPendingApprovalsdata() {
+    this.ApiServicesService.getRegistrationPendingApproval().subscribe((data: registrationApprovalResopnse) => {
+      this.allPendingApprovals = data;
+      this.dataSource.data = this.allPendingApprovals;
+      console.log(this.dataSource.data);
+    });
+  }
+
+  requestId: any;
+  getApproveID(id: any) {
+    this.requestId = Array.from(String(id), Number);
+    console.log(this.requestId);
+    this.approve();
+  }
+  getRejectID(id: any) {
+    this.requestId = Array.from(String(id), Number);
+    console.log(this.requestId);
+    this.reject();
+  }
+
+  selectedIds: any = [];
+  getAllApproveIDs(id: any) {
+    this.selection.selected.forEach(item => {
+      let index: any = this.dataSource.data.find(d => d == item);
+      this.selectedIds.push(index.id);
+    });
+    console.log(this.selectedIds)
+    this.requestId = this.selectedIds;
+    this.approve();
+  }
+
+  getAllRejectIDs(id: any) {
+    this.selection.selected.forEach(item => {
+      let index: any = this.dataSource.data.find(d => d == item);
+      this.selectedIds.push(index.id);
+    });
+    console.log(this.selectedIds)
+    this.requestId = this.selectedIds;
+    this.reject();
+  }
+
+  approve() {
+    this.ApiServicesService.postRegistrationPendingApproval(this.requestId, { "requestId": this.requestId, "actionTaken": 'APPROVE' }).subscribe(
+      (response => {
+        if (response['status'] == 200) {
+          console.log(response);
+          this.toastr.success('Approved');
+        }
+      }),
+      (error => {
+        this.toastr.error(error);
+      }));
+  }
+  reject() {
+    this.ApiServicesService.postRegistrationPendingApproval(this.requestId, { "requestId": this.requestId, "actionTaken": 'REJECT' }).subscribe(
+      (response => {
+        if (response['status'] == 200) {
+          console.log(response);
+          this.toastr.success('Rejected');
+        }
+      }),
+      (error => {
+        this.toastr.error(error);
+      }));
   }
 
   ngAfterViewInit() {

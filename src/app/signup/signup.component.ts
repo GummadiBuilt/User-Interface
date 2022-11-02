@@ -44,6 +44,7 @@ export class SignupComponent implements OnInit {
   filteredTypeOfEstablishments!: Observable<string[]>;
   typeOfEstablishment: string[] = ['CIVIL'];
   allTypeOfEstablishments: string[] = [];
+  roleId: any;
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto')
@@ -60,7 +61,7 @@ export class SignupComponent implements OnInit {
       this.typeOfEstablishment.push(value);
     }
     // Clear the input value
-    event.chipInput!.clear();
+    event.chipInput?.clear();
     this.typeOfEstablishmentCtrl.setValue(null);
   }
 
@@ -81,9 +82,10 @@ export class SignupComponent implements OnInit {
 
 
 
+
   stepperOrientation!: Observable<StepperOrientation>;
   constructor(private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
-    private ApiServicesService: ApiServicesService,private toastr: ToastrService,private router: Router) {
+    private ApiServicesService: ApiServicesService, private toastr: ToastrService, private router: Router) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -106,7 +108,6 @@ export class SignupComponent implements OnInit {
       state: ['', [Validators.required]],
       city: ['', [Validators.required]]
 
-
       // addressGroup: this._formBuilder.group({
 
       // }),
@@ -123,6 +124,7 @@ export class SignupComponent implements OnInit {
       coordinatorMobileNumber: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
     });
+
     this.getMasterdata();
     //mtachips
     this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
@@ -130,6 +132,7 @@ export class SignupComponent implements OnInit {
       map((typeOfEstablishment: string | null) => (typeOfEstablishment ? this._filter(typeOfEstablishment) : this.allTypeOfEstablishments.slice())),
     );
   }
+
   getMasterdata() {
     this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
       this.typeOfEstablishmentList = data.typeOfEstablishments;
@@ -137,7 +140,7 @@ export class SignupComponent implements OnInit {
       this.countries = data.countries;
       this.countryList = this.countries.slice();
       this.applicationRoles = data.applicationRoles.filter(item => item.displayToAll === true);
-      
+      console.log(this.applicationRoles);
       // console.log('typeof establishment', this.allTypeOfEstablishments);
       // console.log('typeof toeestablishment', this.typeOfEstablishment);
     });

@@ -50,14 +50,26 @@ export class ApiServicesService {
       )
   }
   //pending approval getAPI
-
-  // public getRegistrationPendingApproval(): Observable<registrationApprovalResopnse[]> {
-  //   return this.httpClient.get<registrationApprovalResopnse[]>(this.url + '/api/user-registration')
-  //     .pipe(
-  //       retry(1),
-  //       catchError(this.errorHandl)
-  //     )
-  // }
+  public getRegistrationPendingApproval(): Observable<registrationApprovalResopnse> {
+    return this.httpClient.get<registrationApprovalResopnse>(this.url + '/api/user-registration')
+      .pipe(
+        retry(1),
+        catchError(this.errorHandl)
+      )
+  }
+  //pending approval postAPI
+  public postRegistrationPendingApproval(id: any, data: any) {
+    return this.httpClient.post(this.url + '/api/user-registration/approve-reject', data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      observe: "response"
+    })
+      .pipe(
+        retry(1),
+        catchError(this.errorHandl)
+      )
+  }
   // Error handling
   errorHandl(error: HttpErrorResponse) {
     let errorMessage = '';
@@ -68,15 +80,15 @@ export class ApiServicesService {
     ) {
       errorMessage = 'Validation Error'
     }
-    else if(error.error && typeof error.error === 'string') {
+    else if (error.error && typeof error.error === 'string') {
       errorMessage =
-      error.error 
-        ? error.error
-        : 'Invalid value for parameter.';
-    }else {
+        error.error
+          ? error.error
+          : 'Invalid value for parameter.';
+    } else {
       errorMessage = 'Something went wrong.';
     }
-   // console.log(errorMessage);
+    // console.log(errorMessage);
     return throwError(errorMessage);
   }
 }
