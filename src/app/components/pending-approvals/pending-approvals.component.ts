@@ -124,19 +124,19 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     this.ApiServicesService.getRegistrationPendingApproval().subscribe((data: registrationApprovalResopnse) => {
       this.allPendingApprovals = data;
       this.dataSource.data = this.allPendingApprovals;
-      console.log(this.dataSource.data);
+      //console.log(this.dataSource.data);
     });
   }
 
   requestId: any;
   getApproveID(id: any) {
     this.requestId = Array.from(String(id), Number);
-    console.log(this.requestId);
+   // console.log(this.requestId);
     this.approve();
   }
   getRejectID(id: any) {
     this.requestId = Array.from(String(id), Number);
-    console.log(this.requestId);
+   // console.log(this.requestId);
     this.reject();
   }
 
@@ -146,7 +146,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
       let index: any = this.dataSource.data.find(d => d == item);
       this.selectedIds.push(index.id);
     });
-    console.log(this.selectedIds)
+   // console.log(this.selectedIds)
     this.requestId = this.selectedIds;
     this.approve();
   }
@@ -156,7 +156,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
       let index: any = this.dataSource.data.find(d => d == item);
       this.selectedIds.push(index.id);
     });
-    console.log(this.selectedIds)
+    //console.log(this.selectedIds)
     this.requestId = this.selectedIds;
     this.reject();
   }
@@ -165,8 +165,11 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     this.ApiServicesService.postRegistrationPendingApproval(this.requestId, { "requestId": this.requestId, "actionTaken": 'APPROVE' }).subscribe(
       (response => {
         if (response['status'] == 200) {
-          console.log(response);
+         // console.log(response.body);
           this.toastr.success('Approved');
+          this.allPendingApprovals = response.body;
+          this.dataSource.data = this.allPendingApprovals;
+         // console.log('approve',this.dataSource.data);
         }
       }),
       (error => {
@@ -177,8 +180,11 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     this.ApiServicesService.postRegistrationPendingApproval(this.requestId, { "requestId": this.requestId, "actionTaken": 'REJECT' }).subscribe(
       (response => {
         if (response['status'] == 200) {
-          console.log(response);
+         // console.log(response.body);
           this.toastr.success('Rejected');
+          this.allPendingApprovals = response.body;
+          this.dataSource.data = this.allPendingApprovals;
+         // console.log('reject',this.dataSource.data);
         }
       }),
       (error => {

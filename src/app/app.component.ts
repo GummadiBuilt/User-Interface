@@ -16,7 +16,7 @@ export class AppComponent {
   public isLoggedIn = false;
   public userProfile: KeycloakProfile | null = null;
   public userRole: boolean | undefined;
-  public menuName = 'login';
+  public menuName = 'Login';
   constructor(private readonly keycloak: KeycloakService, private router: Router) {
     this.userRole = keycloak.isUserInRole("admin");
     //console.log('ser Role in constructor', this.userRole)
@@ -32,7 +32,7 @@ export class AppComponent {
       //console.log('isloggedin', this.isLoggedIn)
       if (this.isLoggedIn) {
 
-      this.menuName = 'logout';
+      this.menuName = 'Logout';
         //console.log('in getrole', this.isLoggedIn);
         this.userProfile = await this.keycloak.loadUserProfile();
         if (this.userRole) {
