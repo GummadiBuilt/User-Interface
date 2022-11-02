@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  configFile: 'assets/config/config.dev.json',
+  KEYCLOAK_URL: "http://localhost:8080",
+  KEYCLOAK_REALM: "Local-Realm",
+  KEYCLOAK_CLIENT_ID: "gummadi-local"
 };
 
 /*

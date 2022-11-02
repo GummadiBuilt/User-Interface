@@ -1,0 +1,26 @@
+<h1>Keycloak Angular Example</h1>
+<!-- 
+<button *ngIf="isLogIn" type="button" (click)="logout()">Log out</button>
+<button *ngIf="!isLogIn" type="button" (click)="login()">Log in</button> -->
+
+<ng-container *ngIf="agentProfile">
+  <h2>User information</h2>
+  <table>
+    <tr *ngIf="agentProfile.username">
+      <th scope="row">Username</th>
+      <td>{{ agentProfile.username }}</td>
+    </tr>
+    <tr *ngIf="agentProfile.firstName">
+      <th scope="row">First name</th>
+      <td>{{ agentProfile.firstName }}</td>
+    </tr>
+    <tr *ngIf="agentProfile.lastName">
+      <th scope="row">First name</th>
+      <td>{{ agentProfile.lastName }}</td>
+    </tr>
+    <tr *ngIf="agentProfile.email">
+      <th scope="row">E-mail</th>
+      <td>{{ agentProfile.email }}</td>
+    </tr>
+  </table>
+</ng-container>

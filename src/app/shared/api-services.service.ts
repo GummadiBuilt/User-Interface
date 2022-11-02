@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ConnectableObservable, Observable, throwError } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest  } from '@angular/common/http';
 import { registrationMasterData, typeOfEstablishment, countries, changeTracking, registrationStatesData, registrationCitiesData } from './responses';
 import { userRegistrationResopnse } from '../signup/signResponses';
 import { ErrorServiceService } from './error-service.service';
 import { registrationApprovalResopnse } from '../components/commonservices/approvalsUserData';
+import { KeycloakService } from 'keycloak-angular';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiServicesService {
 
   private url: string = 'http://localhost:9001';
-  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService) { }
+  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService) { }
 
   public getRegistrationMasterData(): Observable<registrationMasterData> {
     return this.httpClient.get<registrationMasterData>(this.url + '/api/registration-master-data')

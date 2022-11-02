@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "keycloak-angular": "^12.1.0",
+    "keycloak-js": "^20.0.0",
     "mat-select-filter": "^2.4.1",
     "ngx-toastr": "^15.2.1",
     "primeicons": "^6.0.1",
