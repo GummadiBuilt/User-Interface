@@ -63,8 +63,8 @@
                     </div>
                     <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
                         <mat-form-field appearance="outline">
-                            <input matInput class="form-field" [formControl]="firstNameFilter"
-                                placeholder="First Name Filter" #input>
+                            <input matInput class="form-field" placeholder="First Name Filter"
+                                [formControl]="firstNameFilter" #input>
                             <button mat-icon-button matSuffix>
                                 <mat-icon>search</mat-icon>
                             </button>
@@ -79,92 +79,422 @@
         </ng-container>
         <ng-container matColumnDef="lastName">
             <th mat-header-cell *matHeaderCellDef>
-                Last Name
+                <div class="header">
+                    Last Name
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Last Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Last Name Filter"
+                                [formControl]="lastNameFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
         </ng-container>
         <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef>
-                Email
+                <div class="header">
+                    Email
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Email
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Email Filter" [formControl]="emailFilter"
+                                #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.email}} </td>
         </ng-container>
         <ng-container matColumnDef="companyName">
             <th mat-header-cell *matHeaderCellDef>
-                Company Name
+                <div class="header">
+                    Company Name
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Company Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Company Name Filter"
+                                [formControl]="companyNameFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.companyName}} </td>
         </ng-container>
         <ng-container matColumnDef="yearOfEstablishment">
             <th mat-header-cell *matHeaderCellDef>
-                Year of Establishment
+                <div class="header">
+                    Year of Establishment
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Year of Establishment
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Year Of Establishment Filter"
+                                [formControl]="yearOfEstablishmentFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.yearOfEstablishment}} </td>
         </ng-container>
         <ng-container matColumnDef="typeOfEstablishment">
             <th mat-header-cell *matHeaderCellDef>
-                Type of Establishment
+                <div class="header">
+                    Type of Establishment
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Type of Establishment
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Type Of Establishment Filter"
+                                [formControl]="typeOfEstablishmentFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.typeOfEstablishment}} </td>
         </ng-container>
         <ng-container matColumnDef="address">
             <th mat-header-cell *matHeaderCellDef>
-                Address
+                <div class="header">
+                    Address
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Address
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Address Filter"
+                                [formControl]="addressFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.address}} </td>
         </ng-container>
         <ng-container matColumnDef="city">
             <th mat-header-cell *matHeaderCellDef>
-                City
+                <div class="header">
+                    City
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        City
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="City Filter" [formControl]="cityFilter"
+                                #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.city.cityName}} </td>
         </ng-container>
         <ng-container matColumnDef="state">
             <th mat-header-cell *matHeaderCellDef>
-                State
+                <div class="header">
+                    State
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        State
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="State Filter" [formControl]="stateFilter"
+                                #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.state.stateName}} </td>
         </ng-container>
         <ng-container matColumnDef="country">
             <th mat-header-cell *matHeaderCellDef>
-                Country
+                <div class="header">
+                    Country
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Country
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Country Filter"
+                                [formControl]="countryFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.country.countryName}} </td>
         </ng-container>
 
         <ng-container matColumnDef="contactName">
             <th mat-header-cell *matHeaderCellDef>
-                Contact Name
+                <div class="header">
+                    Contact Name
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Contact Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Contact Name Filter"
+                                [formControl]="contactNameFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.contactName}} </td>
         </ng-container>
         <ng-container matColumnDef="contactDesignation">
             <th mat-header-cell *matHeaderCellDef>
-                Contact Designation
+                <div class="header">
+                    Contact Designation
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Contact Designation
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Contact Designation Filter"
+                                [formControl]="contactDesignationFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.contactDesignation}} </td>
         </ng-container>
         <ng-container matColumnDef="contactPhoneNumber">
             <th mat-header-cell *matHeaderCellDef>
-                Contact Phone Number
+                <div class="header">
+                    Contact Phone Number
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Contact Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Contact Phone Number Filter"
+                                [formControl]="contactPhoneFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.contactPhoneNumber}} </td>
         </ng-container>
         <ng-container matColumnDef="contactEmailAddress">
             <th mat-header-cell *matHeaderCellDef>
-                Contact Email Address
+                <div class="header">
+                    Contact Email Address
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Contact Email Address
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Contact Email Address Filter"
+                                [formControl]="contactEmailAddressFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.contactEmailAddress}} </td>
         </ng-container>
         <ng-container matColumnDef="coordinatorName">
             <th mat-header-cell *matHeaderCellDef>
-                Coordinator Name
+                <div class="header">
+                    Coordinator Name
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Coordinator Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Coordinator Name Filter"
+                                [formControl]="coordinatorNameFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.coordinatorName}} </td>
         </ng-container>
         <ng-container matColumnDef="coordinatorMobileNumber">
             <th mat-header-cell *matHeaderCellDef>
-                coordinator Mobile Number
+                <div class="header">
+                    coordinator Mobile Number
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        coordinator Mobile Number
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="coordinator Mobile Number Filter"
+                                [formControl]="coordinatorPhoneFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.coordinatorMobileNumber}} </td>
         </ng-container>
