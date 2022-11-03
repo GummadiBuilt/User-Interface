@@ -1,6 +1,9 @@
 {
-  "name": "user-interface",
+  "name": "@GummadiBuilt/user-interface",
   "version": "0.0.0",
+  "description": "This repo carries the User Interface code of GummadiBuilt application",
+	"author": "GummadiBuilt LLC",
+	"license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
