@@ -66,5 +66,14 @@
 		"eslint-plugin-testing-library": "3.10.1",
 		"husky": "7.0.4",
 		"prettier": "1.19.1"
-  }
+  },
+  "config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
+	"repository": "git://github.com/GummadiBuilt/User-Interface.git",
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com/"
+	}
 }
