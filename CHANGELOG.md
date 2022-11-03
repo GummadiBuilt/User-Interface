@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/GummadiBuilt/User-Interface/compare/v1.0.0...v1.0.1) (2022-11-03)
+
+
+### Bug Fixes
+
+* **package.json:** change in project name ([fcbe57e](https://github.com/GummadiBuilt/User-Interface/commit/fcbe57e7d33f9039bf3f339dc87426f1ae204071))
+
 # 1.0.0 (2022-11-03)
 
 
