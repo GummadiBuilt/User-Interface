@@ -15,7 +15,7 @@ import { registrationApprovalResopnse } from '../commonservices/approvalsUserDat
 })
 export class PendingApprovalsComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['select', 'applicationRoleId', 'firstName', 'lastName', 'email', 'companyName',
+  displayedColumns: string[] = ['select', 'firstName', 'lastName', 'email', 'companyName',
     'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactName', 'contactDesignation',
     'contactPhoneNumber', 'contactEmailAddress', 'coordinatorName', 'coordinatorMobileNumber'
     , 'actions'];
@@ -124,7 +124,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     this.ApiServicesService.getRegistrationPendingApproval().subscribe((data: registrationApprovalResopnse) => {
       this.allPendingApprovals = data;
       this.dataSource.data = this.allPendingApprovals;
-      //console.log(this.dataSource.data);
+      console.log(this.dataSource.data.length);
     });
   }
 

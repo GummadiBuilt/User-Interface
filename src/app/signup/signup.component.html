@@ -94,7 +94,7 @@
                                 <mat-chip-list #chipList aria-label="Type of Establishment selection"
                                     formControlName="typeOfEstablishment">
                                     <mat-chip *ngFor="let typeOfEstablishment of typeOfEstablishment"
-                                        (removed)="remove(typeOfEstablishment)" [value]="typeOfEstablishment">
+                                        (removed)="remove(typeOfEstablishment)">
                                         {{typeOfEstablishment}}
                                         <button matChipRemove>
                                             <mat-icon>cancel</mat-icon>
@@ -104,8 +104,7 @@
                                         [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
                                         [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        (matChipInputTokenEnd)="add($event)" (blur)="addOnBlur($event)"
-                                        >
+                                        (matChipInputTokenEnd)="add($event)" (blur)="addOnBlur($event)">
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                                     <mat-option *ngFor="let typeOfEstablishment of filteredTypeOfEstablishments | async"
@@ -113,12 +112,9 @@
                                         {{typeOfEstablishment}}
                                     </mat-option>
                                 </mat-autocomplete>
-                                <!-- <mat-error *ngIf="companyDetails.get('typeOfEstablishments')?.errors?.['required']">
+                                <!-- <mat-error *ngIf="companyDetails.get('typeOfEstablishment')?.errors?.['required']">
                                     Atleast 1 type should be selected
                                 </mat-error> -->
-                                <mat-error *ngIf="typeOfEstablishment.length == 0">
-                                    Atleast 1 type should be selected
-                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
@@ -195,7 +191,7 @@
             <mat-step [stepControl]="personalDetails" errorMessage="Fill required contact details.">
                 <form [formGroup]="personalDetails">
                     <ng-template matStepLabel>Contact Person Information</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Name</mat-label>
@@ -223,15 +219,13 @@
                             fxLayout="column">
                             <mat-label>Mobile</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Mobile" formControlName="contactPhoneNumber">
+                                <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
                                 <mat-icon matSuffix>phone</mat-icon>
                                 <mat-error *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['required']">
-                                    Mobile Number
-                                    is required
+                                    Mobile Number is required
                                 </mat-error>
                                 <mat-error *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['pattern']">
-                                    Please enter
-                                    valid mobile number
+                                    Please enter valid mobile number
                                 </mat-error>
                                 <mat-error
                                     *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['minlength'] || personalDetails.controls['contactPhoneNumber'].errors?.['maxlength']">
@@ -246,12 +240,10 @@
                                 <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
                                 <mat-icon matSuffix>mail_outline</mat-icon>
                                 <mat-error *ngIf="personalDetails.controls['contactEmailAddress'].errors?.['required']">
-                                    Email ID is
-                                    required
+                                    Email ID is required
                                 </mat-error>
                                 <mat-error *ngIf="personalDetails.controls['contactEmailAddress'].errors?.['pattern']">
-                                    Please enter
-                                    valid email
+                                    Please enter valid email
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -275,34 +267,33 @@
             <mat-step [stepControl]="projectDetails" errorMessage="Fill required project details.">
                 <form [formGroup]="projectDetails">
                     <ng-template matStepLabel>Regional Head & Project Coordinator</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Name</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Name" minlength="3" maxlength="50" inputmode="tel"
                                     formControlName="coordinatorName" #nameInput>
-                                <mat-error>Name is required</mat-error>
-                                <!-- <mat-error *ngIf="projectDetails.controls['name'].errors?.['minlength']">
-                                    Name should be 3 character.
-                                </mat-error> -->
+                                <mat-error *ngIf="projectDetails.get('coordinatorName')?.errors?.['required']">Last Name
+                                    is required</mat-error>
+                                <mat-error *ngIf="projectDetails.get('coordinatorName')?.errors?.['minlength']">Name
+                                    should be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Mobile</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Mobile" formControlName="coordinatorMobileNumber">
+                                <input matInput placeholder="Mobile" formControlName="coordinatorMobileNumber"
+                                    numbersOnly>
                                 <mat-icon matSuffix>phone</mat-icon>
                                 <mat-error
                                     *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['required']">
-                                    Mobile Number
-                                    is required
+                                    Mobile Number is required
                                 </mat-error>
                                 <mat-error
                                     *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['pattern']">
-                                    Please enter
-                                    valid mobile number
+                                    Please enter valid mobile number
                                 </mat-error>
                                 <mat-error
                                     *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['minlength'] || projectDetails.controls['coordinatorMobileNumber'].errors?.['maxlength']">

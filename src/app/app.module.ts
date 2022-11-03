@@ -28,6 +28,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { ProfileComponent } from './profile/profile.component';
+import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -66,7 +67,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AuditApprovalsComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    ProfileComponent
+    ProfileComponent,
+    NumbersOnlyDirective
   ],
   imports: [
     BrowserModule,

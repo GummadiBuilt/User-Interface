@@ -26,7 +26,7 @@ export class userRegistrationResopnse{
         this.email = d.email;
         this.companyName = d.companyName;
         this.yearOfEstablishment = d.yearOfEstablishment;
-        this.typeOfEstablishment = ['CIVIL'];
+        this.typeOfEstablishment = d.typeOfEstablishment;
         this.address = d.address;
         this.countryCountryIsoCode = d.country.countryIsoCode;
         this.stateStateIsoCode = d.state.stateIsoCode;

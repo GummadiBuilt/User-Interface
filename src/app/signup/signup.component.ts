@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, Directive, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatChipInput, MatChipInputEvent } from '@angular/material/chips';
@@ -16,7 +16,6 @@ import { StatementVisitor } from '@angular/compiler';
 import { ToastrService } from 'ngx-toastr';
 
 import { ActivatedRoute, Router } from '@angular/router';
-
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -47,8 +46,7 @@ export class SignupComponent implements OnInit {
   roleId: any;
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto')
-  matAutocomplete!: MatAutocomplete;
+  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
 
   countryList = new Array<countries>();;
   statesList = new Array<registrationStatesData>();
@@ -92,32 +90,28 @@ export class SignupComponent implements OnInit {
 
 
   }
-
+  
   ngOnInit(): void {
     this.companyDetails = this._formBuilder.group({
       users: ['', Validators.required],
       firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
-      typeOfEstablishment: ['', Validators.required],
+      typeOfEstablishment: [this.typeOfEstablishment],
       address: ['', [Validators.required]],
       country: ['', [Validators.required]],
       state: ['', [Validators.required]],
       city: ['', [Validators.required]]
-
-      // addressGroup: this._formBuilder.group({
-
-      // }),
     });
     this.personalDetails = this._formBuilder.group({
       contactName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       contactDesignation: ['', Validators.required],
       contactPhoneNumber: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
-      contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
     });
     this.projectDetails = this._formBuilder.group({
       coordinatorName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],

@@ -1,7 +1,9 @@
 <div fxLayout="row wrap" fxLayoutAlign="end center" fxLayoutGap="24px grid">
     <div class="action-buttons" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
-        <button mat-raised-button class="button-approve" (click)="getAllApproveIDs(selection.selected)">Approve</button>
-        <button mat-raised-button class="button-reject" (click)="getAllRejectIDs(selection.selected)">Reject</button>
+        <button [disabled]="dataSource.data.length==0" mat-raised-button class="button-approve"
+            (click)="getAllApproveIDs(selection.selected)">Approve</button>
+        <button [disabled]="dataSource.data.length==0" mat-raised-button class="button-reject"
+            (click)="getAllRejectIDs(selection.selected)">Reject</button>
     </div>
 </div>
 <!-- {{selection.selected | json}} -->
@@ -20,7 +22,7 @@
                 </mat-checkbox>
             </td>
         </ng-container>
-        <ng-container matColumnDef="applicationRoleId" sticky>
+        <!-- <ng-container matColumnDef="applicationRoleId" >
             <th mat-header-cell *matHeaderCellDef>
                 <div class="header">
                     User ID
@@ -46,7 +48,7 @@
                 </mat-menu>
             </th>
             <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container>
+        </ng-container> -->
         <ng-container matColumnDef="firstName" sticky>
             <th mat-header-cell *matHeaderCellDef>
                 <div class="header">
