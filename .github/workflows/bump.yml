@@ -11,7 +11,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
@@ -26,7 +26,7 @@ jobs:
     - name: Momentarily remove pull request review protection
       uses: CasperWA/push-protected@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GH_TOKEN }}
         branch: main
         unprotect_reviews: true 
 
