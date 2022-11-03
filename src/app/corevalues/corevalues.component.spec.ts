@@ -11,9 +11,7 @@ describe('CorevaluesComponent', () => {
       declarations: [ CorevaluesComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CorevaluesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

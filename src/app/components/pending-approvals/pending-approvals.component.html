@@ -1,0 +1,194 @@
+<div fxLayout="row wrap" fxLayoutAlign="end center" fxLayoutGap="24px grid">
+    <div class="action-buttons" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
+        <button [disabled]="dataSource.data.length==0" mat-raised-button class="button-approve"
+            (click)="getAllApproveIDs(selection.selected)">Approve</button>
+        <button [disabled]="dataSource.data.length==0" mat-raised-button class="button-reject"
+            (click)="getAllRejectIDs(selection.selected)">Reject</button>
+    </div>
+</div>
+<!-- {{selection.selected | json}} -->
+<section class="example-container mat-elevation-z8" tabindex="0">
+    <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="select" sticky>
+            <th class="column-select" mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+            </th>
+            <td class="column-select" mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+            </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="applicationRoleId" >
+            <th mat-header-cell *matHeaderCellDef>
+                <div class="header">
+                    User ID
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Userer ID
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" [formControl]="idFilter" placeholder="ID Filter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters();">clear</button>
+                    </div>
+                </mat-menu>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container> -->
+        <ng-container matColumnDef="firstName" sticky>
+            <th mat-header-cell *matHeaderCellDef>
+                <div class="header">
+                    First Name
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        First Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" [formControl]="firstNameFilter"
+                                placeholder="First Name Filter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef>
+                Last Name
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>
+                Email
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+        </ng-container>
+        <ng-container matColumnDef="companyName">
+            <th mat-header-cell *matHeaderCellDef>
+                Company Name
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.companyName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="yearOfEstablishment">
+            <th mat-header-cell *matHeaderCellDef>
+                Year of Establishment
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.yearOfEstablishment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="typeOfEstablishment">
+            <th mat-header-cell *matHeaderCellDef>
+                Type of Establishment
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.typeOfEstablishment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef>
+                Address
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.address}} </td>
+        </ng-container>
+        <ng-container matColumnDef="city">
+            <th mat-header-cell *matHeaderCellDef>
+                City
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.city.cityName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef>
+                State
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.state.stateName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="country">
+            <th mat-header-cell *matHeaderCellDef>
+                Country
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.country.countryName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contactName">
+            <th mat-header-cell *matHeaderCellDef>
+                Contact Name
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.contactName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="contactDesignation">
+            <th mat-header-cell *matHeaderCellDef>
+                Contact Designation
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.contactDesignation}} </td>
+        </ng-container>
+        <ng-container matColumnDef="contactPhoneNumber">
+            <th mat-header-cell *matHeaderCellDef>
+                Contact Phone Number
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.contactPhoneNumber}} </td>
+        </ng-container>
+        <ng-container matColumnDef="contactEmailAddress">
+            <th mat-header-cell *matHeaderCellDef>
+                Contact Email Address
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.contactEmailAddress}} </td>
+        </ng-container>
+        <ng-container matColumnDef="coordinatorName">
+            <th mat-header-cell *matHeaderCellDef>
+                Coordinator Name
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.coordinatorName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="coordinatorMobileNumber">
+            <th mat-header-cell *matHeaderCellDef>
+                coordinator Mobile Number
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.coordinatorMobileNumber}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actions" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Actions </th>
+            <td mat-cell *matCellDef="let row">
+                <div fxLayout="row">
+                    <button mat-icon-button class="icon-approve" matTooltip="Approve" matTooltipPosition="left"
+                        (click)="getApproveID(row.id)">
+                        <span class="material-icons">task_alt</span>
+                    </button>
+                    <button mat-icon-button class="icon-reject" matTooltip="Reject" matTooltipPosition="right"
+                        (click)="getRejectID(row.id)">
+                        <span class="material-icons">
+                            highlight_off
+                        </span>
+                    </button>
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+</section>
+<mat-paginator class="example-container mat-elevation-z8" [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page of users"></mat-paginator>

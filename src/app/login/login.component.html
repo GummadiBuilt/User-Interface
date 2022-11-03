@@ -1,1 +1,33 @@
-<p>login works!</p>
+<div class="login-page" fxLayoutAlign="center center">
+    <div>
+        <mat-card>
+            <mat-card-content>
+                <form fxLayout="column" fxLayoutGap="12px grid" [formGroup]="loginForm">
+                    <h2>Log In</h2>
+                    <mat-label>Email</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Email" formControlName="email" required>
+                        <mat-error>
+                            Please provide a valid email address
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput type="password" placeholder="Password" formControlName="password" required>
+                        <mat-error>
+                            Please provide a valid password
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="submit-form" fxLayout="column" fxLayoutGap="12px">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <button mat-stroked-button type="submit" color="primary">Login</button>
+                            <button mat-raised-button color="primary" routerLink="/signup">Create Account</button>
+                        </div>
+                        <a style="text-align: center;" routerLink="/forgot-password">Forgot Password</a>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+</div>
