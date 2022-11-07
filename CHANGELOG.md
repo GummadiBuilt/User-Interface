@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.0.2...v1.1.0) (2022-11-07)
+
+
+### Features
+
+* **audit-approvals.ts:** added audit approvals ([20c78e6](https://github.com/GummadiBuilt/User-Interface/commit/20c78e663b6b61759e702e2df6511cccc4353e3a))
+* **pending-approvals.ts:** pending approval fixes ([e940749](https://github.com/GummadiBuilt/User-Interface/commit/e94074970a0b6c715e4fe576bbe4c22dbe874942))
+
 ## [1.0.2](https://github.com/GummadiBuilt/User-Interface/compare/v1.0.1...v1.0.2) (2022-11-07)
 
 
