@@ -17,8 +17,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['select', 'firstName', 'lastName', 'email', 'companyName',
     'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactName', 'contactDesignation',
-    'contactPhoneNumber', 'contactEmailAddress', 'coordinatorName', 'coordinatorMobileNumber'
-    , 'actions'];
+    'contactPhoneNumber', 'contactEmailAddress', 'coordinatorName', 'coordinatorMobileNumber', 'actions'];
 
   allPendingApprovals: any = [];
   dataSource = new MatTableDataSource<registrationApprovalResopnse>();
@@ -186,12 +185,6 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     return myFilterPredicate;
   }
 
-  // applyFilterById(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
-
-
   //get list of data
   getPendingApprovalsdata() {
     this.ApiServicesService.getRegistrationPendingApproval().subscribe((data: registrationApprovalResopnse) => {
@@ -270,14 +263,14 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
 
   clearFilters() {
     this.dataSource.filter = '';

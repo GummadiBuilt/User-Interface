@@ -7,6 +7,7 @@ import { userRegistrationResopnse } from '../signup/signResponses';
 import { ErrorServiceService } from './error-service.service';
 import { registrationApprovalResopnse } from '../components/commonservices/approvalsUserData';
 import { KeycloakService } from 'keycloak-angular';
+import { registrationAuditResopnse } from '../components/commonservices/auditUserData';
 @Injectable({
   providedIn: 'root'
 })
@@ -66,6 +67,14 @@ export class ApiServicesService {
       }),
       observe: "response"
     })
+      .pipe(
+        retry(1),
+        catchError(this.errorHandl)
+      )
+  }
+  //audit approval getAPI
+  public getRegistrationAuditApproval(): Observable<registrationAuditResopnse> {
+    return this.httpClient.get<registrationAuditResopnse>(this.url + '/api/user-registration/audit-info')
       .pipe(
         retry(1),
         catchError(this.errorHandl)
