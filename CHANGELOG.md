@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/GummadiBuilt/User-Interface/compare/v1.0.1...v1.0.2) (2022-11-07)
+
+
+### Bug Fixes
+
+* **eslint:** changes for eslint config ([b9054dd](https://github.com/GummadiBuilt/User-Interface/commit/b9054ddb6ab060740fa1331319617cde774bc7be))
+
 ## [1.0.1](https://github.com/GummadiBuilt/User-Interface/compare/v1.0.0...v1.0.1) (2022-11-03)
 
 
