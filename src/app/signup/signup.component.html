@@ -77,7 +77,7 @@
                             <mat-label>Year of Establishment</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Year of Establishment"
-                                    formControlName="yearOfEstablishment">
+                                    formControlName="yearOfEstablishment" numbersOnly>
                                 <mat-error *ngIf="companyDetails.get('yearOfEstablishment')?.errors?.['required']">
                                     Year of Establishment is required</mat-error>
                                 <mat-error *ngIf="companyDetails.get('yearOfEstablishment')?.errors?.['pattern']">

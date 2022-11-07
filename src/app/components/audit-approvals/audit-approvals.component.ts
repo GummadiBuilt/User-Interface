@@ -3,56 +3,8 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-export interface UserData {
-  id: string;
-  first_name: string;
-  last_name: string;
-  company_name: string;
-  address: string;
-  status: string;
-}
-const ELEMENT_DATA: UserData[] = [
-  {
-    id: '1',
-    first_name: 'John',
-    last_name: 'Kate',
-    company_name: 'Jhon Pvt Ltd',
-    address: 'Hyderabad, India',
-    status: 'Approved',
-  },
-  {
-    id: '2',
-    first_name: 'Philip',
-    last_name: 'Cross',
-    company_name: 'Philip Pvt Ltd',
-    address: 'Delhi, India',
-    status: 'Rejected',
-  },
-  {
-    id: '3',
-    first_name: 'Wade',
-    last_name: 'Mathew',
-    company_name: 'Wade Pvt Ltd',
-    address: 'Bangalore, India',
-    status: 'Approved',
-  },
-  {
-    id: '4',
-    first_name: 'Faulkner',
-    last_name: 'Daniel',
-    company_name: 'Daniel Pvt Ltd',
-    address: 'Chennai, India',
-    status: 'Rejected',
-  },
-  {
-    id: '5',
-    first_name: 'Stirling',
-    last_name: 'Paul',
-    company_name: 'Stirling Pvt Ltd',
-    address: 'Hyderabad, India',
-    status: 'Rejected',
-  },
-];
+import { ApiServicesService } from 'src/app/shared/api-services.service';
+import { registrationAuditResopnse } from '../commonservices/auditUserData';
 
 @Component({
   selector: 'app-audit-approvals',
@@ -61,68 +13,153 @@ const ELEMENT_DATA: UserData[] = [
 })
 export class AuditApprovalsComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'first_name', 'last_name', 'company_name', 'address', 'status'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'companyName',
+    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactName', 'contactDesignation',
+    'contactPhoneNumber', 'contactEmailAddress', 'coordinatorName', 'coordinatorMobileNumber'];
+
+  dataSource = new MatTableDataSource<registrationAuditResopnse>();
+  allAuditApprovals: any = [];
 
   idFilter = new FormControl();
   firstNameFilter = new FormControl();
   lastNameFilter = new FormControl();
+  emailFilter = new FormControl();
   companyNameFilter = new FormControl();
+  yearOfEstablishmentFilter = new FormControl();
+  typeOfEstablishmentFilter = new FormControl();
   addressFilter = new FormControl();
-  statusFilter = new FormControl();
+  cityFilter = new FormControl();
+  stateFilter = new FormControl();
+  countryFilter = new FormControl();
+  contactNameFilter = new FormControl();
+  contactDesignationFilter = new FormControl();
+  contactPhoneFilter = new FormControl();
+  contactEmailAddressFilter = new FormControl();
+  coordinatorNameFilter = new FormControl();
+  coordinatorPhoneFilter = new FormControl();
 
-  filteredValues = { id: '', first_name: '', last_name: '', company_name: '', address: '', status: '' };
+  filteredValues = {
+    id: '', firstName: '', lastName: '', email: '', companyName: '',
+    yearOfEstablishment: '', typeOfEstablishment: '', address: '', city: '', state: '', country: '',
+    contactName: '', contactDesignation: '', contactPhoneNumber: '', contactEmailAddress: '', coordinatorName: '', coordinatorMobileNumber: ''
+  };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor() {
+  constructor(private ApiServicesService: ApiServicesService) {
   }
 
   ngOnInit(): void {
-    this.idFilter.valueChanges.subscribe((idFilterValue) => {
-      this.filteredValues['id'] = idFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
     this.firstNameFilter.valueChanges.subscribe((firstNameFilterValue) => {
-      this.filteredValues['first_name'] = firstNameFilterValue;
+      this.filteredValues['firstName'] = firstNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
 
     this.lastNameFilter.valueChanges.subscribe((lastNameFilterValue) => {
-      this.filteredValues['last_name'] = lastNameFilterValue;
+      this.filteredValues['lastName'] = lastNameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.emailFilter.valueChanges.subscribe((emailFilterValue) => {
+      this.filteredValues['email'] = emailFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.companyNameFilter.valueChanges.subscribe((companyNameFilterValue) => {
-      this.filteredValues['company_name'] = companyNameFilterValue;
+      this.filteredValues['companyName'] = companyNameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.yearOfEstablishmentFilter.valueChanges.subscribe((yearOfEstablishmentFilterValue) => {
+      this.filteredValues['yearOfEstablishment'] = yearOfEstablishmentFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.typeOfEstablishmentFilter.valueChanges.subscribe((typeOfEstablishmentFilterValue) => {
+      this.filteredValues['typeOfEstablishment'] = typeOfEstablishmentFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.addressFilter.valueChanges.subscribe((addressFilterValue) => {
       this.filteredValues['address'] = addressFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-    this.statusFilter.valueChanges.subscribe((statusFilterValue) => {
-      this.filteredValues['status'] = statusFilterValue;
+    this.cityFilter.valueChanges.subscribe((cityFilterValue) => {
+      this.filteredValues['city'] = cityFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-
+    this.stateFilter.valueChanges.subscribe((stateFilterValue) => {
+      this.filteredValues['state'] = stateFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.countryFilter.valueChanges.subscribe((countryFilterValue) => {
+      this.filteredValues['country'] = countryFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.contactNameFilter.valueChanges.subscribe((contactNameFilterValue) => {
+      this.filteredValues['contactName'] = contactNameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.contactDesignationFilter.valueChanges.subscribe((contactDesignationFilterValue) => {
+      this.filteredValues['contactDesignation'] = contactDesignationFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.contactPhoneFilter.valueChanges.subscribe((contactPhoneFilterValue) => {
+      this.filteredValues['contactPhoneNumber'] = contactPhoneFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.contactEmailAddressFilter.valueChanges.subscribe((contactEmailAddressFilterValue) => {
+      this.filteredValues['contactEmailAddress'] = contactEmailAddressFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.coordinatorNameFilter.valueChanges.subscribe((coordinatorNameFilterValue) => {
+      this.filteredValues['coordinatorName'] = coordinatorNameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.coordinatorPhoneFilter.valueChanges.subscribe((coordinatorPhoneFilterValue) => {
+      this.filteredValues['coordinatorMobileNumber'] = coordinatorPhoneFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.getAuditApprovalsdata();
     this.dataSource.filterPredicate = this.customFilterPredicate();
   }
   customFilterPredicate() {
-    const myFilterPredicate = function (data: UserData, filter: string): boolean {
+    const myFilterPredicate = function (data: registrationAuditResopnse, filter: string): boolean {
       let searchString = JSON.parse(filter);
-      let firstNameFound = data.first_name.toString().trim().toLowerCase().indexOf(searchString.first_name.toLowerCase()) !== -1
-      let idFound = data.id.toString().trim().indexOf(searchString.id) !== -1
-      let lastNameFound = data.last_name.toString().trim().toLowerCase().indexOf(searchString.last_name) !== -1
-      let companyNameFound = data.company_name.toString().trim().toLowerCase().indexOf(searchString.company_name) !== -1
-      let addressFound = data.address.toString().trim().toLowerCase().indexOf(searchString.address) !== -1
-      let statusFound = data.status.toString().trim().toLowerCase().indexOf(searchString.status) !== -1
+      let firstNameFound = data.firstName.toString().trim().toLowerCase().indexOf(searchString.firstName.toLowerCase()) !== -1
+      let lastNameFound = data.lastName.toString().trim().toLowerCase().indexOf(searchString.lastName.toLowerCase()) !== -1
+      let emailFound = data.email.toString().trim().toLowerCase().indexOf(searchString.email.toLowerCase()) !== -1
+      let companyNameFound = data.companyName.toString().trim().toLowerCase().indexOf(searchString.companyName.toLowerCase()) !== -1
+      let yearOfEstablishmentFound = data.yearOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.yearOfEstablishment.toLowerCase()) !== -1
+      let typeOfEstablishmentFound = data.typeOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.typeOfEstablishment.toLowerCase()) !== -1
+      let addressFound = data.address.toString().trim().toLowerCase().indexOf(searchString.address.toLowerCase()) !== -1
+      let cityFound = data.city.toString().trim().toLowerCase().indexOf(searchString.city.toLowerCase()) !== -1
+      let stateFound = data.state.toString().trim().toLowerCase().indexOf(searchString.state.toLowerCase()) !== -1
+      let countryFound = data.country.toString().trim().toLowerCase().indexOf(searchString.country.toLowerCase()) !== -1
+
+      let contactNameFound = data.contactName.toString().trim().toLowerCase().indexOf(searchString.contactName.toLowerCase()) !== -1
+      let contactDesignationFound = data.contactDesignation.toString().trim().toLowerCase().indexOf(searchString.contactDesignation.toLowerCase()) !== -1
+      let contactPhoneFound = data.contactPhoneNumber.toString().trim().toLowerCase().indexOf(searchString.contactPhoneNumber.toLowerCase()) !== -1
+      let contactEmailAddressFound = data.contactEmailAddress.toString().trim().toLowerCase().indexOf(searchString.contactEmailAddress.toLowerCase()) !== -1
+
+      let coordinatorNameFound = data.coordinatorName.toString().trim().toLowerCase().indexOf(searchString.coordinatorName.toLowerCase()) !== -1
+      let coordinatorPhoneFound = data.coordinatorMobileNumber.toString().trim().toLowerCase().indexOf(searchString.coordinatorMobileNumber.toLowerCase()) !== -1
       if (searchString.topFilter) {
-        return firstNameFound || idFound || lastNameFound || companyNameFound || addressFound || statusFound
+        return firstNameFound || lastNameFound || emailFound || companyNameFound || yearOfEstablishmentFound ||
+          typeOfEstablishmentFound || addressFound || cityFound || stateFound || countryFound ||
+          contactNameFound || contactDesignationFound || contactPhoneFound || contactEmailAddressFound
+          || coordinatorNameFound || coordinatorPhoneFound
       } else {
-        return firstNameFound && idFound && lastNameFound && companyNameFound && addressFound && statusFound
+        return firstNameFound && lastNameFound && emailFound && companyNameFound && yearOfEstablishmentFound &&
+          typeOfEstablishmentFound && addressFound && cityFound && stateFound && countryFound &&
+          contactNameFound && contactDesignationFound && contactPhoneFound && contactEmailAddressFound && coordinatorNameFound && coordinatorPhoneFound
       }
     }
     return myFilterPredicate;
+  }
+
+  //get list of data
+  getAuditApprovalsdata() {
+    this.ApiServicesService.getRegistrationAuditApproval().subscribe((data: registrationAuditResopnse) => {
+      this.allAuditApprovals = data;
+      this.dataSource.data = this.allAuditApprovals;
+      console.log(this.dataSource.data);
+    });
   }
 
   ngAfterViewInit() {

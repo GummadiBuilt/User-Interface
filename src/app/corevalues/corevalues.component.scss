@@ -5,21 +5,11 @@
 
 .corevalues-page {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background-image: url("^assets/images/corevalues-bg.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-}
-
-.corevalues-body {
-    width: 100vh;
-    min-height: 50vh;
-    border: #841618 1px solid;
-}
-
-.corevalues-content {
-    padding: 40px 40px 40px 40px !important;
 }
 
 .corevalues-page h1 {
@@ -39,4 +29,10 @@
     font-weight: 300;
     text-align: justify;
     line-height: 28px;
+}
+
+mat-card {
+    border: #841618 1px solid;
+    background-color: transparent;
+    padding: 40px;
 }
