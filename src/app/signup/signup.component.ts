@@ -41,9 +41,19 @@ export class SignupComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   typeOfEstablishmentCtrl = new FormControl('');
   filteredTypeOfEstablishments!: Observable<string[]>;
-  typeOfEstablishment: string[] = ['CIVIL'];
+  typeOfEstablishment: string[] = [];
   allTypeOfEstablishments: string[] = [];
   roleId: any;
+
+  // roleTypeId: any;
+  // onCategorySelected(roleTypeId: number) {
+  //   if (this.roleTypeId == 2) {
+  //     this.typeOfEstablishment = ['CIVIL'];
+  //   }
+  //   if (this.roleTypeId == 1) {
+  //     this.typeOfEstablishment = [];
+  //   }
+  // }
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete!: MatAutocomplete;
@@ -90,7 +100,7 @@ export class SignupComponent implements OnInit {
 
 
   }
-  
+
   ngOnInit(): void {
     this.companyDetails = this._formBuilder.group({
       users: ['', Validators.required],

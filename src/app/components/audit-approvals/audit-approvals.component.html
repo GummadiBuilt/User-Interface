@@ -425,18 +425,18 @@
             <ng-container matColumnDef="coordinatorMobileNumber" stickyEnd>
                 <th mat-header-cell *matHeaderCellDef>
                     <div class="header">
-                        coordinator Mobile Number
+                        Coordinator Mobile Number
                         <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
                             <span class="material-icons icon-filter">filter_alt</span>
                         </button>
                     </div>
                     <mat-menu #menu>
                         <div mat-menu-item mat-filter-item class="menu-title">
-                            coordinator Mobile Number
+                            Coordinator Mobile Number
                         </div>
                         <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
                             <mat-form-field appearance="outline">
-                                <input matInput class="form-field" placeholder="coordinator Mobile Number Filter"
+                                <input matInput class="form-field" placeholder="Coordinator Mobile Number Filter"
                                     [formControl]="coordinatorPhoneFilter" #input>
                                 <button mat-icon-button matSuffix>
                                     <mat-icon>search</mat-icon>

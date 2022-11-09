@@ -1,8 +1,8 @@
 <div fxLayout="row wrap" fxLayoutAlign="end center" fxLayoutGap="24px grid">
     <div class="action-buttons" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
-        <button [disabled]="dataSource.data.length==0" mat-raised-button class="button-approve"
+        <button [disabled]="dataSource.data.length==0||!selection.hasValue()" mat-raised-button class="button-approve"
             (click)="getAllApproveIDs(selection.selected)">Approve</button>
-        <button [disabled]="dataSource.data.length==0" mat-raised-button class="button-reject"
+        <button [disabled]="dataSource.data.length==0||!selection.hasValue()" mat-raised-button class="button-reject"
             (click)="getAllRejectIDs(selection.selected)">Reject</button>
     </div>
 </div>
@@ -473,18 +473,18 @@
         <ng-container matColumnDef="coordinatorMobileNumber">
             <th mat-header-cell *matHeaderCellDef>
                 <div class="header">
-                    coordinator Mobile Number
+                    Coordinator Mobile Number
                     <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
                         <span class="material-icons icon-filter">filter_alt</span>
                     </button>
                 </div>
                 <mat-menu #menu>
                     <div mat-menu-item mat-filter-item class="menu-title">
-                        coordinator Mobile Number
+                        Coordinator Mobile Number
                     </div>
                     <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
                         <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="coordinator Mobile Number Filter"
+                            <input matInput class="form-field" placeholder="Coordinator Mobile Number Filter"
                                 [formControl]="coordinatorPhoneFilter" #input>
                             <button mat-icon-button matSuffix>
                                 <mat-icon>search</mat-icon>

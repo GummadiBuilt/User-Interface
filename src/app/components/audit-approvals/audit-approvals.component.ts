@@ -120,6 +120,9 @@ export class AuditApprovalsComponent implements OnInit, AfterViewInit {
   }
   customFilterPredicate() {
     const myFilterPredicate = function (data: registrationAuditResopnse, filter: string): boolean {
+      const city = Object.values(data.city)[1].toString();
+      const state = Object.values(data.state)[1].toString();
+      const country = Object.values(data.country)[1].toString();
       let searchString = JSON.parse(filter);
       let firstNameFound = data.firstName.toString().trim().toLowerCase().indexOf(searchString.firstName.toLowerCase()) !== -1
       let lastNameFound = data.lastName.toString().trim().toLowerCase().indexOf(searchString.lastName.toLowerCase()) !== -1
@@ -128,9 +131,9 @@ export class AuditApprovalsComponent implements OnInit, AfterViewInit {
       let yearOfEstablishmentFound = data.yearOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.yearOfEstablishment.toLowerCase()) !== -1
       let typeOfEstablishmentFound = data.typeOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.typeOfEstablishment.toLowerCase()) !== -1
       let addressFound = data.address.toString().trim().toLowerCase().indexOf(searchString.address.toLowerCase()) !== -1
-      let cityFound = data.city.toString().trim().toLowerCase().indexOf(searchString.city.toLowerCase()) !== -1
-      let stateFound = data.state.toString().trim().toLowerCase().indexOf(searchString.state.toLowerCase()) !== -1
-      let countryFound = data.country.toString().trim().toLowerCase().indexOf(searchString.country.toLowerCase()) !== -1
+      let cityFound = city.toString().trim().toLowerCase().indexOf(searchString.city.toLowerCase()) !== -1
+      let stateFound = state.toString().trim().toLowerCase().indexOf(searchString.state.toLowerCase()) !== -1
+      let countryFound = country.toString().trim().toLowerCase().indexOf(searchString.country.toLowerCase()) !== -1
 
       let contactNameFound = data.contactName.toString().trim().toLowerCase().indexOf(searchString.contactName.toLowerCase()) !== -1
       let contactDesignationFound = data.contactDesignation.toString().trim().toLowerCase().indexOf(searchString.contactDesignation.toLowerCase()) !== -1
