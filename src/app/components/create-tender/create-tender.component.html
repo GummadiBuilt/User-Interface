@@ -1,0 +1,156 @@
+<div class="tender-form" fxLayoutAlign="center center">
+    <div fxFlex="80" fxFlex.lg="70" fxFlex.md="90">
+        <mat-card>
+            <form [formGroup]="tenderDetails">
+                <div fxLayout="column">
+                    <div>
+                        <h3>Tender Details</h3>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="2px grid">
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Type of Work</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-select formControlName="type_of_work">
+                                    <mat-option>Civil</mat-option>
+                                    <mat-option>Electrical</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="tenderDetails.get('type_of_work')?.errors?.['required']">You must
+                                    make a selection
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Project Location</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Project Location" formControlName="project_location">
+                                <mat-error *ngIf="tenderDetails.get('contract_duration')?.errors?.['required']">
+                                    Enter Project Location
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Description of Work</mat-label>
+                            <mat-form-field appearance="outline">
+                                <textarea matInput placeholder="Description of Work"
+                                    formControlName="description_of_work"></textarea>
+                                    <mat-error *ngIf="tenderDetails.get('description_of_work')?.errors?.['required']">
+                                        Type Description of Work
+                                    </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Type of Contract</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-select formControlName="type_of_contract">
+                                    <mat-option>(1) ITEM RATE</mat-option>
+                                    <mat-option>(2) LUMPSUM</mat-option>
+                                    <mat-option>(3) DESIGN & BUILD</mat-option>
+                                    <mat-option>(4) COST PLUS %</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="tenderDetails.get('type_of_contract')?.errors?.['required']">You must
+                                    make a selection
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Contract Duration (Months or Days)</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Contract Duration" formControlName="contract_duration">
+                                <mat-error *ngIf="tenderDetails.get('contract_duration')?.errors?.['required']">
+                                    Choose last date of submission
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Last Date of Submission</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY"
+                                    formControlName="date_of_submission">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="tenderDetails.get('date_of_submission')?.errors?.['required']">
+                                    Choose last date of submission
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Budget</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Budget" formControlName="budget">
+                                <mat-error *ngIf="tenderDetails.get('budget')?.errors?.['required']">
+                                    Enter Budget
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Technical Tender Document</mat-label>
+                            <div [fileUploadInputFor]="fileUploadQueue" class="upload-drop-zone">
+                                <input id="singleFile" type="file" [fileUploadInputFor]="fileUploadQueue">
+                                Just drag and drop files here
+                            </div>
+                            <mat-file-upload-queue #fileUploadQueue [fileAlias]="'file'">
+                                <mat-file-upload [file]="file" [id]="i"
+                                    *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>
+                            </mat-file-upload-queue>
+                        </div> -->
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column" fxLayoutGap="4px">
+                            <mat-label>Technical Tender Document</mat-label>
+                            <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($event)">
+                                <input type="file" name="file" id="file" (change)="onFileChange($event.target)" hidden>
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30%">
+                                    <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
+                                        fxLayoutGap="8px">
+                                        <span class="material-icons">cloud_upload</span>
+                                        <span class="textLink">Upload File</span>
+                                    </label>
+                                    <label class="drag-drop" for="file">
+                                        <span>DRAG AND DROP</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row fileItem" *ngFor="let f of files; let ind = index">
+                                <span>{{f.name}}</span>
+                            </div>
+                        </div>
+
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column" fxLayoutGap="4px">
+                            <mat-label>Financial Tender Document</mat-label>
+                            <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center" fxLayoutGap="24px">
+                                <button mat-raised-button (click)="fileUpload.click()">
+                                    <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
+                                        <span class="material-icons">
+                                            cloud_upload
+                                        </span>
+                                        <span>Upload File</span>
+                                    </div>
+                                </button>
+                                <span>Choose a file or drag here</span>
+                                <input hidden formControlName="technical_tender_form" id="file" type="file" #fileUpload>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="center center">
+                        <button mat-button>Submit</button>
+                    </div>
+                </div>
+
+            </form>
+        </mat-card>
+
+    </div>
+</div>

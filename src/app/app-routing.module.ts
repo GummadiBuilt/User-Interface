@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { ContractorsComponent } from './components/contractors/contractors.component';
+import { CreateTenderComponent } from './components/create-tender/create-tender.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
@@ -43,6 +44,7 @@ const routes: Routes = [
     { path: 'audit-approvals', component: AuditApprovalsComponent,  canActivate: [AppAuthGuard] },
     ]
   },
+  { path: 'create-tender', component: CreateTenderComponent },
 ];
 
 @NgModule({
