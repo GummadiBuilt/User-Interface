@@ -22,118 +22,7 @@
                 </mat-checkbox>
             </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="applicationRoleId" >
-            <th mat-header-cell *matHeaderCellDef>
-                <div class="header">
-                    User ID
-                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
-                        <span class="material-icons icon-filter">filter_alt</span>
-                    </button>
-                </div>
-                <mat-menu #menu>
-                    <div mat-menu-item mat-filter-item class="menu-title">
-                        Userer ID
-                    </div>
-                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
-                        <mat-form-field appearance="outline">
-                            <input matInput class="form-field" [formControl]="idFilter" placeholder="ID Filter" #input>
-                            <button mat-icon-button matSuffix>
-                                <mat-icon>search</mat-icon>
-                            </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="button-clear" fxLayoutAlign="end center">
-                        <button mat-stroked-button type="reset" (click)="clearFilters();">clear</button>
-                    </div>
-                </mat-menu>
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-        </ng-container> -->
-        <ng-container matColumnDef="firstName" sticky>
-            <th mat-header-cell *matHeaderCellDef>
-                <div class="header">
-                    First Name
-                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
-                        <span class="material-icons icon-filter">filter_alt</span>
-                    </button>
-                </div>
-                <mat-menu #menu>
-                    <div mat-menu-item mat-filter-item class="menu-title">
-                        First Name
-                    </div>
-                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
-                        <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="First Name Filter"
-                                [formControl]="firstNameFilter" #input>
-                            <button mat-icon-button matSuffix>
-                                <mat-icon>search</mat-icon>
-                            </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="button-clear" fxLayoutAlign="end center">
-                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
-                    </div>
-                </mat-menu>
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
-        </ng-container>
-        <ng-container matColumnDef="lastName">
-            <th mat-header-cell *matHeaderCellDef>
-                <div class="header">
-                    Last Name
-                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
-                        <span class="material-icons icon-filter">filter_alt</span>
-                    </button>
-                </div>
-                <mat-menu #menu>
-                    <div mat-menu-item mat-filter-item class="menu-title">
-                        Last Name
-                    </div>
-                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
-                        <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="Last Name Filter"
-                                [formControl]="lastNameFilter" #input>
-                            <button mat-icon-button matSuffix>
-                                <mat-icon>search</mat-icon>
-                            </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="button-clear" fxLayoutAlign="end center">
-                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
-                    </div>
-                </mat-menu>
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>
-                <div class="header">
-                    Email
-                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
-                        <span class="material-icons icon-filter">filter_alt</span>
-                    </button>
-                </div>
-                <mat-menu #menu>
-                    <div mat-menu-item mat-filter-item class="menu-title">
-                        Email
-                    </div>
-                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
-                        <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="Email Filter" [formControl]="emailFilter"
-                                #input>
-                            <button mat-icon-button matSuffix>
-                                <mat-icon>search</mat-icon>
-                            </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="button-clear" fxLayoutAlign="end center">
-                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
-                    </div>
-                </mat-menu>
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.email}} </td>
-        </ng-container>
-        <ng-container matColumnDef="companyName">
+        <ng-container matColumnDef="companyName" sticky>
             <th mat-header-cell *matHeaderCellDef>
                 <div class="header">
                     Company Name
@@ -330,22 +219,22 @@
             <td mat-cell *matCellDef="let row"> {{row.country.countryName}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="contactName">
+        <ng-container matColumnDef="contactFirstName">
             <th mat-header-cell *matHeaderCellDef>
                 <div class="header">
-                    Contact Name
+                    Contact First Name
                     <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
                         <span class="material-icons icon-filter">filter_alt</span>
                     </button>
                 </div>
                 <mat-menu #menu>
                     <div mat-menu-item mat-filter-item class="menu-title">
-                        Contact Name
+                        Contact First Name
                     </div>
                     <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
                         <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="Contact Name Filter"
-                                [formControl]="contactNameFilter" #input>
+                            <input matInput class="form-field" placeholder="Contact First Name Filter"
+                                [formControl]="contactFirstNameFilter" #input>
                             <button mat-icon-button matSuffix>
                                 <mat-icon>search</mat-icon>
                             </button>
@@ -356,7 +245,35 @@
                     </div>
                 </mat-menu>
             </th>
-            <td mat-cell *matCellDef="let row"> {{row.contactName}} </td>
+            <td mat-cell *matCellDef="let row"> {{row.contactFirstName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="contactLastName">
+            <th mat-header-cell *matHeaderCellDef>
+                <div class="header">
+                    Contact Last Name
+                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+                        <span class="material-icons icon-filter">filter_alt</span>
+                    </button>
+                </div>
+                <mat-menu #menu>
+                    <div mat-menu-item mat-filter-item class="menu-title">
+                        Contact Last Name
+                    </div>
+                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
+                        <mat-form-field appearance="outline">
+                            <input matInput class="form-field" placeholder="Contact Last Name Filter"
+                                [formControl]="contactLastNameFilter" #input>
+                            <button mat-icon-button matSuffix>
+                                <mat-icon>search</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="button-clear" fxLayoutAlign="end center">
+                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
+                    </div>
+                </mat-menu>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.contactLastName}} </td>
         </ng-container>
         <ng-container matColumnDef="contactDesignation">
             <th mat-header-cell *matHeaderCellDef>
@@ -442,86 +359,7 @@
             </th>
             <td mat-cell *matCellDef="let row"> {{row.contactEmailAddress}} </td>
         </ng-container>
-        <ng-container matColumnDef="coordinatorName">
-            <th mat-header-cell *matHeaderCellDef>
-                <div class="header">
-                    Coordinator Name
-                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
-                        <span class="material-icons icon-filter">filter_alt</span>
-                    </button>
-                </div>
-                <mat-menu #menu>
-                    <div mat-menu-item mat-filter-item class="menu-title">
-                        Coordinator Name
-                    </div>
-                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
-                        <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="Coordinator Name Filter"
-                                [formControl]="coordinatorNameFilter" #input>
-                            <button mat-icon-button matSuffix>
-                                <mat-icon>search</mat-icon>
-                            </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="button-clear" fxLayoutAlign="end center">
-                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
-                    </div>
-                </mat-menu>
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.coordinatorName}} </td>
-        </ng-container>
-        <ng-container matColumnDef="coordinatorMobileNumber">
-            <th mat-header-cell *matHeaderCellDef>
-                <div class="header">
-                    Coordinator Mobile Number
-                    <button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
-                        <span class="material-icons icon-filter">filter_alt</span>
-                    </button>
-                </div>
-                <mat-menu #menu>
-                    <div mat-menu-item mat-filter-item class="menu-title">
-                        Coordinator Mobile Number
-                    </div>
-                    <div mat-menu-item mat-filter-item [disableRipple]="true" (click)="$event.stopPropagation();">
-                        <mat-form-field appearance="outline">
-                            <input matInput class="form-field" placeholder="Coordinator Mobile Number Filter"
-                                [formControl]="coordinatorPhoneFilter" #input>
-                            <button mat-icon-button matSuffix>
-                                <mat-icon>search</mat-icon>
-                            </button>
-                        </mat-form-field>
-                    </div>
-                    <div class="button-clear" fxLayoutAlign="end center">
-                        <button mat-stroked-button type="reset" (click)="clearFilters()">clear</button>
-                    </div>
-                </mat-menu>
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.coordinatorMobileNumber}} </td>
-        </ng-container>
-        <!-- <ng-container matColumnDef="createdBy">
-            <th mat-header-cell *matHeaderCellDef>
-                Created Date
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.changeTracking.createdBy}} </td>
-        </ng-container>
-        <ng-container matColumnDef="createdDate">
-            <th mat-header-cell *matHeaderCellDef>
-                Created Date
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.changeTracking.createdDate | date:'dd/MM/yyyy'}} </td>
-        </ng-container>
-        <ng-container matColumnDef="modifiedBy">
-            <th mat-header-cell *matHeaderCellDef>
-                Modified By
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.changeTracking.modifiedBy}} </td>
-        </ng-container>
-        <ng-container matColumnDef="modifiedDate">
-            <th mat-header-cell *matHeaderCellDef>
-                Modified Date
-            </th>
-            <td mat-cell *matCellDef="let row"> {{row.changeTracking.modifiedDate | date:'dd/MM/yyyy'}} </td>
-        </ng-container> -->
+       
         <ng-container matColumnDef="actions" stickyEnd>
             <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Actions </th>
             <td mat-cell *matCellDef="let row">
