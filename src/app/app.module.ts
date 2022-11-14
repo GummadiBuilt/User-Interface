@@ -29,6 +29,9 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { ProfileComponent } from './profile/profile.component';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
+import { CreateTenderComponent } from './components/create-tender/create-tender.component';
+import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
+import { MatFileUploadModule } from 'angular-material-fileupload';
 
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -68,7 +71,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ForgotPasswordComponent,
     ResetPasswordComponent,
     ProfileComponent,
-    NumbersOnlyDirective
+    NumbersOnlyDirective,
+    CreateTenderComponent,
+    DragDropFileUploadDirective,
   ],
   imports: [
     BrowserModule,
@@ -81,7 +86,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatSelectFilterModule,
     ToastrModule.forRoot(),
     HttpClientModule,
-    KeycloakAngularModule
+    KeycloakAngularModule,
+    MatFileUploadModule
   ],
   providers: [
     {

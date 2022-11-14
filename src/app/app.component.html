@@ -17,17 +17,14 @@
         <a class="nav-links" mat-button [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
         <span class="nav-divider">|</span>
       </div>
-      <button mat-button [matMenuTriggerFor]="belowMenu" style="color:#841618">{{menuName}}</button>
       <div class="submit-form" fxLayout="column" fxLayoutGap="12px">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <mat-menu #belowMenu="matMenu" yPosition="below">
-            <button class="login-button" fxShow="true" mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
-            <button class="login-button" fxShow="true" mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
-            <button class="login-button" fxShow="true" fxHide.lt-md mat-button *ngIf="!isLoggedIn"
-              routerLink="/signup">Create Account</button>
-          </mat-menu>
+        <div  fxLayout="row" fxLayoutAlign="space-between center">
+          <button class="login-button" fxShow="true" mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+          <button class="login-button" fxShow="true" mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
         </div>
       </div>
+
+
       <a routerLink="home" fxShow="true" fxHide.gt-sm="true">
         <img class="logo" src="assets/images/logo.png">
       </a>

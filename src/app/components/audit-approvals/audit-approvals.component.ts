@@ -13,17 +13,14 @@ import { registrationAuditResopnse } from '../commonservices/auditUserData';
 })
 export class AuditApprovalsComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'companyName',
-    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactName', 'contactDesignation',
-    'contactPhoneNumber', 'contactEmailAddress', 'coordinatorName', 'coordinatorMobileNumber'];
+  displayedColumns: string[] = [ 'companyName',
+    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactFirstName','contactLastName', 'contactDesignation',
+    'contactPhoneNumber', 'contactEmailAddress'];
 
   dataSource = new MatTableDataSource<registrationAuditResopnse>();
   allAuditApprovals: any = [];
 
   idFilter = new FormControl();
-  firstNameFilter = new FormControl();
-  lastNameFilter = new FormControl();
-  emailFilter = new FormControl();
   companyNameFilter = new FormControl();
   yearOfEstablishmentFilter = new FormControl();
   typeOfEstablishmentFilter = new FormControl();
@@ -31,17 +28,16 @@ export class AuditApprovalsComponent implements OnInit, AfterViewInit {
   cityFilter = new FormControl();
   stateFilter = new FormControl();
   countryFilter = new FormControl();
-  contactNameFilter = new FormControl();
+  contactFirstNameFilter = new FormControl();
+  contactLastNameFilter = new FormControl();
   contactDesignationFilter = new FormControl();
   contactPhoneFilter = new FormControl();
   contactEmailAddressFilter = new FormControl();
-  coordinatorNameFilter = new FormControl();
-  coordinatorPhoneFilter = new FormControl();
 
   filteredValues = {
-    id: '', firstName: '', lastName: '', email: '', companyName: '',
+    id: '', companyName: '',
     yearOfEstablishment: '', typeOfEstablishment: '', address: '', city: '', state: '', country: '',
-    contactName: '', contactDesignation: '', contactPhoneNumber: '', contactEmailAddress: '', coordinatorName: '', coordinatorMobileNumber: ''
+    contactFirstName: '',contactLastName: '', contactDesignation: '', contactPhoneNumber: '', contactEmailAddress: ''
   };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -50,19 +46,6 @@ export class AuditApprovalsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.firstNameFilter.valueChanges.subscribe((firstNameFilterValue) => {
-      this.filteredValues['firstName'] = firstNameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-
-    this.lastNameFilter.valueChanges.subscribe((lastNameFilterValue) => {
-      this.filteredValues['lastName'] = lastNameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.emailFilter.valueChanges.subscribe((emailFilterValue) => {
-      this.filteredValues['email'] = emailFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
     this.companyNameFilter.valueChanges.subscribe((companyNameFilterValue) => {
       this.filteredValues['companyName'] = companyNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
@@ -91,8 +74,12 @@ export class AuditApprovalsComponent implements OnInit, AfterViewInit {
       this.filteredValues['country'] = countryFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-    this.contactNameFilter.valueChanges.subscribe((contactNameFilterValue) => {
-      this.filteredValues['contactName'] = contactNameFilterValue;
+    this.contactFirstNameFilter.valueChanges.subscribe((contactFirstNameFilterValue) => {
+      this.filteredValues['contactFirstName'] = contactFirstNameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filteredValues);
+    });
+    this.contactLastNameFilter.valueChanges.subscribe((contactLastNameFilterValue) => {
+      this.filteredValues['contactLastName'] = contactLastNameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.contactDesignationFilter.valueChanges.subscribe((contactDesignationFilterValue) => {
@@ -107,47 +94,37 @@ export class AuditApprovalsComponent implements OnInit, AfterViewInit {
       this.filteredValues['contactEmailAddress'] = contactEmailAddressFilterValue;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-    this.coordinatorNameFilter.valueChanges.subscribe((coordinatorNameFilterValue) => {
-      this.filteredValues['coordinatorName'] = coordinatorNameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.coordinatorPhoneFilter.valueChanges.subscribe((coordinatorPhoneFilterValue) => {
-      this.filteredValues['coordinatorMobileNumber'] = coordinatorPhoneFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
     this.getAuditApprovalsdata();
     this.dataSource.filterPredicate = this.customFilterPredicate();
   }
   customFilterPredicate() {
     const myFilterPredicate = function (data: registrationAuditResopnse, filter: string): boolean {
+      const city = Object.values(data.city)[1].toString();
+      const state = Object.values(data.state)[1].toString();
+      const country = Object.values(data.country)[1].toString();
       let searchString = JSON.parse(filter);
-      let firstNameFound = data.firstName.toString().trim().toLowerCase().indexOf(searchString.firstName.toLowerCase()) !== -1
-      let lastNameFound = data.lastName.toString().trim().toLowerCase().indexOf(searchString.lastName.toLowerCase()) !== -1
-      let emailFound = data.email.toString().trim().toLowerCase().indexOf(searchString.email.toLowerCase()) !== -1
       let companyNameFound = data.companyName.toString().trim().toLowerCase().indexOf(searchString.companyName.toLowerCase()) !== -1
       let yearOfEstablishmentFound = data.yearOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.yearOfEstablishment.toLowerCase()) !== -1
       let typeOfEstablishmentFound = data.typeOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.typeOfEstablishment.toLowerCase()) !== -1
       let addressFound = data.address.toString().trim().toLowerCase().indexOf(searchString.address.toLowerCase()) !== -1
-      let cityFound = data.city.toString().trim().toLowerCase().indexOf(searchString.city.toLowerCase()) !== -1
-      let stateFound = data.state.toString().trim().toLowerCase().indexOf(searchString.state.toLowerCase()) !== -1
-      let countryFound = data.country.toString().trim().toLowerCase().indexOf(searchString.country.toLowerCase()) !== -1
+      let cityFound = city.toString().trim().toLowerCase().indexOf(searchString.city.toLowerCase()) !== -1
+      let stateFound = state.toString().trim().toLowerCase().indexOf(searchString.state.toLowerCase()) !== -1
+      let countryFound = country.toString().trim().toLowerCase().indexOf(searchString.country.toLowerCase()) !== -1
 
-      let contactNameFound = data.contactName.toString().trim().toLowerCase().indexOf(searchString.contactName.toLowerCase()) !== -1
+      let contactFirstNameFound = data.contactFirstName.toString().trim().toLowerCase().indexOf(searchString.contactFirstName.toLowerCase()) !== -1
+      let contactLastNameFound = data.contactLastName.toString().trim().toLowerCase().indexOf(searchString.contactLastName.toLowerCase()) !== -1
       let contactDesignationFound = data.contactDesignation.toString().trim().toLowerCase().indexOf(searchString.contactDesignation.toLowerCase()) !== -1
       let contactPhoneFound = data.contactPhoneNumber.toString().trim().toLowerCase().indexOf(searchString.contactPhoneNumber.toLowerCase()) !== -1
       let contactEmailAddressFound = data.contactEmailAddress.toString().trim().toLowerCase().indexOf(searchString.contactEmailAddress.toLowerCase()) !== -1
 
-      let coordinatorNameFound = data.coordinatorName.toString().trim().toLowerCase().indexOf(searchString.coordinatorName.toLowerCase()) !== -1
-      let coordinatorPhoneFound = data.coordinatorMobileNumber.toString().trim().toLowerCase().indexOf(searchString.coordinatorMobileNumber.toLowerCase()) !== -1
       if (searchString.topFilter) {
-        return firstNameFound || lastNameFound || emailFound || companyNameFound || yearOfEstablishmentFound ||
+        return companyNameFound || yearOfEstablishmentFound ||
           typeOfEstablishmentFound || addressFound || cityFound || stateFound || countryFound ||
-          contactNameFound || contactDesignationFound || contactPhoneFound || contactEmailAddressFound
-          || coordinatorNameFound || coordinatorPhoneFound
+          contactFirstNameFound || contactLastNameFound || contactDesignationFound || contactPhoneFound || contactEmailAddressFound
       } else {
-        return firstNameFound && lastNameFound && emailFound && companyNameFound && yearOfEstablishmentFound &&
+        return companyNameFound && yearOfEstablishmentFound &&
           typeOfEstablishmentFound && addressFound && cityFound && stateFound && countryFound &&
-          contactNameFound && contactDesignationFound && contactPhoneFound && contactEmailAddressFound && coordinatorNameFound && coordinatorPhoneFound
+          contactFirstNameFound && contactLastNameFound && contactDesignationFound && contactPhoneFound && contactEmailAddressFound
       }
     }
     return myFilterPredicate;

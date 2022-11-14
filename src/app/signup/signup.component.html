@@ -1,5 +1,5 @@
 <div class="register-form" fxLayoutAlign="center center">
-    <div fxFlex.lg="70" fxFlex.md="90" class="register-form-body">
+    <div fxFlex="60" fxFlex.lg="60" fxFlex.md="90" class="register-form-body">
         <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
             <mat-step [stepControl]="companyDetails" errorMessage="Fill required company details.">
                 <form [formGroup]="companyDetails">
@@ -9,7 +9,7 @@
                             fxLayout="column">
                             <mat-label>Registering as</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select formControlName="users" [(ngModel)]="roleId">
+                                <mat-select formControlName="users" [(ngModel)]="roleId" (selectionChange)='onRegisterValueChange()'>
                                     <mat-option *ngFor="let role of applicationRoles" [value]="role.id">
                                         {{role.roleName}}
                                     </mat-option>
@@ -21,44 +21,6 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
-                            <mat-label>First Name</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="First Name" minlength="3" maxlength="50" inputmode="tel"
-                                    formControlName="firstName" #nameInput>
-                                <mat-error *ngIf="companyDetails.get('firstName')?.errors?.['required']">First Name
-                                    is required</mat-error>
-                                <mat-error *ngIf="companyDetails.get('firstName')?.errors?.['minlength']">Name should
-                                    be 3 character.</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
-                            <mat-label>Last Name</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Last Name" minlength="3" maxlength="50" inputmode="tel"
-                                    formControlName="lastName" #nameInput>
-                                <mat-error *ngIf="companyDetails.get('lastName')?.errors?.['required']">Last Name
-                                    is required</mat-error>
-                                <mat-error *ngIf="companyDetails.get('lastName')?.errors?.['minlength']">Name should
-                                    be 3 character.</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
-                            <mat-label>Email Id</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Email Id" formControlName="email">
-                                <mat-icon matSuffix>mail_outline</mat-icon>
-                                <mat-error *ngIf="companyDetails.controls['email'].errors?.['required']">Email ID is
-                                    required
-                                </mat-error>
-                                <mat-error *ngIf="companyDetails.controls['email'].errors?.['pattern']">Please enter
-                                    valid email
-                                </mat-error>
-                            </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
@@ -87,43 +49,44 @@
                                     Year must be 4 digits</mat-error>
                             </mat-form-field>
                         </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="93%" fxFlex.xl="93%"
                             fxLayout="column" *ngIf="roleId == 2">
                             <mat-label>Type of Establishment</mat-label>
                             <mat-form-field class="example-chip-list" appearance="outline">
-                                <mat-chip-list #chipList aria-label="Type of Establishment selection"
-                                    formControlName="typeOfEstablishment">
-                                    <mat-chip *ngFor="let typeOfEstablishment of typeOfEstablishment"
-                                        (removed)="remove(typeOfEstablishment)">
-                                        {{typeOfEstablishment}}
+                                <mat-chip-list #chipList aria-label="Type of Establishment selection" formControlName="typeOfEstablishmentCtrl">
+                                    <mat-chip *ngFor="let typeOfEst of typeOfEstablishment"
+                                        (removed)="remove(typeOfEst)">
+                                        {{typeOfEst.establishmentDescription}}
                                         <button matChipRemove>
                                             <mat-icon>cancel</mat-icon>
                                         </button>
                                     </mat-chip>
                                     <input placeholder="Select type..." #typeOfEstablishmentInput
-                                        [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
+                                        formControlName="typeOfEstablishmentCtrl"
+                                        [matAutocomplete]="auto"
                                         [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        (matChipInputTokenEnd)="add($event)" (blur)="addOnBlur($event)">
+                                        [matChipInputAddOnBlur]=true
+                                        (matChipInputTokenEnd)="add($event)">
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                    <mat-option *ngFor="let typeOfEstablishment of filteredTypeOfEstablishments | async"
-                                        [value]="typeOfEstablishment">
-                                        {{typeOfEstablishment}}
+                                    <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
+                                        [value]="typeOfEstab">
+                                        {{typeOfEstab}}
                                     </mat-option>
                                 </mat-autocomplete>
-                                <!-- <mat-error *ngIf="companyDetails.get('typeOfEstablishment')?.errors?.['required']">
+                                <mat-error *ngIf="companyDetails.get('typeOfEstablishmentCtrl')?.errors?.['required']">
                                     Atleast 1 type should be selected
-                                </mat-error> -->
+                                </mat-error> 
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Address</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Address" formControlName="address">
+                                <input matInput placeholder="Company Address" formControlName="address">
                                 <mat-error *ngIf="companyDetails.get('address')?.errors?.['required']">
-                                    Address is required
+                                    Company Address is required
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -194,14 +157,27 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Name</mat-label>
+                            <mat-label>First Name</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Name" minlength="3" inputmode="tel"
-                                    formControlName="contactName" #nameInput>
-                                <mat-error *ngIf="personalDetails.controls['contactName'].errors?.['required']">Name is
+                                    formControlName="contactFirstName" #nameInput>
+                                <mat-error *ngIf="personalDetails.controls['contactFirstName'].errors?.['required']">First Name is
                                     required
                                 </mat-error>
-                                <mat-error *ngIf="personalDetails.get('contactName')?.errors?.['minlength']">Name should
+                                <mat-error *ngIf="personalDetails.get('contactFirstName')?.errors?.['minlength']">First Name should
+                                    be 3 character.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                            fxLayout="column">
+                            <mat-label>Last Name</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                                    formControlName="contactLastName" #nameInput>
+                                <mat-error *ngIf="personalDetails.controls['contactLastName'].errors?.['required']">Last Name is
+                                    required
+                                </mat-error>
+                                <mat-error *ngIf="personalDetails.get('contactLastName')?.errors?.['minlength']">Last Name should
                                     be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
@@ -255,66 +231,13 @@
                                 <span>Previous</span>
                             </div>
                         </button>
-                        <button mat-button matStepperNext>
-                            <div fxLayout="row" fxLayoutAlign="space-between center">
-                                <span>Next</span>
-                                <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
-                            </div>
-                        </button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="projectDetails" errorMessage="Fill required project details.">
-                <form [formGroup]="projectDetails">
-                    <ng-template matStepLabel>Regional Head & Project Coordinator</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
-                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
-                            <mat-label>Name</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name" minlength="3" maxlength="50" inputmode="tel"
-                                    formControlName="coordinatorName" #nameInput>
-                                <mat-error *ngIf="projectDetails.get('coordinatorName')?.errors?.['required']">Last Name
-                                    is required</mat-error>
-                                <mat-error *ngIf="projectDetails.get('coordinatorName')?.errors?.['minlength']">Name
-                                    should be 3 character.</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
-                            <mat-label>Mobile</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Mobile" formControlName="coordinatorMobileNumber"
-                                    numbersOnly>
-                                <mat-icon matSuffix>phone</mat-icon>
-                                <mat-error
-                                    *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['required']">
-                                    Mobile Number is required
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['pattern']">
-                                    Please enter valid mobile number
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="projectDetails.controls['coordinatorMobileNumber'].errors?.['minlength'] || projectDetails.controls['coordinatorMobileNumber'].errors?.['maxlength']">
-                                    Mobile number should be 10 digits
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="action-btn" fxLayout="row" fxLayoutAlign="space-between">
-                        <button mat-button matStepperPrevious>
-                            <div fxLayout="row" fxLayoutAlign="space-between center">
-                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
-                                <span>Previous</span>
-                            </div>
-                        </button>
                         <button mat-raised-button color="primary"
-                            [disabled]="!personalDetails.valid && !projectDetails.valid"
+                            [disabled]="!companyDetails.valid && !personalDetails.valid"
                             (click)="onSubmit()">Submit</button>
                     </div>
                 </form>
             </mat-step>
+            
         </mat-stepper>
     </div>
 </div>
