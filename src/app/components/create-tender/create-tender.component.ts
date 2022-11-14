@@ -7,6 +7,8 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
+import * as _ from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 export interface Element {
   position: string;
   item_description: string;
@@ -26,7 +28,7 @@ const ELEMENT_DATA: Element[] = [
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
-  constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient) { }
+  constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.tenderDetails = this._formBuilder.group({
@@ -101,11 +103,13 @@ export class CreateTenderComponent implements OnInit {
   ]
   public typeOfContractsList = this.typeOfContracts.slice();
 
-//AG GRID COMPONENTS
+  //AG GRID COMPONENTS
+  public appHeaders = ["Make", "Model", "Price"]
+
   public columnDefs: ColDef[] = [
-    { field: 'Make' },
-    { field: 'Model' },
-    { field: 'Price' }
+    { field: this.appHeaders[0] },
+    { field: this.appHeaders[1] },
+    { field: this.appHeaders[2] }
   ];
   public rowData: any;
   public rowSelection: 'single' | 'multiple' = 'single';
@@ -121,6 +125,7 @@ export class CreateTenderComponent implements OnInit {
     }
     const reader: FileReader = new FileReader();
     reader.readAsBinaryString(target.files[0]);
+    console.log('reader', reader);
     reader.onload = (e: any) => {
       /* create workbook */
       const binarystr: string = e.target.result;
@@ -132,10 +137,18 @@ export class CreateTenderComponent implements OnInit {
 
       /* save data */
       const data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
-      const dataHeaders = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      const dataHeaders: string[] = XLSX.utils.sheet_to_json(ws, { header: 1 });
       console.log('headers', dataHeaders[0]);
-      // console.log(data); // Data will be logged in array format containing objects
-      this.rowData = data;
+      const diff = _.difference(this.appHeaders, dataHeaders[0]);
+      if (diff.length > 0) {
+        console.log("Missing headers", diff);
+        this.toastr.error('Template is missing following Headers ' + diff.join(', '));
+      }
+      else {
+        // console.log(data); // Data will be logged in array format containing objects
+        this.rowData = data;
+      }
+
     };
   }
 }
