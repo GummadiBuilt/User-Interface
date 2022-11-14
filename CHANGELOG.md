@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.2.0...v1.3.0) (2022-11-14)
+
+
+### Features
+
+* **environment props:** added environment properties ([9d96bed](https://github.com/GummadiBuilt/User-Interface/commit/9d96bedcc9b4d3e878e7b7fa59f862702a27c435))
+
 # [1.2.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.1.0...v1.2.0) (2022-11-14)
 
 
