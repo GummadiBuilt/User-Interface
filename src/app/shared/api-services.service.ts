@@ -8,30 +8,31 @@ import { ErrorServiceService } from './error-service.service';
 import { registrationApprovalResopnse } from '../components/commonservices/approvalsUserData';
 import { KeycloakService } from 'keycloak-angular';
 import { registrationAuditResopnse } from '../components/commonservices/auditUserData';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiServicesService {
 
-  private url: string = 'http://localhost:9001';
+  private url: string = environment.apiUrl;
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService) { }
 
   public getRegistrationMasterData(): Observable<registrationMasterData> {
-    return this.httpClient.get<registrationMasterData>(this.url + '/api/registration-master-data')
+    return this.httpClient.get<registrationMasterData>(this.url + '/registration-master-data')
       .pipe(
         retry(1),
         catchError(this.errorHandl)
       )
   }
   public getRegistrationStatesData(id: string): Observable<registrationStatesData[]> {
-    return this.httpClient.get<registrationStatesData[]>(this.url + '/api/geography/get-states?countryCode=' + id)
+    return this.httpClient.get<registrationStatesData[]>(this.url + '/geography/get-states?countryCode=' + id)
       .pipe(
         retry(1),
         catchError(this.errorHandl)
       )
   }
   public getRegistrationCitiesData(id: number): Observable<registrationCitiesData[]> {
-    return this.httpClient.get<registrationCitiesData[]>(this.url + '/api/geography/get-cities?stateCode=' + id)
+    return this.httpClient.get<registrationCitiesData[]>(this.url + '/geography/get-cities?stateCode=' + id)
       .pipe(
         retry(1),
         catchError(this.errorHandl)
@@ -39,7 +40,7 @@ export class ApiServicesService {
   }
   //Save Registration postAPI
   public userRegistration(data: any) {
-    return this.httpClient.post(this.url + '/api/user-registration', data, {
+    return this.httpClient.post(this.url + '/user-registration', data, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
@@ -53,7 +54,7 @@ export class ApiServicesService {
   }
   //pending approval getAPI
   public getRegistrationPendingApproval(): Observable<registrationApprovalResopnse> {
-    return this.httpClient.get<registrationApprovalResopnse>(this.url + '/api/user-registration')
+    return this.httpClient.get<registrationApprovalResopnse>(this.url + '/user-registration')
       .pipe(
         retry(1),
         catchError(this.errorHandl)
@@ -61,7 +62,7 @@ export class ApiServicesService {
   }
   //pending approval postAPI
   public postRegistrationPendingApproval(id: any, data: any) {
-    return this.httpClient.post(this.url + '/api/user-registration/approve-reject', data, {
+    return this.httpClient.post(this.url + '/user-registration/approve-reject', data, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
@@ -74,7 +75,7 @@ export class ApiServicesService {
   }
   //audit approval getAPI
   public getRegistrationAuditApproval(): Observable<registrationAuditResopnse> {
-    return this.httpClient.get<registrationAuditResopnse>(this.url + '/api/user-registration/audit-info')
+    return this.httpClient.get<registrationAuditResopnse>(this.url + '/user-registration/audit-info')
       .pipe(
         retry(1),
         catchError(this.errorHandl)
