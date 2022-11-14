@@ -32,7 +32,7 @@ import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 import { CreateTenderComponent } from './components/create-tender/create-tender.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { MatFileUploadModule } from 'angular-material-fileupload';
-
+import { AgGridModule } from 'ag-grid-angular';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -87,7 +87,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ToastrModule.forRoot(),
     HttpClientModule,
     KeycloakAngularModule,
-    MatFileUploadModule
+    MatFileUploadModule,
+    AgGridModule
   ],
   providers: [
     {

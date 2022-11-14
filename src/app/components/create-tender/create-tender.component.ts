@@ -1,8 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { HttpClient } from '@angular/common/http';
+import { AgGridAngular } from 'ag-grid-angular';
+import { CellClickedEvent, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { Observable } from 'rxjs';
+import * as XLSX from 'xlsx';
 export interface Element {
   position: string;
   item_description: string;
@@ -22,8 +26,8 @@ const ELEMENT_DATA: Element[] = [
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
-  constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar) { }
-  
+  constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient) { }
+
   ngOnInit(): void {
     this.tenderDetails = this._formBuilder.group({
       type_of_work: ['', Validators.required],
@@ -97,6 +101,41 @@ export class CreateTenderComponent implements OnInit {
   ]
   public typeOfContractsList = this.typeOfContracts.slice();
 
-  displayedColumns: string[] = ['position', 'item_description', 'unit', 'quantity'];
-  dataSource = ELEMENT_DATA;
+//AG GRID COMPONENTS
+  public columnDefs: ColDef[] = [
+    { field: 'Make' },
+    { field: 'Model' },
+    { field: 'Price' }
+  ];
+  public rowData: any;
+  public rowSelection: 'single' | 'multiple' = 'single';
+
+
+  onGridReady(params: GridReadyEvent) {
+    console.log('grid ready', params)
+  }
+  importExcel(event: any) {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.readAsBinaryString(target.files[0]);
+    reader.onload = (e: any) => {
+      /* create workbook */
+      const binarystr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
+
+      /* selected the first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      const data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
+      const dataHeaders = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      console.log('headers', dataHeaders[0]);
+      // console.log(data); // Data will be logged in array format containing objects
+      this.rowData = data;
+    };
+  }
 }

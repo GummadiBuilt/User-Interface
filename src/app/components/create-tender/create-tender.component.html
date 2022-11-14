@@ -138,47 +138,15 @@
                                         fxLayoutGap="8px">
                                         <span class="material-icons">cloud_download</span>
                                         <span class="textLink">Import CSV</span>
-                                        <input id="file" type="file" hidden>
+                                        <input id="file" type="file" (change)="importExcel($event)" hidden>
                                     </label>
                                 </div>
                             </div>
-                            <mat-table #table [dataSource]="dataSource" formGroupName="ftdTableRows">
-                                <ng-container matColumnDef="position">
-                                    <mat-header-cell *matHeaderCellDef> Sr. No. </mat-header-cell>
-                                    <mat-cell *matCellDef="let element">
-                                        <mat-form-field floatLabel="never" appearance="outline">
-                                            <input matInput placeholder="Sr. No." formControlName="position">
-                                        </mat-form-field>
-                                    </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="item_description">
-                                    <mat-header-cell *matHeaderCellDef> Item Description </mat-header-cell>
-                                    <mat-cell *matCellDef="let element">
-                                        <mat-form-field floatLabel="never" appearance="outline">
-                                            <input matInput placeholder="Item Description"
-                                                formControlName="item_description">
-                                        </mat-form-field>
-                                    </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="unit">
-                                    <mat-header-cell *matHeaderCellDef> Unit </mat-header-cell>
-                                    <mat-cell *matCellDef="let element">
-                                        <mat-form-field floatLabel="never" appearance="outline">
-                                            <input matInput placeholder="Unit" formControlName="unit">
-                                        </mat-form-field>
-                                    </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="quantity">
-                                    <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
-                                    <mat-cell *matCellDef="let element">
-                                        <mat-form-field floatLabel="never" appearance="outline">
-                                            <input matInput placeholder="Quantity" formControlName="quantity">
-                                        </mat-form-field>
-                                    </mat-cell>
-                                </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                            </mat-table>
+                            <div class="example-wrapper">
+                                <ag-grid-angular style="width: 500px; height: 350px;" class="ag-theme-alpine"
+                                    [columnDefs]="columnDefs" [rowData]="rowData"></ag-grid-angular>
+                            </div>
+
                         </div>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="center center">
