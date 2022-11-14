@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.1.0...v1.2.0) (2022-11-14)
+
+
+### Bug Fixes
+
+* **signup:** typeofestablishment ([2f340f2](https://github.com/GummadiBuilt/User-Interface/commit/2f340f24f82ef896469401c196345295e5748823)), closes [#13](https://github.com/GummadiBuilt/User-Interface/issues/13)
+
+
+### Features
+
+* **audit-approvals.ts:** bug fixes in pending approvals ([88941a6](https://github.com/GummadiBuilt/User-Interface/commit/88941a62128085f41d6319f1684acbbffc1f830e))
+* **create-tender.ts:** added create tender page ([7a91566](https://github.com/GummadiBuilt/User-Interface/commit/7a91566508761f8cb12a1eef879bc299621bd8f1))
+* **create-tender.ts:** design changes ([21123cb](https://github.com/GummadiBuilt/User-Interface/commit/21123cb339dfb51080dbe7d24b97da41893aa066))
+
 # [1.1.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.0.2...v1.1.0) (2022-11-07)
 
 
