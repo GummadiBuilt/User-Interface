@@ -48,10 +48,10 @@ mat-label {
 }
 
 //file upload
-.dropzone {
-    min-height: 40px;
-    padding: 4px;
-}
+// .dropzone {
+//     min-height: 40px;
+//     padding: 4px;
+// }
 
 .button-upload {
     background-color: white;
@@ -62,8 +62,27 @@ mat-label {
     color: gray;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
-.drag-drop {
-    text-align: center;
-    justify-content: center;
-    justify-items: center;
+
+// .drag-drop {
+//     text-align: center;
+//     justify-content: center;
+//     justify-items: center;
+// }
+
+::ng-deep .icon-button {
+    cursor: pointer !important;
+}
+
+::ng-deep .mat-tooltip {
+    background-color: #841618 !important;
+}
+
+.mb-24 {
+    margin-bottom: 24px;
+}
+mat-header-row {
+    min-height: 40px;
+}
+::ng-deep .table .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
 }

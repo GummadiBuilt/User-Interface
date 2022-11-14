@@ -1,5 +1,5 @@
 <div class="register-form" fxLayoutAlign="center center">
-    <div fxFlex.lg="70" fxFlex.md="90" class="register-form-body">
+    <div fxFlex="60" fxFlex.lg="60" fxFlex.md="90" class="register-form-body">
         <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
             <mat-step [stepControl]="companyDetails" errorMessage="Fill required company details.">
                 <form [formGroup]="companyDetails">
