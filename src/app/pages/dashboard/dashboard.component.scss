@@ -41,6 +41,10 @@
     line-height: 32px !important;
 }
 
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
+
 .dashboard-body .router-active {
     color: #841618;
     background-color: white;

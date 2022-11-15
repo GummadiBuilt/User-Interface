@@ -45,6 +45,7 @@ const routes: Routes = [
     ]
   },
   { path: 'create-tender', component: CreateTenderComponent },
+  { path: 'tenders', component: TendersComponent },
 ];
 
 @NgModule({

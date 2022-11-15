@@ -1,0 +1,130 @@
+.tenders {
+    width: 100%;
+    min-height: 100%;
+    // background-image: url('^assets/images/loginbg.jpg');
+    // background-size: cover;
+    // background-repeat: no-repeat;
+    // background-position: center center;
+    // background-attachment: fixed;
+    padding: 40px;
+    color: #841618;
+}
+
+.mat-raised-button {
+    background-color: #841618;
+    color: white;
+}
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0.25em 0 !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 1.34375em !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline {
+    color: #3B82F6 !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
+
+table {
+    width: 100%;
+}
+
+::ng-deep .example-container {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+mat-paginator {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+th {
+    color: #841618;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.action-bar {
+    margin-bottom: 12px;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 32px !important;
+}
+
+
+//matcard styles
+.tenders-page mat-card {
+    min-height: 120px;
+    border-radius: 10px;
+    padding: 24px !important;
+}
+
+.tenders-page mat-card h3 {
+    color: #841618;
+    font-weight: 500;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.tenders-page .mat-stroked-button {
+    font-size: 12px;
+    font-weight: 500;
+    color: #841618;
+}
+
+.location-icon {
+    font-size: 16px;
+    color: #841618;
+    height: 16px;
+    width: 16px;
+}
+
+.download-icon,
+.upload-icon {
+    font-size: 20px;
+    color: #841618;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.mat-divider {
+    border-top-color: #841618;
+}
+
+.tenders-page mat-card h5 {
+    font-weight: 500;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.text-maroon {
+    color: #841618;
+}
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.bold-700 {
+    font-weight: 700;
+}
+
+.icon-edit {
+    font-size: 16px;
+    height: 16px;
+    color: #841618;
+}

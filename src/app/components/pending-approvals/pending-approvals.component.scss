@@ -101,3 +101,7 @@ mat-paginator {
 .mat-header-row {
     display: table-row;
 }
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+}
