@@ -43,7 +43,7 @@
             <!-- <button mat-button type="reset" (click)="clearFilters()">
                 <mat-icon matSuffix>close</mat-icon>
             </button> -->
-            <div>
+            <div  *ngIf="userRole?.includes('client')">
                 <button mat-raised-button routerLink="/create-tender">
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                         <mat-icon>add_circle</mat-icon>

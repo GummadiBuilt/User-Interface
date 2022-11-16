@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
+import { KeycloakService } from 'keycloak-angular';
 export interface Element {
   position: string;
   item_description: string;
@@ -28,9 +29,17 @@ const ELEMENT_DATA: Element[] = [
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
-  constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient, private toastr: ToastrService) { }
+  public userRole: string[] | undefined;
+  constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient, private toastr: ToastrService,
+    protected keycloak: KeycloakService) { }
 
   ngOnInit(): void {
+    try {
+      this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
+      //console.log('user role', this.userRole);
+    } catch (e) {
+      this.toastr.error('Failed to load user details' + e);
+    }
     this.tenderDetails = this._formBuilder.group({
       type_of_work: ['', Validators.required],
       description_of_work: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -107,9 +116,9 @@ export class CreateTenderComponent implements OnInit {
   public appHeaders = ["Make", "Model", "Price"]
 
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0] },
-    { field: this.appHeaders[1] },
-    { field: this.appHeaders[2] }
+    { field: this.appHeaders[0], sortable: true },
+    { field: this.appHeaders[1], sortable: true },
+    { field: this.appHeaders[2], sortable: true }
   ];
   public rowData: any;
   public rowSelection: 'single' | 'multiple' = 'single';

@@ -8,7 +8,7 @@ const environment = {
   KEYCLOAK_URL: 'http://localhost:8080',
   KEYCLOAK_REALM: 'Local-Realm',
   KEYCLOAK_CLIENT_ID: 'gummadi-local',
-  apiUrl: 'https://gummadibuilt.com/api'
+  apiUrl: 'http://localhost:9001/api'
 };
 
 export { environment as environment }
