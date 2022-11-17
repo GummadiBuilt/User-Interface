@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile, KeycloakRoles } from 'keycloak-js';
 import { Router } from '@angular/router';
+import { AppAuthGuard } from './guard/auth.guard';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,9 +18,10 @@ export class AppComponent {
   public userProfile: KeycloakProfile | null = null;
   public userRole: boolean | undefined;
   public menuName = 'Login';
-  constructor(private readonly keycloak: KeycloakService, private router: Router) {
-    this.userRole = keycloak.isUserInRole("admin");
-    //console.log('ser Role in constructor', this.userRole)
+  
+  constructor(private readonly keycloak: KeycloakService, private router: Router, private authGuard: AppAuthGuard) {
+    this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin');
+    //console.log('ser Role in constructor', this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin'))
   }
   @ViewChild('sidenav') sidenav!: MatSidenav;
   opened!: boolean;
@@ -27,23 +29,25 @@ export class AppComponent {
     this.sidenav.close();
   }
   public async ngOnInit() {
+   // this.router.canceledNavigationResolution = 'computed';
     this.keycloak.isLoggedIn().then(async isLogged => {
       this.isLoggedIn = isLogged;
       //console.log('isloggedin', this.isLoggedIn)
       if (this.isLoggedIn) {
 
-      this.menuName = 'Logout';
+        this.menuName = 'Logout';
         //console.log('in getrole', this.isLoggedIn);
         this.userProfile = await this.keycloak.loadUserProfile();
         if (this.userRole) {
           this.router.navigate(['/dashboard/pending-approvals']);
         }
-        else{
-          this.router.navigate(['/profile']);
+        else {
+          //console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
+          this.router.navigate(['/tenders']);
         }
       }
-    }); 
-  }  
+    });
+  }
   public login() {
     this.keycloak.login();
   }

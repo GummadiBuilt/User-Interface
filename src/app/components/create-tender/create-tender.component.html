@@ -136,13 +136,13 @@
                                 <div fxLayout="row" fxLayoutGap="25%">
                                     <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                         fxLayoutGap="8px">
-                                        <span class="material-icons">cloud_download</span>
-                                        <span class="textLink">Import CSV</span>
+                                        <span class="material-icons">cloud_upload</span>
+                                        <span class="textLink">Upload File</span>
                                         <input id="file" type="file" (change)="importExcel($event)" accept=".xlsx,.csv" hidden>
                                     </label>
                                 </div>
                             </div>
-                            <div class="example-wrapper">
+                            <div class="example-wrapper"  *ngIf='rowData'>
                                 <ag-grid-angular style="width: 500px; height: 350px;" class="ag-theme-alpine"
                                     [columnDefs]="columnDefs" [rowData]="rowData"></ag-grid-angular>
                             </div>

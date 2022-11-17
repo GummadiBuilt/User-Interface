@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridReadyEvent, SideBarDef } from 'ag-grid-community';
-import 'ag-grid-enterprise';
+import { KeycloakService } from 'keycloak-angular';
 
 export interface TenderElement {
   id: number;
@@ -57,7 +57,7 @@ export class TendersComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'description', 'type_of_contract', 'type_of_work',
     'status', 'location', 'last_date', 'contract_duration', 'tender_document', 'actions'];
   dataSource = new MatTableDataSource<TenderElement>(TENDER_DATA);
-
+  public userRole: string[] | undefined;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -69,7 +69,7 @@ export class TendersComponent implements OnInit, AfterViewInit {
     this.toggle = change.value;
   }
 
-  constructor(private fb: FormBuilder) { }
+  constructor(protected keycloak: KeycloakService) { }
 
   statusFilter = new FormControl();
   filteredValues = {
@@ -78,7 +78,12 @@ export class TendersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
-    console.log(this.dataSource.data);
+    try {
+      this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
+      //console.log('user role',this.userRole);
+    } catch (e) {
+      console.log('Failed to load user details', e);
+    }
     // this.statusFilter.valueChanges.subscribe((statusFilterValue) => {
     //   this.filteredValues['status'] = statusFilterValue;
     //   this.dataSource.filter = JSON.stringify(this.filteredValues);

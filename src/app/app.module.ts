@@ -22,7 +22,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TendersComponent } from './components/tenders/tenders.component';
 import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
 import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
@@ -33,6 +33,7 @@ import { CreateTenderComponent } from './components/create-tender/create-tender.
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { AgGridModule } from 'ag-grid-angular';
+import { ErrorInterceptor } from './guard/error.interceptor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -96,7 +97,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
       useFactory: initializeKeycloak,
       multi: true,
       deps: [KeycloakService]
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
 bootstrap: [AppComponent]
 })

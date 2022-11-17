@@ -37,15 +37,15 @@ const routes: Routes = [
   {
     path: 'dashboard', component: DashboardComponent,
     children: [{ path: '', redirectTo: 'tenders', pathMatch: 'full' },
-    { path: 'tenders', component: TendersComponent },
+    { path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard] },
     { path: 'clients', component: ClientsComponent },
     { path: 'contractors', component: ContractorsComponent },
     { path: 'pending-approvals', component: PendingApprovalsComponent,  canActivate: [AppAuthGuard] },
     { path: 'audit-approvals', component: AuditApprovalsComponent,  canActivate: [AppAuthGuard] },
     ]
   },
-  { path: 'create-tender', component: CreateTenderComponent },
-  { path: 'tenders', component: TendersComponent },
+  { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard] },
+  { path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard] },
 ];
 
 @NgModule({
