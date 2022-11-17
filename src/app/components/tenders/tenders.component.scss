@@ -128,3 +128,20 @@ th {
     height: 16px;
     color: #841618;
 }
+
+//ag-grid
+::ng-deep ag-grid-angular {
+    width: 100% !important;
+}
+
+::ng-deep .ag-root-wrapper-body.ag-layout-normal.ag-focus-managed {
+    height: 100% !important;
+}
+
+//custom filter
+.custom-filter-icon {
+    font-size: 21px;
+}
+.menu-filter {
+    padding: 12px;
+}

@@ -27,22 +27,83 @@
                         </mat-optgroup>
                     </mat-select>
                 </mat-form-field>
-            </div> -->
-
-            <div>
                 <mat-form-field appearance="outline">
-                    <mat-icon matPrefix>filter_alt</mat-icon>
                     <mat-select placeholder="Filter" [formControl]="statusFilter" multiple>
-                        <!-- <mat-option value="">All</mat-option> -->
+                        <mat-option value="">All</mat-option>
                         <mat-option *ngFor="let status of statusList" [value]="status">
                             {{status}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
+            </div> -->
+
+            <div>
+                <button mat-stroked-button [matMenuTriggerFor]="filter">
+                    <mat-icon class="custom-filter-icon" matPrefix>filter_alt</mat-icon>Filter
+                </button>
+                <mat-menu #filter="matMenu">
+                    <div (click)="$event.stopPropagation()">
+                        <mat-form-field appearance="outline">
+                            <mat-select placeholder="Filter">
+                                <mat-option *ngFor="let column of displayedColumns" [value]="column">
+                                    {{column}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-select placeholder="Filter" [formControl]="statusFilter" multiple>
+                                <!-- <mat-option value="">All</mat-option> -->
+                                <mat-option *ngFor="let status of statusList" [value]="status">
+                                    {{status}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </mat-menu>
+
             </div>
-            <!-- <button mat-button type="reset" (click)="clearFilters()">
-                <mat-icon matSuffix>close</mat-icon>
-            </button> -->
+            <div>
+                <button mat-stroked-button [matMenuTriggerFor]="filterBy">
+                    <mat-icon class="custom-filter-icon" matPrefix>filter_alt</mat-icon>Custom filter
+                </button>
+                <mat-menu #filterBy="matMenu">
+                    <div (click)="$event.stopPropagation()">
+                        <div *ngFor="let filter of customFilters" fxLayout="column">
+                            <div>
+                                <span class="ml-1">
+                                    {{filter.column}}
+                                </span>
+                                <span class="ml-1 mr-1">like</span>
+                            </div>
+                            <div>
+                                <span appearance="outline">
+                                    <input type="text" placeholder="Search for" style="max-width: 150px;"
+                                        [(ngModel)]="filter.value">
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <button mat-stroked-button *ngIf="!addFilterFlag"
+                                (click)="$event.stopPropagation(); addFilterFlag = true" title=" Add Filter">
+                                <i class="fa fa-plus-square" aria-hidden="true"></i> Add Filter
+                            </button>
+                            <div *ngIf="addFilterFlag">
+                                <span>
+                                    <select [(ngModel)]="selectedCustomColumn">
+                                        <ng-container class="filter-container" *ngFor="let column of displayedColumns">
+                                            <option *ngIf="ifExists(column)" [value]="column">{{column}}</option>
+                                        </ng-container>
+                                    </select>
+                                </span>
+                                <button mat-stroked-button
+                                    (click)="addFilter(selectedCustomColumn);addFilterFlag = false">Add</button>
+                            </div>
+                            <button mat-stroked-button (click)="customSearch()">Search</button>
+                            <button mat-stroked-button (click)="clearCustomFilter()">Clear</button>
+                        </div>
+                    </div>
+                </mat-menu>
+            </div>
             <div>
                 <button mat-raised-button routerLink="/create-tender">
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
@@ -53,6 +114,7 @@
             </div>
         </div>
     </div>
+
     <div>
         <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
             <mat-button-toggle [value]="true">
@@ -192,5 +254,10 @@
                 </div>
             </mat-card>
         </div>
+    </div>
+    <div>
+        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"  [defaultColDef]="defaultColDef"
+            [rowData]="rowData" [animateRows]="true" [sideBar]="sideBar" (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
     </div>
 </div>

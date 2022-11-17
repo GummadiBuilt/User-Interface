@@ -9,7 +9,7 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="2px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Type of Work</mat-label>
+                            <mat-label>Type of Work *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select Type of Work" formControlName="type_of_work">
                                     <mat-select-filter [placeholder]="'Search'" [array]="typeOfWorks"
@@ -26,7 +26,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Project Location</mat-label>
+                            <mat-label>Project Location *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Project Location" formControlName="project_location">
                                 <mat-error *ngIf="tenderDetails.get('contract_duration')?.errors?.['required']">
@@ -36,7 +36,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Description of Work</mat-label>
+                            <mat-label>Description of Work *</mat-label>
                             <mat-form-field appearance="outline">
                                 <textarea matInput placeholder="Description of Work"
                                     formControlName="description_of_work"></textarea>
@@ -47,7 +47,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Contract Duration (Months or Days)</mat-label>
+                            <mat-label>Contract Duration (Months or Days) *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Contract Duration" formControlName="contract_duration">
                                 <mat-error *ngIf="tenderDetails.get('contract_duration')?.errors?.['required']">
@@ -57,7 +57,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Last Date of Submission</mat-label>
+                            <mat-label>Last Date of Submission *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY"
                                     formControlName="date_of_submission">
@@ -70,7 +70,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Type of Contract</mat-label>
+                            <mat-label>Type of Contract *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select Type of Contract" formControlName="type_of_contract">
                                     <mat-select-filter [placeholder]="'Search'" [array]="typeOfContracts"
@@ -87,7 +87,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Budget</mat-label>
+                            <mat-label>Budget *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Budget" formControlName="budget">
                                 <mat-error *ngIf="tenderDetails.get('budget')?.errors?.['required']">
@@ -99,7 +99,7 @@
 
                         <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%"
                             fxFlex.xl="48%" fxLayout="column" fxLayoutGap="4px">
-                            <mat-label>Technical Tender Document</mat-label>
+                            <mat-label>Technical Tender Document *</mat-label>
                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                                 <div fxLayout="row" fxLayoutGap="25%">
                                     <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
@@ -132,7 +132,7 @@
                             fxFlex.xl="100%" fxLayout="column" fxLayoutGap="8px">
 
                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                <mat-label>Financial Tender Document</mat-label>
+                                <mat-label>Financial Tender Document *</mat-label>
                                 <div fxLayout="row" fxLayoutGap="25%">
                                     <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                         fxLayoutGap="8px">

@@ -1,8 +1,11 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { AgGridAngular } from 'ag-grid-angular';
+import { ColDef, GridReadyEvent, SideBarDef } from 'ag-grid-community';
+import 'ag-grid-enterprise';
 
 export interface TenderElement {
   id: number;
@@ -66,7 +69,7 @@ export class TendersComponent implements OnInit, AfterViewInit {
     this.toggle = change.value;
   }
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   statusFilter = new FormControl();
   filteredValues = {
@@ -75,7 +78,7 @@ export class TendersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
-
+    console.log(this.dataSource.data);
     // this.statusFilter.valueChanges.subscribe((statusFilterValue) => {
     //   this.filteredValues['status'] = statusFilterValue;
     //   this.dataSource.filter = JSON.stringify(this.filteredValues);
@@ -84,15 +87,17 @@ export class TendersComponent implements OnInit, AfterViewInit {
     this.statusFilter.valueChanges.subscribe((positionFilterValue) => {
       this.dataSource.data = this.filterOptions(positionFilterValue);
     });
+
   }
 
+
   statusList = ['Pending', 'Published', 'Rejected'];
-  filterOptions(positionValue: string[]): TenderElement[] {
-    if ((!positionValue || positionValue.length === 0)) {
+  filterOptions(statusValue: string[]): TenderElement[] {
+    if ((!statusValue || statusValue.length === 0)) {
       return TENDER_DATA;
     }
     const filtered = TENDER_DATA.filter((periodicElement) => {
-      return (positionValue ? positionValue.indexOf(periodicElement.status + '') !== -1 : false)
+      return (statusValue ? statusValue.indexOf(periodicElement.status + '') !== -1 : false)
     });
     return filtered;
   }
@@ -101,6 +106,7 @@ export class TendersComponent implements OnInit, AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 
   fileName = '';
   onFileSelected(event: any) {
@@ -153,4 +159,90 @@ export class TendersComponent implements OnInit, AfterViewInit {
   // ];
   // filterGroupsArray = ['Status', 'Type of Work', 'Type of Contract']
   // public filterGroupsList = this.filterGroupsArray.slice();
+
+
+  //ag-grid
+  @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
+  // Each Column Definition results in one Column.
+  public columnDefs: ColDef[] = [
+    { headerName: 'Tender ID', field: 'id', filter: 'agMultiColumnFilter' },
+    { headerName: 'Description', field: 'description', filter: 'agMultiColumnFilter' },
+    { headerName: 'Type of Contract', field: 'type_of_contract', filter: 'agMultiColumnFilter' },
+    { headerName: 'Type of Work', field: 'type_of_work', filter: 'agMultiColumnFilter' },
+    { headerName: 'Status', field: 'status', filter: 'agMultiColumnFilter' },
+    { headerName: 'Location', field: 'location', filter: 'agMultiColumnFilter' },
+    { headerName: 'Last Date', field: 'last_date', filter: 'agMultiColumnFilter' },
+    { headerName: 'Contract Duration', field: 'contract_duration', filter: 'agMultiColumnFilter' },
+    { headerName: 'Tender Document', field: 'tender_document', filter: 'agMultiColumnFilter' },
+    { headerName: 'Actions', field: 'actions', filter: 'agMultiColumnFilter' }
+  ];
+
+  // DefaultColDef sets props common to all Columns
+  public defaultColDef: ColDef = {
+    flex: 1,
+    minWidth: 200,
+    resizable: true,
+    menuTabs: ['filterMenuTab'],
+  };
+  public sideBar: SideBarDef | string | string[] | boolean | null = {
+    toolPanels: ['filters'],
+  };
+
+  public rowData: any;
+  onGridReady(params: GridReadyEvent) {
+    this.rowData = [
+      {
+        id: 1, description: 'Construction of Naval Air Station', type_of_contract: 'Building & Design',
+        type_of_work: 'Civil', status: 'Published', location: 'Karnataka, India', last_date: '20-12-2022', contract_duration: '45 Days'
+      },
+      {
+        id: 2, description: 'Construction of Naval Air Station', type_of_contract: 'Fixed Lump Sum Price Contract',
+        type_of_work: 'Electrical', status: 'Pending', location: 'Hyderabad, India', last_date: '30-11-2022', contract_duration: '30 Days'
+      },
+      {
+        id: 3, description: 'Construction of Naval Air Station', type_of_contract: 'GMP Contract',
+        type_of_work: 'Civil', status: 'Rejected', location: 'Kolkata, India', last_date: '23-09-2022', contract_duration: '90 Days'
+      },
+      {
+        id: 4, description: 'Construction of Naval Air Station', type_of_contract: 'GMP Contract',
+        type_of_work: 'Civil', status: 'Rejected', location: 'Kolkata, India', last_date: '23-09-2022', contract_duration: '90 Days'
+      },
+    ];
+  }
+
+
+  //custom filter
+  addFilterFlag = false;
+  selectedCustomColumn: any;
+  customFilters: any = [];
+  addFilter(columnName: any) {
+    this.customFilters.push({ column: columnName, value: '' });
+    this.selectedCustomColumn = null;
+  }
+  ifExists(columnName: any) {
+    for (const iterator of this.customFilters) {
+      if (iterator.column == columnName) {
+        return false;
+      }
+    }
+    return true;
+  }
+  customSearch() {
+    this.dataSource.data = TENDER_DATA.filter(row => this.multipleFilterPredicate(row));
+    this.dataSource._updateChangeSubscription();
+  }
+  multipleFilterPredicate(row: any) {
+    for (const iterator of this.customFilters) {
+      if (iterator.value != '' && (row[iterator.column] + '').toLocaleLowerCase().indexOf(iterator.value) == -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+  clearCustomFilter() {
+    this.customFilters = [];
+    this.dataSource.data = TENDER_DATA;
+    this.dataSource._updateChangeSubscription();
+  }
+
 }
