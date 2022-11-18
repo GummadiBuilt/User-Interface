@@ -19,7 +19,7 @@ export class AppComponent {
   public userRole: boolean | undefined;
   public menuName = 'Login';
   
-  constructor(private readonly keycloak: KeycloakService, private router: Router, private authGuard: AppAuthGuard) {
+  constructor(private readonly keycloak: KeycloakService, public router: Router, private authGuard: AppAuthGuard) {
     this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin');
     //console.log('ser Role in constructor', this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin'))
   }
@@ -39,10 +39,10 @@ export class AppComponent {
         //console.log('in getrole', this.isLoggedIn);
         this.userProfile = await this.keycloak.loadUserProfile();
         if (this.userRole) {
-          this.router.navigate(['/dashboard/pending-approvals']);
+          this.router.navigate(['/pending-approvals']);
         }
         else {
-          //console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
+          console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
           this.router.navigate(['/tenders']);
         }
       }

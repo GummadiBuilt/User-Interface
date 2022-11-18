@@ -15,7 +15,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectFilterModule } from 'mat-select-filter';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { ContractorsComponent } from './components/contractors/contractors.component';
 import { ToastrModule } from 'ngx-toastr';
@@ -34,6 +33,8 @@ import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { AgGridModule } from 'ag-grid-angular';
 import { ErrorInterceptor } from './guard/error.interceptor';
+import { BreadcrumbModule } from 'xng-breadcrumb';
+import { ButtonRendererComponent } from './components/button-renderer/button-renderer.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -63,7 +64,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AboutComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent,
     ClientsComponent,
     ContractorsComponent,
     TendersComponent,
@@ -75,6 +75,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NumbersOnlyDirective,
     CreateTenderComponent,
     DragDropFileUploadDirective,
+    ButtonRendererComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,7 +90,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     HttpClientModule,
     KeycloakAngularModule,
     MatFileUploadModule,
-    AgGridModule
+    AgGridModule,
+    BreadcrumbModule,
   ],
   providers: [
     {

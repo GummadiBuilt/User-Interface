@@ -15,7 +15,6 @@ import { CorevaluesComponent } from './corevalues/corevalues.component';
 import { AppAuthGuard } from './guard/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ServiceComponent } from './service/service.component';
@@ -23,7 +22,7 @@ import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'login', component: AppComponent,  canActivate: [AppAuthGuard] },
+  { path: 'login', component: AppComponent, canActivate: [AppAuthGuard] },
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
@@ -33,19 +32,15 @@ const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'corevalues', component: CorevaluesComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'profile', component: ProfileComponent,  canActivate: [AppAuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard] },
   {
-    path: 'dashboard', component: DashboardComponent,
-    children: [{ path: '', redirectTo: 'tenders', pathMatch: 'full' },
-    { path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard] },
-    { path: 'clients', component: ClientsComponent },
-    { path: 'contractors', component: ContractorsComponent },
-    { path: 'pending-approvals', component: PendingApprovalsComponent,  canActivate: [AppAuthGuard] },
-    { path: 'audit-approvals', component: AuditApprovalsComponent,  canActivate: [AppAuthGuard] },
-    ]
+    path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } },
+    children: [{ path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } }]
   },
-  { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard] },
-  { path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard] },
+  { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },
+  { path: 'contractors', component: ContractorsComponent, data: { breadcrumb: 'Contractors' } },
+  { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },
+  { path: 'audit-approvals', component: AuditApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Audit Approvals' } },
 ];
 
 @NgModule({

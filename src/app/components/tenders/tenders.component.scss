@@ -1,18 +1,39 @@
 .tenders {
     width: 100%;
     min-height: 100%;
-    // background-image: url('^assets/images/loginbg.jpg');
-    // background-size: cover;
-    // background-repeat: no-repeat;
-    // background-position: center center;
-    // background-attachment: fixed;
-    padding: 40px;
     color: #841618;
+    padding: 0 24px 24px 24px;
 }
 
 .mat-raised-button {
     background-color: #841618;
     color: white;
+}
+
+mat-button-toggle {
+    color: #841618;
+    background-color: white;
+}
+
+.mat-button-toggle-checked {
+    color: white;
+    background-color: #841618;
+}
+
+.toggle-first {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: #841618 1px solid;
+    border-top: #841618 1px solid;
+    border-bottom: #841618 1px solid;
+}
+
+.toggle-last {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-right: #841618 1px solid;
+    border-top: #841618 1px solid;
+    border-bottom: #841618 1px solid;
 }
 
 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
@@ -54,10 +75,6 @@ th {
     color: #841618;
     font-size: 14px;
     font-weight: 500;
-}
-
-.action-bar {
-    margin-bottom: 12px;
 }
 
 ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
@@ -136,12 +153,4 @@ th {
 
 ::ng-deep .ag-root-wrapper-body.ag-layout-normal.ag-focus-managed {
     height: 100% !important;
-}
-
-//custom filter
-.custom-filter-icon {
-    font-size: 21px;
-}
-.menu-filter {
-    padding: 12px;
 }
