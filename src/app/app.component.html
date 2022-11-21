@@ -21,14 +21,19 @@
         <a class="nav-links" mat-button routerLink="tenders" routerLinkActive="router-link-active">Tenders</a>
         <span class="nav-divider">|</span>
       </div>
-      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn && userRoleEnable?.includes('admin')">
+      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center"
+        *ngIf="isLoggedIn && userRoleEnable?.includes('admin')">
         <!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
-        <a class="nav-links" mat-button [matMenuTriggerFor]="menu"  routerLinkActive="router-link-active">Admin</a>
+        <a class="nav-links" mat-button [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin</a>
         <mat-menu #menu="matMenu">
-          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="clients" routerLinkActive="router-link-active">Clients</a>
-          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="contractors" routerLinkActive="router-link-active">Contractors</a>
-          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="pending-approvals" routerLinkActive="router-link-active">Pending Approvals</a>
-          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="audit-approvals" routerLinkActive="router-link-active">Audit Approvals</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="clients"
+            routerLinkActive="router-link-active">Clients</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="contractors"
+            routerLinkActive="router-link-active">Contractors</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="pending-approvals"
+            routerLinkActive="router-link-active">Pending Approvals</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="audit-approvals"
+            routerLinkActive="router-link-active">Audit Approvals</a>
         </mat-menu>
         <span class="nav-divider">|</span>
       </div>
@@ -52,7 +57,8 @@
         <div fxLayout="column" fxLayoutGap="12px">
           <a (click)="clickHandler()" class="nav-links" *ngFor="let link of links; index as i" mat-button
             [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
-          <a (click)="clickHandler()" class="login-button" mat-button routerLink="login">Login</a>
+          <a (click)="clickHandler();login();" *ngIf="!isLoggedIn" class="login-button" mat-button>Login</a>
+          <a (click)="clickHandler();logout();" *ngIf="isLoggedIn" class="login-button" mat-button>Logout</a>
         </div>
       </mat-nav-list>
     </mat-sidenav>

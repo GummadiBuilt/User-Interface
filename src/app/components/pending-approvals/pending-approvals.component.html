@@ -10,7 +10,10 @@
     <mat-icon>arrow_right</mat-icon>
   </ng-template> -->
 <div class="pending-approvals">
-    <div fxLayout="row wrap" fxLayoutAlign="end center" fxLayoutGap="24px grid">
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="24px grid">
+        <div class="text-maroon" fxLayout="row" fxLayoutAlign="start center">
+            <h2>Pending Approvals</h2>
+        </div>
         <div class="action-buttons" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
             <button [disabled]="dataSource.data.length==0||!selection.hasValue()" mat-raised-button
                 class="button-approve" (click)="getAllApproveIDs(selection.selected)">Approve</button>

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
@@ -62,67 +62,69 @@ export class TendersComponent implements OnInit {
     { headerName: 'Type of Work', field: 'type_of_work', filter: 'agTextColumnFilter' },
     { headerName: 'Status', field: 'status', filter: 'agTextColumnFilter' },
     { headerName: 'Location', field: 'location', filter: 'agTextColumnFilter' },
-    { headerName: 'Last Date of Submission', field: 'last_date', filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Contract Duration', field: 'contract_duration', filter: 'agTextColumnFilter' },
-    {
-      headerName: 'Tender Document', field: 'tender_document', cellRenderer: ButtonRendererComponent,
-      cellRendererParams: {
-        clicked: function (field: any) {
+    { headerName: 'Last Date of Submission', field: 'last_date', filter: 'agDateColumnFilter', 
+    filterParams: filterParams },
+{ headerName: 'Contract Duration', field: 'contract_duration', filter: 'agTextColumnFilter' },
+{
+  headerName: 'Tender Document', field: 'tender_document', cellRenderer: ButtonRendererComponent,
+    cellRendererParams: {
+    clicked: function (field: any) {
 
-        },
-        label: 'Tender Document',
-      },
-      filter: false,
     },
-    {
-      headerName: 'Actions', field: 'actions', cellRenderer: ButtonRendererComponent,
-      cellRendererParams: {
-        clicked: function (field: any) {
-
-        },
-        label: 'Edit'
+    label: 'Tender Document',
       },
-      filter: false,
-      pinned: 'right'
+  filter: false,
+    },
+{
+  headerName: 'Actions', field: 'actions', cellRenderer: ButtonRendererComponent,
+    cellRendererParams: {
+    // clicked: function (field: any) {
+    //   return 
+    // },
+    label: 'Edit',
+      inRouterLink: '/edit-tender',
+      },
+  filter: false,
+    pinned: 'right',
     }
   ];
 
   // DefaultColDef sets props common to all Columns
   public defaultColDef: ColDef = {
-    flex: 1,
-    minWidth: 200,
-    resizable: true,
-    menuTabs: ['filterMenuTab'],
-    filter: true,
-    floatingFilter: true,
-  };
+  flex: 1,
+  minWidth: 200,
+  resizable: true,
+  menuTabs: ['filterMenuTab'],
+  filter: true,
+  floatingFilter: true,
+};
   public sideBar: SideBarDef | string | string[] | boolean | null = {
-    toolPanels: ['filters'],
+  toolPanels: ['filters'],
   };
 
 
 
   public rowData: any;
-  onGridReady(params: GridReadyEvent) {
-    this.rowData = [
-      {
-        id: 1, description: 'Construction of Naval Air Station', type_of_contract: 'Building & Design',
-        type_of_work: 'Civil', status: 'Published', location: 'Karnataka, India', last_date: '20-12-2022', contract_duration: '45 Days'
-      },
-      {
-        id: 2, description: 'Construction of Naval Air Station', type_of_contract: 'Fixed Lump Sum Price Contract',
-        type_of_work: 'Electrical', status: 'Pending', location: 'Hyderabad, India', last_date: '30-11-2022', contract_duration: '30 Days'
-      },
-      {
-        id: 3, description: 'Construction of Naval Air Station', type_of_contract: 'GMP Contract',
-        type_of_work: 'Civil', status: 'Rejected', location: 'Kolkata, India', last_date: '23-09-2022', contract_duration: '90 Days'
-      },
-      {
-        id: 4, description: 'Construction of Naval Air Station', type_of_contract: 'GMP Contract',
-        type_of_work: 'Civil', status: 'Rejected', location: 'Kolkata, India', last_date: '23-09-2022', contract_duration: '90 Days'
-      },
-    ];
-  }
+onGridReady(params: GridReadyEvent) {
+  this.rowData = [
+    {
+      id: 1, description: 'Construction of Naval Air Station', type_of_contract: 'Building & Design',
+      type_of_work: 'Civil', status: 'Published', location: 'Karnataka, India', last_date: '20-12-2022', contract_duration: '45 Days'
+    },
+    {
+      id: 2, description: 'Construction of Naval Air Station', type_of_contract: 'Fixed Lump Sum Price Contract',
+      type_of_work: 'Electrical', status: 'Pending', location: 'Hyderabad, India', last_date: '30-11-2022', contract_duration: '30 Days'
+    },
+    {
+      id: 3, description: 'Construction of Naval Air Station', type_of_contract: 'GMP Contract',
+      type_of_work: 'Civil', status: 'Rejected', location: 'Kolkata, India', last_date: '23-09-2022', contract_duration: '90 Days'
+    },
+    {
+      id: 4, description: 'Construction of Naval Air Station', type_of_contract: 'GMP Contract',
+      type_of_work: 'Civil', status: 'Rejected', location: 'Kolkata, India', last_date: '23-09-2022', contract_duration: '90 Days'
+    },
+  ];
+}
 
 }
 

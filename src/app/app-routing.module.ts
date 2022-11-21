@@ -35,7 +35,8 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard] },
   {
     path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } },
-    children: [{ path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } }]
+    children: [{ path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
+    { path: 'edit-tender', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } }]
   },
 
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },

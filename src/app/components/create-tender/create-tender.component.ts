@@ -4,8 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { AgGridAngular } from 'ag-grid-angular';
-import { CellClickedEvent, CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, 
-  ColDef, GridApi, GridReadyEvent, RowValueChangedEvent } from 'ag-grid-community';
+import {
+  CellClickedEvent, CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent,
+  ColDef, GridApi, GridReadyEvent, RowValueChangedEvent
+} from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
@@ -13,21 +15,22 @@ import { ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
 import { ApiServicesService } from '../../shared/api-services.service';
 import { tenderMasterData, typeOfContracts, typeOfEstablishment } from './createTender';
- import {
-   MAT_MOMENT_DATE_FORMATS,
-   MomentDateAdapter,
-   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
- } from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import 'moment/locale/ja';
 import 'moment/locale/fr';
 import { commonOptionsData } from '../../shared/commonOptions';
+import { DatePipe } from '@angular/common';
 export const MY_DATE_FORMATS = {
   parse: {
-    dateInput: 'DD/MM/YYYY',
+    dateInput: 'DD-MM-YYYY',
   },
   display: {
-    dateInput: 'DD/MM/YYYY',
+    dateInput: 'DD-MM-YYYY',
     monthYearLabel: 'MMMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY'
@@ -48,7 +51,7 @@ function actionCellRenderer(params: any) {
   //   <button  class="action-button cancel"  data-action="cancel" > Cancel </button>
   //   `;
   //     } else {
-        eGui.innerHTML = `
+  eGui.innerHTML = `
     <button class="action-button add"  data-action="add" > Add  </button>
     <button class="action-button delete" data-action="delete" > Delete </button>
     `;
@@ -61,28 +64,29 @@ function actionCellRenderer(params: any) {
   templateUrl: './create-tender.component.html',
   styleUrls: ['./create-tender.component.scss'],
   providers: [
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    DatePipe
   ]
 })
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
   public userRole: string[] | undefined;
-  public typeOfWorksList= new Array<typeOfEstablishment>();
-  public typeOfContractsList= new Array<typeOfContracts>();
-  public typeOfWorks = new Array<typeOfEstablishment>();   
+  public typeOfWorksList = new Array<typeOfEstablishment>();
+  public typeOfContractsList = new Array<typeOfContracts>();
+  public typeOfWorks = new Array<typeOfEstablishment>();
   public typeOfContracts = new Array<typeOfContracts>();
   public tenderDocumentName: any;
   //public fileSource: any ;
   public file: any;
   durationCounterList: any;
   constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient, private toastr: ToastrService,
-    protected keycloak: KeycloakService,private ApiServicesService: ApiServicesService,
+    protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
     private _adapter: DateAdapter<any>,
-    @Inject(MAT_DATE_LOCALE) private _locale: string,) { }
-    
-getDateFormatString(): string {
+    @Inject(MAT_DATE_LOCALE) private _locale: string, private datePipe: DatePipe) { }
+
+  getDateFormatString(): string {
     return 'DD/MM/YYYY';
   }
   ngOnInit(): void {
@@ -100,10 +104,10 @@ getDateFormatString(): string {
       projectLocation: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       typeOfContract: ['', [Validators.required]],
       contractDuration: ['', [Validators.required]],
-      durationCounter:['',[Validators.required]],
+      durationCounter: ['', [Validators.required]],
       lastDateOfSubmission: ['', [Validators.required]],
       estimatedBudget: ['', [Validators.required]],
-      tenderFinanceInfo:[''],
+      tenderFinanceInfo: [''],
       //fileSource:  [null]
       // ftdTableRows: this._formBuilder.group({
       //   position: ['', Validators.required],
@@ -121,12 +125,12 @@ getDateFormatString(): string {
       this.typeOfWorksList = this.typeOfWorks.slice();
       this.typeOfContracts = data.typeOfContracts;
       this.typeOfContractsList = this.typeOfContracts.slice();
-      
+
     });
   }
-  getCommonOptionsData(){
-    this.ApiServicesService.getCommonOptionsData().subscribe((data:commonOptionsData) => {
-      console.log('common',data.durationCounter);
+  getCommonOptionsData() {
+    this.ApiServicesService.getCommonOptionsData().subscribe((data: commonOptionsData) => {
+      console.log('common', data.durationCounter);
       this.durationCounterList = data.durationCounter;
     });
   }
@@ -149,7 +153,7 @@ getDateFormatString(): string {
     }
   }
 
-  
+
 
   //AG GRID COMPONENTS
   public appHeaders = ["Make", "Model", "Price"]
@@ -219,13 +223,13 @@ getDateFormatString(): string {
         //   add: [{ make: '', model: '', price: 0 }]
         // });
         params.api.updateRowData({
-          add:  [{ make: '', model: '', price: 0 }],
+          add: [{ make: '', model: '', price: 0 }],
           addIndex: params.node.rowIndex + 1
         });
         params.api.startEditingCell({
-             rowIndex: params.node.rowIndex + 1,
+          rowIndex: params.node.rowIndex + 1,
           //   // gets the first columnKey
-             colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
 
@@ -298,6 +302,16 @@ getDateFormatString(): string {
 
     };
   }
+  //date format to dd-MM-yyyy
+  dateConversion() {
+    if (this.tenderDetails.value.lastDateOfSubmission) {
+      this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd-MM-yyyy');
+      console.log(this.tenderDetails.value.lastDateOfSubmission);
+    }
+  }
   onSubmit() {
-  }   
+    this.dateConversion();
+    console.log(this.tenderDetails.value);
+  }
+
 }

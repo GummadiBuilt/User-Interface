@@ -6,12 +6,6 @@
 .tender-form {
     width: 100%;
     min-height: 100%;
-    // background-image: url('^assets/images/loginbg.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    // padding: 40px;
 }
 
 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
@@ -47,12 +41,6 @@ mat-label {
     color: #841618;
 }
 
-//file upload
-// .dropzone {
-//     min-height: 40px;
-//     padding: 4px;
-// }
-
 .button-upload {
     background-color: white;
     font-weight: 400;
@@ -62,12 +50,6 @@ mat-label {
     color: gray;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
-
-// .drag-drop {
-//     text-align: center;
-//     justify-content: center;
-//     justify-items: center;
-// }
 
 ::ng-deep .icon-button {
     cursor: pointer !important;
@@ -80,9 +62,41 @@ mat-label {
 .mb-24 {
     margin-bottom: 24px;
 }
+
 mat-header-row {
     min-height: 40px;
 }
+
 ::ng-deep .table .mat-form-field-wrapper {
     padding-bottom: 0 !important;
+}
+
+//breadcrumbs
+.breadcrumbs {
+    padding: 0 24px 24px 24px;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    border-radius: 5px !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 2px !important;
+    font-size: 22px !important;
+}
+
+mat-error {
+    margin-top: 16px;
+}
+
+textarea {
+    height: 70px;
 }

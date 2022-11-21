@@ -1,14 +1,14 @@
 <div class="breadcrumbs">
     <xng-breadcrumb [separator]="separatorTemplate">
-      <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-        <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
-        <ng-container>{{ breadcrumb }}</ng-container>
-      </ng-container>
+        <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+            <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+            <ng-container>{{ breadcrumb }}</ng-container>
+        </ng-container>
     </xng-breadcrumb>
-  </div>
-  <ng-template #separatorTemplate>
+</div>
+<ng-template #separatorTemplate>
     <mat-icon>arrow_right</mat-icon>
-  </ng-template>
+</ng-template>
 <div class="tender-form" fxLayoutAlign="center center">
     <div fxFlex="60" fxFlex.lg="60" fxFlex.md="90">
         <mat-card>
@@ -17,15 +17,17 @@
                     <div>
                         <h3>Tender Details</h3>
                     </div>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="2px grid">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="24px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
                             <mat-label>Type of Work *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select Type of Work" formControlName="typeOfWork">
-                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'establishmentDescription'"
-                                     [array]="typeOfWorks" (filteredReturn)="typeOfWorksList =$event"></mat-select-filter>
-                                    <mat-option *ngFor="let item of typeOfWorksList" [value]="item.establishmentDescription">
+                                    <mat-select-filter [placeholder]="'Search'"
+                                        [displayMember]="'establishmentDescription'" [array]="typeOfWorks"
+                                        (filteredReturn)="typeOfWorksList =$event"></mat-select-filter>
+                                    <mat-option *ngFor="let item of typeOfWorksList"
+                                        [value]="item.establishmentDescription">
                                         {{item.establishmentDescription}}
                                     </mat-option>
                                 </mat-select>
@@ -58,28 +60,30 @@
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
                             <mat-label>Contract Duration (Months or Days) *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Contract Duration" formControlName="contractDuration">
-                                <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
-                                    Contract Duration
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field appearance="outline">
-                                <mat-select placeholder="Months or Days" formControlName="durationCounter">
-                                    <mat-option *ngFor="let item of durationCounterList" [value]="item.id">
-                                        {{item.text}}
-                                    </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="tenderDetails.get('durationCounter')?.errors?.['required']">
-                                    Choose Duration
-                                </mat-error>
-                            </mat-form-field>
+                            <div fxLayout="column" fxLayoutGap="16px">
+                                <mat-form-field appearance="outline">
+                                    <input matInput numbersOnly placeholder="Contract Duration" formControlName="contractDuration">
+                                    <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
+                                        Contract Duration
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-select placeholder="Months or Days" formControlName="durationCounter">
+                                        <mat-option *ngFor="let item of durationCounterList" [value]="item.id">
+                                            {{item.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="tenderDetails.get('durationCounter')?.errors?.['required']">
+                                        Choose Duration
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
                             <mat-label>Last Date of Submission *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
+                                <input matInput [matDatepicker]="picker" placeholder="DD-MM-YYYY"
                                     formControlName="lastDateOfSubmission">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
@@ -94,7 +98,8 @@
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select Type of Contract" formControlName="typeOfContract">
                                     <mat-select-filter [placeholder]="'Search'" [displayMember]="'typeOfContract'"
-                                    [array]="typeOfContracts" (filteredReturn)="typeOfContractsList =$event"></mat-select-filter>
+                                        [array]="typeOfContracts" (filteredReturn)="typeOfContractsList =$event">
+                                    </mat-select-filter>
                                     <mat-option *ngFor="let item of typeOfContractsList" [value]="item.id">
                                         {{item.typeOfContract}}
                                     </mat-option>
@@ -155,8 +160,8 @@
                                         fxLayoutGap="8px">
                                         <span class="material-icons">cloud_upload</span>
                                         <span class="textLink">Upload File</span>
-                                        <input id="fileTender" type="file" (change)="importExcel($event)" accept=".xlsx,.csv"
-                                            hidden>
+                                        <input id="fileTender" type="file" (change)="importExcel($event)"
+                                            accept=".xlsx,.csv" hidden>
                                     </label>
                                 </div>
                             </div>
