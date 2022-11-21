@@ -109,3 +109,24 @@ mat-paginator {
 ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 0px !important;
 }
+
+.breadcrumbs {
+    padding: 24px 24px 0 24px;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    border-radius: 5px !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 2px !important;
+    font-size: 22px !important;
+}

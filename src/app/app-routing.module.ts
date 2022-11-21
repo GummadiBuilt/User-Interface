@@ -37,10 +37,13 @@ const routes: Routes = [
     path: 'tenders', component: TendersComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } },
     children: [{ path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } }]
   },
+
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },
   { path: 'contractors', component: ContractorsComponent, data: { breadcrumb: 'Contractors' } },
   { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },
   { path: 'audit-approvals', component: AuditApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Audit Approvals' } },
+
+  
 ];
 
 @NgModule({

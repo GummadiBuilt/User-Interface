@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete!: MatAutocomplete;
 
-  countryList = new Array<countries>();;
+  countryList = new Array<countries>();
   statesList = new Array<registrationStatesData>();
   citiesList = new Array<registrationCitiesData>();
 
@@ -240,7 +240,7 @@ export class SignupComponent implements OnInit {
         }),
         (error => {
           console.log(error);
-          this.toastr.error(error);
+         // this.toastr.error(error);
         })
       )
     }

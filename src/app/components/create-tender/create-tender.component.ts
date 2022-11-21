@@ -1,39 +1,93 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { AgGridAngular } from 'ag-grid-angular';
-import { CellClickedEvent, ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { CellClickedEvent, CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, 
+  ColDef, GridApi, GridReadyEvent, RowValueChangedEvent } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
-export interface Element {
-  position: string;
-  item_description: string;
-  unit: string;
-  quantity: string;
-}
+import { ApiServicesService } from '../../shared/api-services.service';
+import { tenderMasterData, typeOfContracts, typeOfEstablishment } from './createTender';
+ import {
+   MAT_MOMENT_DATE_FORMATS,
+   MomentDateAdapter,
+   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+ } from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import 'moment/locale/ja';
+import 'moment/locale/fr';
+import { commonOptionsData } from '../../shared/commonOptions';
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  },
+};
+function actionCellRenderer(params: any) {
+  let eGui = document.createElement("div");
 
-const ELEMENT_DATA: Element[] = [
-  { position: '1', item_description: 'STRUCTURAL STEEL WORK', unit: 'Ton', quantity: '20' },
-  { position: '2', item_description: 'STRUCTURAL STEEL WORK', unit: 'Kilo', quantity: '40' },
-];
+  let editingCells = params.api.getEditingCells();
+  // checks if the rowIndex matches in at least one of the editing cells
+  let isCurrentRowEditing = editingCells.some((cell: any) => {
+    return cell.rowIndex === params.node.rowIndex;
+  });
+
+  // if (isCurrentRowEditing) {
+  //       eGui.innerHTML = `
+  //   <button  class="action-button update"  data-action="update"> Update  </button>
+  //   <button  class="action-button cancel"  data-action="cancel" > Cancel </button>
+  //   `;
+  //     } else {
+        eGui.innerHTML = `
+    <button class="action-button add"  data-action="add" > Add  </button>
+    <button class="action-button delete" data-action="delete" > Delete </button>
+    `;
+  //}
+
+  return eGui;
+}
 @Component({
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
-  styleUrls: ['./create-tender.component.scss']
+  styleUrls: ['./create-tender.component.scss'],
+  providers: [
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+  ]
 })
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
   public userRole: string[] | undefined;
+  public typeOfWorksList= new Array<typeOfEstablishment>();
+  public typeOfContractsList= new Array<typeOfContracts>();
+  public typeOfWorks = new Array<typeOfEstablishment>();   
+  public typeOfContracts = new Array<typeOfContracts>();
+  public tenderDocumentName: any;
+  //public fileSource: any ;
+  public file: any;
+  durationCounterList: any;
   constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient, private toastr: ToastrService,
-    protected keycloak: KeycloakService) { }
-
+    protected keycloak: KeycloakService,private ApiServicesService: ApiServicesService,
+    private _adapter: DateAdapter<any>,
+    @Inject(MAT_DATE_LOCALE) private _locale: string,) { }
+    
+getDateFormatString(): string {
+    return 'DD/MM/YYYY';
+  }
   ngOnInit(): void {
+    this._locale = 'en-GB';
+    this._adapter.setLocale(this._locale);
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
       //console.log('user role', this.userRole);
@@ -41,91 +95,175 @@ export class CreateTenderComponent implements OnInit {
       this.toastr.error('Failed to load user details' + e);
     }
     this.tenderDetails = this._formBuilder.group({
-      type_of_work: ['', Validators.required],
-      description_of_work: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      project_location: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      type_of_contract: ['', [Validators.required]],
-      contract_duration: ['', [Validators.required]],
-      date_of_submission: ['', [Validators.required]],
-      budget: ['', [Validators.required]],
-      file: ['', Validators.required],
-      fileSource: ['', Validators.required],
-      ftdTableRows: this._formBuilder.group({
-        position: ['', Validators.required],
-        item_description: ['', [Validators.required]],
-        unit: ['', Validators.required],
-        quantity: ['', Validators.required]
-      })
+      typeOfWork: ['', Validators.required],
+      workDescription: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      projectLocation: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      typeOfContract: ['', [Validators.required]],
+      contractDuration: ['', [Validators.required]],
+      durationCounter:['',[Validators.required]],
+      lastDateOfSubmission: ['', [Validators.required]],
+      estimatedBudget: ['', [Validators.required]],
+      tenderFinanceInfo:[''],
+      //fileSource:  [null]
+      // ftdTableRows: this._formBuilder.group({
+      //   position: ['', Validators.required],
+      //   item_description: ['', [Validators.required]],
+      //   unit: ['', Validators.required],
+      //   quantity: ['', Validators.required]
+      // })
+    });
+    this.getTendersMasterData();
+    this.getCommonOptionsData();
+  }
+  getTendersMasterData() {
+    this.ApiServicesService.getTenderMasterData().subscribe((data: tenderMasterData) => {
+      this.typeOfWorks = data.typeOfEstablishments;
+      this.typeOfWorksList = this.typeOfWorks.slice();
+      this.typeOfContracts = data.typeOfContracts;
+      this.typeOfContractsList = this.typeOfContracts.slice();
+      
+    });
+  }
+  getCommonOptionsData(){
+    this.ApiServicesService.getCommonOptionsData().subscribe((data:commonOptionsData) => {
+      console.log('common',data.durationCounter);
+      this.durationCounterList = data.durationCounter;
     });
   }
 
   isFileUploaded = false;
-  file: any;
+  //file: any;
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
+      // console.log(event.target.files[0])
+      // this.file = event.target.files[0]
       this.file = event.target.files[0];
-      // console.log(this.file.name);
-      this.tenderDetails.patchValue({
-        fileSource: this.file
-      });
+      // this.tenderDetails.patchValue({
+      //   fileSource: file,
+      // });
     }
   }
   removeSelectedFile(f: any) {
     if (f) {
-      this.file = '';
+      //this.file = [];
     }
   }
 
-  typeOfWorks = ['Consultancy Services',
-    'Structure Works (Civil)',
-    'Structure Works (Steel/PEB/Precast)',
-    'Structural Post Tensioning Works',
-    'Interior Finishes',
-    'Interior Fitout Works',
-    'Elevation Façade / Glazing',
-    'Waterproofing Works',
-    'Building Electrical Works (LT)',
-    'Building Electrical Works (HT)',
-    'Fire Fighting System Installation',
-    'HVAC Systems',
-    'Elevators',
-    'Sewage Treatment Plants (STP)',
-    'Water Treatment Plants (WTP)',
-    'Landscaping',
-    'Diesel Generators',
-    'IBMS (Integrated Building Management System)',
-    'CCTV, Access Control, Security & Surveilance Systems',
-    'Building Automation Systems',
-    'Compressed Air Systems',
-    'LPG/LNG Gas Distribution Systems',
-    'Nurse Call Systems',
-    'Medical Gas Systems',
-    'Pneumatic Tube Systems'
-  ];
-  public typeOfWorksList = this.typeOfWorks.slice();
-
-  typeOfContracts = ['Itemised Fixed Rate Contract',
-    'Fixed Lumpsum Price Contract',
-    'Design & Build Contract',
-    'GMP Contract',
-    'Cost Plus Percentage Contract'
-  ]
-  public typeOfContractsList = this.typeOfContracts.slice();
+  
 
   //AG GRID COMPONENTS
   public appHeaders = ["Make", "Model", "Price"]
-
+  private gridApi!: GridApi;
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true },
-    { field: this.appHeaders[1], sortable: true },
-    { field: this.appHeaders[2], sortable: true }
+    { field: this.appHeaders[0], sortable: true, filter: true },
+    { field: this.appHeaders[1], sortable: true, filter: true },
+    { field: this.appHeaders[2], sortable: true },
+    {
+      headerName: "Action",
+      minWidth: 150,
+      cellRenderer: actionCellRenderer,
+      editable: false,
+      colId: "action"
+    }
   ];
+  public defaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+  };
+  public editType: 'fullRow' = 'fullRow';
   public rowData: any;
   public rowSelection: 'single' | 'multiple' = 'single';
-
-
+  onCellValueChanged(event: CellValueChangedEvent) {
+    console.log(
+      'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
+    );
+  }
+  onRowValueChanged(event: RowValueChangedEvent) {
+    var data = event.data;
+    console.log(
+      'onRowValueChanged: (' +
+      data.Make +
+      ', ' +
+      data.Model +
+      ', ' +
+      data.Price +
+      ')'
+    );
+  }
+  onBtStopEditing() {
+    this.gridApi.stopEditing();
+  }
+  onBtStartEditing() {
+    this.gridApi.setFocusedCell(1, 'Make');
+    this.gridApi.startEditingCell({
+      rowIndex: 1,
+      colKey: 'Make',
+    });
+  }
   onGridReady(params: GridReadyEvent) {
-    console.log('grid ready', params)
+    this.gridApi = params.api;
+    //console.log('grid ready', params)
+  }
+  onCellClicked(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+
+      if (action === "add") {
+        // params.api.startEditingCell({
+        //   rowIndex: params.node.rowIndex,
+        //   // gets the first columnKey
+        //   colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        // });
+        // params.api.updateRowData({
+        //   add: [{ make: '', model: '', price: 0 }]
+        // });
+        params.api.updateRowData({
+          add:  [{ make: '', model: '', price: 0 }],
+          addIndex: params.node.rowIndex + 1
+        });
+        params.api.startEditingCell({
+             rowIndex: params.node.rowIndex + 1,
+          //   // gets the first columnKey
+             colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+
+      if (action === "delete") {
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+      }
+
+      if (action === "update") {
+        params.api.stopEditing(false);
+      }
+
+      if (action === "cancel") {
+        params.api.stopEditing(true);
+      }
+    }
+  }
+  onCellEditingStarted(event: CellEditingStartedEvent) {
+    console.log('cellEditingStarted');
+  }
+
+  onCellEditingStopped(event: CellEditingStoppedEvent) {
+    console.log('cellEditingStopped');
+  }
+  onRowEditingStarted(params: any) {
+    params.api.refreshCells({
+      columns: ["action"],
+      rowNodes: [params.node],
+      force: true
+    });
+  }
+  onRowEditingStopped(params: any) {
+    params.api.refreshCells({
+      columns: ["action"],
+      rowNodes: [params.node],
+      force: true
+    });
   }
   importExcel(event: any) {
     const target: DataTransfer = <DataTransfer>(event.target);
@@ -134,7 +272,7 @@ export class CreateTenderComponent implements OnInit {
     }
     const reader: FileReader = new FileReader();
     reader.readAsBinaryString(target.files[0]);
-    console.log('reader', reader);
+    //console.log('reader', reader);
     reader.onload = (e: any) => {
       /* create workbook */
       const binarystr: string = e.target.result;
@@ -147,10 +285,10 @@ export class CreateTenderComponent implements OnInit {
       /* save data */
       const data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
       const dataHeaders: string[] = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      console.log('headers', dataHeaders[0]);
+      //console.log('headers', dataHeaders[0]);
       const diff = _.difference(this.appHeaders, dataHeaders[0]);
       if (diff.length > 0) {
-        console.log("Missing headers", diff);
+        // console.log("Missing headers", diff);
         this.toastr.error('Template is missing following Headers ' + diff.join(', '));
       }
       else {
@@ -160,4 +298,6 @@ export class CreateTenderComponent implements OnInit {
 
     };
   }
+  onSubmit() {
+  }   
 }

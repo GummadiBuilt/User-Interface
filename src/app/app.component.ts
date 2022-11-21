@@ -18,6 +18,7 @@ export class AppComponent {
   public userProfile: KeycloakProfile | null = null;
   public userRole: boolean | undefined;
   public menuName = 'Login';
+  public userRoleEnable: string[] | undefined;
   
   constructor(private readonly keycloak: KeycloakService, public router: Router, private authGuard: AppAuthGuard) {
     this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin');
@@ -29,6 +30,12 @@ export class AppComponent {
     this.sidenav.close();
   }
   public async ngOnInit() {
+    try {
+      this.userRoleEnable = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
+     // console.log('user role', this.userRoleEnable);
+    } catch (e) {
+     // console.log('Failed to load user details', e);
+    }
    // this.router.canceledNavigationResolution = 'computed';
     this.keycloak.isLoggedIn().then(async isLogged => {
       this.isLoggedIn = isLogged;

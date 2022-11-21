@@ -216,7 +216,8 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
         }
       }),
       (error => {
-        this.toastr.error(error);
+        console.log(error);
+       // this.toastr.error(error);
       }));
   }
   reject() {
@@ -231,7 +232,8 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
         }
       }),
       (error => {
-        this.toastr.error(error);
+        console.log(error);
+        //this.toastr.error(error);
       }));
   }
 

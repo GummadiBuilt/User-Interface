@@ -29,7 +29,7 @@ export class TendersComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    console.log('tenders');
+    //console.log('tenders');
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
       console.log('user role', this.userRole);

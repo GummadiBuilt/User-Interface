@@ -9,6 +9,8 @@ import { registrationApprovalResopnse } from '../components/commonservices/appro
 import { KeycloakService } from 'keycloak-angular';
 import { registrationAuditResopnse } from '../components/commonservices/auditUserData';
 import { environment } from 'src/environments/environment';
+import { tenderMasterData } from '../components/create-tender/createTender';
+import { commonOptionsData } from './commonOptions';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,25 +20,15 @@ export class ApiServicesService {
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService) { }
 
   public getRegistrationMasterData(): Observable<registrationMasterData> {
-    return this.httpClient.get<registrationMasterData>(this.url + '/registration-master-data')
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+    return this.httpClient.get<registrationMasterData>(this.url + '/registration-master-data');
   }
   public getRegistrationStatesData(id: string): Observable<registrationStatesData[]> {
     return this.httpClient.get<registrationStatesData[]>(this.url + '/geography/get-states?countryCode=' + id)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   public getRegistrationCitiesData(id: number): Observable<registrationCitiesData[]> {
     return this.httpClient.get<registrationCitiesData[]>(this.url + '/geography/get-cities?stateCode=' + id)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //Save Registration postAPI
   public userRegistration(data: any) {
@@ -47,18 +39,12 @@ export class ApiServicesService {
       observe: "response"
 
     })
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //pending approval getAPI
   public getRegistrationPendingApproval(): Observable<registrationApprovalResopnse> {
     return this.httpClient.get<registrationApprovalResopnse>(this.url + '/user-registration')
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //pending approval postAPI
   public postRegistrationPendingApproval(id: any, data: any) {
@@ -68,40 +54,58 @@ export class ApiServicesService {
       }),
       observe: "response"
     })
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //audit approval getAPI
   public getRegistrationAuditApproval(): Observable<registrationAuditResopnse> {
     return this.httpClient.get<registrationAuditResopnse>(this.url + '/user-registration/audit-info')
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
-  // Error handling
-  errorHandl(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (
-      error.error &&
-      error.error.type &&
-      error.error.type === 'validation'
-    ) {
-      errorMessage = 'Validation Error'
-    }
-    else if (error.error && typeof error.error === 'string') {
-      errorMessage =
-        error.error
-          ? error.error
-          : 'Invalid value for parameter.';
-    } else {
-      errorMessage = 'Something went wrong.';
-    }
-    // console.log(errorMessage);
-    return throwError(errorMessage);
+  // Tender Master data GETApI
+  public getTenderMasterData(): Observable<tenderMasterData> {
+    return this.httpClient.get<tenderMasterData>(this.url + '/tender-master-data');
   }
-}
+  //Create Tender postAPI
+  public createTender(data:any) {
+    return this.httpClient.post(this.url + '/tender',data, {
+      //  headers: new HttpHeaders({
+      //    'Content-Type':''
+      //   'Content-Type': 'multipart/form-data',
+      //   'enctype': 'multipart/form-data',
+      //   'Accept': 'application/json',
+      //  }),
+      observe: "events"
+    })
+      
+  }
+
+  //GET Common options for dropdowns and submit or save buttons
+  public getCommonOptionsData(): Observable<commonOptionsData> {
+    return this.httpClient.get<commonOptionsData>(this.url + '/common-options');
+  }
+
+  
+//   // Error handling
+//   errorHandl(error: HttpErrorResponse) {
+//     let errorMessage = '';
+//     if (
+//       error.error &&
+//       error.error.type &&
+//       error.error.type === 'validation'
+//     ) {
+//       errorMessage = 'Validation Error'
+//     }
+//     else if (error.error && typeof error.error === 'string') {
+//       errorMessage =
+//         error.error
+//           ? error.error
+//           : 'Invalid value for parameter.';
+//     } else {
+//       errorMessage = 'Something went wrong.';
+//     }
+//     // console.log(errorMessage);
+//     return throwError(errorMessage);
+//   }
+ }
 
 

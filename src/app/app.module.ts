@@ -75,7 +75,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NumbersOnlyDirective,
     CreateTenderComponent,
     DragDropFileUploadDirective,
-    ButtonRendererComponent,
+    ButtonRendererComponent
   ],
   imports: [
     BrowserModule,

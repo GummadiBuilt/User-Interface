@@ -21,6 +21,17 @@
         <a class="nav-links" mat-button routerLink="tenders" routerLinkActive="router-link-active">Tenders</a>
         <span class="nav-divider">|</span>
       </div>
+      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn && userRoleEnable?.includes('admin')">
+        <!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
+        <a class="nav-links" mat-button [matMenuTriggerFor]="menu"  routerLinkActive="router-link-active">Admin</a>
+        <mat-menu #menu="matMenu">
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="clients" routerLinkActive="router-link-active">Clients</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="contractors" routerLinkActive="router-link-active">Contractors</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="pending-approvals" routerLinkActive="router-link-active">Pending Approvals</a>
+          <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="audit-approvals" routerLinkActive="router-link-active">Audit Approvals</a>
+        </mat-menu>
+        <span class="nav-divider">|</span>
+      </div>
       <div fxHide.lt-md class="submit-form" fxLayout="column" fxLayoutGap="12px">
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <button class="login-button" fxShow="true" mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
@@ -46,43 +57,6 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content fxFlexFill class="sidenav-container">
-      <div *ngIf="isLoggedIn && router.url == '/tenders' || router.url == '/tenders/create-tender' || router.url == '/clients' 
-      || router.url == '/contractors' || router.url == '/pending-approvals' || router.url == '/audit-approvals'">
-        <div class="breadcrumbs">
-          <xng-breadcrumb [separator]="separatorTemplate">
-            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-              <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
-              <ng-container>{{ breadcrumb }}</ng-container>
-            </ng-container>
-          </xng-breadcrumb>
-        </div>
-        <ng-template #separatorTemplate>
-          <mat-icon>arrow_right</mat-icon>
-        </ng-template>
-        <div class="fixed-header" fxLayout="row wrap" fxLayoutAlign="space-between center">
-          <div fxLayout="row wrap" fxLayoutGap="24px grid">
-            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-              <mat-button-toggle class="toggle-first" routerLink="tenders" routerLinkActive="router-link-active">
-                Tenders
-              </mat-button-toggle>
-              <mat-button-toggle class="toggle-second" routerLink="clients" routerLinkActive="router-link-active">
-                Clients
-              </mat-button-toggle>
-              <mat-button-toggle class="toggle-last" routerLink="contractors" routerLinkActive="router-link-active">
-                Contractors</mat-button-toggle>
-            </mat-button-toggle-group>
-            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-              <mat-button-toggle class="toggle-first" routerLink="pending-approvals"
-                routerLinkActive="router-link-active">
-                Pending Approvals
-              </mat-button-toggle>
-              <mat-button-toggle class="toggle-last" routerLink="audit-approvals" routerLinkActive="router-link-active">
-                Audit Approvals
-              </mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-        </div>
-      </div>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

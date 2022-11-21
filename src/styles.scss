@@ -4,3 +4,56 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// ag grid actions button css
+button.action-button {
+    border: none;
+    color: white;
+    padding: 3px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    opacity: 0.9;
+  }
+  
+  button.action-button:hover {
+    opacity: 1.2;
+  }
+  
+  button.action-button.add {
+    background-color: #008cba; /* Blue */
+  }
+  button.action-button.update {
+    background-color: #4caf50; /* Green */
+  }
+  
+  button.action-button.delete {
+    background-color: #84161A; /* Red */
+  }
+  
+  button.action-button.cancel {
+    background-color: #e7e7e7; /* Gray */
+    color: black;
+  }
+
+
+.breadcrumbs {
+  padding: 24px 24px 0 24px;
+}
+
+::ng-deep .xng-breadcrumb-root {
+  padding: 8px 16px !important;
+  display: inline-block !important;
+  border-radius: 5px !important;
+  background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+  color: #841618 !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+  margin-right: 2px !important;
+  font-size: 22px !important;
+}

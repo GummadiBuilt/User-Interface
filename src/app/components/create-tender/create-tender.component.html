@@ -1,3 +1,14 @@
+<div class="breadcrumbs">
+    <xng-breadcrumb [separator]="separatorTemplate">
+      <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+        <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+        <ng-container>{{ breadcrumb }}</ng-container>
+      </ng-container>
+    </xng-breadcrumb>
+  </div>
+  <ng-template #separatorTemplate>
+    <mat-icon>arrow_right</mat-icon>
+  </ng-template>
 <div class="tender-form" fxLayoutAlign="center center">
     <div fxFlex="60" fxFlex.lg="60" fxFlex.md="90">
         <mat-card>
@@ -11,15 +22,14 @@
                             fxLayout="column">
                             <mat-label>Type of Work *</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select Type of Work" formControlName="type_of_work">
-                                    <mat-select-filter [placeholder]="'Search'" [array]="typeOfWorks"
-                                        (filteredReturn)="typeOfWorksList =$event">
-                                    </mat-select-filter>
-                                    <mat-option *ngFor="let item of typeOfWorksList" [value]="item">
-                                        {{item}}
+                                <mat-select placeholder="Select Type of Work" formControlName="typeOfWork">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'establishmentDescription'"
+                                     [array]="typeOfWorks" (filteredReturn)="typeOfWorksList =$event"></mat-select-filter>
+                                    <mat-option *ngFor="let item of typeOfWorksList" [value]="item.establishmentDescription">
+                                        {{item.establishmentDescription}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="tenderDetails.get('type_of_work')?.errors?.['required']">
+                                <mat-error *ngIf="tenderDetails.get('typeOfWork')?.errors?.['required']">
                                     Type of Work is required
                                 </mat-error>
                             </mat-form-field>
@@ -28,8 +38,8 @@
                             fxLayout="column">
                             <mat-label>Project Location *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Project Location" formControlName="project_location">
-                                <mat-error *ngIf="tenderDetails.get('contract_duration')?.errors?.['required']">
+                                <input matInput placeholder="Project Location" formControlName="projectLocation">
+                                <mat-error *ngIf="tenderDetails.get('projectLocation')?.errors?.['required']">
                                     Enter Project Location
                                 </mat-error>
                             </mat-form-field>
@@ -39,8 +49,8 @@
                             <mat-label>Description of Work *</mat-label>
                             <mat-form-field appearance="outline">
                                 <textarea matInput placeholder="Description of Work"
-                                    formControlName="description_of_work"></textarea>
-                                <mat-error *ngIf="tenderDetails.get('description_of_work')?.errors?.['required']">
+                                    formControlName="workDescription"></textarea>
+                                <mat-error *ngIf="tenderDetails.get('workDescription')?.errors?.['required']">
                                     Type Description of Work
                                 </mat-error>
                             </mat-form-field>
@@ -49,9 +59,19 @@
                             fxLayout="column">
                             <mat-label>Contract Duration (Months or Days) *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Contract Duration" formControlName="contract_duration">
-                                <mat-error *ngIf="tenderDetails.get('contract_duration')?.errors?.['required']">
-                                    Choose last date of submission
+                                <input matInput placeholder="Contract Duration" formControlName="contractDuration">
+                                <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
+                                    Contract Duration
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-select placeholder="Months or Days" formControlName="durationCounter">
+                                    <mat-option *ngFor="let item of durationCounterList" [value]="item.id">
+                                        {{item.text}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="tenderDetails.get('durationCounter')?.errors?.['required']">
+                                    Choose Duration
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -59,11 +79,11 @@
                             fxLayout="column">
                             <mat-label>Last Date of Submission *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY"
-                                    formControlName="date_of_submission">
+                                <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
+                                    formControlName="lastDateOfSubmission">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
-                                <mat-error *ngIf="tenderDetails.get('date_of_submission')?.errors?.['required']">
+                                <mat-error *ngIf="tenderDetails.get('lastDateOfSubmission')?.errors?.['required']">
                                     Choose last date of submission
                                 </mat-error>
                             </mat-form-field>
@@ -72,15 +92,14 @@
                             fxLayout="column">
                             <mat-label>Type of Contract *</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select placeholder="Select Type of Contract" formControlName="type_of_contract">
-                                    <mat-select-filter [placeholder]="'Search'" [array]="typeOfContracts"
-                                        (filteredReturn)="typeOfContractsList =$event">
-                                    </mat-select-filter>
-                                    <mat-option *ngFor="let item of typeOfContractsList" [value]="item">
-                                        {{item}}
+                                <mat-select placeholder="Select Type of Contract" formControlName="typeOfContract">
+                                    <mat-select-filter [placeholder]="'Search'" [displayMember]="'typeOfContract'"
+                                    [array]="typeOfContracts" (filteredReturn)="typeOfContractsList =$event"></mat-select-filter>
+                                    <mat-option *ngFor="let item of typeOfContractsList" [value]="item.id">
+                                        {{item.typeOfContract}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="tenderDetails.get('type_of_work')?.errors?.['required']">
+                                <mat-error *ngIf="tenderDetails.get('typeOfContract')?.errors?.['required']">
                                     Type of Work is required
                                 </mat-error>
                             </mat-form-field>
@@ -89,14 +108,12 @@
                             fxLayout="column">
                             <mat-label>Budget *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Budget" formControlName="budget">
-                                <mat-error *ngIf="tenderDetails.get('budget')?.errors?.['required']">
+                                <input matInput placeholder="Budget" formControlName="estimatedBudget">
+                                <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['required']">
                                     Enter Budget
                                 </mat-error>
                             </mat-form-field>
                         </div>
-
-
                         <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%"
                             fxFlex.xl="48%" fxLayout="column" fxLayoutGap="4px">
                             <mat-label>Technical Tender Document *</mat-label>
@@ -106,7 +123,7 @@
                                         fxLayoutGap="8px">
                                         <span class="material-icons">cloud_upload</span>
                                         <span class="textLink">Upload File</span>
-                                        <input formControlName="file" id="file" type="file"
+                                        <input id="file" type="file" class="form-control"
                                             (change)="onFileChange($event)" hidden>
                                     </label>
                                 </div>
@@ -120,12 +137,12 @@
                                     </button>
                                 </div>
                             </div>
-                            <div
+                            <!-- <div
                                 *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
                                 <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
                                     File Required
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="table mb-24" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="100%" fxFlex.lg="100%"
@@ -138,20 +155,28 @@
                                         fxLayoutGap="8px">
                                         <span class="material-icons">cloud_upload</span>
                                         <span class="textLink">Upload File</span>
-                                        <input id="file" type="file" (change)="importExcel($event)" accept=".xlsx,.csv"
+                                        <input id="fileTender" type="file" (change)="importExcel($event)" accept=".xlsx,.csv"
                                             hidden>
                                     </label>
                                 </div>
                             </div>
                             <div class="example-wrapper" *ngIf='rowData'>
                                 <ag-grid-angular style="width: 500px; height: 350px;" class="ag-theme-alpine"
-                                    [columnDefs]="columnDefs" [rowData]="rowData"></ag-grid-angular>
+                                    [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData"
+                                    [editType]="editType" (gridReady)="onGridReady($event)"
+                                    (rowEditingStopped)="onRowEditingStopped($event)"
+                                    (rowEditingStarted)="onRowEditingStarted($event)"
+                                    (cellClicked)="onCellClicked($event)" [editType]="editType"
+                                    (cellValueChanged)="onCellValueChanged($event)"
+                                    (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)">
+                                </ag-grid-angular>
                             </div>
+
 
                         </div>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="center center">
-                        <button mat-button>Submit</button>
+                        <button mat-button (click)="onSubmit()">Submit</button>
                     </div>
                 </div>
             </form>
