@@ -60,14 +60,15 @@
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
                             <mat-label>Contract Duration (Months or Days) *</mat-label>
-                            <div fxLayout="column" fxLayoutGap="16px">
-                                <mat-form-field appearance="outline">
-                                    <input matInput numbersOnly placeholder="Contract Duration" formControlName="contractDuration">
+                            <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
+                                <mat-form-field fxFlex="47%" appearance="outline">
+                                    <input matInput numbersOnly placeholder="Contract Duration"
+                                        formControlName="contractDuration">
                                     <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
                                         Contract Duration
                                     </mat-error>
                                 </mat-form-field>
-                                <mat-form-field appearance="outline">
+                                <mat-form-field fxFlex="47%" appearance="outline">
                                     <mat-select placeholder="Months or Days" formControlName="durationCounter">
                                         <mat-option *ngFor="let item of durationCounterList" [value]="item.id">
                                             {{item.text}}
@@ -111,12 +112,12 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
                             fxLayout="column">
-                            <mat-label>Budget *</mat-label>
+                            <mat-label>Budget</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Budget" formControlName="estimatedBudget">
-                                <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['required']">
+                                <input matInput numbersOnly placeholder="Budget" formControlName="estimatedBudget">
+                                <!-- <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['required']">
                                     Enter Budget
-                                </mat-error>
+                                </mat-error> -->
                             </mat-form-field>
                         </div>
                         <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%"
@@ -180,8 +181,8 @@
 
                         </div>
                     </div>
-                    <div class="action-btn" fxLayout="row" fxLayoutAlign="center center">
-                        <!-- <button mat-button (click)="onSave()" >Save</button> -->
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30%">
+                        <button mat-button (click)="onSave()" >Save</button>
                         <button mat-button (click)="onSubmit()">Submit</button>
                     </div>
                 </div>

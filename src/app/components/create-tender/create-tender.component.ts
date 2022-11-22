@@ -110,13 +110,13 @@ export class CreateTenderComponent implements OnInit {
     }
     this.tenderDetails = this._formBuilder.group({
       typeOfWork: ['', Validators.required],
-      workDescription: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      projectLocation: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      workDescription: ['', [Validators.required, Validators.maxLength(50)]],
+      projectLocation: ['', [Validators.required, Validators.maxLength(50)]],
       typeOfContract: ['', [Validators.required]],
       contractDuration: ['', [Validators.required]],
       durationCounter: ['', [Validators.required]],
       lastDateOfSubmission: ['', [Validators.required]],
-      estimatedBudget: ['', [Validators.required]],
+      estimatedBudget: [''],
       tenderFinanceInfo: [''],
       workflowStep: ['']
       //fileSource:  [null]
@@ -157,7 +157,7 @@ export class CreateTenderComponent implements OnInit {
     this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data['lastDateOfSubmission']);
     this.tenderDetails.get('typeOfWork')?.patchValue(data['typeOfWork']);
     this.tenderDetails.get('estimatedBudget')?.patchValue(data['estimatedBudget']);
-   // this.tenderDetails.get('tenderFinanceInfo')?.patchValue(data['tenderFinanceInfo']);
+    // this.tenderDetails.get('tenderFinanceInfo')?.patchValue(data['tenderFinanceInfo']);
     this.tenderDetails.get('workflowStep')?.patchValue(data['workflowStep']);
     this.rowData = JSON.parse(data['tenderFinanceInfo']);
     // this.tenderDetails.get('typeOfWork')?.patchValue(data['typeOfWork']);
@@ -169,7 +169,7 @@ export class CreateTenderComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
     }
-    else{
+    else {
       this.file = null;
     }
   }
