@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ConnectableObservable, Observable, throwError } from 'rxjs';
+import { ConnectableObservable, Observable, Subject, throwError } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest  } from '@angular/common/http';
 import { registrationMasterData, typeOfEstablishment, countries, changeTracking, registrationStatesData, registrationCitiesData } from './responses';
@@ -11,11 +11,13 @@ import { registrationAuditResopnse } from '../components/commonservices/auditUse
 import { environment } from 'src/environments/environment';
 import { tenderMasterData } from '../components/create-tender/createTender';
 import { commonOptionsData } from './commonOptions';
+import { tenderResopnse } from '../components/tenders/tenderResponse';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiServicesService {
-
+  public navigation = new Subject<any>();
+  public navigation$ = this.navigation.asObservable();
   private url: string = environment.apiUrl;
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService) { }
 
@@ -68,15 +70,25 @@ export class ApiServicesService {
   //Create Tender postAPI
   public createTender(data:any) {
     return this.httpClient.post(this.url + '/tender',data, {
-      //  headers: new HttpHeaders({
-      //    'Content-Type':''
-      //   'Content-Type': 'multipart/form-data',
-      //   'enctype': 'multipart/form-data',
-      //   'Accept': 'application/json',
-      //  }),
       observe: "events"
     })
       
+  }
+  //Update Tender putAPI
+  public updateTender(id:any,data:any) {
+    return this.httpClient.put(this.url + '/tender/update/'+id,data, {
+      observe: "events"
+    })
+      
+  }
+  // Tender data GETApI
+  public getTenders(): Observable<tenderResopnse>  {
+    return this.httpClient.get<tenderResopnse>(this.url + '/tender/getAll');
+  }
+
+  // Tender data GETApI
+  public getTendersDatabyId(id:any): Observable<tenderResopnse>  {
+    return this.httpClient.get<tenderResopnse>(this.url + '/tender/get/'+id);
   }
 
   //GET Common options for dropdowns and submit or save buttons

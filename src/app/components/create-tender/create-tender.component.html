@@ -83,7 +83,7 @@
                             fxLayout="column">
                             <mat-label>Last Date of Submission *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker" placeholder="DD-MM-YYYY"
+                                <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
                                     formControlName="lastDateOfSubmission">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
@@ -181,6 +181,7 @@
                         </div>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="center center">
+                        <!-- <button mat-button (click)="onSave()" >Save</button> -->
                         <button mat-button (click)="onSubmit()">Submit</button>
                     </div>
                 </div>

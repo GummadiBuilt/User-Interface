@@ -25,12 +25,13 @@ import 'moment/locale/ja';
 import 'moment/locale/fr';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 export const MY_DATE_FORMATS = {
   parse: {
-    dateInput: 'DD-MM-YYYY',
+    dateInput: 'DD/MM/YYYY',
   },
   display: {
-    dateInput: 'DD-MM-YYYY',
+    dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY'
@@ -78,20 +79,29 @@ export class CreateTenderComponent implements OnInit {
   public typeOfWorks = new Array<typeOfEstablishment>();
   public typeOfContracts = new Array<typeOfContracts>();
   public tenderDocumentName: any;
+  public workflowStepSave: any;
   //public fileSource: any ;
   public file: any;
   durationCounterList: any;
+  tenderId: string | null | undefined;
   constructor(private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, private http: HttpClient, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private _adapter: DateAdapter<any>,
-    @Inject(MAT_DATE_LOCALE) private _locale: string, private datePipe: DatePipe) { }
-
-  getDateFormatString(): string {
-    return 'DD/MM/YYYY';
+    private datePipe: DatePipe, private route: ActivatedRoute) {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.tenderId = id;
+      if (id) {
+        this.ApiServicesService.getTendersDatabyId(id).subscribe((data) => {
+          console.log('Tender data by id', data);
+          this.editData(data);
+        });
+      }
+    });
   }
+
+
   ngOnInit(): void {
-    this._locale = 'en-GB';
-    this._adapter.setLocale(this._locale);
+    this.ApiServicesService.navigation.next(true);
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
       //console.log('user role', this.userRole);
@@ -108,6 +118,7 @@ export class CreateTenderComponent implements OnInit {
       lastDateOfSubmission: ['', [Validators.required]],
       estimatedBudget: ['', [Validators.required]],
       tenderFinanceInfo: [''],
+      workflowStep: ['']
       //fileSource:  [null]
       // ftdTableRows: this._formBuilder.group({
       //   position: ['', Validators.required],
@@ -132,19 +143,34 @@ export class CreateTenderComponent implements OnInit {
     this.ApiServicesService.getCommonOptionsData().subscribe((data: commonOptionsData) => {
       console.log('common', data.durationCounter);
       this.durationCounterList = data.durationCounter;
+      this.workflowStepSave = data.workflowStep;
+      console.log('workflowStep', data.workflowStep, this.workflowStepSave)
     });
+  }
+  editData(data: any) {
+    this.tenderDetails.get('typeOfWork')?.patchValue(data['typeOfWork']);
+    this.tenderDetails.get('workDescription')?.patchValue(data['workDescription']);
+    this.tenderDetails.get('projectLocation')?.patchValue(data['projectLocation']);
+    this.tenderDetails.get('typeOfContract')?.patchValue(data['typeOfContract']);
+    this.tenderDetails.get('contractDuration')?.patchValue(data['contractDuration']);
+    this.tenderDetails.get('durationCounter')?.patchValue(data['durationCounter']);
+    this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data['lastDateOfSubmission']);
+    this.tenderDetails.get('typeOfWork')?.patchValue(data['typeOfWork']);
+    this.tenderDetails.get('estimatedBudget')?.patchValue(data['estimatedBudget']);
+   // this.tenderDetails.get('tenderFinanceInfo')?.patchValue(data['tenderFinanceInfo']);
+    this.tenderDetails.get('workflowStep')?.patchValue(data['workflowStep']);
+    this.rowData = JSON.parse(data['tenderFinanceInfo']);
+    // this.tenderDetails.get('typeOfWork')?.patchValue(data['typeOfWork']);
   }
 
   isFileUploaded = false;
   //file: any;
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
-      // console.log(event.target.files[0])
-      // this.file = event.target.files[0]
       this.file = event.target.files[0];
-      // this.tenderDetails.patchValue({
-      //   fileSource: file,
-      // });
+    }
+    else{
+      this.file = null;
     }
   }
   removeSelectedFile(f: any) {
@@ -156,7 +182,7 @@ export class CreateTenderComponent implements OnInit {
 
 
   //AG GRID COMPONENTS
-  public appHeaders = ["Make", "Model", "Price"]
+  public appHeaders = ["Item Description", "Unit", "Quantity"]
   private gridApi!: GridApi;
   public columnDefs: ColDef[] = [
     { field: this.appHeaders[0], sortable: true, filter: true },
@@ -198,10 +224,10 @@ export class CreateTenderComponent implements OnInit {
     this.gridApi.stopEditing();
   }
   onBtStartEditing() {
-    this.gridApi.setFocusedCell(1, 'Make');
+    this.gridApi.setFocusedCell(1, 'Item Description');
     this.gridApi.startEditingCell({
       rowIndex: 1,
-      colKey: 'Make',
+      colKey: 'Item Description',
     });
   }
   onGridReady(params: GridReadyEvent) {
@@ -223,7 +249,7 @@ export class CreateTenderComponent implements OnInit {
         //   add: [{ make: '', model: '', price: 0 }]
         // });
         params.api.updateRowData({
-          add: [{ make: '', model: '', price: 0 }],
+          add: [{ itemDescription: '', unit: '', quantity: 0 }],
           addIndex: params.node.rowIndex + 1
         });
         params.api.startEditingCell({
@@ -309,9 +335,74 @@ export class CreateTenderComponent implements OnInit {
       console.log(this.tenderDetails.value.lastDateOfSubmission);
     }
   }
-  onSubmit() {
-    this.dateConversion();
-    console.log(this.tenderDetails.value);
+  onSave() {
+    console.log('save');
   }
+  onSubmit() {
+    //this.dateConversion();
+    console.log(this.tenderDetails.value);
+    this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+    this.tenderDetails.controls['workflowStep'].setValue('SAVE');
+    if (this.tenderDetails.value.lastDateOfSubmission) {
+      this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+      console.log(this.tenderDetails.value.lastDateOfSubmission);
+    }
+    console.log('tender form data', this.tenderDetails.value);
+    if (this.tenderId && this.tenderDetails.valid) {
+      console.log('update form');
+      //update tender form
+      // if(this.file === undefined){
+      //   this.file = null;
+      // }
+      let formData = new FormData();
+      debugger;
+      formData.append('tenderDocument', this.file);
+      formData.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
+      console.log(formData.getAll('tenderDocument'));
+      console.log('tenderDocument formdata', formData);
+      this.ApiServicesService.updateTender(this.tenderId, formData).subscribe(
+        (response => {
+          console.log(response);
+          this.toastr.success('Successfully Updated');
+          //this.router.navigate(['/home']);
+
+        }),
+        (error => {
+          console.log(error);
+          // this.toastr.error(error);
+        })
+      )
+    } else if (this.tenderDetails.valid) {
+      console.log('create form');
+      //create tender form
+      // if(this.file.length === undefined){
+      //   this.file = null;
+      // }
+      let formData = new FormData();
+      formData.append('tenderDocument', this.file);
+      formData.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
+      console.log(formData.getAll('tenderDocument'));
+      console.log('tenderDocument formdata', formData);
+      this.ApiServicesService.createTender(formData).subscribe(
+        (response => {
+          console.log(response);
+          this.toastr.success('Successfully Created');
+          //this.router.navigate(['/home']);
+
+        }),
+        (error => {
+          console.log(error);
+          // this.toastr.error(error);
+        })
+      )
+    }
+    else {
+      //error
+    }
+  }
+
+
+
+
 
 }

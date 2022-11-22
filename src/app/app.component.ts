@@ -50,7 +50,7 @@ export class AppComponent {
         }
         else {
           console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
-          this.router.navigate(['/tenders']);
+          //this.router.navigate(['/tenders']);
         }
       }
     });
