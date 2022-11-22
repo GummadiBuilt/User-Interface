@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { ApiServicesService } from 'src/app/shared/api-services.service';
+import { ApiServicesService } from '../shared/api-services.service';
 import { registrationApprovalResopnse } from '../commonservices/approvalsUserData';
 
 @Component({

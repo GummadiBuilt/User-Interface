@@ -4,7 +4,7 @@ export class tenderResopnse  {
     private contractDuration: number;
     private durationCounter: string;
     private estimatedBudget: number;
-    private typeOfContract: typeOfContracts;
+    private typeOfContract: object;
     private lastDateOfSubmission: string;
     private projectLocation: string;
     private tenderDocumentName: string;
@@ -21,7 +21,7 @@ export class tenderResopnse  {
         this.contractDuration = d.contractDuration;
         this.durationCounter = d.durationCounter;
         this.estimatedBudget = d.estimatedBudget;
-        this.typeOfContract = d.typeOfContract.typeOfContract;
+        this.typeOfContract = d.typeOfContract;
         this.lastDateOfSubmission = d.lastDateOfSubmission;
         this.projectLocation = d.projectLocation;
         this.tenderDocumentName = d.tenderDocumentName;

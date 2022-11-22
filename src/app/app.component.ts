@@ -49,7 +49,7 @@ export class AppComponent {
           this.router.navigate(['/pending-approvals']);
         }
         else {
-          console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
+          //console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
           //this.router.navigate(['/tenders']);
         }
       }

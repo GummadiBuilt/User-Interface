@@ -5,13 +5,13 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEvent, HttpHandler, Htt
 import { registrationMasterData, typeOfEstablishment, countries, changeTracking, registrationStatesData, registrationCitiesData } from './responses';
 import { userRegistrationResopnse } from '../signup/signResponses';
 import { ErrorServiceService } from './error-service.service';
-import { registrationApprovalResopnse } from '../components/commonservices/approvalsUserData';
+import { registrationApprovalResopnse } from '../commonservices/approvalsUserData';
 import { KeycloakService } from 'keycloak-angular';
-import { registrationAuditResopnse } from '../components/commonservices/auditUserData';
+import { registrationAuditResopnse } from '../commonservices/auditUserData';
 import { environment } from 'src/environments/environment';
-import { tenderMasterData } from '../components/create-tender/createTender';
+import { tenderMasterData } from '../tenders/create-tender/createTender';
 import { commonOptionsData } from './commonOptions';
-import { tenderResopnse } from '../components/tenders/tenderResponse';
+import { tenderResopnse } from '../tenders/tender/tenderResponse';
 @Injectable({
   providedIn: 'root'
 })

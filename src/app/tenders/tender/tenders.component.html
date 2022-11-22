@@ -1,12 +1,13 @@
 <div class="tenders">
-    <div *ngIf="router.url != '/tenders/create-tender'">
+    <div >
         <div class="action-bar" fxLayout="row" fxLayoutAlign="space-between center">
             <div fxLayout="row" fxLayoutAlign="center center">
                 <h2>Tenders</h2>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
                 <div *ngIf="userRole?.includes('client')">
-                    <button mat-raised-button routerLink="create-tender">
+                    <!-- routerLink="/tenders/create-tender" -->
+                    <button mat-raised-button (click)="createTender()">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                             <mat-icon>add_circle</mat-icon>
                             <span>Create Tender</span>
@@ -97,8 +98,5 @@
                 </mat-card>
             </div>
         </div>
-    </div>
-    <div>
-        <router-outlet></router-outlet>
     </div>
 </div>

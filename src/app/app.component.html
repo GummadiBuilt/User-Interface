@@ -18,7 +18,7 @@
         <span class="nav-divider">|</span>
       </div>
       <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn">
-        <a class="nav-links" mat-button routerLink="tenders" routerLinkActive="router-link-active">Tenders</a>
+        <a class="nav-links" mat-button routerLink="tenders/tender" routerLinkActive="router-link-active">Tenders</a>
         <span class="nav-divider">|</span>
       </div>
       <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center"
@@ -26,13 +26,13 @@
         <!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
         <a class="nav-links" mat-button [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
           <mat-menu #menu="matMenu">
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="clients"
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/clients"
               routerLinkActive="router-link-active">Clients</a>
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="contractors"
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/contractors"
               routerLinkActive="router-link-active">Contractors</a>
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="pending-approvals"
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/pending-approvals"
               routerLinkActive="router-link-active">Pending Approvals</a>
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="audit-approvals"
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/audit-approvals"
               routerLinkActive="router-link-active">Audit Approvals</a>
           </mat-menu>
         </a>

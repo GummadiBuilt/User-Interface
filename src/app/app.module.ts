@@ -15,26 +15,26 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectFilterModule } from 'mat-select-filter';
-import { ClientsComponent } from './components/clients/clients.component';
-import { ContractorsComponent } from './components/contractors/contractors.component';
+import { ClientsComponent } from './clients/clients.component';
+import { ContractorsComponent } from './contractors/contractors.component';
 import { ToastrModule } from 'ngx-toastr';
-import { TendersComponent } from './components/tenders/tenders.component';
-import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
-import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
+import { TendersComponent } from './tenders/tender/tenders.component';
+import { PendingApprovalsComponent } from './pending-approvals/pending-approvals.component';
+import { AuditApprovalsComponent } from './audit-approvals/audit-approvals.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { ProfileComponent } from './profile/profile.component';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
-import { CreateTenderComponent } from './components/create-tender/create-tender.component';
+import { CreateTenderComponent } from './tenders/create-tender/create-tender.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { AgGridModule } from 'ag-grid-angular';
 import { ErrorInterceptor } from './guard/error.interceptor';
 import { BreadcrumbModule } from 'xng-breadcrumb';
-import { ButtonRendererComponent } from './components/button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -75,7 +75,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NumbersOnlyDirective,
     CreateTenderComponent,
     DragDropFileUploadDirective,
-    ButtonRendererComponent
+    ButtonRendererComponent,
   ],
   imports: [
     BrowserModule,
