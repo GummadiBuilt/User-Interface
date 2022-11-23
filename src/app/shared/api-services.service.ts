@@ -68,17 +68,13 @@ export class ApiServicesService {
     return this.httpClient.get<tenderMasterData>(this.url + '/tender-master-data');
   }
   //Create Tender postAPI
-  public createTender(data:any) {
-    return this.httpClient.post(this.url + '/tender',data, {
-      observe: "events"
-    })
+  public createTender(data:any): Observable<tenderResopnse>  {
+    return this.httpClient.post<tenderResopnse>(this.url + '/tender',data);
       
   }
   //Update Tender putAPI
-  public updateTender(id:any,data:any) {
-    return this.httpClient.put(this.url + '/tender/update/'+id,data, {
-      observe: "events"
-    })
+  public updateTender(id:any,data:any): Observable<tenderResopnse> {
+    return this.httpClient.put<tenderResopnse>(this.url + '/tender/update/'+id,data);
       
   }
   // Tender data GETApI

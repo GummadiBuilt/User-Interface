@@ -15,7 +15,7 @@
             <form [formGroup]="tenderDetails">
                 <div fxLayout="column">
                     <div>
-                        <h3>Tender Details</h3>
+                        <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
                     </div>
                     <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="24px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
@@ -183,7 +183,7 @@
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30%">
                         <button mat-button (click)="onSave()" >Save</button>
-                        <button mat-button (click)="onSubmit()">Submit</button>
+                        <button mat-button *ngIf='this.tenderId' (click)="onSubmit()">Submit</button>
                     </div>
                 </div>
             </form>

@@ -1,23 +1,22 @@
 import { typeOfContracts } from "../create-tender/createTender";
 
 export class tenderResopnse  {
-    private contractDuration: number;
-    private durationCounter: string;
-    private estimatedBudget: number;
-    private typeOfContract: object;
-    private lastDateOfSubmission: string;
-    private projectLocation: string;
-    private tenderDocumentName: string;
-    private tenderId: string;
-    private typeOfWork: string;
-    private workDescription: string;
-    private workflowStep: string;
-    private tenderFinanceInfo: string;
-    private tenderDocumentSize: number;
-    private changeTracking:object;
- 
+    public contractDuration: number;
+    public durationCounter: string;
+    public estimatedBudget: number;
+    public typeOfContract: object;
+    public lastDateOfSubmission: string;
+    public projectLocation: string;
+    public tenderDocumentName: string;
+    public tenderId: string;
+    public typeOfWork: object;
+    public workDescription: string;
+    public workflowStep: string;
+    public tenderFinanceInfo: string;
+    public tenderDocumentSize: number;
+    public changeTracking:object;
+
      constructor(d: any) {
-        debugger;
         this.contractDuration = d.contractDuration;
         this.durationCounter = d.durationCounter;
         this.estimatedBudget = d.estimatedBudget;

@@ -78,7 +78,7 @@ export class TendersComponent implements OnInit {
     },
     { headerName: 'Description', field: 'workDescription', filter: 'agTextColumnFilter' },
     { headerName: 'Type of Contract', field: 'typeOfContract', filter: 'agTextColumnFilter',valueGetter:'data.typeOfContract.typeOfContract' },
-    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter' },
+    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter',valueGetter:'data.typeOfWork.establishmentDescription' },
     { headerName: 'Status', field: 'workflowStep', filter: 'agTextColumnFilter' },
     { headerName: 'Location', field: 'projectLocation', filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter',filterParams: filterParams },
