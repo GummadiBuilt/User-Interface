@@ -6,6 +6,7 @@
 .tender-form {
     width: 100%;
     min-height: 100%;
+    padding-bottom: 24px;
 }
 
 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
@@ -73,7 +74,7 @@ mat-header-row {
 
 //breadcrumbs
 .breadcrumbs {
-    padding: 0 24px 24px 24px;
+    padding: 24px;
 }
 
 ::ng-deep .xng-breadcrumb-root {
@@ -93,6 +94,3 @@ mat-header-row {
     font-size: 22px !important;
 }
 
-mat-error {
-    margin-top: 16px;
-}

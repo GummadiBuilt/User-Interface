@@ -36,27 +36,6 @@ mat-button-toggle {
     border-bottom: #841618 1px solid;
 }
 
-::ng-deep .mat-form-field-flex>.mat-form-field-infix {
-    padding: 0.4em 0px 0.8em 0px !important;
-    font-size: 12px !important;
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
-    margin: 0.25em 0 !important;
-}
-
-::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 1.34375em !important;
-}
-
-::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline {
-    color: #3B82F6 !important;
-}
-
-::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 0px !important;
-}
-
 table {
     width: 100%;
 }

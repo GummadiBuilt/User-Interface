@@ -70,7 +70,7 @@ export class TendersComponent implements OnInit {
 
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Tender ID', field: 'tenderId', filter: 'agNumberColumnFilter', pinned: 'left',
+      headerName: 'Tender ID', field: 'tenderId', filter: 'agTextColumnFilter', pinned: 'left',
       cellRenderer: function (params: any) {
         const id = `<a href=/tenders/edit-tender/${params.value}>${params.value}</a>`;
         return id;

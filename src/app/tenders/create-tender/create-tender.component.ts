@@ -50,6 +50,7 @@ export class CreateTenderComponent implements OnInit {
   public durationCounterList: any;
   public tenderId: string | null | undefined;
   public isFileUploaded = false;
+  loading = false;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -58,7 +59,7 @@ export class CreateTenderComponent implements OnInit {
       const id = params.get('id');
       this.tenderId = id;
       if (id) {
-        this.ApiServicesService.getTendersDatabyId(id).subscribe((data:tenderResopnse) => {
+        this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
           // console.log('Tender data by id', data);
           this.editData(data);
         });
@@ -80,7 +81,7 @@ export class CreateTenderComponent implements OnInit {
       contractDuration: ['', [Validators.required]],
       durationCounter: ['', [Validators.required]],
       lastDateOfSubmission: ['', [Validators.required]],
-      estimatedBudget: [''],
+      estimatedBudget: ['', Validators.maxLength(20)],
       tenderFinanceInfo: [''],
       workflowStep: ['']
     });
@@ -108,7 +109,12 @@ export class CreateTenderComponent implements OnInit {
     this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);
     this.tenderDetails.get('contractDuration')?.patchValue(data.contractDuration);
     this.tenderDetails.get('durationCounter')?.patchValue(data.durationCounter);
-    this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data.lastDateOfSubmission);
+    const date = data.lastDateOfSubmission;
+    const [day, month, year] = date.split('/');
+    const convertedDate = new Date(+year, +month - 1, +day);
+    // console.log(date);
+    // console.log(convertedDate.toISOString());
+    this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
     this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
     this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
     this.rowData = JSON.parse(data.tenderFinanceInfo);
@@ -136,20 +142,25 @@ export class CreateTenderComponent implements OnInit {
   public rowData: any;
   public rowSelection: 'single' | 'multiple' = 'single';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: true },
-    { field: this.appHeaders[1], sortable: true, filter: true },
-    { field: this.appHeaders[2], sortable: true },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter' },
+    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter' },
+    { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter' },
     {
       headerName: "Action",
       minWidth: 150,
       cellRenderer: actionCellRenderer,
       editable: false,
-      colId: "action"
+      colId: "action",
+      filter: false
     }
   ];
   public defaultColDef: ColDef = {
     flex: 1,
     editable: true,
+    filter: true,
+    floatingFilter: true,
+    minWidth: 160,
+    resizable: true,
   };
 
   onCellValueChanged(event: CellValueChangedEvent) {
@@ -270,20 +281,21 @@ export class CreateTenderComponent implements OnInit {
     let formData = new FormData();
     formData.append('tenderDocument', this.file);
     formData.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
+    this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe(
-        ((response:tenderResopnse) => {
+        ((response: tenderResopnse) => {
           this.toastr.success('Successfully Updated');
         }),
         (error => {
           console.log(error);
         })
-      )
+      ).add(() => this.loading = false)
     } else if (this.tenderDetails.valid) {
       // console.log('create form');
       this.ApiServicesService.createTender(formData).subscribe(
-        ((response:tenderResopnse) => {
+        ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
           this.toastr.success('Successfully Created');
         }),
@@ -308,6 +320,7 @@ export class CreateTenderComponent implements OnInit {
     let formDataSubmit = new FormData();
     formDataSubmit.append('tenderDocument', this.file);
     formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
+    this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
@@ -317,11 +330,11 @@ export class CreateTenderComponent implements OnInit {
         (error => {
           console.log(error);
         })
-      )
-    }  else {
+      ).add(() => this.loading = false)
+    } else {
       //error
       console.log('error');
-      this.toastr.error('Error in Submitting Tender Form');      
+      this.toastr.error('Error in Submitting Tender Form');
     }
   }
 }
