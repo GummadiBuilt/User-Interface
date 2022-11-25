@@ -34,7 +34,6 @@ function actionCellRenderer(params: any) {
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
   styleUrls: ['./create-tender.component.scss'],
-  providers: [DatePipe]
 })
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
@@ -78,13 +77,14 @@ export class CreateTenderComponent implements OnInit {
       workDescription: ['', [Validators.required, Validators.maxLength(50)]],
       projectLocation: ['', [Validators.required, Validators.maxLength(50)]],
       typeOfContract: ['', [Validators.required]],
-      contractDuration: ['', [Validators.required]],
+      contractDuration: ['', [Validators.required, Validators.maxLength(5)]],
       durationCounter: ['', [Validators.required]],
       lastDateOfSubmission: ['', [Validators.required]],
       estimatedBudget: ['', Validators.maxLength(20)],
       tenderFinanceInfo: [''],
       workflowStep: ['']
     });
+    
     this.getTendersMasterData();
     this.getCommonOptionsData();
   }
@@ -94,7 +94,6 @@ export class CreateTenderComponent implements OnInit {
       this.typeOfWorksList = this.typeOfWorks.slice();
       this.typeOfContracts = data.typeOfContracts;
       this.typeOfContractsList = this.typeOfContracts.slice();
-
     });
   }
   getCommonOptionsData() {
@@ -116,6 +115,7 @@ export class CreateTenderComponent implements OnInit {
     // console.log(convertedDate.toISOString());
     this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
     this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
+    console.log('edit', this.tenderDetails.get('estimatedBudget')?.value);
     this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
     this.rowData = JSON.parse(data.tenderFinanceInfo);
     this.tenderId = data.tenderId;
@@ -142,7 +142,7 @@ export class CreateTenderComponent implements OnInit {
   public rowData: any;
   public rowSelection: 'single' | 'multiple' = 'single';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter' },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter' },
     { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter' },
     {

@@ -44,6 +44,9 @@
                                 <mat-error *ngIf="tenderDetails.get('projectLocation')?.errors?.['required']">
                                     Enter Project Location
                                 </mat-error>
+                                <mat-error *ngIf="tenderDetails.get('projectLocation')?.errors?.['maxlength']">
+                                    Enter only 50 characters
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="48%" fxFlex.lg="48%" fxFlex.xl="48%"
@@ -54,6 +57,9 @@
                                     formControlName="workDescription"></textarea>
                                 <mat-error *ngIf="tenderDetails.get('workDescription')?.errors?.['required']">
                                     Type Description of Work
+                                </mat-error>
+                                <mat-error *ngIf="tenderDetails.get('workDescription')?.errors?.['maxlength']">
+                                    Enter only 50 characters
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -66,6 +72,9 @@
                                         formControlName="contractDuration">
                                     <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
                                         Contract Duration
+                                    </mat-error>
+                                    <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['maxlength']">
+                                        Enter only 5 digits
                                     </mat-error>
                                 </mat-form-field>
                                 <mat-form-field fxFlex="47%" appearance="outline">
@@ -85,7 +94,7 @@
                             <mat-label>Last Date of Submission *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
-                                    formControlName="lastDateOfSubmission">
+                                    formControlName="lastDateOfSubmission" (click)="picker.open()">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
                                 <mat-error *ngIf="tenderDetails.get('lastDateOfSubmission')?.errors?.['required']">
@@ -183,8 +192,6 @@
                                     (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)">
                                 </ag-grid-angular>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30%">

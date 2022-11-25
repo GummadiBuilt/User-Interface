@@ -44,6 +44,7 @@ export class TendersComponent implements OnInit {
   getTendersData() {
     this.ApiServicesService.getTenders().subscribe((data: tenderResopnse) => {
       this.rowData = data;
+      console.log(this.rowData);
     });
   }
   savedFiltersChanged(event: any) {
