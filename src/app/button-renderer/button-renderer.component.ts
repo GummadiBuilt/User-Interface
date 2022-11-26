@@ -4,19 +4,24 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-button-renderer',
-  templateUrl: './button-renderer.component.html',
+  templateUrl:  './button-renderer.component.html',
   styleUrls: ['./button-renderer.component.scss']
 })
 export class ButtonRendererComponent implements ICellRendererAngularComp {
-  params: any;
+  private params: any;
   label!: string;
+  public rowData: any;
   agInit(params: any): void {
+    this.rowData= params.data;
     this.params = params;
     this.label = this.params.label || null;
   }
 
-  btnClickedHandler($event: any) {
-    this.params.clicked(this.params.value);
+  btnClickedHandler(data: any) {
+    //console.log('medals won!',data);
+    //this.params.clicked(this.params.value);
+    this.params.context.downloadDocument(data);
+    
   }
 
   refresh() {

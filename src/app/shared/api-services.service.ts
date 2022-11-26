@@ -91,8 +91,37 @@ export class ApiServicesService {
   public getCommonOptionsData(): Observable<commonOptionsData> {
     return this.httpClient.get<commonOptionsData>(this.url + '/common-options');
   }
-
-  
+  //Download Technical tender document
+  public downloadTechnicalTenderDocument(id:any) {
+    return this.httpClient.get(this.url + '/tender/download/'+id);
+  }
+//download files converstion
+downloadFile(data: any) {
+  const downlodFile = this.ConvertFile(data);
+  const blob = new Blob([downlodFile], { type: data.fileType });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  let fileName = <string>data.fileName;
+  link.download = fileName;
+  link.click();
+}
+  ConvertFile(data: {fileType: any; fileName?: any; encodedResponse?: any; }) {
+    const base64Encode = data.encodedResponse;
+    const blobFile = this.URItoBlob(base64Encode, data.fileType);
+    const file = new File([blobFile], '', { type: data.fileType });
+    return file;
+  }  
+  URItoBlob(dataURI: string, fileType: any) {
+    const byteString = atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: fileType });
+    return blob;
+  }
 //   // Error handling
 //   errorHandl(error: HttpErrorResponse) {
 //     let errorMessage = '';

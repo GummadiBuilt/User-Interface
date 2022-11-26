@@ -5,12 +5,12 @@ import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent,
-  ColDef, GridApi, GridReadyEvent, RowValueChangedEvent
+  ColDef, GridApi, GridReadyEvent, RowValueChangedEvent, ValueFormatterParams
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { ApiServicesService } from '../../shared/api-services.service';
@@ -50,10 +50,11 @@ export class CreateTenderComponent implements OnInit {
   public tenderId: string | null | undefined;
   public isFileUploaded = false;
   loading = false;
+  fileName: any;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private datePipe: DatePipe, private route: ActivatedRoute) {
+    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.tenderId = id;
@@ -84,7 +85,7 @@ export class CreateTenderComponent implements OnInit {
       tenderFinanceInfo: [''],
       workflowStep: ['']
     });
-    
+
     this.getTendersMasterData();
     this.getCommonOptionsData();
   }
@@ -115,13 +116,15 @@ export class CreateTenderComponent implements OnInit {
     // console.log(convertedDate.toISOString());
     this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
     this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
-    console.log('edit', this.tenderDetails.get('estimatedBudget')?.value);
+    // console.log('edit', this.tenderDetails.get('estimatedBudget')?.value);
     this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
     this.rowData = JSON.parse(data.tenderFinanceInfo);
     this.tenderId = data.tenderId;
+    this.fileName = data.tenderDocumentName;
   }
 
   onFileChange(event: any) {
+    this.fileName = '';
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
     }
@@ -134,6 +137,13 @@ export class CreateTenderComponent implements OnInit {
     if (f) {
       this.file = null;
     }
+  }
+  downloadSelectedFile(id: any) {
+    // console.log('download',id);
+    this.ApiServicesService.downloadTechnicalTenderDocument(id).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
   //AG GRID COMPONENTS
   public appHeaders = ["Item Description", "Unit", "Quantity"]
@@ -192,7 +202,6 @@ export class CreateTenderComponent implements OnInit {
   }
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-    //console.log('grid ready', params)
   }
   onCellClicked(params: any) {
     // Handle click event for action cells
@@ -279,7 +288,8 @@ export class CreateTenderComponent implements OnInit {
       this.toastr.error('Please Select Valid Last Date of Submission');
     }
     let formData = new FormData();
-    formData.append('tenderDocument', this.file);
+    const blob = new Blob();
+    formData.append('tenderDocument', this.file || blob);
     formData.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
     this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
@@ -297,6 +307,7 @@ export class CreateTenderComponent implements OnInit {
       this.ApiServicesService.createTender(formData).subscribe(
         ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
+          this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),
         (error => {
@@ -318,14 +329,15 @@ export class CreateTenderComponent implements OnInit {
       this.toastr.error('Please Select Valid Last Date of Submission');
     }
     let formDataSubmit = new FormData();
-    formDataSubmit.append('tenderDocument', this.file);
+    const blob = new Blob();
+    formDataSubmit.append('tenderDocument', this.file || blob);
     formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
     this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
         (response => {
-          this.toastr.success('Successfully Updated');
+          this.toastr.success('Successfully Submitted');
         }),
         (error => {
           console.log(error);

@@ -37,6 +37,12 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
 import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { LoaderService } from './shared/loader.service';
+import { LoaderInterceptor } from './shared/loader-interceptor.service';
+import { MyLoaderComponent } from './my-loader/my-loader.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -89,6 +95,7 @@ export const MY_DATE_FORMATS = {
     CreateTenderComponent,
     DragDropFileUploadDirective,
     ButtonRendererComponent,
+    MyLoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -105,8 +112,12 @@ export const MY_DATE_FORMATS = {
     MatFileUploadModule,
     AgGridModule,
     BreadcrumbModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   providers: [
+    DatePipe,
+    LoaderService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
@@ -114,6 +125,7 @@ export const MY_DATE_FORMATS = {
       deps: [KeycloakService]
     },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],

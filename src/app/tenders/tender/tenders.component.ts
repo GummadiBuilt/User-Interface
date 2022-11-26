@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
+import { ToastrService } from 'ngx-toastr';
 import { ButtonRendererComponent } from '../../button-renderer/button-renderer.component';
 import { ApiServicesService } from '../../shared/api-services.service';
 import { tenderResopnse } from './tenderResponse';
@@ -27,7 +28,7 @@ export class TendersComponent implements OnInit {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
   constructor(protected keycloak: KeycloakService, public router: Router, private route: ActivatedRoute,
-    private ApiServicesService: ApiServicesService,) {
+    private ApiServicesService: ApiServicesService, private toastr: ToastrService,) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.editId = id;
@@ -44,7 +45,6 @@ export class TendersComponent implements OnInit {
   getTendersData() {
     this.ApiServicesService.getTenders().subscribe((data: tenderResopnse) => {
       this.rowData = data;
-      console.log(this.rowData);
     });
   }
   savedFiltersChanged(event: any) {
@@ -78,21 +78,28 @@ export class TendersComponent implements OnInit {
       }
     },
     { headerName: 'Description', field: 'workDescription', filter: 'agTextColumnFilter' },
-    { headerName: 'Type of Contract', field: 'typeOfContract', filter: 'agTextColumnFilter',valueGetter:'data.typeOfContract.typeOfContract' },
-    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter',valueGetter:'data.typeOfWork.establishmentDescription' },
+    { headerName: 'Type of Contract', field: 'typeOfContract', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfContract.typeOfContract' },
+    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfWork.establishmentDescription' },
     { headerName: 'Status', field: 'workflowStep', filter: 'agTextColumnFilter' },
     { headerName: 'Location', field: 'projectLocation', filter: 'agTextColumnFilter' },
-    { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter',filterParams: filterParams },
+    { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },
     { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter' },
     {
       headerName: 'Tender Document', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
-        clicked: function (field: any) { },
+        context: this,
         label: 'Tender Document',
       },
       filter: false,
     }
   ];
+
+  downloadDocument(data: any) {
+    this.ApiServicesService.downloadTechnicalTenderDocument(data.tenderId).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
+  }
 
   // DefaultColDef sets props common to all Columns
   public defaultColDef: ColDef = {

@@ -21,6 +21,9 @@
     margin: 0 !important;
 }
 
-.mat-raised-button {
-    height:30px !important;
+
+::ng-deep .button-download {
+    background-color: #841618;
+    color: white;
+    
 }

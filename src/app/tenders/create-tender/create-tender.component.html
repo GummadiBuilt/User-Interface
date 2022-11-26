@@ -139,25 +139,32 @@
                                     <span class="material-icons">cloud_upload</span>
                                     <span class="textLink">Upload File</span>
                                 </label>
-                                <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
+                                <!-- <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                     fxLayoutGap="8px">
                                     <span class="material-icons">cloud_download</span>
                                     <span class="textLink">Download File</span>
-                                </label>
+                                </label> -->
                                 <label for="file">
                                     <input id="file" type="file" class="form-control" (change)="onFileChange($event)"
                                         hidden>
                                 </label>
+                                <!-- <div fxLayout="row" fxLayoutAlign="center"> -->
+                                    <span *ngIf="!file?.name && !fileName">No file Choosen</span>
+                                    <span *ngIf="fileName">{{fileName}}</span>
+                                    <span>{{file?.name}}</span>
+                                    <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Remove Document" matTooltipPosition="right"
+                                        (click)="removeSelectedFile(file)">
+                                        <span class="material-icons">cancel</span>
+                                    </button>
+                                    <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Download Document" matTooltipPosition="right"
+                                        (click)="downloadSelectedFile(tenderId)">
+                                        <span class="material-icons">cloud_download</span>
+                                    </button>
+                                <!-- </div> -->
                             </div>
-                            <div fxLayout="row" fxLayoutAlign="start center">
-                                <span *ngIf="!file?.name">No file Choosen</span>
-                                <span>{{file?.name}}</span>
-                                <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
-                                    matTooltip="Remove Document" matTooltipPosition="right"
-                                    (click)="removeSelectedFile(file)">
-                                    <span class="material-icons">cancel</span>
-                                </button>
-                            </div>
+                            
                             <!-- <div
                                 *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
                                 <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
@@ -198,17 +205,11 @@
                         <button mat-button (click)="onSave()">
                             <div fxLayout="row" fxLayoutAlign="space-between center">
                                 <div>Save</div>
-                                <div>
-                                    <mat-spinner *ngIf="loading" [diameter]="20"></mat-spinner>
-                                </div>
                             </div>
                         </button>
                         <button mat-button *ngIf='this.tenderId' (click)="onSubmit()">
                             <div fxLayout="row" fxLayoutAlign="space-between center">
                                 <div>Submit</div>
-                                <div>
-                                    <mat-spinner *ngIf="loading" [diameter]="20"></mat-spinner>
-                                </div>
                             </div>
                         </button>
                     </div>
