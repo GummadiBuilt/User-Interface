@@ -21,16 +21,14 @@ mat-button-toggle {
 }
 
 .toggle-first {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-radius: 0 !important;
     border-left: #841618 1px solid;
     border-top: #841618 1px solid;
     border-bottom: #841618 1px solid;
 }
 
 .toggle-last {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 0 !important;
     border-right: #841618 1px solid;
     border-top: #841618 1px solid;
     border-bottom: #841618 1px solid;
@@ -64,7 +62,7 @@ th {
 //matcard styles
 .tenders-page mat-card {
     min-height: 120px;
-    border-radius: 10px;
+    border-radius: 0px !important;
     padding: 24px !important;
 }
 
@@ -132,4 +130,9 @@ th {
 
 ::ng-deep .ag-root-wrapper-body.ag-layout-normal.ag-focus-managed {
     height: 100% !important;
+}
+
+//ag-grid cell text wrap in words
+::ng-deep .ag-cell-wrap-text {
+    word-break: break-word !important;
 }

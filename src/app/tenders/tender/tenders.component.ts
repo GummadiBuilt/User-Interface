@@ -23,7 +23,8 @@ export class TendersComponent implements OnInit {
   public rowData: any;
   public frameworkComponents: any;
   fileName = '';
-
+  public domLayout: any;
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
@@ -33,6 +34,7 @@ export class TendersComponent implements OnInit {
       const id = params.get('id');
       this.editId = id;
     });
+    this.domLayout = "autoHeight";
   }
   ngOnInit(): void {
     try {
@@ -77,9 +79,9 @@ export class TendersComponent implements OnInit {
         return id;
       }
     },
-    { headerName: 'Description', field: 'workDescription', filter: 'agTextColumnFilter' },
+    { headerName: 'Description', field: 'workDescription', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Type of Contract', field: 'typeOfContract', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfContract.typeOfContract' },
-    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfWork.establishmentDescription' },
+    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfWork.establishmentDescription', autoHeight: true, wrapText: true },
     { headerName: 'Status', field: 'workflowStep', filter: 'agTextColumnFilter' },
     { headerName: 'Location', field: 'projectLocation', filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },

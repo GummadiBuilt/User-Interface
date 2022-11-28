@@ -4,13 +4,11 @@ import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {
-  CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent,
-  ColDef, GridApi, GridReadyEvent, RowValueChangedEvent, ValueFormatterParams
+  CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, GridApi,
+  GridReadyEvent, RowValueChangedEvent,
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { ApiServicesService } from '../../shared/api-services.service';
@@ -34,6 +32,7 @@ function actionCellRenderer(params: any) {
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
   styleUrls: ['./create-tender.component.scss'],
+  providers: [CurrencyPipe]
 })
 export class CreateTenderComponent implements OnInit {
   tenderDetails!: FormGroup;
@@ -51,7 +50,6 @@ export class CreateTenderComponent implements OnInit {
   public isFileUploaded = false;
   loading = false;
   fileName: any;
-
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
     private datePipe: DatePipe, private route: ActivatedRoute, public router: Router) {
@@ -65,6 +63,7 @@ export class CreateTenderComponent implements OnInit {
         });
       }
     });
+    this.domLayout = "autoHeight";
   }
   ngOnInit(): void {
     try {
@@ -89,6 +88,16 @@ export class CreateTenderComponent implements OnInit {
     this.getTendersMasterData();
     this.getCommonOptionsData();
   }
+
+  //currency format
+  transform(value: string) {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0, //no.of decimal values
+    }).format(Number(value));
+  }
+  
   getTendersMasterData() {
     this.ApiServicesService.getTenderMasterData().subscribe((data: tenderMasterData) => {
       this.typeOfWorks = data.typeOfEstablishments;
@@ -151,8 +160,9 @@ export class CreateTenderComponent implements OnInit {
   public editType: 'fullRow' = 'fullRow';
   public rowData: any;
   public rowSelection: 'single' | 'multiple' = 'single';
+  public domLayout: any;
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', minWidth: 350, autoHeight: true, wrapText: true },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter' },
     { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter' },
     {
@@ -172,7 +182,6 @@ export class CreateTenderComponent implements OnInit {
     minWidth: 160,
     resizable: true,
   };
-
   onCellValueChanged(event: CellValueChangedEvent) {
     console.log(
       'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
@@ -275,7 +284,6 @@ export class CreateTenderComponent implements OnInit {
         // Data will be logged in array format containing objects
         this.rowData = data;
       }
-
     };
   }
 

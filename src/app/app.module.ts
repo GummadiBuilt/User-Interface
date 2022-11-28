@@ -43,6 +43,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LoaderService } from './shared/loader.service';
 import { LoaderInterceptor } from './shared/loader-interceptor.service';
 import { MyLoaderComponent } from './my-loader/my-loader.component';
+import { BlurFormatDirective } from './directives/blur-format.directive';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -96,6 +97,7 @@ export const MY_DATE_FORMATS = {
     DragDropFileUploadDirective,
     ButtonRendererComponent,
     MyLoaderComponent,
+    BlurFormatDirective,
   ],
   imports: [
     BrowserModule,
@@ -113,7 +115,7 @@ export const MY_DATE_FORMATS = {
     AgGridModule,
     BreadcrumbModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   providers: [
     DatePipe,
