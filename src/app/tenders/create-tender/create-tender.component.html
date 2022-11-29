@@ -156,12 +156,11 @@
                                 <span class="material-icons">cloud_download</span>
                             </button>
                         </div>
-                        <!-- <div
-                                *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
+                        <div *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
                                 <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
                                     File Required
                                 </div>
-                            </div> -->
+                            </div>
                     </div>
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -176,13 +175,13 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="example-wrapper" *ngIf='rowData'>
+                        <div class="example-wrapper">
                             <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"
                                 [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
-                                (gridReady)="onGridReady($event)" (rowEditingStopped)="onRowEditingStopped($event)"
-                                (rowEditingStarted)="onRowEditingStarted($event)" (cellClicked)="onCellClicked($event)"
-                                [editType]="editType" (cellValueChanged)="onCellValueChanged($event)"
-                                (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
+                                (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"
+                                (rowEditingStarted)="onRowEditingStarted($event)" (rowEditingStopped)="onRowEditingStopped($event)"
+                                (cellValueChanged)="onCellValueChanged($event)" (rowValueChanged)="onRowValueChanged($event)"
+                                (gridReady)="onGridReady($event)" (cellEditingStopped)="onCellEditingStopped($event)"
                                 [domLayout]="domLayout">
                             </ag-grid-angular>
                         </div>

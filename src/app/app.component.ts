@@ -45,13 +45,13 @@ export class AppComponent {
         this.menuName = 'Logout';
         //console.log('in getrole', this.isLoggedIn);
         this.userProfile = await this.keycloak.loadUserProfile();
-        if (this.userRole) {
-          this.router.navigate(['/pending-approvals']);
-        }
-        else {
+        // if (this.userRole) {
+        //   this.router.navigate(['/pending-approvals']);
+        // }
+        // else {
           //console.log('users',this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles)
           //this.router.navigate(['/tenders']);
-        }
+        //}
       }
     });
   }

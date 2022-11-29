@@ -134,6 +134,7 @@ export class CreateTenderComponent implements OnInit {
 
   onFileChange(event: any) {
     this.fileName = '';
+    this.isFileUploaded = true;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
     }
@@ -158,7 +159,7 @@ export class CreateTenderComponent implements OnInit {
   public appHeaders = ["Item Description", "Unit", "Quantity"]
   private gridApi!: GridApi;
   public editType: 'fullRow' = 'fullRow';
-  public rowData: any;
+  public rowData :any[]= [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
   public columnDefs: ColDef[] = [
@@ -187,17 +188,23 @@ export class CreateTenderComponent implements OnInit {
       'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
     );
   }
-  onRowValueChanged(event: RowValueChangedEvent) {
+  onRowValueChanged(event : any) {
     var data = event.data;
     console.log(
       'onRowValueChanged: (' +
-      data.Make +
+      data['Item Description'] +
       ', ' +
-      data.Model +
+      data.Unit +
       ', ' +
-      data.Price +
+      data.Quantity +
       ')'
     );
+   // console.log('rowvalue change',event.rowIndex,event.data);
+    if(event.rowIndex==0){
+      this.gridApi.setRowData(this.rowData)
+    }else{
+      this.rowData.splice(event.rowIndex, 0, event.data);
+    }
   }
   onBtStopEditing() {
     this.gridApi.stopEditing();
@@ -218,11 +225,11 @@ export class CreateTenderComponent implements OnInit {
       let action = params.event.target.dataset.action;
 
       if (action === "add") {
-        params.api.updateRowData({
-          add: [{ itemDescription: '', unit: '', quantity: 0 }],
+        this.gridApi.applyTransaction({
+          add: [{ 'Item Description': '', 'Unit': '', 'Quantity': 0 }],
           addIndex: params.node.rowIndex + 1
         });
-        params.api.startEditingCell({
+        this.gridApi.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           //   // gets the first columnKey
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
@@ -233,6 +240,7 @@ export class CreateTenderComponent implements OnInit {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
+        this.rowData.splice(params.rowIndex, 1);
       }
     }
   }
@@ -242,6 +250,7 @@ export class CreateTenderComponent implements OnInit {
 
   onCellEditingStopped(event: CellEditingStoppedEvent) {
     // console.log('cellEditingStopped');
+     this.gridApi.stopEditing();
   }
   onRowEditingStarted(params: any) {
     params.api.refreshCells({
@@ -256,6 +265,7 @@ export class CreateTenderComponent implements OnInit {
       rowNodes: [params.node],
       force: true
     });
+    this.gridApi.stopEditing();
   }
   importExcel(event: any) {
     const target: DataTransfer = <DataTransfer>(event.target);
@@ -310,7 +320,7 @@ export class CreateTenderComponent implements OnInit {
           console.log(error);
         })
       ).add(() => this.loading = false)
-    } else if (this.tenderDetails.valid) {
+    } else if (this.tenderDetails.valid && this.file) {
       // console.log('create form');
       this.ApiServicesService.createTender(formData).subscribe(
         ((response: tenderResopnse) => {
@@ -322,7 +332,11 @@ export class CreateTenderComponent implements OnInit {
           console.log(error);
         })
       )
-    } else {
+    } else if(!this.tenderId && !this.file) {
+      //error
+      console.log('File upload error');
+      this.toastr.error('Please upload the Technical Tender Document');
+    }else{
       //error
       console.log('error');
       this.toastr.error('Error in Creation Tender Form');
