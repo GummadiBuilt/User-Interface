@@ -92,7 +92,6 @@ export class CreateTenderComponent implements OnInit {
   //currency format
   transform(value: string) {
     return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
       currency: 'INR',
       minimumFractionDigits: 0, //no.of decimal values
     }).format(Number(value));

@@ -97,3 +97,11 @@ mat-header-row {
 ::ng-deep .ag-cell-wrap-text {
     word-break: break-word !important;
 }
+
+
+//rupee symbol
+::ng-deep .tender-form .mat-form-field-appearance-outline .mat-form-field-prefix {
+    top: 0 !important;
+    padding-right: 4px !important;
+    font-size: 14px !important;
+}

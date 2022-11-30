@@ -1,0 +1,575 @@
+<div class="pq-form">
+    <div class="pq-form-body">
+        <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
+            <mat-step>
+                <ng-template matStepLabel>Tender Details</ng-template>
+                <div>
+                    <app-create-tender></app-create-tender>
+                </div>
+                <div class="action-btn" fxLayoutAlign="end">
+                    <button mat-button matStepperNext>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <span>Next</span>
+                            <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                        </div>
+                    </button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>General Notes</ng-template>
+                <div>
+                    <ol>
+                        <li>The pre-qualification document shall be submitted in a sealed cover clearly indicating
+                            the Name of the project on top of the cover. Though soft copy form shall be accepted to
+                            expedite the process, the hard copy duly signed by contractor shall form the basis of
+                            final assessment.
+                        </li>
+                        <li>The last date for receipt of completed pre-qualification documents with all the
+                            necessary certificates, is as specified in the initial section - 'Project Information'
+                        </li>
+                        <li>Incomplete or incorrect information provided herein by the agency shall result in
+                            automatic disqualification including cancellation of the order.
+                        </li>
+                        <li>TIME shall be the essence of the contract.
+
+                        </li>
+                        <li>Only the successful pre-qualified Contractors will be intimated for further.</li>
+                        <li>Clients reserve the right to accept or reject any or all applications of
+                            pre-qualification without assigning any reasons thereof.
+                        </li>
+                        <li>Please attach copies Certificates, Work orders, Project photographs, Company Profile etc
+                            in support of the information disclosed in this bid.
+                        </li>
+                    </ol>
+                </div>
+                <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                    <button mat-button matStepperPrevious>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
+                            <span>Previous</span>
+                        </div>
+                    </button>
+                    <button mat-button matStepperNext>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <span>Next</span>
+                            <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                        </div>
+                    </button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <form [formGroup]="pqForm">
+                    <ng-template matStepLabel>Project Information</ng-template>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Name of Project *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Name of Project" formControlName="nameOfProject">
+                                <mat-error *ngIf="pqForm.get('nameOfProject')?.errors?.['required']">
+                                    Enter Name of Project
+                                </mat-error>
+                                <mat-error *ngIf="pqForm.get('nameOfProject')?.errors?.['maxlength']">
+                                    Enter only 50 characters
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Name of Work Package *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Name of Work Package" formControlName="nameOfWorkProject">
+                                <mat-error *ngIf="pqForm.get('nameOfWorkProject')?.errors?.['required']">
+                                    Enter Name of Work Package
+                                </mat-error>
+                                <mat-error *ngIf="pqForm.get('nameOfWorkProject')?.errors?.['maxlength']">
+                                    Enter only 50 characters
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Nature of Structure *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Nature of Structure" formControlName="natureOfStructure">
+                                <mat-error *ngIf="pqForm.get('natureOfStructure')?.errors?.['required']">
+                                    Enter Nature of Structure
+                                </mat-error>
+                                <mat-error *ngIf="pqForm.get('natureOfStructure')?.errors?.['maxlength']">
+                                    Enter only 50 characters
+                                </mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Project Duration (Months or Days) *</mat-label>
+                            <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
+                                <mat-form-field fxFlex="47%" appearance="outline">
+                                    <input matInput numbersOnly placeholder="Project Duration"
+                                        formControlName="projectDuration">
+                                    <mat-error *ngIf="pqForm.get('projectDuration')?.errors?.['required']">
+                                        Contract Duration
+                                    </mat-error>
+                                    <mat-error *ngIf="pqForm.get('projectDuration')?.errors?.['maxlength']">
+                                        Enter only 5 digits
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field fxFlex="47%" appearance="outline">
+                                    <mat-select placeholder="Months or Days" formControlName="durationCounter">
+                                        <mat-option>
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="pqForm.get('durationCounter')?.errors?.['required']">
+                                        Contract Duration
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Date of Issue of PQ Document *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="picker1" placeholder="DD/MM/YYYY"
+                                    (click)="picker1.open()" formControlName="dateOfIssueOfPqDocument">
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                                <mat-error *ngIf="pqForm.get('dateOfIssueOfPqDocument')?.errors?.['required']">
+                                    Choose last date of submission
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY"
+                                    (click)="picker2.open()" formControlName="lastDateOfSubmissionOfFilledPqDocument">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                                <mat-error
+                                    *ngIf="pqForm.get('lastDateOfSubmissionOfFilledPqDocument')?.errors?.['required']">
+                                    Choose last date of submission
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Tentative Date of Award of Works *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="picker3" placeholder="DD/MM/YYYY"
+                                    (click)="picker3.open()" formControlName="tentativeDateOfAwardOfWorks">
+                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                                <mat-error *ngIf="pqForm.get('tentativeDateOfAwardOfWorks')?.errors?.['required']">
+                                    Choose last date of submission
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column">
+                            <mat-label>Scheduled Completion *</mat-label>
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="picker4" placeholder="DD/MM/YYYY"
+                                    (click)="picker4.open()" formControlName="scheduledCompletion">
+                                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                                <mat-datepicker #picker4></mat-datepicker>
+                                <mat-error *ngIf="pqForm.get('scheduledCompletion')?.errors?.['required']">
+                                    Choose last date of submission
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <button mat-button matStepperPrevious>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
+                                <span>Previous</span>
+                            </div>
+                        </button>
+                        <button mat-raised-button color="primary">Submit</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <form>
+                    <ng-template matStepLabel>Vendor's General Company Information</ng-template>
+                    <div>
+                        <form [formGroup]="pqForm">
+                            <h3 class="info-header">Company Details</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Company Name in Full</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Company Name">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Year of Establishment</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Year of Establishment">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Type of Establishment</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Type of Establishment">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Postal Address [Corporate Office]</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Postal Address [Corporate Office]">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Postal Address [Local Office]</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Postal Address [Local Office]">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Telephone</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Telephone">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Fax</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Fax">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+                            <h3 class="info-header">Contact Person Information</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Contact Person</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Contact Person">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Designation</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Designation">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Mobile / Tel.</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Mobile / Tel.">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Email ID</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Email ID">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <h3 class="info-header">Regional Head / Project Coordinator</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Name of Regional Head / Project Coordinator</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Name of Regional Head / Project Coordinator">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Mobile No.</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Mobile No.">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+
+                            <div class="example-wrapper">
+                                <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                    [columnDefs]="turnoverColumnDefs" [defaultColDef]="turnoverDefaultColDef"
+                                    [rowData]="turnoverDetails" [domLayout]="domLayout" [editType]="editType">
+                                </ag-grid-angular>
+                            </div>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Name & Value of any one similar largest project executed
+                                    </mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                            placeholder="Name & Value of any one similar largest project executed">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Scope of Contract</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Scope of Contract">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Built Up Area</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Built Up Area">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <button mat-button matStepperPrevious>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
+                                <span>Previous</span>
+                            </div>
+                        </button>
+                        <button mat-button matStepperNext>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <span>Next</span>
+                                <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <form>
+                    <ng-template matStepLabel>Performance Preferences</ng-template>
+                    <div>
+                        <mat-accordion class="example-headers-align" multi>
+                            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Client References of 3 Major Projects
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div>
+                                    <ul>
+                                        <li>List maximum 3 major projects executed.</li>
+                                        <li>Client reserves the right to approach those named to seek a performance
+                                            reference and rely on you having obtained the necessary consents.</li>
+                                    </ul>
+                                </div>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData"
+                                        [domLayout]="domLayout" [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
+                                <mat-action-row>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Projects of Similar Nature
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Statutory Compliances
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <ul>
+                                    <li>Give references to documents pertaining to statutory compliances here Specify NA
+                                        if not available or applicable.</li>
+                                </ul>
+                                <mat-label>Company Registration</mat-label>
+
+
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Employees Strength
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <ul>
+                                    <li>List out the details of Key Professional Staff with relevant experience.</li>
+                                </ul>
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Capital Equipments
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <ul>
+                                    <li>Major Equipments owned by the company be listed here.</li>
+                                </ul>
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Safety Policy and Systems
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <ul>
+                                    <li>Company's policy and resources pertaining to safety may be listed below.</li>
+                                </ul>
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <button mat-button matStepperPrevious>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
+                                <span>Previous</span>
+                            </div>
+                        </button>
+                        <button mat-button matStepperNext>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <span>Next</span>
+                                <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <form>
+                    <ng-template matStepLabel>Financial Information</ng-template>
+                    <div>
+                        Provide the following information for the last 3 years for the company (Attach Annexure if
+                        required)
+                    </div>
+                    <div class="financial-wrapper">
+                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                            [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
+                            [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType">
+                        </ag-grid-angular>
+                    </div>
+                    <div>
+                        <mat-accordion class="example-headers-align" multi>
+                            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Company Bankers
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="companyBankersColumnDefs" [defaultColDef]="companyBankersDefaultColDef"
+                                        [rowData]="companyBankersDetails" [domLayout]="domLayout" [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
+                                <mat-action-row>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Company Auditors
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="companyAuditorsColumnDefs" [defaultColDef]="companyAuditorsDefaultColDef"
+                                        [rowData]="companyAuditorsDetails" [domLayout]="domLayout" [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                    <div class="financial-conditions">
+                        Client reserves the right to approach those named to seek reference and rely on you having obtained the necessary consents.
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <button mat-button matStepperPrevious>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
+                                <span>Previous</span>
+                            </div>
+                        </button>
+                        <button mat-button matStepperNext>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <span>Next</span>
+                                <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-stepper>
+    </div>
+    <div class="undertaking">
+        <div fxLayout="column" fxLayoutGap="12px">
+            <mat-label>Undertaking</mat-label>
+            <form>
+                <div fxLayoutAlign="start center">
+                    <mat-radio-button class="example-radio-button">
+                        <div>
+                            The information, facts, details etc disclosed in this document is true and correct.
+                            We take responsibility for the correctness of the same.
+                        </div>
+                    </mat-radio-button>
+                </div>
+            </form>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+            <button mat-raised-button color="primary">Submit</button>
+        </div>
+    </div>
+</div>

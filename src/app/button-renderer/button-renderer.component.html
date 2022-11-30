@@ -1,1 +1,4 @@
-<button mat-raised-button class="button-download" (click)="btnClickedHandler(rowData)">{{label}}</button>
+<div fxLayout="row" fxLayoutGap="12px">
+    <button mat-raised-button class="button-download" (click)="btnClickedHandler(rowData)">{{label}}</button>
+    <button mat-stroked-button (click)="navigateToPQForm()">PQ-Form</button>
+</div>

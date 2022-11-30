@@ -4,7 +4,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-button-renderer',
-  templateUrl:  './button-renderer.component.html',
+  templateUrl: './button-renderer.component.html',
   styleUrls: ['./button-renderer.component.scss']
 })
 export class ButtonRendererComponent implements ICellRendererAngularComp {
@@ -12,7 +12,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   label!: string;
   public rowData: any;
   agInit(params: any): void {
-    this.rowData= params.data;
+    this.rowData = params.data;
     this.params = params;
     this.label = this.params.label || null;
   }
@@ -21,7 +21,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     //console.log('medals won!',data);
     //this.params.clicked(this.params.value);
     this.params.context.downloadDocument(data);
-    
+
   }
 
   refresh() {
@@ -37,4 +37,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     });
   }
 
+  navigateToPQForm() {
+    this.router.navigate(['/pq-form']);
+  }
 }

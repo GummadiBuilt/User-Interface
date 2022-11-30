@@ -87,12 +87,13 @@ export class TendersComponent implements OnInit {
     { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },
     { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter' , valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
     {
-      headerName: 'Tender Document', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
+      headerName: 'Actions', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
         context: this,
         label: 'Tender Document',
       },
       filter: false,
+      minWidth: 350,
     }
   ];
 

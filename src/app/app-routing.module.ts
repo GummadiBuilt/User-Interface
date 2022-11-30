@@ -19,6 +19,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ServiceComponent } from './service/service.component';
 import { SignupComponent } from './signup/signup.component';
+import { PQFormComponent } from './tenders/pq-form/pq-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -44,12 +45,9 @@ const routes: Routes = [
       { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
       { path: 'edit-tender/:id', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
       { path: '**', redirectTo: 'tender', pathMatch: 'full' },
-  ]
+    ]
   },
-
-  
-
-  
+  { path: 'pq-form', component: PQFormComponent },
 ];
 
 @NgModule({

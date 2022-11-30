@@ -122,6 +122,7 @@
                         fxLayout="column">
                         <mat-label>Budget</mat-label>
                         <mat-form-field appearance="outline">
+                            <span matPrefix>&#8377;</span>
                             <input matInput numbersOnly type="text" placeholder="Budget"
                                 formControlName="estimatedBudget" [onblur]="transform">
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
