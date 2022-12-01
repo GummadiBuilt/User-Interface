@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 
@@ -38,6 +38,6 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
 
   navigateToPQForm() {
-    this.router.navigate(['/pq-form']);
+    this.router.navigate(['/tenders', this.rowData.tenderId, 'create-pq-form']);
   }
 }

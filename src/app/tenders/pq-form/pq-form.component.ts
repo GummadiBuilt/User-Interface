@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, ColDef, GridApi, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
@@ -62,6 +62,9 @@ export class PQFormComponent implements OnInit {
       scheduledCompletion: ['', Validators.required],
     });
   }
+  onSubmit() {
+    console.log(this.pqForm.value);
+  }
   step = 0;
   setStep(index: number) {
     this.step = index;
@@ -82,14 +85,6 @@ export class PQFormComponent implements OnInit {
     { headerName: 'Project 1', field: 'project1', editable: true },
     { headerName: 'Project 2', field: 'project2', editable: true },
     { headerName: 'Project 3', field: 'project3', editable: true },
-    {
-      headerName: "Action",
-      minWidth: 150,
-      cellRenderer: actionCellRenderer,
-      editable: false,
-      colId: "action",
-      filter: false
-    }
   ];
   public defaultColDef: ColDef = {
     flex: 1,
@@ -113,14 +108,6 @@ export class PQFormComponent implements OnInit {
   public turnoverColumnDefs: ColDef[] = [
     { headerName: 'Turnover Details: [Rs. In Lacs]', field: 'details', editable: true },
     { headerName: '', field: '', editable: true },
-    {
-      headerName: "Action",
-      minWidth: 150,
-      cellRenderer: actionCellRenderer,
-      editable: false,
-      colId: "action",
-      filter: false
-    }
   ];
   public turnoverDefaultColDef: ColDef = {
     flex: 1,
@@ -153,14 +140,6 @@ export class PQFormComponent implements OnInit {
     { headerName: 'Profit After Tax Rs.', field: '', editable: true },
     { headerName: 'Current Assets Rs.', field: '', editable: true },
     { headerName: 'Current Liabilities Rs.', field: '', editable: true },
-    {
-      headerName: "Action",
-      minWidth: 150,
-      cellRenderer: actionCellRenderer,
-      editable: false,
-      colId: "action",
-      filter: false
-    }
   ];
   public financialDefaultColDef: ColDef = {
     flex: 1,
@@ -178,14 +157,6 @@ export class PQFormComponent implements OnInit {
   public companyBankersColumnDefs: ColDef[] = [
     { headerName: 'Name', field: 'details', editable: true },
     { headerName: 'Address', field: '', editable: true },
-    {
-      headerName: "Action",
-      minWidth: 150,
-      cellRenderer: actionCellRenderer,
-      editable: false,
-      colId: "action",
-      filter: false
-    }
   ];
   public companyBankersDefaultColDef: ColDef = {
     flex: 1,
@@ -201,14 +172,6 @@ export class PQFormComponent implements OnInit {
   public companyAuditorsColumnDefs: ColDef[] = [
     { headerName: 'Name', field: 'details', editable: true },
     { headerName: 'Address', field: '', editable: true },
-    {
-      headerName: "Action",
-      minWidth: 150,
-      cellRenderer: actionCellRenderer,
-      editable: false,
-      colId: "action",
-      filter: false
-    }
   ];
   public companyAuditorsDefaultColDef: ColDef = {
     flex: 1,

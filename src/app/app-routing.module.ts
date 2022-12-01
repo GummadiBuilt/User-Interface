@@ -44,10 +44,12 @@ const routes: Routes = [
       { path: 'tender', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } } },
       { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
       { path: 'edit-tender/:id', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
+      {
+        path: ':id/create-pq-form', component: PQFormComponent, data: { breadcrumb: {} }
+      },
       { path: '**', redirectTo: 'tender', pathMatch: 'full' },
     ]
   },
-  { path: 'pq-form', component: PQFormComponent },
 ];
 
 @NgModule({

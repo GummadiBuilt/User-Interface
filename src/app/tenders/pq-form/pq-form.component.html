@@ -1,10 +1,21 @@
 <div class="pq-form">
+    <div class="breadcrumbs">
+        <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
+            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+                <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+            </ng-container>
+        </xng-breadcrumb>
+    </div>
+    <ng-template #separatorTemplate>
+        <mat-icon>arrow_right</mat-icon>
+    </ng-template>
     <div class="pq-form-body">
         <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
-            <mat-step>
+            <mat-step *ngIf="userRole?.includes('admin')">
                 <ng-template matStepLabel>Tender Details</ng-template>
                 <div>
-                    <app-create-tender></app-create-tender>
+                    <app-create-tender [readonly]="true"></app-create-tender>
                 </div>
                 <div class="action-btn" fxLayoutAlign="end">
                     <button mat-button matStepperNext>
@@ -15,7 +26,7 @@
                     </button>
                 </div>
             </mat-step>
-            <mat-step>
+            <mat-step *ngIf="userRole?.includes('contractor')">
                 <ng-template matStepLabel>General Notes</ng-template>
                 <div>
                     <ol>
@@ -57,10 +68,10 @@
                     </button>
                 </div>
             </mat-step>
-            <mat-step>
+            <mat-step *ngIf="userRole?.includes('admin')">
                 <form [formGroup]="pqForm">
                     <ng-template matStepLabel>Project Information</ng-template>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                    <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                             fxLayout="column">
                             <mat-label>Name of Project *</mat-label>
@@ -118,8 +129,8 @@
                                 </mat-form-field>
                                 <mat-form-field fxFlex="47%" appearance="outline">
                                     <mat-select placeholder="Months or Days" formControlName="durationCounter">
-                                        <mat-option>
-                                        </mat-option>
+                                        <mat-option value="days">Days</mat-option>
+                                        <mat-option value="months">Months</mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="pqForm.get('durationCounter')?.errors?.['required']">
                                         Contract Duration
@@ -188,11 +199,12 @@
                                 <span>Previous</span>
                             </div>
                         </button>
-                        <button mat-raised-button color="primary">Submit</button>
+                        <button mat-raised-button color="primary">Save</button>
+                        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
                     </div>
                 </form>
             </mat-step>
-            <mat-step>
+            <mat-step *ngIf="userRole?.includes('contractor')">
                 <form>
                     <ng-template matStepLabel>Vendor's General Company Information</ng-template>
                     <div>
@@ -363,7 +375,7 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step>
+            <mat-step *ngIf="userRole?.includes('contractor')">
                 <form>
                     <ng-template matStepLabel>Performance Preferences</ng-template>
                     <div>
@@ -487,7 +499,7 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step>
+            <mat-step *ngIf="userRole?.includes('contractor')">
                 <form>
                     <ng-template matStepLabel>Financial Information</ng-template>
                     <div>
@@ -510,8 +522,9 @@
                                 </mat-expansion-panel-header>
                                 <div class="example-wrapper">
                                     <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                        [columnDefs]="companyBankersColumnDefs" [defaultColDef]="companyBankersDefaultColDef"
-                                        [rowData]="companyBankersDetails" [domLayout]="domLayout" [editType]="editType">
+                                        [columnDefs]="companyBankersColumnDefs"
+                                        [defaultColDef]="companyBankersDefaultColDef" [rowData]="companyBankersDetails"
+                                        [domLayout]="domLayout" [editType]="editType">
                                     </ag-grid-angular>
                                 </div>
                                 <mat-action-row>
@@ -526,15 +539,18 @@
                                 </mat-expansion-panel-header>
                                 <div class="example-wrapper">
                                     <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                        [columnDefs]="companyAuditorsColumnDefs" [defaultColDef]="companyAuditorsDefaultColDef"
-                                        [rowData]="companyAuditorsDetails" [domLayout]="domLayout" [editType]="editType">
+                                        [columnDefs]="companyAuditorsColumnDefs"
+                                        [defaultColDef]="companyAuditorsDefaultColDef"
+                                        [rowData]="companyAuditorsDetails" [domLayout]="domLayout"
+                                        [editType]="editType">
                                     </ag-grid-angular>
                                 </div>
                             </mat-expansion-panel>
                         </mat-accordion>
                     </div>
                     <div class="financial-conditions">
-                        Client reserves the right to approach those named to seek reference and rely on you having obtained the necessary consents.
+                        Client reserves the right to approach those named to seek reference and rely on you having
+                        obtained the necessary consents.
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                         <button mat-button matStepperPrevious>
@@ -552,24 +568,26 @@
                     </div>
                 </form>
             </mat-step>
+            <mat-step *ngIf="userRole?.includes('contractor')">
+                <form>
+                    <ng-template matStepLabel>Undertaking</ng-template>
+                    <div class="undertaking" fxLayout="column">
+                        <mat-radio-button class="example-radio-button">
+                            <div>
+                                The information, facts, details etc disclosed in this document is true and correct.
+                                We take responsibility for the correctness of the same.
+                            </div>
+                        </mat-radio-button>
+                        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                            <button mat-raised-button color="primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </mat-step>
         </mat-stepper>
     </div>
     <div class="undertaking">
-        <div fxLayout="column" fxLayoutGap="12px">
-            <mat-label>Undertaking</mat-label>
-            <form>
-                <div fxLayoutAlign="start center">
-                    <mat-radio-button class="example-radio-button">
-                        <div>
-                            The information, facts, details etc disclosed in this document is true and correct.
-                            We take responsibility for the correctness of the same.
-                        </div>
-                    </mat-radio-button>
-                </div>
-            </form>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
-            <button mat-raised-button color="primary">Submit</button>
-        </div>
+
+
     </div>
 </div>

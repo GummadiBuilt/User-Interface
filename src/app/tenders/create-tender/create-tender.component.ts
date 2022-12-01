@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
@@ -50,6 +50,7 @@ export class CreateTenderComponent implements OnInit {
   public isFileUploaded = false;
   loading = false;
   fileName: any;
+  @Input() readonly!: boolean;
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
     private datePipe: DatePipe, private route: ActivatedRoute, public router: Router) {
@@ -64,6 +65,8 @@ export class CreateTenderComponent implements OnInit {
       }
     });
     this.domLayout = "autoHeight";
+    // console.log(this.tenderId);
+    // console.log(router.url);
   }
   ngOnInit(): void {
     try {
@@ -96,7 +99,7 @@ export class CreateTenderComponent implements OnInit {
       minimumFractionDigits: 0, //no.of decimal values
     }).format(Number(value));
   }
-  
+
   getTendersMasterData() {
     this.ApiServicesService.getTenderMasterData().subscribe((data: tenderMasterData) => {
       this.typeOfWorks = data.typeOfEstablishments;
@@ -158,11 +161,11 @@ export class CreateTenderComponent implements OnInit {
   public appHeaders = ["Item Description", "Unit", "Quantity"]
   private gridApi!: GridApi;
   public editType: 'fullRow' = 'fullRow';
-  public rowData :any[]= [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
+  public rowData: any[] = [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', minWidth: 350, autoHeight: true, wrapText: true },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', minWidth: 350, autoHeight: true, wrapText: true, },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter' },
     { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter' },
     {
@@ -187,7 +190,7 @@ export class CreateTenderComponent implements OnInit {
       'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
     );
   }
-  onRowValueChanged(event : any) {
+  onRowValueChanged(event: any) {
     var data = event.data;
     console.log(
       'onRowValueChanged: (' +
@@ -198,10 +201,10 @@ export class CreateTenderComponent implements OnInit {
       data.Quantity +
       ')'
     );
-   // console.log('rowvalue change',event.rowIndex,event.data);
-    if(event.rowIndex==0){
+    // console.log('rowvalue change',event.rowIndex,event.data);
+    if (event.rowIndex == 0) {
       this.gridApi.setRowData(this.rowData)
-    }else{
+    } else {
       this.rowData.splice(event.rowIndex, 0, event.data);
     }
   }
@@ -249,7 +252,7 @@ export class CreateTenderComponent implements OnInit {
 
   onCellEditingStopped(event: CellEditingStoppedEvent) {
     // console.log('cellEditingStopped');
-     this.gridApi.stopEditing();
+    this.gridApi.stopEditing();
   }
   onRowEditingStarted(params: any) {
     params.api.refreshCells({
@@ -331,11 +334,11 @@ export class CreateTenderComponent implements OnInit {
           console.log(error);
         })
       )
-    } else if(!this.tenderId && !this.file) {
+    } else if (!this.tenderId && !this.file) {
       //error
       console.log('File upload error');
       this.toastr.error('Please upload the Technical Tender Document');
-    }else{
+    } else {
       //error
       console.log('error');
       this.toastr.error('Error in Creation Tender Form');

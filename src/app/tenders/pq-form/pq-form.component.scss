@@ -49,6 +49,31 @@ form mat-label {
     color: white;
 }
 
+.project-info {
+    margin-top: 24px;
+}
+
+//breadcrumbs
+.pq-form .breadcrumbs {
+    padding: 0 0 12px 0;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 2px !important;
+    font-size: 22px !important;
+}
+
 //accordion or Expansion Panel
 .example-action-buttons {
     padding-bottom: 20px;
@@ -79,14 +104,7 @@ form mat-label {
 
 //undertaking
 .undertaking {
-    margin-top: 12px;
-    background-color: white;
-    padding: 24px;
-}
-
-.undertaking mat-label {
-    color: #841618;
-    font-weight: 500;
+    margin: 24px 0px 0px 0px;
 }
 
 .example-wrapper {
