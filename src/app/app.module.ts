@@ -44,6 +44,9 @@ import { LoaderService } from './shared/loader.service';
 import { LoaderInterceptor } from './shared/loader-interceptor.service';
 import { MyLoaderComponent } from './my-loader/my-loader.component';
 import { BlurFormatDirective } from './directives/blur-format.directive';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
+import { CurrencyformatterDirective } from './shared/currencyformatter.directive';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -98,12 +101,15 @@ export const MY_DATE_FORMATS = {
     ButtonRendererComponent,
     MyLoaderComponent,
     BlurFormatDirective,
+    ConfirmationDlgComponent,
+    CurrencyformatterDirective,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatDialogModule,
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
