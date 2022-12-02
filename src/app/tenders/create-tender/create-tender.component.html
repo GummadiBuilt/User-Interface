@@ -1,11 +1,30 @@
 <div class="tender-form">
-    <div class="breadcrumbs" *ngIf="router.url != '/tenders/'+tenderId+'/create-pq-form'">
-        <xng-breadcrumb [separator]="separatorTemplate">
-            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
-                <ng-container>{{ breadcrumb }}</ng-container>
-            </ng-container>
-        </xng-breadcrumb>
+    <div class="breadcrumbs" fxLayout="row wrap" *ngIf="!hideBreadcrumbs" fxLayoutAlign="space-between center"
+        fxLayoutGap="12px grid">
+        <div fxLayoutAlign="center center">
+            <xng-breadcrumb [separator]="separatorTemplate">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+                    <ng-container>{{ breadcrumb }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <div fxLayoutAlign="center center">
+            <div class="warn" *ngIf="warningMessage" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div>
+                    <span class="material-icons">warning</span>
+                </div>
+                <div>
+                    <span>{{warningMessage}}</span>
+                </div>
+            </div>
+        </div>
+        <div fxLayoutAlign="center center">
+            <div class="status" *ngIf="this.tenderDetails.get('workflowStep')?.value">
+                <span>WorkflowStep : </span>
+                <span class="text-bold">{{this.tenderDetails.get('workflowStep')?.value}}</span>
+            </div>
+        </div>
     </div>
     <ng-template #separatorTemplate>
         <mat-icon>arrow_right</mat-icon>
@@ -21,8 +40,7 @@
                         fxLayout="column">
                         <mat-label>Type of Work *</mat-label>
                         <mat-form-field appearance="outline">
-                            <mat-select [disabled]="readonly" placeholder="Select Type of Work"
-                                formControlName="typeOfWork">
+                            <mat-select placeholder="Select Type of Work" formControlName="typeOfWork">
                                 <mat-select-filter [placeholder]="'Search'" [displayMember]="'establishmentDescription'"
                                     [array]="typeOfWorks" (filteredReturn)="typeOfWorksList =$event">
                                 </mat-select-filter>
@@ -40,8 +58,7 @@
                         fxLayout="column">
                         <mat-label>Type of Contract *</mat-label>
                         <mat-form-field appearance="outline">
-                            <mat-select [disabled]="readonly" placeholder="Select Type of Contract"
-                                formControlName="typeOfContract">
+                            <mat-select placeholder="Select Type of Contract" formControlName="typeOfContract">
                                 <mat-select-filter [placeholder]="'Search'" [displayMember]="'typeOfContract'"
                                     [array]="typeOfContracts" (filteredReturn)="typeOfContractsList =$event">
                                 </mat-select-filter>
@@ -58,8 +75,7 @@
                         fxLayout="column">
                         <mat-label>Project Location *</mat-label>
                         <mat-form-field appearance="outline">
-                            <input [readonly]="readonly" matInput placeholder="Project Location"
-                                formControlName="projectLocation">
+                            <input matInput placeholder="Project Location" formControlName="projectLocation">
                             <mat-error *ngIf="tenderDetails.get('projectLocation')?.errors?.['required']">
                                 Enter Project Location
                             </mat-error>
@@ -73,7 +89,7 @@
                         <mat-label>Contract Duration (Months or Days) *</mat-label>
                         <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
                             <mat-form-field fxFlex="47%" appearance="outline">
-                                <input [readonly]="readonly" matInput numbersOnly placeholder="Contract Duration"
+                                <input matInput numbersOnly placeholder="Contract Duration"
                                     formControlName="contractDuration">
                                 <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
                                     Contract Duration
@@ -83,8 +99,7 @@
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field fxFlex="47%" appearance="outline">
-                                <mat-select [disabled]="readonly" placeholder="Months or Days"
-                                    formControlName="durationCounter">
+                                <mat-select placeholder="Months or Days" formControlName="durationCounter">
                                     <mat-option *ngFor="let item of durationCounterList" [value]="item.id">
                                         {{item.text}}
                                     </mat-option>
@@ -99,7 +114,7 @@
                         fxLayout="column">
                         <mat-label>Description of Work *</mat-label>
                         <mat-form-field appearance="outline">
-                            <textarea [readonly]="readonly" matInput placeholder="Description of Work"
+                            <textarea matInput placeholder="Description of Work"
                                 formControlName="workDescription"></textarea>
                             <mat-error *ngIf="tenderDetails.get('workDescription')?.errors?.['required']">
                                 Type Description of Work
@@ -113,8 +128,8 @@
                         fxLayout="column">
                         <mat-label>Last Date of Submission *</mat-label>
                         <mat-form-field appearance="outline">
-                            <input [disabled]="readonly" [readonly]="readonly" matInput [matDatepicker]="picker"
-                                placeholder="DD/MM/YYYY" formControlName="lastDateOfSubmission" (click)="picker.open()">
+                            <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
+                                formControlName="lastDateOfSubmission" (click)="picker.open()">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-error *ngIf="tenderDetails.get('lastDateOfSubmission')?.errors?.['required']">
@@ -126,9 +141,8 @@
                         fxLayout="column">
                         <mat-label>Budget</mat-label>
                         <mat-form-field appearance="outline">
-                            <span matPrefix>&#8377;</span>
-                            <input [readonly]="readonly" matInput numbersOnly type="text" placeholder="Budget"
-                                formControlName="estimatedBudget" [onblur]="transform">
+                            <input matInput type="text" placeholder="Budget" formControlName="estimatedBudget"
+                                [onblur]="transform">
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
                                 Enter only 20 digits
                             </mat-error>
@@ -138,32 +152,36 @@
                         fxLayout="column" fxLayoutGap="4px">
                         <mat-label>Technical Tender Document *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <div>
-                                <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
-                                    fxLayoutGap="8px">
-                                    <span class="material-icons">cloud_upload</span>
-                                    <span class="textLink">Upload File</span>
-                                </label>
-                                <label for="file">
-                                    <input [disabled]="readonly" id="file" type="file" class="form-control"
-                                        (change)="onFileChange($event)" hidden>
-                                </label>
+                            <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
+                                fxLayoutGap="8px">
+                                <span class="material-icons">cloud_upload</span>
+                                <span class="textLink">Upload File</span>
+                            </label>
+                            <label for="file">
+                                <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden
+                                    [disabled]="btnstate">
+                            </label>
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div>
+                                    <span *ngIf="!file?.name && !fileName">No file Choosen</span>
+                                    <span *ngIf="fileName">{{fileName}}</span>
+                                    <span>{{file?.name}}</span>
+                                </div>
+                                <div>
+                                    <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Remove Document" matTooltipPosition="right"
+                                        (click)="removeSelectedFile(file)">
+                                        <span class="material-icons">cancel</span>
+                                    </button>
+                                    <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Download Document" matTooltipPosition="right"
+                                        (click)="downloadSelectedFile(tenderId)">
+                                        <span class="material-icons">cloud_download</span>
+                                    </button>
+                                </div>
+
                             </div>
-                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                <span *ngIf="!file?.name && !fileName">No file Choosen</span>
-                                <span *ngIf="fileName">{{fileName}}</span>
-                                <span>{{file?.name}}</span>
-                                <button [disabled]="readonly" *ngIf="file?.name" type="button" mat-icon-button
-                                    class="icon-approve" matTooltip="Remove Document" matTooltipPosition="right"
-                                    (click)="removeSelectedFile(file)">
-                                    <span class="material-icons">cancel</span>
-                                </button>
-                                <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
-                                    matTooltip="Download Document" matTooltipPosition="right"
-                                    (click)="downloadSelectedFile(tenderId)">
-                                    <span class="material-icons">cloud_download</span>
-                                </button>
-                            </div>
+
                         </div>
                         <div
                             *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
@@ -178,35 +196,38 @@
                             <div fxLayout="row" fxLayoutGap="25%">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                     fxLayoutGap="8px">
-                                    <span class="material-icons">cloud_upload</span>
-                                    <span class="textLink">Upload File</span>
-                                    <input [disabled]="readonly" id="fileTender" type="file"
-                                        (change)="importExcel($event)" accept=".xlsx,.csv" hidden>
+                                    <span class="material-icons">file_upload</span>
+                                    <span class="textLink">Import File</span>
+                                    <input id="fileTender" type="file" (change)="importExcel($event)"
+                                        accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
                             </div>
                         </div>
                         <div class="example-wrapper">
-                            <ag-grid-angular [suppressClickEdit]="readonly" class="ag-theme-alpine"
-                                [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData"
-                                [editType]="editType" (gridReady)="onGridReady($event)"
-                                (cellClicked)="onCellClicked($event)" (rowEditingStarted)="onRowEditingStarted($event)"
+                            <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"
+                                [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
+                                (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"
+                                (rowEditingStarted)="onRowEditingStarted($event)"
                                 (rowEditingStopped)="onRowEditingStopped($event)"
                                 (cellValueChanged)="onCellValueChanged($event)"
                                 (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
-                                (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout">
+                                (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
+                                [overlayLoadingTemplate]="overlayLoadingTemplate">
                             </ag-grid-angular>
                         </div>
                     </div>
                 </div>
-                <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px"
-                    *ngIf="router.url != '/tenders/'+tenderId+'/create-pq-form'">
-                    <button [disabled]="readonly" mat-button (click)="onSave()">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
+                    <button mat-button style="background-color: grey ;" (click)="onSave()" [disabled]="btnstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <mat-icon class="Icon">save</mat-icon>
                             <div>Save</div>
                         </div>
                     </button>
-                    <button [disabled]="readonly" mat-button *ngIf='this.tenderId' (click)="onSubmit()">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <button mat-button *ngIf='this.tenderId' (click)="onSubmit()" style="background-color: green ;"
+                        [disabled]="btnstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <mat-icon class="Icon">send</mat-icon>
                             <div>Submit</div>
                         </div>
                     </button>

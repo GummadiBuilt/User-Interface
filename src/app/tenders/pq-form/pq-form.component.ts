@@ -27,7 +27,7 @@ function actionCellRenderer(params: any) {
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true },
+      useValue: { displayDefaultIndicatorType: false, showError: true },
     },
   ],
 })
@@ -43,7 +43,6 @@ export class PQFormComponent implements OnInit {
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
   }
-
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles

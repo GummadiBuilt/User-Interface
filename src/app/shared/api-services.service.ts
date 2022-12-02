@@ -12,14 +12,25 @@ import { environment } from 'src/environments/environment';
 import { tenderMasterData } from '../tenders/create-tender/createTender';
 import { commonOptionsData } from './commonOptions';
 import { tenderResopnse } from '../tenders/tender/tenderResponse';
+import { GlobalConfig, IndividualConfig, ToastrService } from 'ngx-toastr';
+export interface toastPayload {
+  message: string;
+  title: string;
+  ic: IndividualConfig;
+  type: string;
+}
 @Injectable({
   providedIn: 'root'
 })
+
 export class ApiServicesService {
   public navigation = new Subject<any>();
   public navigation$ = this.navigation.asObservable();
   private url: string = environment.apiUrl;
-  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService) { }
+  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService,
+    private toastr: ToastrService) {
+      this.toastr.toastrConfig.enableHtml = true;
+     }
 
   public getRegistrationMasterData(): Observable<registrationMasterData> {
     return this.httpClient.get<registrationMasterData>(this.url + '/registration-master-data');
@@ -122,6 +133,15 @@ downloadFile(data: any) {
     const blob = new Blob([arrayBuffer], { type: fileType });
     return blob;
   }
+  //warning or error toastr
+  showToast(toast: toastPayload) {
+    this.toastr.show(
+      toast.message,
+      toast.title,
+      toast.ic,
+      'toast-' + toast.type
+    );
+  }
 //   // Error handling
 //   errorHandl(error: HttpErrorResponse) {
 //     let errorMessage = '';
@@ -144,5 +164,4 @@ downloadFile(data: any) {
 //     return throwError(errorMessage);
 //   }
  }
-
 

@@ -11,11 +11,14 @@
         <mat-icon>arrow_right</mat-icon>
     </ng-template>
     <div class="pq-form-body">
-        <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
-            <mat-step *ngIf="userRole?.includes('admin')">
-                <ng-template matStepLabel>Tender Details</ng-template>
+        <mat-stepper errorMessage="Fill required contact details." #stepper
+            [orientation]="(stepperOrientation | async)!">
+            <ng-template matStepperIcon="tender_details">
+                <mat-icon>wysiwyg</mat-icon>
+            </ng-template>
+            <mat-step *ngIf="userRole?.includes('admin')" label="Tender Details" state="tender_details">
                 <div>
-                    <app-create-tender [readonly]="true"></app-create-tender>
+                    <app-create-tender [hideBreadcrumbs]="true"></app-create-tender>
                 </div>
                 <div class="action-btn" fxLayoutAlign="end">
                     <button mat-button matStepperNext>
@@ -68,9 +71,12 @@
                     </button>
                 </div>
             </mat-step>
-            <mat-step *ngIf="userRole?.includes('admin')">
+            <ng-template matStepperIcon="project_information">
+                <mat-icon>add_business</mat-icon>
+            </ng-template>
+            <mat-step [stepControl]="pqForm" errorMessage="Fill required project details."
+                *ngIf="userRole?.includes('admin')" label="Project Information" state="project_information">
                 <form [formGroup]="pqForm">
-                    <ng-template matStepLabel>Project Information</ng-template>
                     <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                             fxLayout="column">
@@ -111,7 +117,6 @@
                                     Enter only 50 characters
                                 </mat-error>
                             </mat-form-field>
-
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                             fxLayout="column">
@@ -192,15 +197,25 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                         <button mat-button matStepperPrevious>
                             <div fxLayout="row" fxLayoutAlign="space-between center">
                                 <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
                                 <span>Previous</span>
                             </div>
                         </button>
-                        <button mat-raised-button color="primary">Save</button>
-                        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+                        <button mat-button style="background-color: grey ;">
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                <mat-icon class="Icon">save</mat-icon>
+                                <div>Save</div>
+                            </div>
+                        </button>
+                        <button mat-button (click)="onSubmit()" style="background-color: green ;">
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                <mat-icon class="Icon">send</mat-icon>
+                                <div>Submit</div>
+                            </div>
+                        </button>
                     </div>
                 </form>
             </mat-step>

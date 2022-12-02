@@ -45,6 +45,7 @@ import { LoaderInterceptor } from './shared/loader-interceptor.service';
 import { MyLoaderComponent } from './my-loader/my-loader.component';
 import { BlurFormatDirective } from './directives/blur-format.directive';
 import { PQFormComponent } from './tenders/pq-form/pq-form.component';
+import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -99,6 +100,7 @@ export const MY_DATE_FORMATS = {
     ButtonRendererComponent,
     MyLoaderComponent,
     BlurFormatDirective,
+    ConfirmationDlgComponent,
     PQFormComponent,
   ],
   imports: [

@@ -72,9 +72,25 @@ mat-header-row {
     padding-bottom: 0 !important;
 }
 
+.text-bold {
+    font-weight: 500;
+}
+
 //breadcrumbs
-.tender-form .breadcrumbs {
-    padding: 0 0 12px 0;
+.breadcrumbs {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.warn {
+    color: #756e15;
+    background: #fffbd1;
+    border: 1px solid #87803e;
+    padding: 4px 12px 4px 12px !important;
+}
+
+.status {
+    color: #841618;
 }
 
 ::ng-deep .xng-breadcrumb-root {
@@ -98,10 +114,23 @@ mat-header-row {
     word-break: break-word !important;
 }
 
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
 
-//rupee symbol
-::ng-deep .tender-form .mat-form-field-appearance-outline .mat-form-field-prefix {
-    top: 0 !important;
-    padding-right: 4px !important;
-    font-size: 14px !important;
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}
+
+.Icon {
+    color: white;
+    font-size: 20px;
+}
+
+button.mat-button-disabled {
+    cursor: not-allowed;
+}
+
+input[type="file" i]:disabled {
+    cursor: not-allowed;
 }

@@ -124,3 +124,18 @@ form mat-label {
 .financial-conditions {
     margin-top: 12px;
 }
+
+.Icon {
+    color: white;
+    font-size: 20px;
+}
+
+//mat-stepper custom css
+::ng-deep .mat-step-text-label {
+    height: 22px;
+    color: #6b6b6b;
+    font-family: "Fira Sans Condensed";
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+}

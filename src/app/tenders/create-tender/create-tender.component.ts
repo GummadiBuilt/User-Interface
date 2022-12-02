@@ -1,33 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
 import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, GridApi,
+  GridOptions,
   GridReadyEvent, RowValueChangedEvent,
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
-import { ApiServicesService } from '../../shared/api-services.service';
+import { ApiServicesService, toastPayload } from '../../shared/api-services.service';
 import { tenderMasterData, typeOfContracts, typeOfEstablishment } from './createTender';
 import { tenderResopnse } from '../tender/tenderResponse';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 
-function actionCellRenderer(params: any) {
-  let eGui = document.createElement("div");
-  let editingCells = params.api.getEditingCells();
-  // checks if the rowIndex matches in at least one of the editing cells
-  let isCurrentRowEditing = editingCells.some((cell: any) => {
-    return cell.rowIndex === params.node.rowIndex;
-  });
-  eGui.innerHTML = `
-    <button class="action-button add"  data-action="add" > Add  </button>
-    <button class="action-button delete" data-action="delete" > Delete </button>
-    `;
-  return eGui;
-}
 @Component({
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
@@ -50,10 +40,14 @@ export class CreateTenderComponent implements OnInit {
   public isFileUploaded = false;
   loading = false;
   fileName: any;
-  @Input() readonly!: boolean;
+  public btnstate: boolean = false;
+  public warningMessage!: string;
+  //to hide breadcrumbs in pq-form
+  @Input() hideBreadcrumbs!: boolean;
+
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router) {
+    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router, private dialog: MatDialog) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.tenderId = id;
@@ -61,12 +55,11 @@ export class CreateTenderComponent implements OnInit {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
           // console.log('Tender data by id', data);
           this.editData(data);
+          this.tenderFormDisable();
         });
       }
     });
     this.domLayout = "autoHeight";
-    // console.log(this.tenderId);
-    // console.log(router.url);
   }
   ngOnInit(): void {
     try {
@@ -95,6 +88,7 @@ export class CreateTenderComponent implements OnInit {
   //currency format
   transform(value: string) {
     return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
       currency: 'INR',
       minimumFractionDigits: 0, //no.of decimal values
     }).format(Number(value));
@@ -160,29 +154,56 @@ export class CreateTenderComponent implements OnInit {
   //AG GRID COMPONENTS
   public appHeaders = ["Item Description", "Unit", "Quantity"]
   private gridApi!: GridApi;
+  public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
   public rowData: any[] = [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
+  public overlayLoadingTemplate =
+    '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', minWidth: 350, autoHeight: true, wrapText: true, },
-    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter' },
-    { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter' },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
+    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
+    { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
     {
-      headerName: "Action",
-      minWidth: 150,
-      cellRenderer: actionCellRenderer,
+      headerName: "Action", flex: 1, minWidth: 150,
+      cellRenderer: (params: any) => {
+        const divElement = document.createElement("div");
+        const editingCells = params.api.getEditingCells();
+        // checks if the rowIndex matches in at least one of the editing cells
+        const isCurrentRowEditing = editingCells.some((cell: any) => {
+          return cell.rowIndex === params.node.rowIndex;
+        });
+        if (this.btnstate) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" disabled>
+            <span style="font-size: 20px" class="material-icons">add</span>
+          </button>
+          <button class="action-disable-button delete" disabled>
+            <span style="font-size: 20px" class="material-icons">delete</span>
+          </button>
+          `;
+        } else {
+          divElement.innerHTML = `
+          <button class="action-button add" data-action="add">
+            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+          </button>
+          <button class="action-button delete" data-action="delete">
+            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+          </button>
+          `;
+        }
+        return divElement;
+      },
       editable: false,
       colId: "action",
       filter: false
     }
   ];
   public defaultColDef: ColDef = {
-    flex: 1,
     editable: true,
     filter: true,
     floatingFilter: true,
-    minWidth: 160,
     resizable: true,
   };
   onCellValueChanged(event: CellValueChangedEvent) {
@@ -220,6 +241,7 @@ export class CreateTenderComponent implements OnInit {
   }
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.gridOptions = params.columnApi;
   }
   onCellClicked(params: any) {
     // Handle click event for action cells
@@ -321,7 +343,7 @@ export class CreateTenderComponent implements OnInit {
         (error => {
           console.log(error);
         })
-      ).add(() => this.loading = false)
+      )
     } else if (this.tenderDetails.valid && this.file) {
       // console.log('create form');
       this.ApiServicesService.createTender(formData).subscribe(
@@ -356,21 +378,48 @@ export class CreateTenderComponent implements OnInit {
     const blob = new Blob();
     formDataSubmit.append('tenderDocument', this.file || blob);
     formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
-    this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
-      // console.log('update form');
-      this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
-        (response => {
-          this.toastr.success('Successfully Submitted');
-        }),
-        (error => {
-          console.log(error);
-        })
-      ).add(() => this.loading = false)
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: 'Are you sure you want to submit the tender?', msg: 'Submitting will disable further editing of Tender and will be sent to Admins for review' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
+            (response => {
+              console.log('response', response.workflowStep);
+              this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
+              console.log('response tender', this.tenderDetails.get('workflowStep')?.value);
+              this.toastr.success('Successfully Submitted');
+              this.tenderFormDisable();
+            }),
+            (error => {
+              console.log(error);
+            })
+          )
+        }
+      });
+
+
     } else {
       //error
       console.log('error');
       this.toastr.error('Error in Submitting Tender Form');
+    }
+  }
+  tenderFormDisable() {
+    console.log(this.tenderDetails.get('workflowStep')?.value);
+    console.log(this.userRole?.includes("client"));
+    console.log(this.router.url);
+    if ((this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
+      || this.tenderDetails.get('workflowStep')?.value == 'YET_TO_BE_PUBLISHED')) || this.router.url == '/tenders/' + this.tenderId + '/create-pq-form') {
+      // console.log('inside',this.tenderDetails.controls['workflowStep'].value);
+      this.tenderDetails.disable();
+      this.btnstate = true;
+      this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+      this.gridOptions.getColumn('Unit').getColDef().editable = false;
+      this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+      this.gridApi.refreshCells();
+      this.warningMessage = 'User cannot edit values because form already Submitted ';
     }
   }
 }
