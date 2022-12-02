@@ -11,13 +11,16 @@
 }
 
 mat-button-toggle {
-    color: black;
-    background-color: rgb(204, 204, 204);
+    // color: black;
+    // background-color: rgb(204, 204, 204);
+    color: #841618;
+    background-color: white;
 }
 
 .mat-button-toggle-checked {
     color: white;
-    background-color: rgb(82, 82, 82);
+    // background-color: rgb(82, 82, 82);
+    background-color: #841618;
 }
 
 ::ng-deep .mat-button-toggle .mat-icon {
@@ -139,4 +142,9 @@ th {
 //ag-grid cell text wrap in words
 ::ng-deep .ag-cell-wrap-text {
     word-break: break-word !important;
+}
+::ng-deep .button-download {
+    background-color: #841618;
+    color: white;
+    
 }

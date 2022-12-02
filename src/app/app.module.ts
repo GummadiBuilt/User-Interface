@@ -46,7 +46,6 @@ import { MyLoaderComponent } from './my-loader/my-loader.component';
 import { BlurFormatDirective } from './directives/blur-format.directive';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
-import { CurrencyformatterDirective } from './shared/currencyformatter.directive';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -101,8 +100,7 @@ export const MY_DATE_FORMATS = {
     ButtonRendererComponent,
     MyLoaderComponent,
     BlurFormatDirective,
-    ConfirmationDlgComponent,
-    CurrencyformatterDirective,
+    ConfirmationDlgComponent
   ],
   imports: [
     BrowserModule,

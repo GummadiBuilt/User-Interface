@@ -87,17 +87,17 @@ export class TendersComponent implements OnInit {
     { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },
     { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter', valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
     {
-      headerName: 'Tender Document', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
+      headerName: 'Action', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
-        context: this,
-        label: 'Tender Document',
+        context: this
       },
       filter: false,
     }
   ];
 
   downloadDocument(data: any) {
-    this.ApiServicesService.downloadTechnicalTenderDocument(data.tenderId).subscribe((response) => {
+    const downloadId = data.tenderId ? data.tenderId : data;
+    this.ApiServicesService.downloadTechnicalTenderDocument(downloadId).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });
