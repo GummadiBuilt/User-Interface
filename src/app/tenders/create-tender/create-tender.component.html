@@ -1,19 +1,29 @@
 <div class="tender-form">
-    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-        <xng-breadcrumb [separator]="separatorTemplate">
-            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
-                <ng-container>{{ breadcrumb }}</ng-container>
-            </ng-container>
-        </xng-breadcrumb>
-        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-         *ngIf="warningMessage" fxLayoutAlign="center" class="bar warn">
-        <span><span class="material-icons">warning</span>{{warningMessage}}</span>
-    </div>
-        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-         fxLayoutAlign="end" *ngIf="this.tenderDetails.get('workflowStep')?.value">
-            <span>WorkflowStep : {{this.tenderDetails.get('workflowStep')?.value}}</span>
-</div>
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
+        <div fxLayoutAlign="center center">
+            <xng-breadcrumb [separator]="separatorTemplate">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+                    <ng-container>{{ breadcrumb }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <div fxLayoutAlign="center center">
+            <div class="warn" *ngIf="warningMessage" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div>
+                    <span class="material-icons">warning</span>
+                </div>
+                <div>
+                    <span>{{warningMessage}}</span>
+                </div>
+            </div>
+        </div>
+        <div fxLayoutAlign="center center">
+            <div class="status" *ngIf="this.tenderDetails.get('workflowStep')?.value">
+                <span>WorkflowStep : </span>
+                <span class="text-bold">{{this.tenderDetails.get('workflowStep')?.value}}</span>
+            </div>
+        </div>
     </div>
     <ng-template #separatorTemplate>
         <mat-icon>arrow_right</mat-icon>
@@ -130,8 +140,8 @@
                         fxLayout="column">
                         <mat-label>Budget</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput  type="text" placeholder="Budget"
-                                formControlName="estimatedBudget" [onblur]="transform">
+                            <input matInput type="text" placeholder="Budget" formControlName="estimatedBudget"
+                                [onblur]="transform">
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
                                 Enter only 20 digits
                             </mat-error>
@@ -140,35 +150,44 @@
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px">
                         <mat-label>Technical Tender Document *</mat-label>
-                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
                                 fxLayoutGap="8px">
                                 <span class="material-icons">cloud_upload</span>
                                 <span class="textLink">Upload File</span>
                             </label>
                             <label for="file">
-                                <input id="file" type="file" class="form-control" (change)="onFileChange($event)"
-                                    hidden [disabled]="btnstate">
+                                <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden
+                                    [disabled]="btnstate">
                             </label>
-                            <span *ngIf="!file?.name && !fileName">No file Choosen</span>
-                            <span *ngIf="fileName">{{fileName}}</span>
-                            <span>{{file?.name}}</span>
-                            <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
-                                matTooltip="Remove Document" matTooltipPosition="right"
-                                (click)="removeSelectedFile(file)">
-                                <span class="material-icons">cancel</span>
-                            </button>
-                            <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
-                                matTooltip="Download Document" matTooltipPosition="right"
-                                (click)="downloadSelectedFile(tenderId)">
-                                <span class="material-icons">cloud_download</span>
-                            </button>
-                        </div>
-                        <div *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
-                                <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
-                                    File Required
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div>
+                                    <span *ngIf="!file?.name && !fileName">No file Choosen</span>
+                                    <span *ngIf="fileName">{{fileName}}</span>
+                                    <span>{{file?.name}}</span>
                                 </div>
+                                <div>
+                                    <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Remove Document" matTooltipPosition="right"
+                                        (click)="removeSelectedFile(file)">
+                                        <span class="material-icons">cancel</span>
+                                    </button>
+                                    <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Download Document" matTooltipPosition="right"
+                                        (click)="downloadSelectedFile(tenderId)">
+                                        <span class="material-icons">cloud_download</span>
+                                    </button>
+                                </div>
+
                             </div>
+
+                        </div>
+                        <div
+                            *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
+                            <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
+                                File Required
+                            </div>
+                        </div>
                     </div>
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -179,7 +198,7 @@
                                     <span class="material-icons">file_upload</span>
                                     <span class="textLink">Import File</span>
                                     <input id="fileTender" type="file" (change)="importExcel($event)"
-                                        accept=".xlsx,.csv" hidden  [disabled]="btnstate">
+                                        accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
                             </div>
                         </div>
@@ -187,23 +206,26 @@
                             <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"
                                 [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
                                 (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"
-                                (rowEditingStarted)="onRowEditingStarted($event)" (rowEditingStopped)="onRowEditingStopped($event)"
-                                (cellValueChanged)="onCellValueChanged($event)" (rowValueChanged)="onRowValueChanged($event)"
-                                (gridReady)="onGridReady($event)" (cellEditingStopped)="onCellEditingStopped($event)"
-                                [domLayout]="domLayout" [overlayLoadingTemplate]="overlayLoadingTemplate">
+                                (rowEditingStarted)="onRowEditingStarted($event)"
+                                (rowEditingStopped)="onRowEditingStopped($event)"
+                                (cellValueChanged)="onCellValueChanged($event)"
+                                (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
+                                (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
+                                [overlayLoadingTemplate]="overlayLoadingTemplate">
                             </ag-grid-angular>
                         </div>
                     </div>
                 </div>
                 <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                     <button mat-button style="background-color: grey ;" (click)="onSave()" [disabled]="btnstate">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                             <mat-icon class="Icon">save</mat-icon>
                             <div>Save</div>
                         </div>
                     </button>
-                    <button mat-button *ngIf='this.tenderId' (click)="onSubmit()" style="background-color: green ;" [disabled]="btnstate">
-                        <div fxLayout="row"  fxLayoutAlign="space-between center">
+                    <button mat-button *ngIf='this.tenderId' (click)="onSubmit()" style="background-color: green ;"
+                        [disabled]="btnstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                             <mat-icon class="Icon">send</mat-icon>
                             <div>Submit</div>
                         </div>

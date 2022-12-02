@@ -24,7 +24,7 @@ export class TendersComponent implements OnInit {
   public frameworkComponents: any;
   fileName = '';
   public domLayout: any;
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
@@ -85,7 +85,7 @@ export class TendersComponent implements OnInit {
     { headerName: 'Status', field: 'workflowStep', filter: 'agTextColumnFilter' },
     { headerName: 'Location', field: 'projectLocation', filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter' , valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
+    { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter', valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
     {
       headerName: 'Tender Document', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
       cellRendererParams: {

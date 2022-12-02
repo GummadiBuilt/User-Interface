@@ -132,6 +132,14 @@ th {
     height: 100% !important;
 }
 
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
+
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}
+
 //ag-grid cell text wrap in words
 ::ng-deep .ag-cell-wrap-text {
     word-break: break-word !important;
