@@ -11,27 +11,23 @@
 }
 
 mat-button-toggle {
-    color: #841618;
-    background-color: white;
+    color: black;
+    background-color: rgb(204, 204, 204);
 }
 
 .mat-button-toggle-checked {
     color: white;
-    background-color: #841618;
+    background-color: rgb(82, 82, 82);
 }
 
-.toggle-first {
-    border-radius: 0 !important;
-    border-left: #841618 1px solid;
-    border-top: #841618 1px solid;
-    border-bottom: #841618 1px solid;
+::ng-deep .mat-button-toggle .mat-icon {
+    color: black;
+    font-size: 22px;
 }
 
-.toggle-last {
-    border-radius: 0 !important;
-    border-right: #841618 1px solid;
-    border-top: #841618 1px solid;
-    border-bottom: #841618 1px solid;
+::ng-deep .mat-button-toggle-checked .mat-icon {
+    color: white;
+    font-size: 22px;
 }
 
 table {

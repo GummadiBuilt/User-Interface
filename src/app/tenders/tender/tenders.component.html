@@ -24,9 +24,11 @@
         <div>
             <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
                 <mat-button-toggle class="toggle-first" [value]="true">
+                    <mat-icon>reorder</mat-icon>
                     List
                 </mat-button-toggle>
                 <mat-button-toggle class="toggle-last" [value]="false">
+                    <mat-icon>apps</mat-icon>
                     Grid
                 </mat-button-toggle>
             </mat-button-toggle-group>
