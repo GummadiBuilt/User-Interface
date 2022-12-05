@@ -46,6 +46,7 @@ import { MyLoaderComponent } from './my-loader/my-loader.component';
 import { BlurFormatDirective } from './directives/blur-format.directive';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -62,6 +63,19 @@ function initializeKeycloak(keycloak: KeycloakService) {
       }
     });
 }
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ".",
+  precision: 0,
+  prefix: "₹ ",
+  suffix: "",
+  thousands: ",",
+  nullable: false,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
+
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -120,10 +134,12 @@ export const MY_DATE_FORMATS = {
     BreadcrumbModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   providers: [
     DatePipe,
     LoaderService,
+    
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,

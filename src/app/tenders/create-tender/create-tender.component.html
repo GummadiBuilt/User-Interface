@@ -141,7 +141,7 @@
                         <mat-label>Budget</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput type="text" placeholder="Budget" formControlName="estimatedBudget"
-                                [onblur]="transform">
+                            currencyMask>
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
                                 Enter only 20 digits
                             </mat-error>
