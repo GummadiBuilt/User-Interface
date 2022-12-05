@@ -154,7 +154,7 @@ export class CreateTenderComponent implements OnInit {
   }
   //AG GRID COMPONENTS
   public appHeaders = ["Item Description", "Unit", "Quantity"]
-  private gridApi!: GridApi;
+  public gridApi!: GridApi;
   public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
   public rowData: any[] = [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
@@ -413,8 +413,8 @@ export class CreateTenderComponent implements OnInit {
     console.log(this.tenderDetails.get('workflowStep')?.value);
     console.log(this.userRole?.includes("client"));
     console.log(this.router.url);
-    if ((this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
-      || this.tenderDetails.get('workflowStep')?.value == 'YET_TO_BE_PUBLISHED')) || this.router.url == '/tenders/' + this.tenderId + '/create-pq-form') {
+    if (this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
+      || this.tenderDetails.get('workflowStep')?.value == 'YET_TO_BE_PUBLISHED')) {
       // console.log('inside',this.tenderDetails.controls['workflowStep'].value);
       this.tenderDetails.disable();
       this.btnstate = true;

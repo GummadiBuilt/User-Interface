@@ -565,17 +565,35 @@
                 <form>
                     <ng-template matStepLabel>Financial Information</ng-template>
                     <div>
-                        Provide the following information for the last 3 years for the company (Attach Annexure if
-                        required)
-                    </div>
-                    <div class="financial-wrapper">
-                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                            [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
-                            [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType">
-                        </ag-grid-angular>
+                        <ul>
+                            <li>
+                                Provide the following information for the last 3 years for the company (Attach Annexure
+                                if required)
+                            </li>
+                            <li>
+                                Client reserves the right to approach those named to seek reference and rely on you
+                                having obtained the necessary consents.
+                            </li>
+                        </ul>
                     </div>
                     <div>
                         <mat-accordion class="example-headers-align" multi>
+                            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Financial Information
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
+                                        [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
+                                <mat-action-row>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
                             <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
@@ -590,6 +608,7 @@
                                     </ag-grid-angular>
                                 </div>
                                 <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
                                     <button mat-button color="primary" (click)="nextStep()">Next</button>
                                 </mat-action-row>
                             </mat-expansion-panel>
@@ -607,12 +626,12 @@
                                         [editType]="editType">
                                     </ag-grid-angular>
                                 </div>
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
                             </mat-expansion-panel>
                         </mat-accordion>
-                    </div>
-                    <div class="financial-conditions">
-                        Client reserves the right to approach those named to seek reference and rely on you having
-                        obtained the necessary consents.
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                         <button mat-button matStepperPrevious>

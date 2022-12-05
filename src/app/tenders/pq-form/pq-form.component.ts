@@ -1,10 +1,14 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, ColDef, GridApi, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
+import { ApiServicesService } from 'src/app/shared/api-services.service';
+import { CreateTenderComponent } from '../create-tender/create-tender.component';
+import { tenderResopnse } from '../tender/tenderResponse';
 
 function actionCellRenderer(params: any) {
   let eGui = document.createElement("div");
@@ -36,12 +40,29 @@ export class PQFormComponent implements OnInit {
   pqForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
+  //to hide tender details
+  @ViewChild(CreateTenderComponent) createTenderComponent!: CreateTenderComponent;
 
-  constructor(protected keycloak: KeycloakService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
+  constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
+
+    //to hide tender details
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
+          this.createTenderComponent.tenderDetails.disable();
+          this.createTenderComponent.btnstate = true;
+          this.createTenderComponent.gridOptions.getColumn('Item Description').getColDef().editable = false;
+          this.createTenderComponent.gridOptions.getColumn('Unit').getColDef().editable = false;
+          this.createTenderComponent.gridOptions.getColumn('Quantity').getColDef().editable = false;
+          this.createTenderComponent.gridApi.refreshCells();
+        });
+      }
+    });
   }
   ngOnInit(): void {
     try {
