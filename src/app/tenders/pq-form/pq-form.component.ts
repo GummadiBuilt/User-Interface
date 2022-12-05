@@ -78,31 +78,6 @@ export class PQFormComponent implements OnInit {
   //ag-grid
   private gridApi!: GridApi;
   public editType: 'fullRow' = 'fullRow';
-  //Section C of PQ-Form
-  public columnDefs: ColDef[] = [
-    { headerName: 'Details', field: 'details', editable: true },
-    { headerName: 'Project 1', field: 'project1', editable: true },
-    { headerName: 'Project 2', field: 'project2', editable: true },
-    { headerName: 'Project 3', field: 'project3', editable: true },
-  ];
-  public defaultColDef: ColDef = {
-    flex: 1,
-    editable: true,
-    minWidth: 200,
-    resizable: true,
-  };
-  public rowData = [
-    { details: 'Name & Location of Project:', project1: '', project2: '', project3: '', },
-    { details: 'Scope of Contract:', project1: '', project2: '', project3: '', },
-    { details: 'Built Up Area:', project1: '', project2: '', project3: '', },
-    { details: 'Contract Value:', project1: '', project2: '', project3: '', },
-    { details: 'Current Status (If completed date of completion):', project1: '', project2: '', project3: '', },
-    { details: 'Employers Name & Address', project1: '', project2: '', project3: '', },
-    { details: 'Referee’s Name', project1: '', project2: '', project3: '', },
-    { details: 'Referee’s Position', project1: '', project2: '', project3: '', },
-    { details: 'Contact details', project1: '', project2: '', project3: '', },
-    { details: 'Remarks if any', project1: '', project2: '', project3: '', },
-  ];
   //Section B of PQ-Form
   public turnoverColumnDefs: ColDef[] = [
     { headerName: 'Turnover Details: [Rs. In Lacs]', field: 'details', editable: true },
@@ -119,8 +94,142 @@ export class PQFormComponent implements OnInit {
     { details: '', turnover: '', },
     { details: '', turnover: '', },
   ];
+  //Section C of PQ-Form: Client References of 3 Major Projects
+  public clientRefColumnDefs: ColDef[] = [
+    { headerName: 'Details', field: 'details', editable: true },
+    { headerName: 'Project 1', field: 'project1', editable: true },
+    { headerName: 'Project 2', field: 'project2', editable: true },
+    { headerName: 'Project 3', field: 'project3', editable: true },
+  ];
+  public clientRefDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 200,
+    resizable: true,
+  };
+  public clientRefRowData = [
+    { details: 'Name & Location of Project:', project1: '', project2: '', project3: '', },
+    { details: 'Scope of Contract:', project1: '', project2: '', project3: '', },
+    { details: 'Built Up Area:', project1: '', project2: '', project3: '', },
+    { details: 'Contract Duration:', project1: '', project2: '', project3: '', },
+    { details: 'Contract Value:', project1: '', project2: '', project3: '', },
+    { details: 'Current Status (If completed date of completion):', project1: '', project2: '', project3: '', },
+    { details: 'Employers Name & Address', project1: '', project2: '', project3: '', },
+    { details: 'Referee’s Name', project1: '', project2: '', project3: '', },
+    { details: 'Referee’s Position', project1: '', project2: '', project3: '', },
+    { details: 'Contact details', project1: '', project2: '', project3: '', },
+    { details: 'Remarks if any', project1: '', project2: '', project3: '', },
+  ];
 
-  //Section D of PQ-Form
+  //Section C of PQ-Form: Projects of similar Nature
+  public similarNatureColumnDefs: ColDef[] = [
+    { headerName: 'Details', field: 'details', editable: true },
+    { headerName: 'Project 1', field: 'project1', editable: true },
+    { headerName: 'Project 2', field: 'project2', editable: true },
+    { headerName: 'Project 3', field: 'project3', editable: true },
+  ];
+  public similarNatureDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 200,
+    resizable: true,
+  };
+  public similarNatureRowData = [
+    { details: 'Name & Location of Project:', project1: '', project2: '', project3: '', },
+    { details: 'Scope of Contract:', project1: '', project2: '', project3: '', },
+    { details: 'Built Up Area:', project1: '', project2: '', project3: '', },
+    { details: 'Contract Duration:', project1: '', project2: '', project3: '', },
+    { details: 'Contract Value:', project1: '', project2: '', project3: '', },
+    { details: 'Current Status:', project1: '', project2: '', project3: '', },
+    { details: 'Employers Name & Address', project1: '', project2: '', project3: '', },
+    { details: 'Referee’s Name', project1: '', project2: '', project3: '', },
+    { details: 'Referee’s Position', project1: '', project2: '', project3: '', },
+    { details: 'Contact details', project1: '', project2: '', project3: '', },
+    { details: 'Remarks if any', project1: '', project2: '', project3: '', },
+  ];
+
+  //Section C of PQ-Form: Statutory Compliances
+  public statutoryCompliancesColumnDefs: ColDef[] = [
+    { headerName: 'Company Registration', field: 'details', editable: true },
+    { headerName: '', field: 'inDetail', editable: true },
+  ];
+  public statutoryCompliancesDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 200,
+    resizable: true,
+  };
+  public statutoryCompliancesRowData = [
+    { details: 'ESI Registration / No of Employees:', inDetail: '', },
+    { details: 'EPF Registration / No of Employees:', inDetail: '', },
+    { details: 'GST Registration:', inDetail: '', },
+    { details: 'PAN No:', inDetail: '', },
+  ];
+
+  //Section C of PQ-Form: Employees Strength
+  public employeesStrengthColumnDefs: ColDef[] = [
+    { headerName: 'SI No', field: 'sNo', editable: true },
+    { headerName: 'Name', field: 'name', editable: true },
+    { headerName: 'Designation', field: 'designation', editable: true },
+    { headerName: 'Qualification', field: 'qualification', editable: true },
+    { headerName: 'Total Years of Experience', field: 'totalExp', editable: true },
+    { headerName: 'Years of Experience in the Present Position', field: 'totalExpPresent', editable: true },
+  ];
+  public employeesStrengthDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 150,
+    resizable: true,
+  };
+  public employeesStrengthRowData = [
+    { sNo: '1', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+    { sNo: '2', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+    { sNo: '3', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+    { sNo: '4', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+    { sNo: '5', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+    { sNo: '6', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+    { sNo: '7', name: '', designation: '', totalExp: '', totalExpPresent: '', },
+  ];
+
+  //Section C of PQ-Form: Employees Strength
+  public capitalEquipmentsColumnDefs: ColDef[] = [
+    { headerName: 'Description of Equipment', field: 'description', editable: true },
+    { headerName: 'Quantity', field: 'quantity', editable: true },
+    { headerName: 'Own / Rented', field: 'own_rented', editable: true },
+    { headerName: 'Capacity / Size', field: 'capacity_size', editable: true },
+    { headerName: 'Age / Condition', field: 'age_condition', editable: true },
+  ];
+  public capitalEquipmentsDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 150,
+    resizable: true,
+  };
+  public capitalEquipmentsRowData = [
+    { description: '', quantity: '', own_rented: '', capacity_size: '', age_condition: '', },
+    { description: '', quantity: '', own_rented: '', capacity_size: '', age_condition: '', },
+  ];
+
+  //Section C of PQ-Form: Saftey policy and Systems
+  public safteyPolicyColumnDefs: ColDef[] = [
+    { headerName: 'SI No', field: 'sNo', editable: true },
+    { headerName: 'Particulars', field: 'particulars', editable: true },
+    { headerName: 'Details', field: 'details', editable: true },
+  ];
+  public safteyPolicyDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 150,
+    resizable: true,
+  };
+  public safteyPolicyRowData = [
+    { sNo: '1', particulars: 'Availability of Safety Policy or Manual', details: 'Refer enclosed Company Safety Policy & Plan', },
+    { sNo: '2', particulars: 'PPEs provided to staff', details: '', },
+    { sNo: '3', particulars: 'PPEs provided to workmen', details: '', },
+    { sNo: '4', particulars: 'Availability of Safety Officer', details: '', },
+  ];
+
+  //Section D of PQ-Form: Financial Information
   public financialColumnDefs: ColDef[] = [
     { headerName: 'Financial Year', field: 'details', editable: true },
     {
@@ -152,6 +261,7 @@ export class PQFormComponent implements OnInit {
     { details: 'Year', turnover: '', },
     { details: 'Year', turnover: '', },
   ];
+
   //Section D Company Bankers of PQ-Form
   public companyBankersColumnDefs: ColDef[] = [
     { headerName: 'Name', field: 'details', editable: true },
@@ -167,6 +277,7 @@ export class PQFormComponent implements OnInit {
     { details: '', turnover: '', },
     { details: '', turnover: '', },
   ];
+
   //Section D Company Bankers of PQ-Form
   public companyAuditorsColumnDefs: ColDef[] = [
     { headerName: 'Name', field: 'details', editable: true },

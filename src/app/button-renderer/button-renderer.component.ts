@@ -14,7 +14,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
-    this.label = this.params.label || null;
+    this.label = this.rowData.tenderDocumentName || null;
   }
 
   btnClickedHandler(data: any) {

@@ -11,8 +11,7 @@
         <mat-icon>arrow_right</mat-icon>
     </ng-template>
     <div class="pq-form-body">
-        <mat-stepper errorMessage="Fill required contact details." #stepper
-            [orientation]="(stepperOrientation | async)!">
+        <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
             <ng-template matStepperIcon="tender_details">
                 <mat-icon>wysiwyg</mat-icon>
             </ng-template>
@@ -410,8 +409,8 @@
                                 </div>
                                 <div class="example-wrapper">
                                     <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData"
-                                        [domLayout]="domLayout" [editType]="editType">
+                                        [columnDefs]="clientRefColumnDefs" [defaultColDef]="clientRefDefaultColDef"
+                                        [rowData]="clientRefRowData" [domLayout]="domLayout" [editType]="editType">
                                     </ag-grid-angular>
                                 </div>
                                 <mat-action-row>
@@ -424,9 +423,20 @@
                                         Projects of Similar Nature
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-
-
-
+                                <div>
+                                    <ul>
+                                        <li>List maximum 3 major projects of similar nature.</li>
+                                        <li>Client reserves the right to approach those named to seek a performance
+                                            reference and rely on you having obtained the necessary consents.</li>
+                                    </ul>
+                                </div>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="similarNatureColumnDefs"
+                                        [defaultColDef]="similarNatureDefaultColDef" [rowData]="similarNatureRowData"
+                                        [domLayout]="domLayout" [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
                                 <mat-action-row>
                                     <button mat-button color="warn" (click)="prevStep()">Previous</button>
                                     <button mat-button color="primary" (click)="nextStep()">Next</button>
@@ -438,14 +448,20 @@
                                         Statutory Compliances
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ul>
-                                    <li>Give references to documents pertaining to statutory compliances here Specify NA
-                                        if not available or applicable.</li>
-                                </ul>
-                                <mat-label>Company Registration</mat-label>
-
-
-
+                                <div>
+                                    <ul>
+                                        <li>Give references to documents pertaining to statutory compliances here
+                                            Specify NA if not available or applicable.</li>
+                                    </ul>
+                                </div>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="statutoryCompliancesColumnDefs"
+                                        [defaultColDef]="statutoryCompliancesDefaultColDef"
+                                        [rowData]="statutoryCompliancesRowData" [domLayout]="domLayout"
+                                        [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
                                 <mat-action-row>
                                     <button mat-button color="warn" (click)="prevStep()">Previous</button>
                                     <button mat-button color="primary" (click)="nextStep()">Next</button>
@@ -457,9 +473,20 @@
                                         Employees Strength
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ul>
-                                    <li>List out the details of Key Professional Staff with relevant experience.</li>
-                                </ul>
+                                <div>
+                                    <ul>
+                                        <li>List out the details of Key Professional Staff with relevant experience.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="employeesStrengthColumnDefs"
+                                        [defaultColDef]="employeesStrengthDefaultColDef"
+                                        [rowData]="employeesStrengthRowData" [domLayout]="domLayout"
+                                        [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
 
                                 <mat-action-row>
                                     <button mat-button color="warn" (click)="prevStep()">Previous</button>
@@ -472,10 +499,21 @@
                                         Capital Equipments
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ul>
-                                    <li>Major Equipments owned by the company be listed here.</li>
-                                </ul>
-
+                                <div>
+                                    <ul>
+                                        <li>Major Equipments owned by the company be listed here.</li>
+                                        <li>Refer enclosed List of Plant, Machineries, Tools & Equipments available with
+                                            us and proposed to be deployed for the project</li>
+                                    </ul>
+                                </div>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="capitalEquipmentsColumnDefs"
+                                        [defaultColDef]="capitalEquipmentsDefaultColDef"
+                                        [rowData]="capitalEquipmentsRowData" [domLayout]="domLayout"
+                                        [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
                                 <mat-action-row>
                                     <button mat-button color="warn" (click)="prevStep()">Previous</button>
                                     <button mat-button color="primary" (click)="nextStep()">Next</button>
@@ -487,10 +525,19 @@
                                         Safety Policy and Systems
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ul>
-                                    <li>Company's policy and resources pertaining to safety may be listed below.</li>
-                                </ul>
-
+                                <div>
+                                    <ul>
+                                        <li>Company's policy and resources pertaining to safety may be listed below.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="safteyPolicyColumnDefs"
+                                        [defaultColDef]="safteyPolicyDefaultColDef" [rowData]="safteyPolicyRowData"
+                                        [domLayout]="domLayout" [editType]="editType">
+                                    </ag-grid-angular>
+                                </div>
                                 <mat-action-row>
                                     <button mat-button color="warn" (click)="prevStep()">Previous</button>
                                     <button mat-button color="primary" (click)="nextStep()">Next</button>
@@ -593,16 +640,29 @@
                                 We take responsibility for the correctness of the same.
                             </div>
                         </mat-radio-button>
-                        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
-                            <button mat-raised-button color="primary">Submit</button>
-                        </div>
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
+                        <button mat-button matStepperPrevious>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
+                                <span>Previous</span>
+                            </div>
+                        </button>
+                        <button mat-button style="background-color: grey;">
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                <mat-icon class="Icon">save</mat-icon>
+                                <div>Save</div>
+                            </div>
+                        </button>
+                        <button mat-button (click)="onSubmit()" style="background-color: green;">
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                <mat-icon class="Icon">send</mat-icon>
+                                <div>Submit</div>
+                            </div>
+                        </button>
                     </div>
                 </form>
             </mat-step>
         </mat-stepper>
-    </div>
-    <div class="undertaking">
-
-
     </div>
 </div>

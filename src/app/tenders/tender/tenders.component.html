@@ -24,9 +24,11 @@
         <div>
             <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
                 <mat-button-toggle class="toggle-first" [value]="true">
+                    <mat-icon>reorder</mat-icon>
                     List
                 </mat-button-toggle>
                 <mat-button-toggle class="toggle-last" [value]="false">
+                    <mat-icon>apps</mat-icon>
                     Grid
                 </mat-button-toggle>
             </mat-button-toggle-group>
@@ -63,7 +65,8 @@
                                     Contractors Applied
                                 </button>
                             </div> -->
-                            <div fxLayoutAlign="center center" [routerLink]="['/tenders', tender.tenderId, 'create-pq-form']">
+                            <div fxLayoutAlign="center center"
+                                [routerLink]="['/tenders', tender.tenderId, 'create-pq-form']">
                                 <button mat-stroked-button>
                                     PQ-Form
                                 </button>
@@ -85,7 +88,8 @@
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                             <div fxLayout="row" fxLayoutAlign="center center">
                                 <h5 class="text-maroon bold-500">Tender Document</h5>
-                                <mat-icon class="download-icon">file_download</mat-icon>
+                                <mat-icon matTooltip="{{tender.tenderDocumentName}}"
+                                    (click)="downloadDocument(tender.tenderId)">file_download</mat-icon>
                             </div>
                             <h5><span class="text-maroon">Last Date of Submission: </span>
                                 {{tender.lastDateOfSubmission}}</h5>

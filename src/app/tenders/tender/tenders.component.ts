@@ -25,7 +25,7 @@ export class TendersComponent implements OnInit {
   public frameworkComponents: any;
   fileName = '';
   public domLayout: any;
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
@@ -86,12 +86,11 @@ export class TendersComponent implements OnInit {
     { headerName: 'Status', field: 'workflowStep', filter: 'agTextColumnFilter' },
     { headerName: 'Location', field: 'projectLocation', filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter' , valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
+    { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter', valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
     {
-      headerName: 'Actions', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
+      headerName: 'Action', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
-        context: this,
-        label: 'Tender Document',
+        context: this
       },
       filter: false,
       minWidth: 350,
@@ -99,7 +98,8 @@ export class TendersComponent implements OnInit {
   ];
 
   downloadDocument(data: any) {
-    this.ApiServicesService.downloadTechnicalTenderDocument(data.tenderId).subscribe((response) => {
+    const downloadId = data.tenderId ? data.tenderId : data;
+    this.ApiServicesService.downloadTechnicalTenderDocument(downloadId).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });

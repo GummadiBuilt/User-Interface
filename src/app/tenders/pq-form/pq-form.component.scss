@@ -50,7 +50,7 @@ form mat-label {
 }
 
 .project-info {
-    margin-top: 24px;
+    margin-top: 24px !important;
 }
 
 //breadcrumbs
@@ -104,7 +104,7 @@ form mat-label {
 
 //undertaking
 .undertaking {
-    margin: 24px 0px 0px 0px;
+    margin: 24px 0px 24px 0px;
 }
 
 .example-wrapper {
@@ -138,4 +138,8 @@ form mat-label {
     font-size: 18px;
     line-height: 22px;
     text-align: center;
+}
+
+li {
+    line-height: 30px;
 }

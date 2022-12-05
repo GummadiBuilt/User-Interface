@@ -21,7 +21,7 @@
         </div>
         <div fxLayoutAlign="center center">
             <div class="status" *ngIf="this.tenderDetails.get('workflowStep')?.value">
-                <span>WorkflowStep : </span>
+                <span>WorkFlowStep : </span>
                 <span class="text-bold">{{this.tenderDetails.get('workflowStep')?.value}}</span>
             </div>
         </div>
@@ -179,9 +179,7 @@
                                         <span class="material-icons">cloud_download</span>
                                     </button>
                                 </div>
-
                             </div>
-
                         </div>
                         <div
                             *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">

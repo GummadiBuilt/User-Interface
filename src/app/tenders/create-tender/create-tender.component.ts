@@ -88,10 +88,11 @@ export class CreateTenderComponent implements OnInit {
   //currency format
   transform(value: string) {
     return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0, //no.of decimal values
+      minimumFractionDigits: 0 //no.of decimal values
     }).format(Number(value));
+  }
+  unformatValue(value: string) {
+    return value.replace(/,/g, '');
   }
 
   getTendersMasterData() {
@@ -120,7 +121,7 @@ export class CreateTenderComponent implements OnInit {
     // console.log(date);
     // console.log(convertedDate.toISOString());
     this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
-    this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
+    this.tenderDetails.get('estimatedBudget')?.patchValue(this.transform(data.estimatedBudget));
     // console.log('edit', this.tenderDetails.get('estimatedBudget')?.value);
     this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
     this.rowData = JSON.parse(data.tenderFinanceInfo);
@@ -338,6 +339,7 @@ export class CreateTenderComponent implements OnInit {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe(
         ((response: tenderResopnse) => {
+          this.tenderDetails.controls['estimatedBudget'].setValue(this.transform((response.estimatedBudget).toString()));
           this.toastr.success('Successfully Updated');
         }),
         (error => {
@@ -367,28 +369,31 @@ export class CreateTenderComponent implements OnInit {
     }
   }
   onSubmit() {
-    this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
-    this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
-    if (this.tenderDetails.value.lastDateOfSubmission) {
-      this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
-    } else {
-      this.toastr.error('Please Select Valid Last Date of Submission');
-    }
-    let formDataSubmit = new FormData();
-    const blob = new Blob();
-    formDataSubmit.append('tenderDocument', this.file || blob);
-    formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
     if (this.tenderId && this.tenderDetails.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: 'Are you sure you want to submit the tender?', msg: 'Submitting will disable further editing of Tender and will be sent to Admins for review' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
+          this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+          this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
+          const budget = this.tenderDetails.get('estimatedBudget')?.value;
+          this.tenderDetails.controls['estimatedBudget'].setValue(this.unformatValue(budget));
+          if (this.tenderDetails.value.lastDateOfSubmission) {
+            this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+          } else {
+            this.toastr.error('Please Select Valid Last Date of Submission');
+          }
+          let formDataSubmit = new FormData();
+          const blob = new Blob();
+          formDataSubmit.append('tenderDocument', this.file || blob);
+          formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
           this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
             (response => {
-              console.log('response', response.workflowStep);
+              // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
-              console.log('response tender', this.tenderDetails.get('workflowStep')?.value);
+              this.tenderDetails.controls['estimatedBudget'].setValue(this.transform((response.estimatedBudget).toString()));
+              //  console.log('response tender', this.tenderDetails.get('workflowStep')?.value);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
             }),
@@ -398,8 +403,6 @@ export class CreateTenderComponent implements OnInit {
           )
         }
       });
-
-
     } else {
       //error
       console.log('error');

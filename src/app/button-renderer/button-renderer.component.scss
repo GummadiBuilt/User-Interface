@@ -21,9 +21,6 @@
     margin: 0 !important;
 }
 
-
-::ng-deep .button-download {
-    background-color: #841618;
-    color: white;
-    
+::ng-deep .mat-tooltip {
+    background-color: #841618 !important;
 }
