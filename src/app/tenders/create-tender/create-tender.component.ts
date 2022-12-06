@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
@@ -17,7 +17,6 @@ import { tenderMasterData, typeOfContracts, typeOfEstablishment } from './create
 import { tenderResopnse } from '../tender/tenderResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
-
 @Component({
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
@@ -44,10 +43,10 @@ export class CreateTenderComponent implements OnInit {
   public warningMessage!: string;
   //to hide breadcrumbs in pq-form
   @Input() hideBreadcrumbs!: boolean;
-
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router, private dialog: MatDialog) {
+    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router,
+    private dialog: MatDialog) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.tenderId = id;
@@ -80,19 +79,8 @@ export class CreateTenderComponent implements OnInit {
       tenderFinanceInfo: [''],
       workflowStep: ['']
     });
-
     this.getTendersMasterData();
     this.getCommonOptionsData();
-  }
-
-  //currency format
-  transform(value: string) {
-    return new Intl.NumberFormat('en-IN', {
-      minimumFractionDigits: 0 //no.of decimal values
-    }).format(Number(value));
-  }
-  unformatValue(value: string) {
-    return value.replace(/,/g, '');
   }
 
   getTendersMasterData() {
@@ -121,7 +109,8 @@ export class CreateTenderComponent implements OnInit {
     // console.log(date);
     // console.log(convertedDate.toISOString());
     this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
-    this.tenderDetails.get('estimatedBudget')?.patchValue(this.transform(data.estimatedBudget));
+    this.tenderDetails.get('estimatedBudget')?.patchValue((data.estimatedBudget))
+    //this.ApiServicesService.transform(data.estimatedBudget));
     // console.log('edit', this.tenderDetails.get('estimatedBudget')?.value);
     this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
     this.rowData = JSON.parse(data.tenderFinanceInfo);
@@ -325,6 +314,8 @@ export class CreateTenderComponent implements OnInit {
   onSave() {
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('SAVE');
+    // const budget = this.tenderDetails.get('estimatedBudget')?.value;
+    //this.tenderDetails.controls['estimatedBudget'].setValue(this.ApiServicesService.unformatValue(budget));
     if (this.tenderDetails.value.lastDateOfSubmission) {
       this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
     } else {
@@ -339,7 +330,7 @@ export class CreateTenderComponent implements OnInit {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe(
         ((response: tenderResopnse) => {
-          this.tenderDetails.controls['estimatedBudget'].setValue(this.transform((response.estimatedBudget).toString()));
+          // this.tenderDetails.controls['estimatedBudget'].setValue(this.ApiServicesService.transform((response.estimatedBudget).toString()));
           this.toastr.success('Successfully Updated');
         }),
         (error => {
@@ -376,9 +367,14 @@ export class CreateTenderComponent implements OnInit {
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
           this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
-          this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
-          const budget = this.tenderDetails.get('estimatedBudget')?.value;
-          this.tenderDetails.controls['estimatedBudget'].setValue(this.unformatValue(budget));
+          if (this.userRole?.includes("admin")) {
+            this.tenderDetails.controls['workflowStep'].setValue('PUBLISHED');
+          } else {
+            this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
+          }
+
+          //  const budget = this.tenderDetails.get('estimatedBudget')?.value;
+          //  this.tenderDetails.controls['estimatedBudget'].setValue(this.ApiServicesService.unformatValue(budget));
           if (this.tenderDetails.value.lastDateOfSubmission) {
             this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
           } else {
@@ -392,7 +388,7 @@ export class CreateTenderComponent implements OnInit {
             (response => {
               // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
-              this.tenderDetails.controls['estimatedBudget'].setValue(this.transform((response.estimatedBudget).toString()));
+              // this.tenderDetails.controls['estimatedBudget'].setValue(this.ApiServicesService.transform((response.estimatedBudget).toString()));
               //  console.log('response tender', this.tenderDetails.get('workflowStep')?.value);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
@@ -410,11 +406,8 @@ export class CreateTenderComponent implements OnInit {
     }
   }
   tenderFormDisable() {
-    console.log(this.tenderDetails.get('workflowStep')?.value);
-    console.log(this.userRole?.includes("client"));
-    console.log(this.router.url);
     if (this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
-      || this.tenderDetails.get('workflowStep')?.value == 'YET_TO_BE_PUBLISHED')) {
+      || this.tenderDetails.get('workflowStep')?.value == 'Published')) {
       // console.log('inside',this.tenderDetails.controls['workflowStep'].value);
       this.tenderDetails.disable();
       this.btnstate = true;
@@ -423,6 +416,15 @@ export class CreateTenderComponent implements OnInit {
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
       this.warningMessage = 'User cannot edit values because form already Submitted ';
+    } else if (this.userRole?.includes("admin") && (this.tenderDetails.get('workflowStep')?.value == 'Published'
+      || this.tenderDetails.get('workflowStep')?.value == 'PUBLISHED')) {
+      this.tenderDetails.disable();
+      this.btnstate = true;
+      this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+      this.gridOptions.getColumn('Unit').getColDef().editable = false;
+      this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+      this.gridApi.refreshCells();
+      this.warningMessage = 'Admin cannot edit values because form already Submitted ';
     }
   }
 }

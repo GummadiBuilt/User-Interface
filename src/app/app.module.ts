@@ -46,6 +46,7 @@ import { MyLoaderComponent } from './my-loader/my-loader.component';
 import { BlurFormatDirective } from './directives/blur-format.directive';
 import { PQFormComponent } from './tenders/pq-form/pq-form.component';
 import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -62,7 +63,18 @@ function initializeKeycloak(keycloak: KeycloakService) {
       }
     });
 }
-
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ".",
+  precision: 0,
+  prefix: "₹ ",
+  suffix: "",
+  thousands: ",",
+  nullable: false,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -120,6 +132,7 @@ export const MY_DATE_FORMATS = {
     BreadcrumbModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   providers: [
     DatePipe,
@@ -135,6 +148,6 @@ export const MY_DATE_FORMATS = {
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
-bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
