@@ -1,42 +1,47 @@
 import { Injectable } from '@angular/core';
-import { ConnectableObservable, Observable, throwError } from 'rxjs';
+import { ConnectableObservable, Observable, Subject, throwError } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest  } from '@angular/common/http';
 import { registrationMasterData, typeOfEstablishment, countries, changeTracking, registrationStatesData, registrationCitiesData } from './responses';
 import { userRegistrationResopnse } from '../signup/signResponses';
 import { ErrorServiceService } from './error-service.service';
-import { registrationApprovalResopnse } from '../components/commonservices/approvalsUserData';
+import { registrationApprovalResopnse } from '../commonservices/approvalsUserData';
 import { KeycloakService } from 'keycloak-angular';
-import { registrationAuditResopnse } from '../components/commonservices/auditUserData';
+import { registrationAuditResopnse } from '../commonservices/auditUserData';
 import { environment } from 'src/environments/environment';
+import { tenderMasterData } from '../tenders/create-tender/createTender';
+import { commonOptionsData } from './commonOptions';
+import { tenderResopnse } from '../tenders/tender/tenderResponse';
+import { GlobalConfig, IndividualConfig, ToastrService } from 'ngx-toastr';
+export interface toastPayload {
+  message: string;
+  title: string;
+  ic: IndividualConfig;
+  type: string;
+}
 @Injectable({
   providedIn: 'root'
 })
-export class ApiServicesService {
 
+export class ApiServicesService {
+  public navigation = new Subject<any>();
+  public navigation$ = this.navigation.asObservable();
   private url: string = environment.apiUrl;
-  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService) { }
+  constructor(private httpClient: HttpClient, private errorService: ErrorServiceService,private kcService: KeycloakService,
+    private toastr: ToastrService) {
+      this.toastr.toastrConfig.enableHtml = true;
+     }
 
   public getRegistrationMasterData(): Observable<registrationMasterData> {
-    return this.httpClient.get<registrationMasterData>(this.url + '/registration-master-data')
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+    return this.httpClient.get<registrationMasterData>(this.url + '/registration-master-data');
   }
   public getRegistrationStatesData(id: string): Observable<registrationStatesData[]> {
     return this.httpClient.get<registrationStatesData[]>(this.url + '/geography/get-states?countryCode=' + id)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   public getRegistrationCitiesData(id: number): Observable<registrationCitiesData[]> {
     return this.httpClient.get<registrationCitiesData[]>(this.url + '/geography/get-cities?stateCode=' + id)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //Save Registration postAPI
   public userRegistration(data: any) {
@@ -47,18 +52,12 @@ export class ApiServicesService {
       observe: "response"
 
     })
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //pending approval getAPI
   public getRegistrationPendingApproval(): Observable<registrationApprovalResopnse> {
     return this.httpClient.get<registrationApprovalResopnse>(this.url + '/user-registration')
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //pending approval postAPI
   public postRegistrationPendingApproval(id: any, data: any) {
@@ -68,40 +67,101 @@ export class ApiServicesService {
       }),
       observe: "response"
     })
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
   //audit approval getAPI
   public getRegistrationAuditApproval(): Observable<registrationAuditResopnse> {
     return this.httpClient.get<registrationAuditResopnse>(this.url + '/user-registration/audit-info')
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
+      
   }
-  // Error handling
-  errorHandl(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (
-      error.error &&
-      error.error.type &&
-      error.error.type === 'validation'
-    ) {
-      errorMessage = 'Validation Error'
-    }
-    else if (error.error && typeof error.error === 'string') {
-      errorMessage =
-        error.error
-          ? error.error
-          : 'Invalid value for parameter.';
-    } else {
-      errorMessage = 'Something went wrong.';
-    }
-    // console.log(errorMessage);
-    return throwError(errorMessage);
+  // Tender Master data GETApI
+  public getTenderMasterData(): Observable<tenderMasterData> {
+    return this.httpClient.get<tenderMasterData>(this.url + '/tender-master-data');
   }
+  //Create Tender postAPI
+  public createTender(data:any): Observable<tenderResopnse>  {
+    return this.httpClient.post<tenderResopnse>(this.url + '/tender',data);
+      
+  }
+  //Update Tender putAPI
+  public updateTender(id:any,data:any): Observable<tenderResopnse> {
+    return this.httpClient.put<tenderResopnse>(this.url + '/tender/update/'+id,data);
+      
+  }
+  // Tender data GETApI
+  public getTenders(): Observable<tenderResopnse>  {
+    return this.httpClient.get<tenderResopnse>(this.url + '/tender/getAll');
+  }
+
+  // Tender data GETApI
+  public getTendersDatabyId(id:any): Observable<tenderResopnse>  {
+    return this.httpClient.get<tenderResopnse>(this.url + '/tender/get/'+id);
+  }
+
+  //GET Common options for dropdowns and submit or save buttons
+  public getCommonOptionsData(): Observable<commonOptionsData> {
+    return this.httpClient.get<commonOptionsData>(this.url + '/common-options');
+  }
+  //Download Technical tender document
+  public downloadTechnicalTenderDocument(id:any) {
+    return this.httpClient.get(this.url + '/tender/download/'+id);
+  }
+//download files converstion
+downloadFile(data: any) {
+  const downlodFile = this.ConvertFile(data);
+  const blob = new Blob([downlodFile], { type: data.fileType });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  let fileName = <string>data.fileName;
+  link.download = fileName;
+  link.click();
 }
-
-
+  ConvertFile(data: {fileType: any; fileName?: any; encodedResponse?: any; }) {
+    const base64Encode = data.encodedResponse;
+    const blobFile = this.URItoBlob(base64Encode, data.fileType);
+    const file = new File([blobFile], '', { type: data.fileType });
+    return file;
+  }  
+  URItoBlob(dataURI: string, fileType: any) {
+    const byteString = atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: fileType });
+    return blob;
+  }
+  //warning or error toastr
+  showToast(toast: toastPayload) {
+    this.toastr.show(
+      toast.message,
+      toast.title,
+      toast.ic,
+      'toast-' + toast.type
+    );
+  }
+  
+//   // Error handling
+//   errorHandl(error: HttpErrorResponse) {
+//     let errorMessage = '';
+//     if (
+//       error.error &&
+//       error.error.type &&
+//       error.error.type === 'validation'
+//     ) {
+//       errorMessage = 'Validation Error'
+//     }
+//     else if (error.error && typeof error.error === 'string') {
+//       errorMessage =
+//         error.error
+//           ? error.error
+//           : 'Invalid value for parameter.';
+//     } else {
+//       errorMessage = 'Something went wrong.';
+//     }
+//     // console.log(errorMessage);
+//     return throwError(errorMessage);
+//   }
+ }

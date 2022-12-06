@@ -1,0 +1,138 @@
+@font-face {
+    font-family: 'Saira';
+    src: url(/assets/font/Saira/Saira-VariableFont_wdth,wght.ttf) format("truetype");
+}
+
+.tender-form {
+    width: 100%;
+    min-height: 100%;
+    padding: 24px;
+}
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-selected {
+    background-color: #841618 !important;
+    color: #fff !important;
+}
+
+::ng-deep mat-card {
+    border-radius: 0px !important;
+    padding: 24px !important;
+}
+
+h3 {
+    color: #841618;
+    font-weight: 500;
+}
+
+mat-label {
+    color: #841618;
+}
+
+.tender-form .mat-button {
+    background-color: #841618;
+    color: white;
+}
+
+.material-icons {
+    color: #841618;
+}
+
+.button-upload {
+    background-color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 4px 12px;
+    color: gray;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+::ng-deep .icon-button {
+    cursor: pointer !important;
+}
+
+::ng-deep .mat-tooltip {
+    background-color: #841618 !important;
+}
+
+.mb-24 {
+    margin-bottom: 24px;
+}
+
+mat-header-row {
+    min-height: 40px;
+}
+
+::ng-deep .table .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+
+.text-bold {
+    font-weight: 500;
+}
+
+//breadcrumbs
+.breadcrumbs {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.warn {
+    color: #756e15;
+    background: #fffbd1;
+    border: 1px solid #87803e;
+    padding: 4px 12px 4px 12px !important;
+}
+
+.status {
+    color: #841618;
+    background: white;
+    padding: 8px 16px 8px 16px !important;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 2px !important;
+    font-size: 22px !important;
+}
+
+//ag-grid cell text wrap in words
+::ng-deep .ag-cell-wrap-text {
+    word-break: break-word !important;
+}
+
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
+
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}
+
+.Icon {
+    color: white;
+    font-size: 20px;
+}
+
+button.mat-button-disabled {
+    cursor: not-allowed;
+}
+
+input[type="file" i]:disabled {
+    cursor: not-allowed;
+}

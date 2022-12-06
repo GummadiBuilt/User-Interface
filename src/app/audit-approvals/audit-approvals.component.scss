@@ -1,0 +1,59 @@
+.audit-approvals {
+    padding: 24px;
+}
+
+.example-container {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+mat-paginator {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.mat-row:nth-child(2n+1) {
+    background-color: #e4f0ec;
+}
+
+.icon-filter:hover {
+    color: #841618;
+}
+
+.text-maroon {
+    color: #841618;
+}
+
+.button-clear {
+    padding-right: 12px;
+}
+
+.button-clear {
+    padding-right: 12px;
+}
+
+.example-container {
+    width: 100%;
+    overflow: auto;
+}
+
+.mat-table {
+    overflow-x: scroll;
+}
+
+.mat-cell,
+.mat-header-cell {
+    word-wrap: initial;
+    display: table-cell;
+    padding: 0px 10px;
+    line-break: unset;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.mat-row,
+.mat-header-row {
+    display: table-row;
+}

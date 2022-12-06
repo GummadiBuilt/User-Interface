@@ -15,24 +15,38 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectFilterModule } from 'mat-select-filter';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ClientsComponent } from './components/clients/clients.component';
-import { ContractorsComponent } from './components/contractors/contractors.component';
+import { ClientsComponent } from './clients/clients.component';
+import { ContractorsComponent } from './contractors/contractors.component';
 import { ToastrModule } from 'ngx-toastr';
-import { TendersComponent } from './components/tenders/tenders.component';
-import { PendingApprovalsComponent } from './components/pending-approvals/pending-approvals.component';
-import { AuditApprovalsComponent } from './components/audit-approvals/audit-approvals.component';
-import { HttpClientModule } from '@angular/common/http';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { TendersComponent } from './tenders/tender/tenders.component';
+import { PendingApprovalsComponent } from './pending-approvals/pending-approvals.component';
+import { AuditApprovalsComponent } from './audit-approvals/audit-approvals.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { ProfileComponent } from './profile/profile.component';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
-import { CreateTenderComponent } from './components/create-tender/create-tender.component';
+import { CreateTenderComponent } from './tenders/create-tender/create-tender.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { MatFileUploadModule } from 'angular-material-fileupload';
-
+import { AgGridModule } from 'ag-grid-angular';
+import { ErrorInterceptor } from './guard/error.interceptor';
+import { BreadcrumbModule } from 'xng-breadcrumb';
+import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { LoaderService } from './shared/loader.service';
+import { LoaderInterceptor } from './shared/loader-interceptor.service';
+import { MyLoaderComponent } from './my-loader/my-loader.component';
+import { BlurFormatDirective } from './directives/blur-format.directive';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
+import { CurrencyFormatterDirective } from './shared/currency-formatter.directive';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -49,7 +63,17 @@ function initializeKeycloak(keycloak: KeycloakService) {
       }
     });
 }
-
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  },
+};
 
 @NgModule({
   declarations: [
@@ -62,7 +86,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AboutComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent,
     ClientsComponent,
     ContractorsComponent,
     TendersComponent,
@@ -74,12 +97,18 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NumbersOnlyDirective,
     CreateTenderComponent,
     DragDropFileUploadDirective,
+    ButtonRendererComponent,
+    MyLoaderComponent,
+    BlurFormatDirective,
+    ConfirmationDlgComponent,
+    CurrencyFormatterDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatDialogModule,
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
@@ -87,15 +116,25 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ToastrModule.forRoot(),
     HttpClientModule,
     KeycloakAngularModule,
-    MatFileUploadModule
+    MatFileUploadModule,
+    AgGridModule,
+    BreadcrumbModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
   ],
   providers: [
+    DatePipe,
+    LoaderService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
       deps: [KeycloakService]
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
 bootstrap: [AppComponent]
 })

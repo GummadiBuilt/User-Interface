@@ -17,8 +17,29 @@
         <a class="nav-links" mat-button [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
         <span class="nav-divider">|</span>
       </div>
-      <div class="submit-form" fxLayout="column" fxLayoutGap="12px">
-        <div  fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn">
+        <a class="nav-links" mat-button routerLink="tenders/tender" routerLinkActive="router-link-active">Tenders</a>
+        <span class="nav-divider">|</span>
+      </div>
+      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center"
+        *ngIf="isLoggedIn && userRoleEnable?.includes('admin')">
+        <!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
+        <a class="nav-links" mat-button [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
+          <mat-menu #menu="matMenu">
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/clients"
+              routerLinkActive="router-link-active">Clients</a>
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/contractors"
+              routerLinkActive="router-link-active">Contractors</a>
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/pending-approvals"
+              routerLinkActive="router-link-active">Pending Approvals</a>
+            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/audit-approvals"
+              routerLinkActive="router-link-active">Audit Approvals</a>
+          </mat-menu>
+        </a>
+        <span class="nav-divider">|</span>
+      </div>
+      <div fxHide.lt-md class="submit-form" fxLayout="column" fxLayoutGap="12px">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
           <button class="login-button" fxShow="true" mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
           <button class="login-button" fxShow="true" mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
         </div>
@@ -37,7 +58,23 @@
         <div fxLayout="column" fxLayoutGap="12px">
           <a (click)="clickHandler()" class="nav-links" *ngFor="let link of links; index as i" mat-button
             [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
-          <a (click)="clickHandler()" class="login-button" mat-button routerLink="login">Login</a>
+          <a (click)="clickHandler()" *ngIf="isLoggedIn" class="nav-links" mat-button routerLink="tenders"
+            routerLinkActive="router-link-active">Tenders</a>
+          <a *ngIf="isLoggedIn && userRoleEnable?.includes('admin')" class="nav-links" mat-button
+            [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
+            <mat-menu #menu="matMenu">
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
+                routerLink="clients" routerLinkActive="router-link-active">Clients</a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
+                routerLink="contractors" routerLinkActive="router-link-active">Contractors</a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
+                routerLink="pending-approvals" routerLinkActive="router-link-active">Pending Approvals</a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
+                routerLink="audit-approvals" routerLinkActive="router-link-active">Audit Approvals</a>
+            </mat-menu>
+          </a>
+          <a (click)="clickHandler();login();" *ngIf="!isLoggedIn" class="login-button" mat-button>Login</a>
+          <a (click)="clickHandler();logout();" *ngIf="isLoggedIn" class="login-button" mat-button>Logout</a>
         </div>
       </mat-nav-list>
     </mat-sidenav>
@@ -46,3 +83,4 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+<app-my-loader></app-my-loader>

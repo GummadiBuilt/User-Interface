@@ -1,0 +1,29 @@
+.text-maroon {
+    color: #841618;
+    font-size: 12px;
+}
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.bold-700 {
+    font-weight: 700;
+}
+
+.ag-cell-icon {
+    color: #841618;
+    font-size: 16px;
+    height: 16px;
+}
+
+::ng-deep .mat-typography h5 {
+    margin: 0 !important;
+}
+
+
+::ng-deep .button-download {
+    background-color: #841618;
+    color: white;
+    
+}

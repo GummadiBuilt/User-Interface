@@ -1,0 +1,95 @@
+<div class="tenders">
+    <div>
+        <div class="action-bar" fxLayout="row" fxLayoutAlign="space-between center">
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <h2>Tenders</h2>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
+                <div *ngIf="userRole?.includes('client')">
+                    <!-- routerLink="/tenders/create-tender" -->
+                    <button mat-raised-button (click)="createTender()">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <mat-icon>add_circle</mat-icon>
+                            <span>Create Tender</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="search">
+            <ng-advanced-search [headers]="headers" [inputArray]="rowData" 
+            (outputArray)="displayTender = $event" [showFilterSaving]="true" [savedFilters]="saved">
+            </ng-advanced-search>
+        </div> -->
+        <div>
+            <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
+                <mat-button-toggle class="toggle-first" [value]="true">
+                    <mat-icon>reorder</mat-icon>
+                    List
+                </mat-button-toggle>
+                <mat-button-toggle class="toggle-last" [value]="false">
+                    <mat-icon>apps</mat-icon>
+                    Grid
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div *ngIf="toggle">
+            <ag-grid-angular style="height: calc(100vh - 200px);" class="ag-theme-alpine" [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef" [pagination]="true" [rowData]="rowData" [animateRows]="true"
+                [sideBar]="sideBar" (gridReady)="onGridReady($event)" [frameworkComponents]="frameworkComponents"
+                [domLayout]="domLayout">
+            </ag-grid-angular>
+        </div>
+        <div *ngIf="!toggle" class="tenders-page" fxLayout="row wrap" fxLayoutAlign="start center"
+            fxLayoutGap="20px grid">
+            <div fxFlex="50%" fxFlex.md="50%" fxFlex.xs="100%" fxFlex.sm="100%" *ngFor="let tender of rowData">
+                <mat-card>
+                    <div fxLayout="column" fxLayoutGap="12px">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <a [routerLink]="['/tenders/edit-tender', tender.tenderId]">
+                                <h3>Tender ID: {{tender.tenderId}}</h3>
+                            </a>
+                            <h3>Status: {{tender.workflowStep}}</h3>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="space-between start">
+                            <div fxLayout="column">
+                                <h5><span class="text-maroon">Type of Work:</span>
+                                    {{tender.typeOfWork.establishmentDescription}}</h5>
+                                <h5><span class="text-maroon">Description:</span> {{tender.workDescription}}</h5>
+                                <h5><span class="text-maroon">Type of Contract:</span>
+                                    {{tender.typeOfContract.typeOfContract}}
+                                </h5>
+                            </div>
+                            <div fxLayoutAlign="center center">
+                                <button mat-stroked-button>
+                                    Contractors Applied
+                                </button>
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxLayout="row">
+                                <mat-icon class="location-icon">location_on</mat-icon>
+                                <h5>{{tender.projectLocation}}</h5>
+                            </div>
+                            <h5><span class="text-maroon">Contract Duration: </span>{{tender.contractDuration}}
+                                {{tender.durationCounter}}
+                            </h5>
+                        </div>
+                        <div>
+                            <mat-divider></mat-divider>
+                        </div>
+
+                        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                            <div fxLayout="row" fxLayoutAlign="center center">
+                                <h5 class="text-maroon bold-500">Tender Document</h5>
+                                <mat-icon  matTooltip="{{tender.tenderDocumentName}}" (click)="downloadDocument(tender.tenderId)">file_download</mat-icon>
+                            </div>
+                            <h5><span class="text-maroon">Last Date of Submission: </span>
+                                {{tender.lastDateOfSubmission}}</h5>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
