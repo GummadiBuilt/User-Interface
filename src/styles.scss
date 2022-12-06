@@ -5,7 +5,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 // ag grid actions button css
-button.action-button {
+button.action-button , button.action-disable-button{
     border: none;
     color: white;
     padding: 3px 12px;
@@ -21,19 +21,19 @@ button.action-button {
   }
   
   button.action-button.add {
-    background-color: #008cba; /* Blue */
+    background-color: green; 
   }
-  button.action-button.update {
-    background-color: #4caf50; /* Green */
+  button.action-disable-button.add {
+    background-color: green; 
+    cursor: not-allowed;
+  }
+  button.action-disable-button.delete {
+    background-color: #891010; 
+    cursor: not-allowed;
   }
   
   button.action-button.delete {
-    background-color: #84161A; /* Red */
-  }
-  
-  button.action-button.cancel {
-    background-color: #e7e7e7; /* Gray */
-    color: black;
+    background-color: #891010; 
   }
 
 

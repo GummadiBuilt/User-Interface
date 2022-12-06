@@ -4,9 +4,9 @@ export interface typeOfEstablishment extends changeTracking {
     active: boolean
 }
 export interface typeOfContracts extends changeTracking {
-    id:number,
+    id: number,
     contractShortCode: string,
-    typeOfContract:string,
+    typeOfContract: string,
     changeTracking: changeTracking,
     active: boolean
 }
@@ -17,6 +17,6 @@ export interface changeTracking {
     modifiedDate: number
 }
 export interface tenderMasterData extends typeOfEstablishment, typeOfContracts {
-     typeOfEstablishments: Array<typeOfEstablishment>,
-     typeOfContracts: Array<typeOfContracts>
+    typeOfEstablishments: Array<typeOfEstablishment>,
+    typeOfContracts: Array<typeOfContracts>
 }
