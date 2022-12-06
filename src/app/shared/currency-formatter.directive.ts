@@ -40,7 +40,6 @@ export class CurrencyFormatterDirective implements OnInit,OnDestroy {
   }
 
   updateValue(value: any) {
-    debugger;
     let inputVal = value || '';
      if(typeof inputVal == 'string'){
       console.log('if',this.ngControl.control?.value)
@@ -51,10 +50,7 @@ export class CurrencyFormatterDirective implements OnInit,OnDestroy {
       console.log('else',this.ngControl.control?.value)
       this.setValue(this.formatPrice(this.ngControl.control?.value));
      // this.ngControl.control?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(this.updateValue.bind(this));
-    }
-    
-
-    
+    }    
   }
 
   @HostListener('focus') onFocus() {
