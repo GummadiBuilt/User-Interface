@@ -142,15 +142,7 @@ downloadFile(data: any) {
       'toast-' + toast.type
     );
   }
-  // //currency format
-  // transform(value: string) {
-  //   return new Intl.NumberFormat('en-IN', {
-  //     minimumFractionDigits: 0 //no.of decimal values
-  //   }).format(Number(value));
-  // }
-  // unformatValue(value: string) {
-  //   return value.replace(/,/g, '');
-  // }
+  
 //   // Error handling
 //   errorHandl(error: HttpErrorResponse) {
 //     let errorMessage = '';
@@ -173,5 +165,3 @@ downloadFile(data: any) {
 //     return throwError(errorMessage);
 //   }
  }
-
-

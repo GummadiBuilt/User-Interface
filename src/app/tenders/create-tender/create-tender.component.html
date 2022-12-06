@@ -127,7 +127,7 @@
                         fxLayout="column">
                         <mat-label>Last Date of Submission *</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
+                            <input matInput [matDatepicker]="picker" [min]="todayDate" placeholder="DD/MM/YYYY"
                                 formControlName="lastDateOfSubmission" (click)="picker.open()">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
@@ -141,7 +141,7 @@
                         <mat-label>Budget</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput type="text" placeholder="Budget" formControlName="estimatedBudget"
-                            currencyMask>
+                            currencyFormatter>
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
                                 Enter only 20 digits
                             </mat-error>
@@ -211,7 +211,8 @@
                                 (cellValueChanged)="onCellValueChanged($event)"
                                 (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
                                 (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
-                                [overlayLoadingTemplate]="overlayLoadingTemplate">
+                                [overlayLoadingTemplate]="overlayLoadingTemplate"
+                                [stopEditingWhenCellsLoseFocus] = true>
                             </ag-grid-angular>
                         </div>
                     </div>
