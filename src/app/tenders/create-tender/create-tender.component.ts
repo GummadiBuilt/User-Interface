@@ -406,8 +406,9 @@ export class CreateTenderComponent implements OnInit {
     }
   }
   tenderFormDisable() {
-    if (this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
-      || this.tenderDetails.get('workflowStep')?.value == 'Published')) {
+    if ((this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
+      || this.tenderDetails.get('workflowStep')?.value == 'Published')) || (this.userRole?.includes("contractor") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
+        || this.tenderDetails.get('workflowStep')?.value == 'Published'))) {
       // console.log('inside',this.tenderDetails.controls['workflowStep'].value);
       this.tenderDetails.disable();
       this.btnstate = true;

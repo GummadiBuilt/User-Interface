@@ -140,7 +140,8 @@
                                         (click)="picker3.open()" formControlName="tentativeDateOfAwardOfWorks">
                                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                                     <mat-datepicker #picker3></mat-datepicker>
-                                    <mat-error *ngIf="adminPqForm.get('tentativeDateOfAwardOfWorks')?.errors?.['required']">
+                                    <mat-error
+                                        *ngIf="adminPqForm.get('tentativeDateOfAwardOfWorks')?.errors?.['required']">
                                         Choose last date of submission
                                     </mat-error>
                                 </mat-form-field>
@@ -235,164 +236,232 @@
                     <mat-icon>business</mat-icon>
                 </ng-template>
                 <mat-step label="Vendor's General Company Information" state="vendor_info" [completed]="false">
-                    <form>
+                    <form [formGroup]="contractorPqForm">
                         <div>
-                            <form>
-                                <h3 class="info-header">Company Details</h3>
-                                <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Company Name in Full</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Company Name">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Year of Establishment</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput [matDatepicker]="yearPicker" placeholder="Choose a Year"
-                                                [formControl]="date" (click)="yearPicker.open()" [min]="minDate"
-                                                [max]="maxDate">
-                                            <mat-datepicker-toggle matSuffix [for]="yearPicker"></mat-datepicker-toggle>
-                                            <mat-datepicker #yearPicker startView="multi-year"
-                                                (yearSelected)="chosenYearHandler($event, yearPicker)">
-                                            </mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Type of Establishment</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Type of Establishment">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Postal Address [Corporate Office]</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Postal Address [Corporate Office]">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Postal Address [Local Office]</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Postal Address [Local Office]">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Telephone</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input numbersOnly matInput placeholder="Telephone">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Fax</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Fax">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-
-                                    </div>
+                            <h3 class="info-header">Company Details</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Company Name in Full *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="nameOfCompany" matInput placeholder="Company Name">
+                                        <mat-error *ngIf="contractorPqForm.get('nameOfCompany')?.errors?.['required']">
+                                            Company Name is required
+                                        </mat-error>
+                                        <mat-error *ngIf="contractorPqForm.get('nameOfCompany')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
                                 </div>
-                                <h3 class="info-header">Contact Person Information</h3>
-                                <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Contact Person</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Contact Person">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Designation</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Designation">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Mobile / Tel.</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Mobile / Tel.">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Email ID</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Email ID">
-                                        </mat-form-field>
-                                    </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Year of Establishment *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput [matDatepicker]="yearPicker" placeholder="Choose a Year"
+                                            formControlName="yearOfEstablishment" (click)="yearPicker.open()"
+                                            [min]="minDate" [max]="maxDate">
+                                        <mat-datepicker-toggle matSuffix [for]="yearPicker"></mat-datepicker-toggle>
+                                        <mat-datepicker #yearPicker startView="multi-year"
+                                            (yearSelected)="chosenYearHandler($event, yearPicker)">
+                                        </mat-datepicker>
+                                        <mat-error *ngIf="contractorPqForm.get('yearOfEstablishment')?.invalid">
+                                            Year of Establishment is required
+                                        </mat-error>
+                                    </mat-form-field>
                                 </div>
-                                <h3 class="info-header">Regional Head / Project Coordinator</h3>
-                                <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Name of Regional Head / Project Coordinator</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Name of Regional Head / Project Coordinator">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Mobile No.</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Mobile No.">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-
-                                    </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Type of Establishment *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="typeOfEstablishment" matInput
+                                            placeholder="Type of Establishment">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.get('typeOfEstablishment')?.errors?.['required']">
+                                            Type of Establishment is required
+                                        </mat-error>
+                                    </mat-form-field>
                                 </div>
-
-                                <div class="example-wrapper">
-                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                        [columnDefs]="turnoverColumnDefs" [defaultColDef]="turnoverDefaultColDef"
-                                        [rowData]="turnoverDetails" [domLayout]="domLayout" [editType]="editType">
-                                    </ag-grid-angular>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Postal Address [Corporate Office]</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="postalAddressCorporate" matInput
+                                            placeholder="Postal Address [Corporate Office]">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.get('postalAddressCorporate')?.errors?.['maxlength']">
+                                            Enter only 250 characters
+                                        </mat-error>
+                                    </mat-form-field>
                                 </div>
-                                <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Name & Value of any one similar largest project executed
-                                        </mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput
-                                                placeholder="Name & Value of any one similar largest project executed">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Scope of Contract</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Scope of Contract">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-                                        <mat-label>Built Up Area</mat-label>
-                                        <mat-form-field appearance="outline">
-                                            <input matInput placeholder="Built Up Area">
-                                        </mat-form-field>
-                                    </div>
-                                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                                        fxFlex.xl="24%" fxLayout="column">
-
-                                    </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Postal Address [Local Office]</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="postalAddressLocal" matInput
+                                            placeholder="Postal Address [Local Office]">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.get('postalAddressLocal')?.errors?.['maxlength']">
+                                            Enter only 250 characters
+                                        </mat-error>
+                                    </mat-form-field>
                                 </div>
-                            </form>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Telephone *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input numbersOnly formControlName="telephone" matInput placeholder="Telephone">
+                                        <mat-error *ngIf="contractorPqForm.get('telephone')?.errors?.['required']">
+                                            Telephone is required
+                                        </mat-error>
+                                        <mat-error *ngIf="contractorPqForm.controls['telephone'].errors?.['pattern']">
+                                            Please enter valid mobile number
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="contractorPqForm.controls['telephone'].errors?.['minlength'] || contractorPqForm.controls['telephone'].errors?.['maxlength']">
+                                            Mobile number should be 10 digits
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Fax</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="fax" placeholder="Fax">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+                            <h3 class="info-header">Contact Person Information</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Contact Person Name</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="contactPerson" placeholder="Contact Person">
+                                        <mat-error *ngIf="contractorPqForm.get('contactPerson')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Designation</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="contactPersonDesignation"
+                                            placeholder="Designation">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.get('contactPersonDesignation')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Mobile / Tel.</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput numbersOnly formControlName="contactPersonMobile"
+                                            placeholder="Mobile / Tel.">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.controls['contactPersonMobile'].errors?.['pattern']">
+                                            Please enter valid mobile number
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="contractorPqForm.controls['contactPersonMobile'].errors?.['minlength'] || contractorPqForm.controls['contactPersonMobile'].errors?.['maxlength']">
+                                            Mobile number should be 10 digits
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Email ID</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="contactPersonEmail" placeholder="Email ID">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.controls['contactPersonEmail'].errors?.['pattern']">
+                                            Please enter valid email
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <h3 class="info-header">Regional Head / Project Coordinator</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Name of Regional Head / Project Coordinator</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="nameOfRegionalHead"
+                                            placeholder="Name of Regional Head / Project Coordinator">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.get('nameOfRegionalHead')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Mobile No.</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput numbersOnly formControlName="regionalHeadMobile"
+                                            placeholder="Mobile No.">
+                                        <mat-error
+                                            *ngIf="contractorPqForm.controls['regionalHeadMobile'].errors?.['pattern']">
+                                            Please enter valid mobile number
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="contractorPqForm.controls['regionalHeadMobile'].errors?.['minlength'] || contractorPqForm.controls['regionalHeadMobile'].errors?.['maxlength']">
+                                            Mobile number should be 10 digits
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+
+                            <div class="example-wrapper">
+                                <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                    [columnDefs]="turnoverColumnDefs" [defaultColDef]="turnoverDefaultColDef"
+                                    [rowData]="turnoverDetails" [domLayout]="domLayout" [editType]="editType">
+                                </ag-grid-angular>
+                            </div>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Name & Value of any one similar largest project executed
+                                    </mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput
+                                            placeholder="Name & Value of any one similar largest project executed">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Scope of Contract</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Scope of Contract">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Built Up Area</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="Built Up Area">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                             <button mat-button matStepperPrevious>
@@ -502,7 +571,8 @@
                                             [columnDefs]="employeesStrengthColumnDefs"
                                             [defaultColDef]="employeesStrengthDefaultColDef"
                                             [rowData]="employeesStrengthRowData" [domLayout]="domLayout"
-                                            [editType]="editType">
+                                            [editType]="editType" (gridReady)="onGridReadyEmployeesStrength($event)"
+                                            (cellClicked)="onCellClickedEmployeesStrength($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -524,7 +594,8 @@
                                             [columnDefs]="capitalEquipmentsColumnDefs"
                                             [defaultColDef]="capitalEquipmentsDefaultColDef"
                                             [rowData]="capitalEquipmentsRowData" [domLayout]="domLayout"
-                                            [editType]="editType">
+                                            [editType]="editType" (gridReady)="onGridReadyCapitalEquipments($event)"
+                                            (cellClicked)="onCellClickedCapitalEquipments($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -575,8 +646,7 @@
                             <ul>
                                 <li>
                                     Provide the following information for the last 3 years for the company (Attach
-                                    Annexure
-                                    if required)
+                                    Annexure if required)
                                 </li>
                                 <li>
                                     Client reserves the right to approach those named to seek reference and rely on you
@@ -603,7 +673,9 @@
                                     <div class="example-wrapper">
                                         <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
                                             [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
-                                            [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType">
+                                            [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType"
+                                            (gridReady)="onGridReadyFinancialDetails($event)"
+                                            (cellClicked)="onCellClickedFinancialDetails($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -618,7 +690,8 @@
                                             [columnDefs]="companyBankersColumnDefs"
                                             [defaultColDef]="companyBankersDefaultColDef"
                                             [rowData]="companyBankersDetails" [domLayout]="domLayout"
-                                            [editType]="editType">
+                                            [editType]="editType" (gridReady)="onGridReadyCompanyBankersDetails($event)"
+                                            (cellClicked)="onCellClickedCompanyBankersDetails($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -633,7 +706,9 @@
                                             [columnDefs]="companyAuditorsColumnDefs"
                                             [defaultColDef]="companyAuditorsDefaultColDef"
                                             [rowData]="companyAuditorsDetails" [domLayout]="domLayout"
-                                            [editType]="editType">
+                                            [editType]="editType"
+                                            (gridReady)="onGridReadyCompanyAuditorsDetails($event)"
+                                            (cellClicked)="onCellClickedCompanyAuditorsDetails($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>

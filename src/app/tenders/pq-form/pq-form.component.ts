@@ -4,29 +4,19 @@ import { AfterViewInit, Component, Input, OnInit, ViewChild, ViewChildren } from
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepicker } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
-import * as moment from 'moment';
-import { Moment } from 'moment';
 import { map, Observable } from 'rxjs';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { CreateTenderComponent } from '../create-tender/create-tender.component';
 import { tenderResopnse } from '../tender/tenderResponse';
+import * as _moment from 'moment';
+import { default as _rollupMoment, Moment } from 'moment';
+import { DatePipe } from '@angular/common';
 
-function actionCellRenderer(params: any) {
-  let eGui = document.createElement("div");
-  let editingCells = params.api.getEditingCells();
-  // checks if the rowIndex matches in at least one of the editing cells
-  let isCurrentRowEditing = editingCells.some((cell: any) => {
-    return cell.rowIndex === params.node.rowIndex;
-  });
-  eGui.innerHTML = `
-    <button class="action-button add"  data-action="add" > Add  </button>
-    <button class="action-button delete" data-action="delete" > Delete </button>
-    `;
-  return eGui;
-}
+const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
   parse: {
     dateInput: 'YYYY',
@@ -52,7 +42,6 @@ export const MY_FORMATS = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
-
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
@@ -60,12 +49,13 @@ export class PQFormComponent implements OnInit {
   stepperOrientation!: Observable<StepperOrientation>;
   adminPqForm!: FormGroup;
   contractorPqForm!: FormGroup;
+  safteyPolicyForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
   //to hide tender details
   @ViewChild(CreateTenderComponent) createTenderComponent!: CreateTenderComponent;
 
-  constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
+  constructor(private datePipe: DatePipe, private route: ActivatedRoute, private ApiServicesService: ApiServicesService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -96,7 +86,7 @@ export class PQFormComponent implements OnInit {
       console.log('Failed to load user details', e);
     }
 
-    //Project Info
+    //Project Info (Admin)
     this.adminPqForm = this._formBuilder.group({
       nameOfProject: ['', Validators.required],
       nameOfWorkProject: ['', [Validators.required, Validators.maxLength(50)]],
@@ -109,29 +99,47 @@ export class PQFormComponent implements OnInit {
       scheduledCompletion: ['', Validators.required],
     });
 
-    //Vendor General Company info
+    //Vendor General Company info & etc (Contractor)
     this.contractorPqForm = this._formBuilder.group({
       nameOfCompany: ['', [Validators.required, Validators.maxLength(50)]],
-      yearOfEstablishment: ['', [Validators.required,]],
+      yearOfEstablishment: moment(),
       typeOfEstablishment: ['', [Validators.required,]],
-      postalAddressCorporate: [''],
-      postalAddressLocal: [''],
+      postalAddressCorporate: ['', Validators.maxLength(250)],
+      postalAddressLocal: ['', Validators.maxLength(250)],
       telephone: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
       fax: [''],
       contactPerson: ['', Validators.maxLength(50)],
       contactPersonDesignation: ['', Validators.maxLength(50)],
-      contactPersonMobile: ['', [Validators.pattern("^[1-9][0-9]*$"),
-      Validators.minLength(10), Validators.maxLength(10)]],
+      contactPersonMobile: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
       contactPersonEmail: ['', [Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
-      turnover: [''],
+      nameOfRegionalHead: ['', Validators.maxLength(50)],
+      regionalHeadMobile: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      turnover: '',
       nameValueSimilarLargestProjectExecuted: [''],
       scopeOfContract: [''],
       builtUpArea: [''],
+
+      clientReferences: '',
+      projectsSmilarNature: '',
+      statutoryCompliances: '',
+      employeeStrength: '',
+      capitalEquipments: '',
+      safteyPolicySystems: '',
+
+      financialInfo: '',
+      companyBankers: '',
+      companyAuditors: '',
+      undertaking: ['', Validators.required]
     });
+
   }
   onSubmit() {
     console.log(this.adminPqForm.value);
+    if (this.contractorPqForm.value.yearOfEstablishment) {
+      this.contractorPqForm.value.yearOfEstablishment = this.datePipe.transform(this.contractorPqForm.value.yearOfEstablishment, 'yyyy');
+    }
+    console.log(this.contractorPqForm.value);
   }
   step = 0;
   setStep(index: number) {
@@ -145,29 +153,19 @@ export class PQFormComponent implements OnInit {
   }
 
   //year picker
-  date = new FormControl(moment());
-  minDate = new Date(2000, 0, 1);
-  maxDate = new Date(2020, 0, 1);
-  chosenYearHandler(normalizedYear: Moment, yearPicker: any) {
-    const ctrlValue = this.date.value;
+  // date = new FormControl(moment());
+  minDate = new Date(1980, 0, 1);
+  maxDate = new Date(2023, 0, 1);
+  chosenYearHandler(normalizedYear: Moment, yearPicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.contractorPqForm.get('yearOfEstablishment')?.value!;
     ctrlValue?.year(normalizedYear.year());
-    this.date.setValue(ctrlValue);
+    this.contractorPqForm.get('yearOfEstablishment')?.setValue(ctrlValue);
     yearPicker.close();
   }
 
   //ag-grid
-  private gridApi!: GridApi;
-  public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
 
-  addRow() {
-    console.log("a");
-    var employeesStrengthRowData = {
-      name: '', designation: '', qualification: '', totalExp: '', totalExpPresent: ''
-    }
-    this.gridOptions.api.addItems([employeesStrengthRowData]);
-    this.gridOptions.api.refreshView();
-  }
   //Section B of PQ-Form
   public turnoverColumnDefs: ColDef[] = [
     { headerName: 'Turnover Details: [Rs. In Lacs]', field: 'details', editable: true },
@@ -264,14 +262,9 @@ export class PQFormComponent implements OnInit {
     { headerName: 'Total Years of Experience', field: 'totalExp', editable: true, flex: 2 },
     { headerName: 'Years of Experience in the Present Position', field: 'totalExpPresent', editable: true, flex: 2 },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
-        const divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        // checks if the rowIndex matches in at least one of the editing cells
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
+        let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
@@ -282,9 +275,6 @@ export class PQFormComponent implements OnInit {
           `;
         return divElement;
       },
-      editable: false,
-      colId: "action",
-      filter: false
     }
   ];
   public employeesStrengthDefaultColDef: ColDef = {
@@ -292,12 +282,43 @@ export class PQFormComponent implements OnInit {
     editable: true,
     minWidth: 150,
     resizable: true,
+    cellEditor: true
   };
   public employeesStrengthRowData: any[] = [
     { name: '', designation: '', qualification: '', totalExp: '', totalExpPresent: '', },
   ];
+  private gridApi!: GridApi;
+  public gridOptions!: any;
+  onGridReadyEmployeesStrength(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.gridOptions = params.columnApi;
+  }
+  onCellClickedEmployeesStrength(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        console.log('add', params.node.rowIndex);
+        this.gridApi.applyTransaction({
+          add: [{ 'name': '', 'designation': '', 'qualification': '', 'totalExp': '', 'totalExpPresent': '', }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApi.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        console.log('delete');
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.employeesStrengthRowData.splice(params.rowIndex, 1);
+      }
+    }
+  }
 
-  //Section C of PQ-Form: Employees Strength
+  //Section C of PQ-Form: Capital Equipments
   public capitalEquipmentsColumnDefs: ColDef[] = [
     { headerName: 'Description of Equipment', field: 'description', editable: true, flex: 2 },
     { headerName: 'Quantity', field: 'quantity', editable: true, flex: 2 },
@@ -305,14 +326,9 @@ export class PQFormComponent implements OnInit {
     { headerName: 'Capacity / Size', field: 'capacity_size', editable: true, flex: 2 },
     { headerName: 'Age / Condition', field: 'age_condition', editable: true, flex: 2 },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
-        const divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        // checks if the rowIndex matches in at least one of the editing cells
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
+        let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
@@ -323,9 +339,6 @@ export class PQFormComponent implements OnInit {
           `;
         return divElement;
       },
-      editable: false,
-      colId: "action",
-      filter: false
     }
   ];
   public capitalEquipmentsDefaultColDef: ColDef = {
@@ -335,8 +348,37 @@ export class PQFormComponent implements OnInit {
     resizable: true,
   };
   public capitalEquipmentsRowData = [
-    { description: '', quantity: '', own_rented: '', capacity_size: '', age_condition: '', },
+    { description: '', quantity: '', own_rented: '', capacity_size: '', age_condition: '' },
   ];
+  private gridApiCapitalEquipments!: GridApi;
+  public gridOptionsCapitalEquipments!: any;
+  onGridReadyCapitalEquipments(params: GridReadyEvent) {
+    this.gridApiCapitalEquipments = params.api;
+    this.gridOptionsCapitalEquipments = params.columnApi;
+  }
+  onCellClickedCapitalEquipments(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        this.gridApiCapitalEquipments.applyTransaction({
+          add: [{ 'description': '', 'quantity': '', 'own_rented': '', 'capacity_size': '', 'age_condition': '' }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApiCapitalEquipments.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          //   // gets the first columnKey
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.capitalEquipmentsRowData.splice(params.rowIndex, 1);
+      }
+    }
+  }
 
   //Section C of PQ-Form: Saftey policy and Systems
   public safteyPolicyColumnDefs: ColDef[] = [
@@ -358,21 +400,16 @@ export class PQFormComponent implements OnInit {
 
   //Section D of PQ-Form: Financial Information
   public financialColumnDefs: ColDef[] = [
-    { headerName: 'Financial Year', field: 'details', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Gross turnover Rs.', field: 'turnover', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Net Profit before tax Rs.', field: '', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Profit After Tax Rs.', field: '', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Current Assets Rs.', field: '', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Current Liabilities Rs.', field: '', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Financial Year', field: 'f_year', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, flex: 2, minWidth: 250 },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
-        const divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        // checks if the rowIndex matches in at least one of the editing cells
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
+        let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
@@ -383,9 +420,6 @@ export class PQFormComponent implements OnInit {
           `;
         return divElement;
       },
-      editable: false,
-      colId: "action",
-      filter: false
     }
   ];
   public financialDefaultColDef: ColDef = {
@@ -395,22 +429,46 @@ export class PQFormComponent implements OnInit {
     resizable: true,
   };
   public financialDetails = [
-    { details: '', turnover: '', },
+    { f_year: '', gross_turnover: '', net_profit: '', profit_after_tax: '', current_assets: '', current_liabilities: '', },
   ];
+  private gridApiFinancialDetails!: GridApi;
+  public gridOptionsFinancialDetails!: any;
+  onGridReadyFinancialDetails(params: GridReadyEvent) {
+    this.gridApiFinancialDetails = params.api;
+    this.gridOptionsFinancialDetails = params.columnApi;
+  }
+  onCellClickedFinancialDetails(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        this.gridApiFinancialDetails.applyTransaction({
+          add: [{ 'f_year': '', 'gross_turnover': '', 'net_profit': '', 'profit_after_tax': '', 'current_assets': '', 'current_liabilities': '' }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApiFinancialDetails.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          //   // gets the first columnKey
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.financialDetails.splice(params.rowIndex, 1);
+      }
+    }
+  }
 
   //Section D Company Bankers of PQ-Form
   public companyBankersColumnDefs: ColDef[] = [
-    { headerName: 'Name', field: 'details', editable: true, flex: 3, minWidth: 250 },
-    { headerName: 'Address', field: '', editable: true, flex: 6, minWidth: 350, wrapText: true },
+    { headerName: 'Name', field: 'name', editable: true, flex: 3, minWidth: 250 },
+    { headerName: 'Address', field: 'address', editable: true, flex: 6, minWidth: 350, wrapText: true },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
-        const divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        // checks if the rowIndex matches in at least one of the editing cells
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
+        let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
@@ -421,9 +479,6 @@ export class PQFormComponent implements OnInit {
           `;
         return divElement;
       },
-      editable: false,
-      colId: "action",
-      filter: false
     }
   ];
   public companyBankersDefaultColDef: ColDef = {
@@ -433,22 +488,46 @@ export class PQFormComponent implements OnInit {
     resizable: true,
   };
   public companyBankersDetails = [
-    { details: '', turnover: '', },
+    { name: '', address: '', },
   ];
+  private gridApiCompanyBankersDetails!: GridApi;
+  public gridOptionsCompanyBankersDetails!: any;
+  onGridReadyCompanyBankersDetails(params: GridReadyEvent) {
+    this.gridApiCompanyBankersDetails = params.api;
+    this.gridOptionsCompanyBankersDetails = params.columnApi;
+  }
+  onCellClickedCompanyBankersDetails(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        this.gridApiCompanyBankersDetails.applyTransaction({
+          add: [{ 'name': '', 'address': '' }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApiCompanyBankersDetails.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          //   // gets the first columnKey
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.companyBankersDetails.splice(params.rowIndex, 1);
+      }
+    }
+  }
 
   //Section D Company Bankers of PQ-Form
   public companyAuditorsColumnDefs: ColDef[] = [
-    { headerName: 'Name', field: 'details', editable: true, flex: 3, minWidth: 250 },
-    { headerName: 'Address', field: '', editable: true, flex: 6, minWidth: 350, wrapText: true },
+    { headerName: 'Name', field: 'name', editable: true, flex: 3, minWidth: 250 },
+    { headerName: 'Address', field: 'address', editable: true, flex: 6, minWidth: 350, wrapText: true },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
-        const divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        // checks if the rowIndex matches in at least one of the editing cells
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
+        let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
@@ -459,9 +538,6 @@ export class PQFormComponent implements OnInit {
           `;
         return divElement;
       },
-      editable: false,
-      colId: "action",
-      filter: false,
     }
   ];
   public companyAuditorsDefaultColDef: ColDef = {
@@ -471,6 +547,35 @@ export class PQFormComponent implements OnInit {
     resizable: true,
   };
   public companyAuditorsDetails = [
-    { details: '', turnover: '', },
+    { name: '', address: '', },
   ];
+  private gridApiCompanyAuditorsDetails!: GridApi;
+  public gridOptionsCompanyAuditorsDetails!: any;
+  onGridReadyCompanyAuditorsDetails(params: GridReadyEvent) {
+    this.gridApiCompanyAuditorsDetails = params.api;
+    this.gridOptionsCompanyAuditorsDetails = params.columnApi;
+  }
+  onCellClickedCompanyAuditorsDetails(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        this.gridApiCompanyAuditorsDetails.applyTransaction({
+          add: [{ 'name': '', 'address': '' }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApiCompanyAuditorsDetails.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          //   // gets the first columnKey
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.companyAuditorsDetails.splice(params.rowIndex, 1);
+      }
+    }
+  }
 }
