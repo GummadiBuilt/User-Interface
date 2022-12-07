@@ -1,5 +1,5 @@
 <div class="tender-form">
-    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
+    <div class="breadcrumbs" fxLayout="row wrap"  *ngIf="!hideBreadcrumbs"  fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
         <div fxLayoutAlign="center center">
             <xng-breadcrumb [separator]="separatorTemplate">
                 <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">

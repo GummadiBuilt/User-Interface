@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
@@ -42,6 +42,8 @@ export class CreateTenderComponent implements OnInit {
   public btnstate: boolean = false;
   public warningMessage!: string;
   public todayDate!: Date;
+  //to hide breadcrumbs in pq-form
+  @Input() hideBreadcrumbs!: boolean;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -158,7 +160,7 @@ export class CreateTenderComponent implements OnInit {
   }
   //AG GRID COMPONENTS
   public appHeaders = ["Item Description", "Unit", "Quantity"]
-  private gridApi!: GridApi;
+  public gridApi!: GridApi;
   public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
   public rowData: any[] = [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
