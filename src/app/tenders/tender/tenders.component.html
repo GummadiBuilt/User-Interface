@@ -88,8 +88,7 @@
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                             <div fxLayout="row" fxLayoutAlign="center center">
                                 <h5 class="text-maroon bold-500">Tender Document</h5>
-                                <mat-icon matTooltip="{{tender.tenderDocumentName}}"
-                                    (click)="downloadDocument(tender.tenderId)">file_download</mat-icon>
+                                <mat-icon  matTooltip="{{tender.tenderDocumentName}}" (click)="downloadDocument(tender.tenderId)">file_download</mat-icon>
                             </div>
                             <h5><span class="text-maroon">Last Date of Submission: </span>
                                 {{tender.lastDateOfSubmission}}</h5>

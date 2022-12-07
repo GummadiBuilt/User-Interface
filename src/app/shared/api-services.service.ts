@@ -142,6 +142,7 @@ downloadFile(data: any) {
       'toast-' + toast.type
     );
   }
+  
 //   // Error handling
 //   errorHandl(error: HttpErrorResponse) {
 //     let errorMessage = '';
@@ -164,4 +165,3 @@ downloadFile(data: any) {
 //     return throwError(errorMessage);
 //   }
  }
-

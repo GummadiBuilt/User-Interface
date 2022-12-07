@@ -1,6 +1,5 @@
 <div class="tender-form">
-    <div class="breadcrumbs" fxLayout="row wrap" *ngIf="!hideBreadcrumbs" fxLayoutAlign="space-between center"
-        fxLayoutGap="12px grid">
+    <div class="breadcrumbs" fxLayout="row wrap"  *ngIf="!hideBreadcrumbs"  fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
         <div fxLayoutAlign="center center">
             <xng-breadcrumb [separator]="separatorTemplate">
                 <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
@@ -133,7 +132,7 @@
                         fxLayout="column">
                         <mat-label>Last Date of Submission *</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY"
+                            <input matInput [matDatepicker]="picker" [min]="todayDate" placeholder="DD/MM/YYYY"
                                 formControlName="lastDateOfSubmission" (click)="picker.open()">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
@@ -147,7 +146,7 @@
                         <mat-label>Budget</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput type="text" placeholder="Budget" formControlName="estimatedBudget"
-                                currencyMask>
+                            currencyFormatter>
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
                                 Enter only 20 digits
                             </mat-error>
@@ -184,6 +183,7 @@
                                         <span class="material-icons">cloud_download</span>
                                     </button>
                                 </div>
+
                             </div>
                         </div>
                         <div
@@ -215,7 +215,8 @@
                                 (cellValueChanged)="onCellValueChanged($event)"
                                 (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
                                 (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
-                                [overlayLoadingTemplate]="overlayLoadingTemplate">
+                                [overlayLoadingTemplate]="overlayLoadingTemplate"
+                                [stopEditingWhenCellsLoseFocus] = true>
                             </ag-grid-angular>
                         </div>
                     </div>
