@@ -7,7 +7,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, GridApi,
+  CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, CsvExportParams, GridApi,
   GridOptions,
   GridReadyEvent, RowValueChangedEvent,
 } from 'ag-grid-community';
@@ -159,19 +159,20 @@ export class CreateTenderComponent implements OnInit {
     });
   }
   //AG GRID COMPONENTS
-  public appHeaders = ["Item Description", "Unit", "Quantity"]
+  public appHeaders = ["Item No","Item Description", "Unit", "Quantity"]
   public gridApi!: GridApi;
   public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
-  public rowData: any[] = [{ "Item Description": "", "Unit": "", "Quantity": 0 }];
+  public rowData: any[] = [{ "Item No":0,"Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
-    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
+    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
     { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
+    { field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
     {
       headerName: "Action", flex: 1, minWidth: 150,
       cellRenderer: (params: any) => {
@@ -214,36 +215,33 @@ export class CreateTenderComponent implements OnInit {
     resizable: true,
   };
   onCellValueChanged(event: CellValueChangedEvent) {
-    console.log(
-      'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
-    );
+    // console.log(
+    //   'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
+    // );
+    const dataItem = [event.node.data];
+    this.gridApi.applyTransaction({
+      update: dataItem,
+    });
   }
   onRowValueChanged(event: any) {
     var data = event.data;
-    console.log(
-      'onRowValueChanged: (' +
-      data['Item Description'] +
-      ', ' +
-      data.Unit +
-      ', ' +
-      data.Quantity +
-      ')'
-    );
     // console.log('rowvalue change',event.rowIndex,event.data);
     if (event.rowIndex == 0) {
       this.gridApi.setRowData(this.rowData)
     } else {
-      this.rowData.splice(event.rowIndex, 0, event.data);
+       const addDataItem = [event.node.data];
+    this.gridApi.applyTransaction({ update: addDataItem });
     }
+    this.gridApi.refreshCells();
   }
   onBtStopEditing() {
     this.gridApi.stopEditing();
   }
   onBtStartEditing() {
-    this.gridApi.setFocusedCell(1, 'Item Description');
+    this.gridApi.setFocusedCell(1, 'Item No');
     this.gridApi.startEditingCell({
       rowIndex: 1,
-      colKey: 'Item Description',
+      colKey: 'Item No',
     });
   }
   onGridReady(params: GridReadyEvent) {
@@ -254,17 +252,21 @@ export class CreateTenderComponent implements OnInit {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
-
+      const newRow = { 'Item No': 0 ,'Item Description': '', 'Unit': '', 'Quantity': 0 };
+      const newIndex = params.node.rowIndex + 1;
       if (action === "add") {
         this.gridApi.applyTransaction({
-          add: [{ 'Item Description': '', 'Unit': '', 'Quantity': 0 }],
-          addIndex: params.node.rowIndex + 1
+          add: [newRow],
+          addIndex: newIndex
         });
+        this.rowData.splice(newIndex, 0, newRow);
+        this.gridApi.setRowData(this.rowData); 
         this.gridApi.startEditingCell({
-          rowIndex: params.node.rowIndex + 1,
+          rowIndex: newIndex,
           //   // gets the first columnKey
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
+        this.gridApi.refreshCells();
       }
 
       if (action === "delete") {
@@ -272,6 +274,7 @@ export class CreateTenderComponent implements OnInit {
           remove: [params.node.data]
         });
         this.rowData.splice(params.rowIndex, 1);
+        this.gridApi.refreshCells();
       }
     }
   }
@@ -326,6 +329,21 @@ export class CreateTenderComponent implements OnInit {
         this.rowData = data;
       }
     };
+  }
+  getParams() {
+    let columnsForExport={columnKeys:['']};
+    const allColumns=this.gridOptions.getColumns();
+
+    allColumns.forEach((element: { colId: string; }) => {
+      if(element.colId!="action"){
+        columnsForExport.columnKeys.push(element.colId)
+      }
+    });
+    //console.log(columnsForExport)
+    return columnsForExport;
+  }
+  exportExcelFile(){
+    this.gridApi.exportDataAsCsv(this.getParams());
   }
 
   onSave() {

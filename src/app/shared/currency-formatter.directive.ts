@@ -1,4 +1,4 @@
-import { Directive, HostListener, Self, OnDestroy, OnInit } from '@angular/core';
+import { Directive, HostListener, Self, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -16,41 +16,34 @@ export class CurrencyFormatterDirective implements OnInit,OnDestroy {
     this.formatter = new Intl.NumberFormat('en-IN', { style: "currency",currency: "INR", maximumFractionDigits: 0 });
     
   }
-  ngOnInit(): void {
-    this.setValue(this.formatPrice(this.ngControl.control?.value))
-    // this.ngControl
-    // .control?.
-    // valueChanges
-    // .pipe(takeUntil(this.destroy$))
-    // .subscribe(this.updateValue.bind(this));
-    // this.setValue(this.formatPrice(this.ngControl.control?.value))
-  }
 
-  ngAfterViewInit() {
-    this.setValue(this.formatPrice(this.ngControl.control?.value))
-    this.ngControl
-      .control?.
-      valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(this.updateValue.bind(this));
-  }
-  ngAfterContentInit() {
-    // contentChildren is set
-    this.setValue(this.formatPrice(this.ngControl.control?.value))
+  ngOnInit(): void {
+    setTimeout(() => {
+    //console.log('ngAfterContentChecked',this.ngControl.control?.value)
+    if(this.ngControl.control?.value){
+      this.setValue(this.formatPrice(this.ngControl.control?.value))
+      this.ngControl
+        .control?.
+        valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(this.updateValue.bind(this));
+    }
+  },1000);
+    
   }
 
   updateValue(value: any) {
-    let inputVal = value || '';
-     if(typeof inputVal == 'string'){
+    let inputVal = value.toString() || '';
+    // if(typeof inputVal == 'string' ){
       console.log('if',this.ngControl.control?.value)
       this.setValue(!!inputVal ?
         this.validateDecimalValue(inputVal.replace(/[^0-9.]/g, '')) : '');
        // this.ngControl.control?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(this.updateValue.bind(this));
-    } else{
-      console.log('else',this.ngControl.control?.value)
-      this.setValue(this.formatPrice(this.ngControl.control?.value));
-     // this.ngControl.control?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(this.updateValue.bind(this));
-    }    
+    // } else{
+    //   console.log('else',this.ngControl.control?.value)
+    //   this.setValue(this.formatPrice(this.ngControl.control?.value));
+    //  // this.ngControl.control?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(this.updateValue.bind(this));
+    // }    
   }
 
   @HostListener('focus') onFocus() {

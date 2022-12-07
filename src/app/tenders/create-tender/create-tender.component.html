@@ -154,7 +154,7 @@
                     </div>
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px">
-                        <mat-label>Technical Tender Document *</mat-label>
+                        <mat-label>Technical Bid Document *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
                                 fxLayoutGap="8px">
@@ -195,7 +195,7 @@
                     </div>
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <mat-label>Financial Tender Document *</mat-label>
+                            <mat-label>Financial Bid Document *</mat-label>
                             <div fxLayout="row" fxLayoutGap="25%">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                     fxLayoutGap="8px">
@@ -204,6 +204,13 @@
                                     <input id="fileTender" type="file" (change)="importExcel($event)"
                                         accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="25%">
+                                <button type="button" mat-icon-button class="icon-approve"
+                                matTooltip="Download Document" matTooltipPosition="right"
+                                (click)="exportExcelFile()">
+                                <span class="material-icons">cloud_download</span>
+                            </button>
                             </div>
                         </div>
                         <div class="example-wrapper">
