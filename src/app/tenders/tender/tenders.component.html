@@ -32,6 +32,13 @@
                     Grid
                 </mat-button-toggle>
             </mat-button-toggle-group>
+             <!-- <div fxLayout="row" fxLayoutGap="25%"> -->
+                <button type="button" mat-icon-button class="icon-approve"
+                matTooltip="Download Tender List" matTooltipPosition="right"
+                (click)="exportTendersFile()">
+                <span class="material-icons">cloud_download</span>
+            </button>
+            <!-- </div> -->
         </div>
         <div *ngIf="toggle">
             <ag-grid-angular style="height: calc(100vh - 200px);" class="ag-theme-alpine" [columnDefs]="columnDefs"
