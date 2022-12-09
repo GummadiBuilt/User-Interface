@@ -1,33 +1,12 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AfterViewInit, Component, Input, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatDatepicker } from '@angular/material/datepicker';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
-import { ApiServicesService } from 'src/app/shared/api-services.service';
-import { CreateTenderComponent } from '../create-tender/create-tender.component';
-import { tenderResopnse } from '../tender/tenderResponse';
-import * as _moment from 'moment';
-import { default as _rollupMoment, Moment } from 'moment';
-import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
-const moment = _rollupMoment || _moment;
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'YYYY',
-  },
-  display: {
-    dateInput: 'YYYY',
-    monthYearLabel: 'YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY',
-  },
-};
 @Component({
   selector: 'app-pq-form',
   templateUrl: './pq-form.component.html',
@@ -37,12 +16,6 @@ export const MY_FORMATS = {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false, showError: true },
     },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
 export class PQFormComponent implements OnInit {
@@ -52,30 +25,18 @@ export class PQFormComponent implements OnInit {
   safteyPolicyForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
-  //to hide tender details
-  @ViewChild(CreateTenderComponent) createTenderComponent!: CreateTenderComponent;
+  currentYear: number = new Date().getFullYear();
+  years: number[] = [];
 
-  constructor(private datePipe: DatePipe, private route: ActivatedRoute, private ApiServicesService: ApiServicesService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
+  constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
+    private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
 
-    //to hide tender details
-    if (this.userRole?.includes('admin')) {
-      this.route.paramMap.subscribe(params => {
-        const id = params.get('id');
-        if (id) {
-          this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
-            this.createTenderComponent.tenderDetails.disable();
-            this.createTenderComponent.btnstate = true;
-            this.createTenderComponent.gridOptions.getColumn('Item Description').getColDef().editable = false;
-            this.createTenderComponent.gridOptions.getColumn('Unit').getColDef().editable = false;
-            this.createTenderComponent.gridOptions.getColumn('Quantity').getColDef().editable = false;
-            this.createTenderComponent.gridApi.refreshCells();
-          });
-        }
-      });
+    for (let i = (this.currentYear - 20); i < (this.currentYear + 1); i++) {
+      this.years.push(i);
     }
 
   }
@@ -102,7 +63,7 @@ export class PQFormComponent implements OnInit {
     //Vendor General Company info & etc (Contractor)
     this.contractorPqForm = this._formBuilder.group({
       nameOfCompany: ['', [Validators.required, Validators.maxLength(50)]],
-      yearOfEstablishment: moment(),
+      yearOfEstablishment: ['', [Validators.required,]],
       typeOfEstablishment: ['', [Validators.required,]],
       postalAddressCorporate: ['', Validators.maxLength(250)],
       postalAddressLocal: ['', Validators.maxLength(250)],
@@ -116,9 +77,7 @@ export class PQFormComponent implements OnInit {
       nameOfRegionalHead: ['', Validators.maxLength(50)],
       regionalHeadMobile: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
       turnover: '',
-      nameValueSimilarLargestProjectExecuted: [''],
-      scopeOfContract: [''],
-      builtUpArea: [''],
+      similarProjects: '',
 
       clientReferences: '',
       projectsSmilarNature: '',
@@ -134,12 +93,13 @@ export class PQFormComponent implements OnInit {
     });
 
   }
+  //dates range
+  minDate = new Date(1990, 0, 1);
+  maxDate = new Date(2023, 0, 1);
+
   onSubmit() {
     console.log(this.adminPqForm.value);
-    if (this.contractorPqForm.value.yearOfEstablishment) {
-      this.contractorPqForm.value.yearOfEstablishment = this.datePipe.transform(this.contractorPqForm.value.yearOfEstablishment, 'yyyy');
-    }
-    console.log(this.contractorPqForm.value);
+    console.log(this.contractorPqForm.value.yearOfEstablishment);
   }
   step = 0;
   setStep(index: number) {
@@ -152,24 +112,29 @@ export class PQFormComponent implements OnInit {
     this.step--;
   }
 
-  //year picker
-  // date = new FormControl(moment());
-  minDate = new Date(1980, 0, 1);
-  maxDate = new Date(2023, 0, 1);
-  chosenYearHandler(normalizedYear: Moment, yearPicker: MatDatepicker<Moment>) {
-    const ctrlValue = this.contractorPqForm.get('yearOfEstablishment')?.value!;
-    ctrlValue?.year(normalizedYear.year());
-    this.contractorPqForm.get('yearOfEstablishment')?.setValue(ctrlValue);
-    yearPicker.close();
-  }
-
   //ag-grid
   public editType: 'fullRow' = 'fullRow';
 
-  //Section B of PQ-Form
+  //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
-    { headerName: 'Turnover Details: [Rs. In Lacs]', field: 'details', editable: true },
-    { headerName: '', field: '', editable: true },
+    { headerName: 'Year', field: 'year', editable: true, flex: 4 },
+    { headerName: 'Rs in Crores', field: 'rupees', editable: true, flex: 4 },
+    { headerName: 'Remarks (Financial Statement for Reference)', field: 'remarks', editable: true, flex: 4 },
+    {
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
+      cellRenderer: (params: any) => {
+        let divElement = document.createElement("div");
+        divElement.innerHTML = `
+          <button class="action-button add" type="button" data-action="add">
+            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+          </button>
+          <button class="action-button delete" type="button" data-action="delete">
+            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+          </button>
+          `;
+        return divElement;
+      },
+    }
   ];
   public turnoverDefaultColDef: ColDef = {
     flex: 1,
@@ -178,17 +143,142 @@ export class PQFormComponent implements OnInit {
     resizable: true,
   };
   public turnoverDetails = [
-    { details: 'Total Turnover - Rs.in Lakhs', turnover: '', },
-    { details: '', turnover: '', },
-    { details: '', turnover: '', },
+    { year: '', rupees: '', remarks: '' },
   ];
+  private gridApiTurnover!: GridApi;
+  public gridOptionsTurnover!: any;
+  onGridReadyTurnover(params: GridReadyEvent) {
+    this.gridApiTurnover = params.api;
+    this.gridOptionsTurnover = params.columnApi;
+  }
+  onCellClickedTurnover(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        console.log('add', params.node.rowIndex);
+        this.gridApiTurnover.applyTransaction({
+          add: [{ 'year': '', 'rupees': '', 'remarks': '' }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApiTurnover.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        console.log('delete');
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.turnoverDetails.splice(params.rowIndex, 1);
+      }
+    }
+  }
+
+  //Section B of PQ-Form: Similar Projects
+  public similarProjectsColumnDefs: ColDef[] = [
+    { headerName: 'SNo', field: 'sno', editable: true, flex: 1 },
+    { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
+    { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
+    { headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4 },
+    { headerName: 'Year of Execution', field: 'year_of_execution', editable: true, flex: 1 },
+    { headerName: 'Scope of Contract', field: 'scope_of_contract', editable: true, flex: 4 },
+    { headerName: 'Builtup Area (in Sqft)', field: 'builtup_area', editable: true, flex: 3 },
+    {
+      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
+      cellRenderer: (params: any) => {
+        let divElement = document.createElement("div");
+        divElement.innerHTML = `
+          <button class="action-button add" type="button" data-action="add">
+            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+          </button>
+          <button class="action-button delete" type="button" data-action="delete">
+            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+          </button>
+          `;
+        return divElement;
+      },
+    }
+  ];
+  public similarProjectsDefaultColDef: ColDef = {
+    flex: 1,
+    editable: true,
+    minWidth: 150,
+    resizable: true,
+  };
+  public similarProjectsDetails = [
+    { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
+  ];
+  private gridApiSimilarProjects!: GridApi;
+  public gridOptionsSimilarProjects!: any;
+  onGridReadySimilarProjects(params: GridReadyEvent) {
+    this.gridApiSimilarProjects = params.api;
+    this.gridOptionsSimilarProjects = params.columnApi;
+  }
+  onCellClickedSimilarProjects(params: any) {
+    // Handle click event for action cells
+    if (params.column.colId === "action" && params.event.target.dataset.action) {
+      let action = params.event.target.dataset.action;
+      if (action === "add") {
+        console.log('add', params.node.rowIndex);
+        this.gridApiSimilarProjects.applyTransaction({
+          add: [{ 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' }],
+          addIndex: params.node.rowIndex + 1
+        });
+        this.gridApiSimilarProjects.startEditingCell({
+          rowIndex: params.node.rowIndex + 1,
+          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+        });
+      }
+      if (action === "delete") {
+        console.log('delete');
+        params.api.applyTransaction({
+          remove: [params.node.data]
+        });
+        this.similarProjectsDetails.splice(params.rowIndex, 1);
+      }
+    }
+  }
+
   //Section C of PQ-Form: Client References of 3 Major Projects
   public clientRefColumnDefs: ColDef[] = [
+    { headerName: 'Details', field: 'details', editable: false },
+    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
+  ];
+  public clientRefProject2ColumnDefs: ColDef[] = [
+    { headerName: 'Details', field: 'details', editable: false },
+    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
+    { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
+  ];
+  public clientRefProject3ColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
     { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
     { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
     { headerName: 'Project 3', field: 'project3', editable: true, wrapText: true },
   ];
+  onBtExcludeProjectColumns() {
+    this.gridApiClientRef.setColumnDefs(this.clientRefColumnDefs);
+  }
+  projectCount = 0;
+  onBtIncludeProject2Columns() {
+    console.log('Add Project');
+    console.log(this.projectCount++);
+    if (this.projectCount == 1) {
+      this.gridApiClientRef.setColumnDefs(this.clientRefProject2ColumnDefs);
+      this.gridApiSimilarNature.setColumnDefs(this.similarNatureProject2ColumnDefs);
+    } else if (this.projectCount == 2) {
+      this.gridApiClientRef.setColumnDefs(this.clientRefProject3ColumnDefs);
+      this.gridApiSimilarNature.setColumnDefs(this.similarNatureProject3ColumnDefs);
+    }
+    else {
+      this.toastr.warning("Only 3 Projects are allowed to add");
+    }
+  }
+  gridApiClientRef!: GridApi;
+  onGridReadyClientRef(params: GridReadyEvent) {
+    this.gridApiClientRef = params.api;
+  }
   public clientRefDefaultColDef: ColDef = {
     flex: 1,
     editable: true,
@@ -213,9 +303,22 @@ export class PQFormComponent implements OnInit {
   public similarNatureColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
     { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
+  ];
+  public similarNatureProject2ColumnDefs: ColDef[] = [
+    { headerName: 'Details', field: 'details', editable: false },
+    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
+    { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
+  ];
+  public similarNatureProject3ColumnDefs: ColDef[] = [
+    { headerName: 'Details', field: 'details', editable: false },
+    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
     { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
     { headerName: 'Project 3', field: 'project3', editable: true, wrapText: true },
   ];
+  gridApiSimilarNature!: GridApi;
+  onGridReadySimilarNature(params: GridReadyEvent) {
+    this.gridApiSimilarNature = params.api;
+  }
   public similarNatureDefaultColDef: ColDef = {
     flex: 1,
     editable: true,

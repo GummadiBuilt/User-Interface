@@ -444,11 +444,11 @@ export class CreateTenderComponent implements OnInit {
   }
   tenderFormDisable() {
     if ((this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
-          || this.tenderDetails.get('workflowStep')?.value == 'Published')) || (this.userRole?.includes("contractor") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
-        || this.tenderDetails.get('workflowStep')?.value == 'Published'))) {
+          || this.tenderDetails.get('workflowStep')?.value == 'Published'))) {
       // console.log('inside',this.tenderDetails.controls['workflowStep'].value);
       this.tenderDetails.disable();
       this.btnstate = true;
+      this.gridOptions.getColumn('Item No').getColDef().editable = false;
       this.gridOptions.getColumn('Item Description').getColDef().editable = false;
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
@@ -457,6 +457,7 @@ export class CreateTenderComponent implements OnInit {
     } else if(this.userRole?.includes("admin") && (this.tenderDetails.get('workflowStep')?.value == 'Published')){
       this.tenderDetails.disable();
       this.btnstate = true;
+      this.gridOptions.getColumn('Item No').getColDef().editable = false;
       this.gridOptions.getColumn('Item Description').getColDef().editable = false;
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;

@@ -113,7 +113,7 @@
                                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                                     <mat-datepicker #picker1></mat-datepicker>
                                     <mat-error *ngIf="adminPqForm.get('dateOfIssueOfPqDocument')?.errors?.['required']">
-                                        Choose last date of submission
+                                        Choose date of issue of pq document
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -128,7 +128,7 @@
                                     <mat-datepicker #picker2></mat-datepicker>
                                     <mat-error
                                         *ngIf="adminPqForm.get('lastDateOfSubmissionOfFilledPqDocument')?.errors?.['required']">
-                                        Choose last date of submission
+                                        Choose last date of submission of filled pq document
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -142,7 +142,7 @@
                                     <mat-datepicker #picker3></mat-datepicker>
                                     <mat-error
                                         *ngIf="adminPqForm.get('tentativeDateOfAwardOfWorks')?.errors?.['required']">
-                                        Choose last date of submission
+                                        Choose tentative date of award of works
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -155,7 +155,7 @@
                                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                                     <mat-datepicker #picker4></mat-datepicker>
                                     <mat-error *ngIf="adminPqForm.get('scheduledCompletion')?.errors?.['required']">
-                                        Choose last date of submission
+                                        Choose scheduled completion
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -257,13 +257,9 @@
                                     fxLayout="column">
                                     <mat-label>Year of Establishment *</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput [matDatepicker]="yearPicker" placeholder="Choose a Year"
-                                            formControlName="yearOfEstablishment" (click)="yearPicker.open()"
-                                            [min]="minDate" [max]="maxDate">
-                                        <mat-datepicker-toggle matSuffix [for]="yearPicker"></mat-datepicker-toggle>
-                                        <mat-datepicker #yearPicker startView="multi-year"
-                                            (yearSelected)="chosenYearHandler($event, yearPicker)">
-                                        </mat-datepicker>
+                                        <mat-select placeholder="Select Year" formControlName="yearOfEstablishment">
+                                            <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+                                        </mat-select>
                                         <mat-error *ngIf="contractorPqForm.get('yearOfEstablishment')?.invalid">
                                             Year of Establishment is required
                                         </mat-error>
@@ -425,43 +421,57 @@
 
                                 </div>
                             </div>
-
-                            <div class="example-wrapper">
-                                <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                    [columnDefs]="turnoverColumnDefs" [defaultColDef]="turnoverDefaultColDef"
-                                    [rowData]="turnoverDetails" [domLayout]="domLayout" [editType]="editType">
-                                </ag-grid-angular>
+                            <div>
+                                <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
+                                    fxLayoutGap="8px">
+                                    <button mat-stroked-button type="button"
+                                        (click)="accordionTurnover.openAll()">Expand All
+                                    </button>
+                                    <button mat-stroked-button type="button"
+                                        (click)="accordionTurnover.closeAll()">Collapse All
+                                    </button>
+                                </div>
+                                <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <mat-icon>currency_exchange</mat-icon>
+                                                    <span>Turnover Details (Last 3 Years)</span>
+                                                </div>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div class="example-wrapper">
+                                            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                                [columnDefs]="turnoverColumnDefs"
+                                                [defaultColDef]="turnoverDefaultColDef" [rowData]="turnoverDetails"
+                                                [domLayout]="domLayout" [editType]="editType"
+                                                (gridReady)="onGridReadyTurnover($event)"
+                                                (cellClicked)="onCellClickedTurnover($event)">
+                                            </ag-grid-angular>
+                                        </div>
+                                    </mat-expansion-panel>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <mat-icon>repeat</mat-icon>
+                                                    <span>Similar Projects</span>
+                                                </div>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div class="example-wrapper">
+                                            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                                [columnDefs]="similarProjectsColumnDefs"
+                                                [defaultColDef]="similarProjectsDefaultColDef"
+                                                [rowData]="similarProjectsDetails" [domLayout]="domLayout"
+                                                [editType]="editType" (gridReady)="onGridReadySimilarProjects($event)"
+                                                (cellClicked)="onCellClickedSimilarProjects($event)">
+                                            </ag-grid-angular>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
                             </div>
-                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                                    fxLayout="column">
-                                    <mat-label>Name & Value of any one similar largest project executed
-                                    </mat-label>
-                                    <mat-form-field appearance="outline">
-                                        <input matInput
-                                            placeholder="Name & Value of any one similar largest project executed">
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                                    fxLayout="column">
-                                    <mat-label>Scope of Contract</mat-label>
-                                    <mat-form-field appearance="outline">
-                                        <input matInput placeholder="Scope of Contract">
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                                    fxLayout="column">
-                                    <mat-label>Built Up Area</mat-label>
-                                    <mat-form-field appearance="outline">
-                                        <input matInput placeholder="Built Up Area">
-                                    </mat-form-field>
-                                </div>
-                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                                    fxLayout="column">
-
-                                </div>
-                            </div>
-
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                             <button mat-button matStepperPrevious>
@@ -494,7 +504,10 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Client References of 3 Major Projects
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">star_rate</span>
+                                                <span>Client References of 3 Major Projects</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div>
@@ -505,16 +518,29 @@
                                         </ul>
                                     </div>
                                     <div class="example-wrapper">
+                                        <div fxLayoutAlign="end">
+                                            <button mat-stroked-button *ngIf="clientRefProject2ColumnDefs"
+                                                (click)="onBtIncludeProject2Columns()">
+                                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                                    <mat-icon style="font-size: 20px;">add</mat-icon>
+                                                    <span>Add Project</span>
+                                                </div>
+                                            </button>
+                                        </div>
                                         <ag-grid-angular class="ag-theme-alpine" [columnDefs]="clientRefColumnDefs"
                                             [defaultColDef]="clientRefDefaultColDef" [rowData]="clientRefRowData"
-                                            [domLayout]="domLayout" [editType]="editType" [gridOptions]="gridOptions">
+                                            [domLayout]="domLayout" [editType]="editType"
+                                            (gridReady)="onGridReadyClientRef($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Projects of Similar Nature
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">repeat</span>
+                                                <span>Projects of Similar Nature</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div>
@@ -529,14 +555,19 @@
                                             [columnDefs]="similarNatureColumnDefs"
                                             [defaultColDef]="similarNatureDefaultColDef"
                                             [rowData]="similarNatureRowData" [domLayout]="domLayout"
-                                            [editType]="editType">
+                                            [editType]="editType" (gridReady)="onGridReadySimilarNature($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Statutory Compliances
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    privacy_tip
+                                                </span>
+                                                <span>Statutory Compliances</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div>
@@ -557,7 +588,12 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Employees Strength
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    zoom_in
+                                                </span>
+                                                <span>Employees Strength</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div>
@@ -579,7 +615,12 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Capital Equipments
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    category
+                                                </span>
+                                                <span>Capital Equipments</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div>
@@ -602,7 +643,12 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Safety Policy and Systems
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    lock
+                                                </span>
+                                                <span>Safety Policy and Systems</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div>
@@ -664,12 +710,21 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Financial Information
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    request_quote
+                                                </span>
+                                                <span>Financial Information</span>
+                                            </div>
                                         </mat-panel-title>
-                                        <mat-panel-description>
-                                            Rs. In Lakhs
-                                        </mat-panel-description>
                                     </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>
+                                                Enter Rupees in Lakhs
+                                            </li>
+                                        </ul>
+                                    </div>
                                     <div class="example-wrapper">
                                         <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
                                             [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
@@ -682,7 +737,12 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Company Bankers
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    account_balance
+                                                </span>
+                                                <span>Company Bankers</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div class="example-wrapper">
@@ -698,7 +758,12 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Company Auditors
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <span class="material-icons-outlined">
+                                                    fact_check
+                                                </span>
+                                                <span>Company Auditors</span>
+                                            </div>
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div class="example-wrapper">

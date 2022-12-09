@@ -31,10 +31,10 @@
     <mat-card>
         <form [formGroup]="tenderDetails">
             <div fxLayout="column">
-                <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
                     <mat-form-field appearance="outline" *ngIf="!hideBreadcrumbs && tenderId">
-                        <mat-select placeholder="Navigate to">
+                        <mat-select placeholder="Actions">
                             <mat-option [routerLink]="['/tenders', tenderId, 'create-pq-form']">PQ-Form</mat-option>
                         </mat-select>
                     </mat-form-field>
