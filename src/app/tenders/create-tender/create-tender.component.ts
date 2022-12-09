@@ -123,12 +123,8 @@ export class CreateTenderComponent implements OnInit {
     const date = data.lastDateOfSubmission;
     const [day, month, year] = date.split('/');
     const convertedDate = new Date(+year, +month - 1, +day);
-    // console.log(date);
-    // console.log(convertedDate.toISOString());
     this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
     this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
-      //this.transform(data.estimatedBudget));
-    // console.log('edit', this.tenderDetails.get('estimatedBudget')?.value);
     this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
     this.rowData = JSON.parse(data.tenderFinanceInfo);
     this.tenderId = data.tenderId;
@@ -349,8 +345,6 @@ export class CreateTenderComponent implements OnInit {
   onSave() {
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('SAVE');
-    const budgetSave = this.tenderDetails.get('estimatedBudget')?.value;
-    this.tenderDetails.controls['estimatedBudget'].setValue(this.unformatValue(budgetSave));
     if (this.tenderDetails.value.lastDateOfSubmission) {
       this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
     } else {
@@ -365,7 +359,6 @@ export class CreateTenderComponent implements OnInit {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe(
         ((response: tenderResopnse) => {
-        // this.tenderDetails.controls['estimatedBudget'].setValue(this.transform((response.estimatedBudget).toString()));
           this.toastr.success('Successfully Updated');
         }),
         (error => {
@@ -407,9 +400,6 @@ export class CreateTenderComponent implements OnInit {
           }else{
             this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
           }
-          
-          const budget = this.tenderDetails.get('estimatedBudget')?.value;
-          this.tenderDetails.controls['estimatedBudget'].setValue(this.unformatValue(budget));
           if (this.tenderDetails.value.lastDateOfSubmission) {
             this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
           } else {
@@ -423,8 +413,6 @@ export class CreateTenderComponent implements OnInit {
             (response => {
               // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
-              //this.tenderDetails.controls['estimatedBudget'].setValue(this.transform((response.estimatedBudget).toString()));
-              //  console.log('response tender', this.tenderDetails.get('workflowStep')?.value);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
             }),

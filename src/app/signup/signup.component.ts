@@ -110,9 +110,7 @@ export class SignupComponent implements OnInit {
     });
   }
   onRegisterValueChange(){
-    debugger;
     const registerValueSelected = this.companyDetails.get('users')?.value
-    debugger;
     if(registerValueSelected !== 2){
       this.companyDetails.get('typeOfEstablishmentCtrl')?.disable()           
   } else {                
