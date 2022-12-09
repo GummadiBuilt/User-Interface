@@ -10,7 +10,7 @@
     <mat-icon>arrow_right</mat-icon>
   </ng-template> -->
 <div class="pending-approvals">
-    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="24px grid">
+    <!-- <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="24px grid">
         <div class="text-maroon" fxLayout="row" fxLayoutAlign="start center">
             <h2>Pending Approvals</h2>
         </div>
@@ -20,9 +20,9 @@
             <button [disabled]="dataSource.data.length==0||!selection.hasValue()" mat-raised-button
                 class="button-reject" (click)="getAllRejectIDs(selection.selected)">Reject</button>
         </div>
-    </div>
+    </div> -->
     <!-- {{selection.selected | json}} -->
-    <section class="example-container mat-elevation-z8" tabindex="0">
+    <!-- <section class="example-container mat-elevation-z8" tabindex="0">
         <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="select" sticky>
                 <th class="column-select" mat-header-cell *matHeaderCellDef>
@@ -395,5 +395,23 @@
         </table>
     </section>
     <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users">
-    </mat-paginator>
+    </mat-paginator> -->
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="24px grid">
+        <div class="text-maroon" fxLayout="row" fxLayoutAlign="start center">
+            <h2>Pending Approvals</h2>
+        </div>
+        <div class="action-buttons" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
+            <button [disabled]="allPendingApprovals.length==0" mat-raised-button class="button-approve"
+                (click)="onApproveSelected()">Approve</button>
+            <button [disabled]="allPendingApprovals.length==0" mat-raised-button class="button-reject"
+                (click)="onRejectSelected()">Reject</button>
+        </div>
+    </div>
+    <div class="example-wrapper">
+        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="ColumnDefs" [defaultColDef]="DefaultColDef"
+            [rowData]="allPendingApprovals" [domLayout]="domLayout" [pagination]="true"
+            [paginationPageSize]="paginationPageSize" (gridReady)="onGridReady($event)" [rowSelection]="rowSelection">
+        </ag-grid-angular>
+    </div>
 </div>

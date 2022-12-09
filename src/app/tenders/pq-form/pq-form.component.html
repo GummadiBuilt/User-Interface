@@ -447,7 +447,8 @@
                                                 [defaultColDef]="turnoverDefaultColDef" [rowData]="turnoverDetails"
                                                 [domLayout]="domLayout" [editType]="editType"
                                                 (gridReady)="onGridReadyTurnover($event)"
-                                                (cellClicked)="onCellClickedTurnover($event)">
+                                                (cellClicked)="onCellClickedTurnover($event)"
+                                                (rowValueChanged)="onRowValueChangedTurnover($event)">
                                             </ag-grid-angular>
                                         </div>
                                     </mat-expansion-panel>

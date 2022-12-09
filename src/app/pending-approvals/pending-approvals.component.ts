@@ -7,6 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { ApiServicesService } from '../shared/api-services.service';
 import { registrationApprovalResopnse } from '../commonservices/approvalsUserData';
+import { CheckboxSelectionCallbackParams, ColDef, GridApi, GridReadyEvent, HeaderCheckboxSelectionCallbackParams } from 'ag-grid-community';
+import { ActionButtonRendererComponent } from '../action-button-renderer/action-button-renderer.component';
 
 @Component({
   selector: 'app-pending-approvals',
@@ -15,8 +17,8 @@ import { registrationApprovalResopnse } from '../commonservices/approvalsUserDat
 })
 export class PendingApprovalsComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['select',  'companyName',
-    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactFirstName','contactLastName', 'contactDesignation',
+  displayedColumns: string[] = ['select', 'companyName',
+    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactFirstName', 'contactLastName', 'contactDesignation',
     'contactPhoneNumber', 'contactEmailAddress', 'actions'];
 
   allPendingApprovals: any = [];
@@ -71,9 +73,9 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.applicationRoleId + 1}`;
   }
-
+  domLayout: any;
   constructor(private ApiServicesService: ApiServicesService, private toastr: ToastrService) {
-
+    this.domLayout = "autoHeight";
   }
 
   ngOnInit(): void {
@@ -150,7 +152,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
       let contactEmailAddressFound = data.contactEmailAddress.toString().trim().toLowerCase().indexOf(searchString.contactEmailAddress.toLowerCase()) !== -1
 
       if (searchString.topFilter) {
-        return  companyNameFound || yearOfEstablishmentFound ||
+        return companyNameFound || yearOfEstablishmentFound ||
           typeOfEstablishmentFound || addressFound || cityFound || stateFound || countryFound ||
           contactFirstNameFound || contactLastNameFound || contactDesignationFound || contactPhoneFound || contactEmailAddressFound
       } else {
@@ -217,7 +219,7 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
       }),
       (error => {
         console.log(error);
-       // this.toastr.error(error);
+        // this.toastr.error(error);
       }));
   }
   reject() {
@@ -255,4 +257,104 @@ export class PendingApprovalsComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = '';
   }
 
+  //Ag-Grid
+  private gridApi!: GridApi;
+  private gridColumnApi: any;
+  public rowSelection: 'single' | 'multiple' = 'multiple';
+
+  public ColumnDefs: ColDef[] = [
+    {
+      headerName: 'Company Name', field: 'companyName', flex: 2, pinned: 'left',
+      checkboxSelection: checkboxSelection,
+      headerCheckboxSelection: headerCheckboxSelection,
+    },
+    { headerName: 'Year of Establishment', field: 'yearOfEstablishment', flex: 2, minWidth: 200, },
+    { headerName: 'Type of Establishment', field: 'typeOfEstablishment', flex: 4 },
+    { headerName: 'Address', field: 'address', flex: 4 },
+    { headerName: 'City', field: 'city.cityName', flex: 4 },
+    { headerName: 'State', field: 'state.stateName', flex: 4 },
+    { headerName: 'Country', field: 'country.countryName', flex: 4 },
+    { headerName: 'Contact First Name', field: 'contactFirstName', flex: 4 },
+    { headerName: 'Contact Last Name', field: 'contactLastName', flex: 4 },
+    { headerName: 'Contact Designation', field: 'contactDesignation', flex: 4 },
+    { headerName: 'Contact Phone Number', field: 'contactPhoneNumber', flex: 4 },
+    { headerName: 'Contact Email Address', field: 'contactEmailAddress', flex: 6 },
+    { headerName: 'Action', },
+    {
+      headerName: "Action", field: 'action', flex: 1, pinned: 'right', filter: false, maxWidth: 150,
+      cellRenderer: ActionButtonRendererComponent,
+      cellRendererParams: {
+        context: this
+      },
+    }
+  ];
+  public autoGroupColumnDef: ColDef = {
+    headerName: 'Group',
+    minWidth: 170,
+    field: 'companyName',
+    headerCheckboxSelection: true,
+    cellRenderer: 'agGroupCellRenderer',
+    cellRendererParams: {
+      checkbox: true,
+    },
+  };
+  public DefaultColDef: ColDef = {
+    minWidth: 250,
+    resizable: true,
+    editable: false,
+    wrapText: true,
+    autoHeight: true,
+    menuTabs: ['filterMenuTab'],
+    filter: true,
+    floatingFilter: true,
+  };
+  public paginationPageSize = 30;
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+  }
+
+  onApproveSelected() {
+    const selectedData = this.gridApi.getSelectedRows();
+    let selectedGridIds = selectedData.map(i => i.id);
+    console.log("requestId:" + selectedGridIds);
+    this.ApiServicesService.postRegistrationPendingApproval(selectedData, { "requestId": selectedGridIds, "actionTaken": 'APPROVE' }).subscribe(
+      (response => {
+        if (response['status'] == 200) {
+          this.toastr.success('Approved');
+          this.allPendingApprovals = response.body;
+        }
+      }),
+      (error => {
+        console.log(error);
+      }));
+  }
+
+  onRejectSelected() {
+    const selectedData = this.gridApi.getSelectedRows();
+    let selectedGridIds = selectedData.map(i => i.id);
+    this.ApiServicesService.postRegistrationPendingApproval(selectedData, { "requestId": selectedGridIds, "actionTaken": 'REJECT' }).subscribe(
+      (response => {
+        if (response['status'] == 200) {
+          this.toastr.success('Rejected');
+          this.allPendingApprovals = response.body;
+        }
+      }),
+      (error => {
+        console.log(error);
+      }));
+  }
+
 }
+
+
+var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
+  // we put checkbox on the name if we are not doing grouping
+  return params.columnApi.getRowGroupColumns().length === 0;
+};
+var headerCheckboxSelection = function (
+  params: HeaderCheckboxSelectionCallbackParams
+) {
+  // we put checkbox on the name if we are not doing grouping
+  return params.columnApi.getRowGroupColumns().length === 0;
+};

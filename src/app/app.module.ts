@@ -49,6 +49,7 @@ import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CurrencyFormatterDirective } from './shared/currency-formatter.directive';
+import { ActionButtonRendererComponent } from './action-button-renderer/action-button-renderer.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -116,7 +117,8 @@ export const MY_DATE_FORMATS = {
     BlurFormatDirective,
     ConfirmationDlgComponent,
     PQFormComponent,
-    CurrencyFormatterDirective
+    CurrencyFormatterDirective,
+    ActionButtonRendererComponent
   ],
   imports: [
     BrowserModule,

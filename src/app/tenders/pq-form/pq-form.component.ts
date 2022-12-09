@@ -114,12 +114,52 @@ export class PQFormComponent implements OnInit {
 
   //ag-grid
   public editType: 'fullRow' = 'fullRow';
-
+  //file upload turnover
+  public file: any;
+  fileName: any;
+  public isFileUploaded = false;
+  onFileChange(event: any) {
+    this.fileName = '';
+    this.isFileUploaded = true;
+    if (event.target.files.length > 0) {
+      this.file = event.target.files[0];
+    }
+    else {
+      this.file = null;
+    }
+  }
+  removeSelectedFile(f: any) {
+    if (f) {
+      this.file = null;
+    }
+  }
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
     { headerName: 'Year', field: 'year', editable: true, flex: 4 },
     { headerName: 'Rs in Crores', field: 'rupees', editable: true, flex: 4 },
-    { headerName: 'Remarks (Financial Statement for Reference)', field: 'remarks', editable: true, flex: 4 },
+    {
+      headerName: 'Remarks (Financial Statement for Reference)', field: 'remarks', editable: false, flex: 4,
+      cellRenderer: (params: any) => {
+        let divElement = document.createElement("div");
+        divElement.innerHTML = `
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="center center"
+              fxLayoutGap="8px" >
+                <span class="material-icons">cloud_upload</span>
+              </label>
+              <label for="file">
+                <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden>
+              </label>
+              <label for="file">
+                <span *ngIf="!file?.name && !fileName">No file Choosen</span>
+                <span *ngIf="fileName" value="{{fileName}}"></span>
+                <span [value]="file.name"></span>
+              </label>
+          </div>
+        `;
+        return divElement;
+      },
+    },
     {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
@@ -174,6 +214,9 @@ export class PQFormComponent implements OnInit {
         this.turnoverDetails.splice(params.rowIndex, 1);
       }
     }
+  }
+  onRowValueChangedTurnover(event: any) {
+    this.gridApiTurnover.refreshCells();
   }
 
   //Section B of PQ-Form: Similar Projects
