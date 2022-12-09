@@ -4,7 +4,7 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridReadyEvent, SideBarDef } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { BreadcrumbService } from 'xng-breadcrumb';
@@ -71,7 +71,8 @@ export class TendersComponent implements OnInit {
   }
 
   // Each Column Definition results in one Column.
-
+  public gridApi!: GridApi;
+  public gridOptions!: any;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Tender ID', field: 'tenderId', filter: 'agTextColumnFilter', pinned: 'left',
@@ -80,6 +81,7 @@ export class TendersComponent implements OnInit {
         return id;
       }
     },
+    { headerName: 'Client Name', field: 'clientInformation', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Description', field: 'workDescription', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Type of Contract', field: 'typeOfContract', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfContract.typeOfContract' },
     { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfWork.establishmentDescription', autoHeight: true, wrapText: true },
@@ -93,6 +95,7 @@ export class TendersComponent implements OnInit {
         context: this
       },
       filter: false,
+      colId: "action",
       minWidth: 350,
     }
   ];
@@ -118,6 +121,32 @@ export class TendersComponent implements OnInit {
     toolPanels: ['filters'],
   };
   onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.gridOptions = params.columnApi;
+    console.log(this.userRole);
+    if (this.userRole?.includes("client")) {
+      this.agGrid.columnApi.setColumnVisible('clientInformation', false);
+    }
+  }
+  getParams() {
+    let columnsForExport = { columnKeys: [''] };
+    const allColumns = this.gridOptions.getColumns();
+    allColumns.forEach((element: { colId: string; }) => {
+      if (this.userRole?.includes("client")) {
+        if (element.colId != "clientInformation" && element.colId != "action") {
+          columnsForExport.columnKeys.push(element.colId)
+        }
+      } else {
+        if (element.colId != "action") {
+          columnsForExport.columnKeys.push(element.colId)
+        }
+      }
+    });
+    //console.log(columnsForExport)
+    return columnsForExport;
+  }
+  exportTendersFile() {
+    this.gridApi.exportDataAsCsv(this.getParams());
   }
 }
 
