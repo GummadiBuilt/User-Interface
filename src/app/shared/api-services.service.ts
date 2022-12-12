@@ -13,6 +13,7 @@ import { tenderMasterData } from '../tenders/create-tender/createTender';
 import { commonOptionsData } from './commonOptions';
 import { tenderResopnse } from '../tenders/tender/tenderResponse';
 import { GlobalConfig, IndividualConfig, ToastrService } from 'ngx-toastr';
+import { pqFormResponse } from '../tenders/pq-form/pqformresponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -106,6 +107,17 @@ export class ApiServicesService {
   public downloadTechnicalTenderDocument(id:any) {
     return this.httpClient.get(this.url + '/tender/download/'+id);
   }
+  //Get PQ Form by tender id
+  public getPQForm(id:any): Observable<pqFormResponse>{
+    return this.httpClient.get<pqFormResponse>(this.url + '/tender/'+id+'/pq-form');
+  }
+  //Create PQ Form postAPI
+  public createPQForm(id:any,data:any)  {
+    return this.httpClient.post(this.url + '/tender/'+id+'/pq-form',data);
+      
+  }
+
+
 //download files converstion
 downloadFile(data: any) {
   const downlodFile = this.ConvertFile(data);

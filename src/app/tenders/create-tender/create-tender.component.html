@@ -153,7 +153,7 @@
                         </mat-form-field>
                     </div>
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                        fxLayout="column" fxLayoutGap="4px">
+                        fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
                         <mat-label>Technical Bid *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
@@ -193,7 +193,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px">
+                    <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px" *ngIf="!downloadBtnState">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <mat-label>Financial Bid *</mat-label>
                             <div fxLayout="row" fxLayoutGap="25%">
@@ -229,17 +229,24 @@
                     </div>
                 </div>
                 <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
-                    <button mat-button style="background-color: grey ;" (click)="onSave()" [disabled]="btnstate">
+                    <button  *ngIf="userRole?.includes('client')" mat-button style="background-color: grey ;" (click)="onSave()" [disabled]="btnstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                             <mat-icon class="Icon">save</mat-icon>
                             <div>Save</div>
                         </div>
                     </button>
-                    <button mat-button *ngIf='this.tenderId' (click)="onSubmit()" style="background-color: green ;"
+                    <button  *ngIf="userRole?.includes('client') && this.tenderId" mat-button (click)="onSubmit()" style="background-color: green ;"
                         [disabled]="btnstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                             <mat-icon class="Icon">send</mat-icon>
                             <div>Submit</div>
+                        </div>
+                    </button>
+                    <button *ngIf="userRole?.includes('admin') && this.tenderId" mat-button (click)="onUpdate()" style="background-color: green ;"
+                        [disabled]="btnstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <mat-icon class="Icon">save</mat-icon>
+                            <div>Update</div>
                         </div>
                     </button>
                 </div>
