@@ -24,6 +24,7 @@ export class AuditApprovalsComponent implements OnInit {
   getAuditApprovalsdata() {
     this.ApiServicesService.getRegistrationAuditApproval().subscribe((data: registrationAuditResopnse) => {
       this.allAuditApprovals = data;
+      console.log(this.allAuditApprovals);
     });
   }
 

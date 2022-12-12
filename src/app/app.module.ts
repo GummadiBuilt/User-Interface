@@ -34,7 +34,7 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
 import { AgGridModule } from 'ag-grid-angular';
 import { ErrorInterceptor } from './guard/error.interceptor';
 import { BreadcrumbModule } from 'xng-breadcrumb';
-import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
+import { ButtonRendererComponent } from './renderers/button-renderer/button-renderer.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
@@ -49,7 +49,8 @@ import { ConfirmationDlgComponent } from './shared/confirmation-dlg.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CurrencyFormatterDirective } from './shared/currency-formatter.directive';
-import { ActionButtonRendererComponent } from './action-button-renderer/action-button-renderer.component';
+import { ActionButtonRendererComponent } from './renderers/action-button-renderer/action-button-renderer.component';
+import { UploadButtonRendererComponent } from './renderers/upload-button-renderer/upload-button-renderer.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -118,7 +119,8 @@ export const MY_DATE_FORMATS = {
     ConfirmationDlgComponent,
     PQFormComponent,
     CurrencyFormatterDirective,
-    ActionButtonRendererComponent
+    ActionButtonRendererComponent,
+    UploadButtonRendererComponent
   ],
   imports: [
     BrowserModule,

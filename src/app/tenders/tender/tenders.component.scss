@@ -33,26 +33,6 @@ mat-button-toggle {
     font-size: 22px;
 }
 
-table {
-    width: 100%;
-}
-
-::ng-deep .example-container {
-    border-top-left-radius: 10px !important;
-    border-top-right-radius: 10px !important;
-}
-
-mat-paginator {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-th {
-    color: #841618;
-    font-size: 14px;
-    font-weight: 500;
-}
-
 ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
     line-height: 32px !important;
 }
@@ -146,5 +126,4 @@ th {
 ::ng-deep .button-download {
     background-color: #841618;
     color: white;
-    
 }

@@ -6,6 +6,7 @@ import { CellEditingStartedEvent, CellEditingStoppedEvent, ColDef, GridApi, Grid
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { UploadButtonRendererComponent } from 'src/app/renderers/upload-button-renderer/upload-button-renderer.component';
 
 @Component({
   selector: 'app-pq-form',
@@ -35,11 +36,12 @@ export class PQFormComponent implements OnInit {
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
 
+    //year range from past 20 years
     for (let i = (this.currentYear - 20); i < (this.currentYear + 1); i++) {
       this.years.push(i);
     }
-
   }
+
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
@@ -114,50 +116,16 @@ export class PQFormComponent implements OnInit {
 
   //ag-grid
   public editType: 'fullRow' = 'fullRow';
-  //file upload turnover
-  public file: any;
-  fileName: any;
-  public isFileUploaded = false;
-  onFileChange(event: any) {
-    this.fileName = '';
-    this.isFileUploaded = true;
-    if (event.target.files.length > 0) {
-      this.file = event.target.files[0];
-    }
-    else {
-      this.file = null;
-    }
-  }
-  removeSelectedFile(f: any) {
-    if (f) {
-      this.file = null;
-    }
-  }
+
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
     { headerName: 'Year', field: 'year', editable: true, flex: 4 },
     { headerName: 'Rs in Crores', field: 'rupees', editable: true, flex: 4 },
     {
       headerName: 'Remarks (Financial Statement for Reference)', field: 'remarks', editable: false, flex: 4,
-      cellRenderer: (params: any) => {
-        let divElement = document.createElement("div");
-        divElement.innerHTML = `
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-            <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="center center"
-              fxLayoutGap="8px" >
-                <span class="material-icons">cloud_upload</span>
-              </label>
-              <label for="file">
-                <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden>
-              </label>
-              <label for="file">
-                <span *ngIf="!file?.name && !fileName">No file Choosen</span>
-                <span *ngIf="fileName" value="{{fileName}}"></span>
-                <span [value]="file.name"></span>
-              </label>
-          </div>
-        `;
-        return divElement;
+      cellRenderer: UploadButtonRendererComponent,
+      cellRendererParams: {
+        context: this,
       },
     },
     {
@@ -187,6 +155,7 @@ export class PQFormComponent implements OnInit {
   ];
   private gridApiTurnover!: GridApi;
   public gridOptionsTurnover!: any;
+
   onGridReadyTurnover(params: GridReadyEvent) {
     this.gridApiTurnover = params.api;
     this.gridOptionsTurnover = params.columnApi;
@@ -218,10 +187,13 @@ export class PQFormComponent implements OnInit {
   onRowValueChangedTurnover(event: any) {
     this.gridApiTurnover.refreshCells();
   }
+  //download Financial Reference Document
+  // downloadRefDocument(data: any) {
+  // }
 
   //Section B of PQ-Form: Similar Projects
   public similarProjectsColumnDefs: ColDef[] = [
-    { headerName: 'SNo', field: 'sno', editable: true, flex: 1 },
+    { headerName: 'SI No', field: 'sno', editable: true, flex: 1 },
     { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
     { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
     { headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4 },
@@ -384,7 +356,7 @@ export class PQFormComponent implements OnInit {
 
   //Section C of PQ-Form: Statutory Compliances
   public statutoryCompliancesColumnDefs: ColDef[] = [
-    { headerName: 'Company Registration', field: 'details', editable: true, flex: 1 },
+    { headerName: 'Company Registration', field: 'details', editable: false, flex: 1 },
     { headerName: '', field: 'inDetail', editable: true, flex: 2 },
   ];
   public statutoryCompliancesDefaultColDef: ColDef = {
