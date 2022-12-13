@@ -58,18 +58,18 @@
                 <mat-card>
                     <div fxLayout="column" fxLayoutGap="12px">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                            <a [routerLink]="['/tenders/edit-tender', tender.tenderId]">
-                                <h3>Tender ID: {{tender.tenderId}}</h3>
+                            <a [routerLink]="['/tenders/edit-tender', tender.tender_id]">
+                                <h3>Tender ID: {{tender.tender_id}}</h3>
                             </a>
-                            <h3>Status: {{tender.workflowStep}}</h3>
+                            <h3>Status: {{tender.workflow_step}}</h3>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between start">
                             <div fxLayout="column">
                                 <h5><span class="text-maroon">Type of Work:</span>
-                                    {{tender.typeOfWork.establishmentDescription}}</h5>
-                                <h5><span class="text-maroon">Description:</span> {{tender.workDescription}}</h5>
+                                    {{tender.establishment_description}}</h5>
+                                <h5><span class="text-maroon">Description:</span> {{tender.work_description}}</h5>
                                 <h5><span class="text-maroon">Type of Contract:</span>
-                                    {{tender.typeOfContract.typeOfContract}}
+                                    {{tender.type_of_contract}}{{tender.pq_id}}
                                 </h5>
                             </div>
                             <!-- <div fxLayoutAlign="center center">
@@ -77,20 +77,26 @@
                                     Contractors Applied
                                 </button>
                             </div> -->
-                            <div fxLayoutAlign="center center"
-                                [routerLink]="['/tenders', tender.tenderId, 'create-pq-form']">
+                            <div fxLayoutAlign="center center" *ngIf="tender.pq_id==null"
+                                [routerLink]="['/tenders', tender.tender_id, 'create-pq-form']">
                                 <button mat-stroked-button>
-                                    PQ-Form
+                                    Create PQ-Form {{tender.pq_id}}
+                                </button>
+                            </div>
+                            <div fxLayoutAlign="center center" *ngIf="tender.pq_id!=null"
+                                [routerLink]="['/tenders', tender.tender_id, 'edit-pq-form']">
+                                <button mat-stroked-button>
+                                    Edit PQ-Form
                                 </button>
                             </div>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxLayout="row">
                                 <mat-icon class="location-icon">location_on</mat-icon>
-                                <h5>{{tender.projectLocation}}</h5>
+                                <h5>{{tender.project_location}}</h5>
                             </div>
-                            <h5><span class="text-maroon">Contract Duration: </span>{{tender.contractDuration}}
-                                {{tender.durationCounter}}
+                            <h5><span class="text-maroon">Contract Duration: </span>{{tender.contract_duration}}
+                                {{tender.duration_counter}}
                             </h5>
                         </div>
                         <div>
@@ -100,11 +106,11 @@
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                             <div fxLayout="row" fxLayoutAlign="center center">
                                 <h5 class="text-maroon bold-500">Tender Document</h5>
-                                <mat-icon matTooltip="{{tender.tenderDocumentName}}"
-                                    (click)="downloadDocument(tender.tenderId)">file_download</mat-icon>
+                                <mat-icon matTooltip="{{tender.tender_document_name}}"
+                                    (click)="downloadDocument(tender.tender_id)">file_download</mat-icon>
                             </div>
                             <h5><span class="text-maroon">Last Date of Submission: </span>
-                                {{tender.lastDateOfSubmission}}</h5>
+                                {{tender.last_date_of_submission}}</h5>
                         </div>
                     </div>
                 </mat-card>

@@ -47,9 +47,8 @@ const routes: Routes = [
       { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
       { path: 'edit-tender/:id', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
       { path: ':id/create-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
-      {
-        path: ':id/create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: {} }
-      },
+      { path: ':id/edit-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
+      { path: ':id/create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: {} }},
       { path: ':id/view-applicants', component: ViewApplicantsComponent, },
       { path: '**', redirectTo: 'tender', pathMatch: 'full' },
     ]

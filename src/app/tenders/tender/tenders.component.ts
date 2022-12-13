@@ -75,22 +75,22 @@ export class TendersComponent implements OnInit {
   public gridOptions!: any;
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Tender ID', field: 'tenderId', filter: 'agTextColumnFilter', pinned: 'left',
+      headerName: 'Tender ID', field: 'tender_id', filter: 'agTextColumnFilter', pinned: 'left',
       cellRenderer: function (params: any) {
         const id = `<a href=/tenders/edit-tender/${params.value}>${params.value}</a>`;
         return id;
       }
     },
-    { headerName: 'Client Name', field: 'clientInformation', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Description', field: 'workDescription', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Type of Contract', field: 'typeOfContract', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfContract.typeOfContract' },
-    { headerName: 'Type of Work', field: 'typeOfWork', filter: 'agTextColumnFilter', valueGetter: 'data.typeOfWork.establishmentDescription', autoHeight: true, wrapText: true },
-    { headerName: 'Status', field: 'workflowStep', filter: 'agTextColumnFilter' },
-    { headerName: 'Location', field: 'projectLocation', filter: 'agTextColumnFilter' },
-    { headerName: 'Last Date of Submission', field: 'lastDateOfSubmission', filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Contract Duration', field: 'contractDuration', filter: 'agTextColumnFilter', valueGetter: `data.contractDuration  +' '+  data.durationCounter` },
+    { headerName: 'Client Name', field: 'company_name', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Description', field: 'work_description', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Type of Contract', field: 'type_of_contract', filter: 'agTextColumnFilter' },
+    { headerName: 'Type of Work', field: 'establishment_description', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Status', field: 'workflow_step', filter: 'agTextColumnFilter' },
+    { headerName: 'Location', field: 'project_location', filter: 'agTextColumnFilter' },
+    { headerName: 'Last Date of Submission', field: 'last_date_of_submission', filter: 'agDateColumnFilter', filterParams: filterParams },
+    { headerName: 'Contract Duration', field: 'contract_duration', filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
     {
-      headerName: 'Action', field: 'tenderDocumentName', cellRenderer: ButtonRendererComponent,
+      headerName: 'Action', field: 'tender_document_name', cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
         context: this
       },
@@ -101,7 +101,8 @@ export class TendersComponent implements OnInit {
   ];
 
   downloadDocument(data: any) {
-    const downloadId = data.tenderId ? data.tenderId : data;
+    debugger;
+    const downloadId = data.tender_id ? data.tender_id : data;
     this.ApiServicesService.downloadTechnicalTenderDocument(downloadId).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
@@ -125,7 +126,7 @@ export class TendersComponent implements OnInit {
     this.gridOptions = params.columnApi;
     console.log(this.userRole);
     if (this.userRole?.includes("client")) {
-      this.agGrid.columnApi.setColumnVisible('clientInformation', false);
+      this.agGrid.columnApi.setColumnVisible('company_name', false);
     }
   }
   getParams() {
@@ -133,7 +134,7 @@ export class TendersComponent implements OnInit {
     const allColumns = this.gridOptions.getColumns();
     allColumns.forEach((element: { colId: string; }) => {
       if (this.userRole?.includes("client")) {
-        if (element.colId != "clientInformation" && element.colId != "action") {
+        if (element.colId != "company_name" && element.colId != "action") {
           columnsForExport.columnKeys.push(element.colId)
         }
       } else {

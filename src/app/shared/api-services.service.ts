@@ -112,9 +112,12 @@ export class ApiServicesService {
     return this.httpClient.get<pqFormResponse>(this.url + '/tender/'+id+'/pq-form');
   }
   //Create PQ Form postAPI
-  public createPQForm(id:any,data:any)  {
-    return this.httpClient.post(this.url + '/tender/'+id+'/pq-form',data);
-      
+  public createPQForm(id:any,data:any): Observable<pqFormResponse>  {
+    return this.httpClient.post<pqFormResponse>(this.url + '/tender/'+id+'/pq-form',data);
+  }
+  //Update PQ Form postAPI
+  public updatePQForm(id:any,pqID:any,data:any): Observable<pqFormResponse>  {
+    return this.httpClient.post<pqFormResponse>(this.url + '/tender/'+id+'/pq-form/update/'+pqID,data);  
   }
 
 

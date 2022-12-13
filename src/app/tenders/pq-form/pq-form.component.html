@@ -93,8 +93,9 @@
                                     </mat-form-field>
                                     <mat-form-field fxFlex="47%" appearance="outline">
                                         <mat-select placeholder="Months or Days" formControlName="durationCounter">
-                                            <mat-option value="days">Days</mat-option>
-                                            <mat-option value="months">Months</mat-option>
+                                            <mat-option *ngFor="let item of pqdurationList" [value]="item.id">
+                                                {{item.text}}
+                                            </mat-option>
                                         </mat-select>
                                         <mat-error *ngIf="adminPqForm.get('durationCounter')?.errors?.['required']">
                                             Contract Duration

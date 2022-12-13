@@ -32,7 +32,9 @@ export class PQFormComponent implements OnInit {
   public userRole: string[] | undefined;
   public domLayout: any;
   @ViewChild(CreateTenderComponent) tender: any;
-  pqformid: any;
+  pqFormTenderId: any;
+  pqFormId!: any;
+  pqdurationList!: any;
   loading = false;
   tenderId: any;
 
@@ -71,17 +73,43 @@ export class PQFormComponent implements OnInit {
       scheduledCompletion: ['', Validators.required],
       workflowStep: ['']
     });
+    this.getCommonOptions();
   }
   ngAfterViewInit() {
-    this.pqformid = this.tender.tenderId;
+    this.pqFormTenderId = this.tender.tenderId;
     //console.log(this.pqformid)
-    this.getPQForms(this.pqformid);
+    this.getPQForms(this.pqFormTenderId);
   }
+  getCommonOptions() {
+    this.pqdurationList = [{ id: "MONTHS", text: "MONTHS" }, { id: "DAYS", text: "DAYS" }];
+  }
+
   getPQForms(id: any) {
     // console.log('onload pqform');
     this.ApiServicesService.getPQForm(id).subscribe((data: pqFormResponse) => {
-      console.log('Tender data by id', data);
+      // console.log('Tender data by id', data);
+      this.adminPqForm.get('projectName')?.patchValue(data.projectName);
+      this.adminPqForm.get('workPackage')?.patchValue(data.workPackage);
+      this.adminPqForm.get('typeOfStructure')?.patchValue(data.typeOfStructure);
+      this.adminPqForm.get('pqDocumentIssueDate')?.patchValue(this.dateConverstion(data.pqDocumentIssueDate));
+      this.adminPqForm.get('pqLastDateOfSubmission')?.patchValue(this.dateConverstion(data.pqLastDateOfSubmission));
+      this.adminPqForm.get('tentativeDateOfAward')?.patchValue(this.dateConverstion(data.tentativeDateOfAward));
+      this.adminPqForm.get('scheduledCompletion')?.patchValue(this.dateConverstion(data.scheduledCompletion));
+      this.adminPqForm.get('contractDuration')?.patchValue(data.contractDuration);
+      this.adminPqForm.get('durationCounter')?.patchValue(data.durationCounter);
+      if (data.id != 0) {
+        this.pqFormId = data.id
+      }
     });
+  }
+  dateConverstion(input: any) {
+    if (input) {
+      const date = input;
+      const [day, month, year] = date.split('/');
+      const convertedDate = new Date(+year, +month - 1, +day);
+      return convertedDate;
+    }
+    return;
   }
 
   applyPqForm() {
@@ -94,41 +122,53 @@ export class PQFormComponent implements OnInit {
   }
 
   onSave() {
-    console.log(this.adminPqForm.value);
-    this.adminPqForm.controls['workflowStep'].setValue('SAVE');
+    this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
     if (this.adminPqForm.value.pqDocumentIssueDate) {
-      this.adminPqForm.value.pqDocumentIssueDate = this.datePipe.transform(this.adminPqForm.value.pqDocumentIssueDate, 'yyyy-MM-dd');
+      this.adminPqForm.value.pqDocumentIssueDate = this.datePipe.transform(this.adminPqForm.value.pqDocumentIssueDate, 'dd/MM/yyyy');
     } else {
       this.toastr.error('Please Select Valid PQ Document Issue Date');
     }
     if (this.adminPqForm.value.pqLastDateOfSubmission) {
-      this.adminPqForm.value.pqLastDateOfSubmission = this.datePipe.transform(this.adminPqForm.value.pqLastDateOfSubmission, 'yyyy-MM-dd');
+      this.adminPqForm.value.pqLastDateOfSubmission = this.datePipe.transform(this.adminPqForm.value.pqLastDateOfSubmission, 'dd/MM/yyyy');
     } else {
       this.toastr.error('Please Select Valid PQ Last Date of Submission');
     }
     if (this.adminPqForm.value.tentativeDateOfAward) {
-      this.adminPqForm.value.tentativeDateOfAward = this.datePipe.transform(this.adminPqForm.value.tentativeDateOfAward, 'yyyy-MM-dd');
+      this.adminPqForm.value.tentativeDateOfAward = this.datePipe.transform(this.adminPqForm.value.tentativeDateOfAward, 'dd/MM/yyyy');
     } else {
       this.toastr.error('Please Select Valid Tentative Date of Award');
     }
     if (this.adminPqForm.value.scheduledCompletion) {
-      this.adminPqForm.value.scheduledCompletion = this.datePipe.transform(this.adminPqForm.value.scheduledCompletion, 'yyyy-MM-dd');
+      this.adminPqForm.value.scheduledCompletion = this.datePipe.transform(this.adminPqForm.value.scheduledCompletion, 'dd/MM/yyyy');
     } else {
       this.toastr.error('Please Select Valid Scheduled Completion');
     }
 
     this.loading = true;
-    if (this.tenderId && this.adminPqForm.valid) {
-      this.ApiServicesService.createPQForm(this.tenderId, this.adminPqForm.value).subscribe(
-        (response: any) => {
-          this.toastr.success('Successfully Created');
-        },
-        error => {
+    //console.log(this.adminPqForm.value, this.pqFormId);
+    if (this.pqFormId && this.adminPqForm.valid) {
+      //console.log('update form');
+      this.ApiServicesService.updatePQForm(this.tenderId, this.pqFormId, this.adminPqForm.value).subscribe({
+        next: ((response: pqFormResponse) => {
+         // console.log('update', response);
+          this.toastr.success('Successfully Updated');
+        }),
+        error: (error => {
           console.log(error);
-        }
-      );
-    }
-    else {
+        })
+      })
+    } else if (this.tenderId && this.adminPqForm.valid) {
+      this.ApiServicesService.createPQForm(this.tenderId, this.adminPqForm.value).subscribe({
+        next: ((response: pqFormResponse) => {
+          this.pqFormId = response.id;
+          this.router.navigate(['tenders/' + this.tenderId + '/edit-pq-form/']);
+          this.toastr.success('Successfully Created');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      });
+    } else {
       console.log('error');
       this.toastr.error('Error in Creation PQ Form');
     }

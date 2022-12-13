@@ -15,7 +15,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
-    this.label = this.rowData.tenderDocumentName || null;
+    this.label = this.rowData.tender_document_name || null;
   }
 
   btnClickedHandler(data: any) {
@@ -44,12 +44,16 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
 
   navigateToPQForm() {
-    this.router.navigate(['/tenders', this.rowData.tenderId, 'create-pq-form']);
+    if (this.rowData.pq_id != null) {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form']);
+    } else {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
+    }
   }
-  navigateToApplyPQForm() {
-    this.router.navigate(['/tenders', this.rowData.tenderId, 'create-applicants-pq-form']);
-  }
-  navigateToApplicants(){
-    this.router.navigate(['/tenders', this.rowData.tenderId, 'view-applicants']);
-  }
+  // navigateToApplyPQForm() {
+  //   this.router.navigate(['/tenders', this.rowData.tenderId, 'create-applicants-pq-form']);
+  // }
+  // navigateToApplicants(){
+  //   this.router.navigate(['/tenders', this.rowData.tenderId, 'view-applicants']);
+  // }
 }

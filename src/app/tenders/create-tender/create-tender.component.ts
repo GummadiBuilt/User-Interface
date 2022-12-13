@@ -346,26 +346,26 @@ export class CreateTenderComponent implements OnInit {
     this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
       // console.log('update form');
-      this.ApiServicesService.updateTender(this.tenderId, formData).subscribe(
-        ((response: tenderResopnse) => {
+      this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
+        next:((response: tenderResopnse) => {
           this.toastr.success('Successfully Updated');
         }),
-        (error => {
+        error:(error => {
           console.log(error);
         })
-      )
+    })
     } else if (this.tenderDetails.valid && this.file) {
       // console.log('create form');
-      this.ApiServicesService.createTender(formData).subscribe(
-        ((response: tenderResopnse) => {
+      this.ApiServicesService.createTender(formData).subscribe({
+        next:((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
           this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),
-        (error => {
+        error:(error => {
           console.log(error);
         })
-      )
+    })
     } else if (!this.tenderId && !this.file) {
       //error
       console.log('File upload error');
@@ -394,17 +394,17 @@ export class CreateTenderComponent implements OnInit {
           const blob = new Blob();
           formDataSubmit.append('tenderDocument', this.file || blob);
           formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
-          this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
-            (response => {
+          this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
+            next:(response => {
               // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
             }),
-            (error => {
+            error:(error => {
               console.log(error);
             })
-          )
+        })
         }
       });
     } else {
@@ -426,16 +426,16 @@ export class CreateTenderComponent implements OnInit {
       const blob = new Blob();
       formDataSubmit.append('tenderDocument', this.file || blob);
       formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
-      this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe(
-        (response => {
+      this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
+       next: (response => {
           this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.toastr.success('Successfully Submitted');
           this.tenderFormDisable();
         }),
-        (error => {
+        error:(error => {
           console.log(error);
         })
-      );
+    });
     } else {
       //error
       console.log('error');
