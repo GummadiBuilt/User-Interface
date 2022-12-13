@@ -5,9 +5,19 @@
         </div>
         <div class="action-buttons" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
             <button [disabled]="allPendingApprovals.length==0 || !selectedDataLength" mat-raised-button
-                class="button-approve" (click)="onApproveSelected()">Approve</button>
+                class="button-approve" (click)="onApproveSelected()">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                    <span class="material-icons">task_alt</span>
+                    <span>Approve</span>
+                </div>
+            </button>
             <button [disabled]="allPendingApprovals.length==0 || !selectedDataLength" mat-raised-button
-                class="button-reject" (click)="onRejectSelected()">Reject</button>
+                class="button-reject" (click)="onRejectSelected()">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                    <span class="material-icons">highlight_off</span>
+                    <span>Reject</span>
+                </div>
+            </button>
         </div>
     </div>
     <div class="example-wrapper">

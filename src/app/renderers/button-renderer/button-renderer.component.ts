@@ -1,6 +1,7 @@
 import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-button-renderer',
@@ -27,9 +28,14 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   refresh() {
     return false;
   }
-
-  constructor(private ngZone: NgZone,
-    private router: Router) { }
+  public userRole: string[] | undefined;
+  constructor(private ngZone: NgZone, private router: Router, protected keycloak: KeycloakService,) {
+    try {
+      this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
+    } catch (e) {
+      console.log('Failed to load user details', e);
+    }
+  }
 
   navigate(link: any) {
     this.ngZone.run(() => {
@@ -39,5 +45,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
   navigateToPQForm() {
     this.router.navigate(['/tenders', this.rowData.tenderId, 'create-pq-form']);
+  }
+  navigateToApplyPQForm() {
+    this.router.navigate(['/tenders', this.rowData.tenderId, 'create-applicants-pq-form']);
+  }
+  navigateToApplicants(){
+    this.router.navigate(['/tenders', this.rowData.tenderId, 'view-applicants']);
   }
 }

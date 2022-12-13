@@ -52,6 +52,7 @@ import { CurrencyFormatterDirective } from './shared/currency-formatter.directiv
 import { ActionButtonRendererComponent } from './renderers/action-button-renderer/action-button-renderer.component';
 import { UploadButtonRendererComponent } from './renderers/upload-button-renderer/upload-button-renderer.component';
 import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
+import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -122,7 +123,8 @@ export const MY_DATE_FORMATS = {
     CurrencyFormatterDirective,
     ActionButtonRendererComponent,
     UploadButtonRendererComponent,
-    ViewApplicantsPQFormComponent
+    ViewApplicantsPQFormComponent,
+    ViewApplicantsComponent
   ],
   imports: [
     BrowserModule,

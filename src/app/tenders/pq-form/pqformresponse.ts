@@ -1,9 +1,9 @@
 export class pqFormResponse  {
     public id: number;
     public projectName: string;
-    public workPackage: number;
+    public workPackage: string;
     public typeOfStructure: object;
-    public contractDuration: string;
+    public contractDuration: number;
     public durationCounter: string;
     public pqDocumentIssueDate: string;
     public pqLastDateOfSubmission: string;

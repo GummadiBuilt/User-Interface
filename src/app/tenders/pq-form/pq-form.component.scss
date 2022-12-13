@@ -107,6 +107,14 @@ form mat-label {
     font-size: 20px;
 }
 
+.icon-appy {
+    color: white;
+    font-size: 20px;
+}
+
+::ng-deep .button-apply {
+    background-color: green !important;
+}
 
 //stepper custom css
 

@@ -54,8 +54,7 @@
                                 fxLayout="column">
                                 <mat-label>Name of Work Package *</mat-label>
                                 <mat-form-field appearance="outline">
-                                    <input matInput placeholder="Name of Work Package"
-                                        formControlName="workPackage">
+                                    <input matInput placeholder="Name of Work Package" formControlName="workPackage">
                                     <mat-error *ngIf="adminPqForm.get('workPackage')?.errors?.['required']">
                                         Enter Name of Work Package
                                     </mat-error>
@@ -69,8 +68,7 @@
                                 fxLayout="column">
                                 <mat-label>Nature of Structure *</mat-label>
                                 <mat-form-field appearance="outline">
-                                    <input matInput placeholder="Nature of Structure"
-                                        formControlName="typeOfStructure">
+                                    <input matInput placeholder="Nature of Structure" formControlName="typeOfStructure">
                                     <mat-error *ngIf="adminPqForm.get('typeOfStructure')?.errors?.['required']">
                                         Enter Nature of Structure
                                     </mat-error>
@@ -122,12 +120,10 @@
                                 <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
                                 <mat-form-field appearance="outline">
                                     <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY"
-                                        (click)="picker2.open()"
-                                        formControlName="pqLastDateOfSubmission">
+                                        (click)="picker2.open()" formControlName="pqLastDateOfSubmission">
                                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                     <mat-datepicker #picker2></mat-datepicker>
-                                    <mat-error
-                                        *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">
+                                    <mat-error *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">
                                         Choose last date of submission of filled pq document
                                     </mat-error>
                                 </mat-form-field>
@@ -140,8 +136,7 @@
                                         (click)="picker3.open()" formControlName="tentativeDateOfAward">
                                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                                     <mat-datepicker #picker3></mat-datepicker>
-                                    <mat-error
-                                        *ngIf="adminPqForm.get('tentativeDateOfAward')?.errors?.['required']">
+                                    <mat-error *ngIf="adminPqForm.get('tentativeDateOfAward')?.errors?.['required']">
                                         Choose tentative date of award of works
                                     </mat-error>
                                 </mat-form-field>
@@ -160,7 +155,8 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
+                        <div *ngIf="!userRole?.includes('contractor')" class="action-btn" fxLayout="row"
+                            fxLayoutAlign="end center" fxLayoutGap="24px">
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center">
                                     <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
@@ -177,6 +173,15 @@
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <mat-icon class="Icon">send</mat-icon>
                                     <div>Submit</div>
+                                </div>
+                            </button>
+                        </div>
+                        <div *ngIf="userRole?.includes('contractor')" class="action-btn" fxLayout="row"
+                            fxLayoutAlign="end center" fxLayoutGap="24px">
+                            <button class="button-apply" mat-button type="button" (click)="applyPqForm()">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <mat-icon class="icon-appy">double_arrow</mat-icon>
+                                    <div>Apply</div>
                                 </div>
                             </button>
                         </div>

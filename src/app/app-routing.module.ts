@@ -20,6 +20,8 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ServiceComponent } from './service/service.component';
 import { SignupComponent } from './signup/signup.component';
 import { PQFormComponent } from './tenders/pq-form/pq-form.component';
+import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
+import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -44,9 +46,11 @@ const routes: Routes = [
       { path: 'tender', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } } },
       { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
       { path: 'edit-tender/:id', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
+      { path: ':id/create-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
       {
-        path: ':id/create-pq-form', component: PQFormComponent, data: { breadcrumb: {} }
+        path: ':id/create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: {} }
       },
+      { path: ':id/view-applicants', component: ViewApplicantsComponent, },
       { path: '**', redirectTo: 'tender', pathMatch: 'full' },
     ]
   },
