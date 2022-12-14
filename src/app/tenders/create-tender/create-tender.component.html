@@ -163,7 +163,8 @@
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
                                 fxLayoutGap="8px">
-                                <span class="material-icons">cloud_upload</span>
+                                <!-- <span class="material-icons">cloud_upload</span> -->
+                                <i class="fa-icons fa-solid fa-file-arrow-up"></i>
                                 <span class="textLink">Upload File</span>
                             </label>
                             <label for="file">
@@ -185,7 +186,8 @@
                                     <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
                                         matTooltip="Download Document" matTooltipPosition="right"
                                         (click)="downloadSelectedFile(tenderId)">
-                                        <span class="material-icons">cloud_download</span>
+                                        <!-- <span class="material-icons">cloud_download</span> -->
+                                        <i class="icon-download fa-solid fa-file-arrow-down"></i>
                                     </button>
                                 </div>
 
@@ -205,8 +207,10 @@
                             <div fxLayout="row" fxLayoutGap="25%">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                     fxLayoutGap="8px">
-                                    <span class="material-icons">file_upload</span>
+                                    <!-- <span class="material-icons">file_upload</span> -->
+                                    <i class="fa-icons fa-solid fa-file-import"></i>
                                     <span class="textLink">Import File</span>
+                                    
                                     <input id="fileTender" type="file" (change)="importExcel($event)"
                                         accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
@@ -215,7 +219,8 @@
                                 <button type="button" mat-icon-button class="icon-approve"
                                     matTooltip="Download Document" matTooltipPosition="right"
                                     (click)="exportExcelFile()">
-                                    <span class="material-icons">cloud_download</span>
+                                    <!-- <span class="material-icons">cloud_download</span> -->
+                                    <i class="icon-download fa-solid fa-file-arrow-down"></i>
                                 </button>
                             </div>
                         </div>

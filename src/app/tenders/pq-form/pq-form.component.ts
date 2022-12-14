@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { StepperOrientation, StepperSelectionEvent, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { KeycloakService } from 'keycloak-angular';
@@ -13,6 +13,8 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
+import { PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-pq-form',
   templateUrl: './pq-form.component.html',
@@ -37,6 +39,7 @@ export class PQFormComponent implements OnInit {
   pqdurationList!: any;
   loading = false;
   tenderId: any;
+  @ViewChild('stepper') stepper!: MatStepper;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -51,6 +54,7 @@ export class PQFormComponent implements OnInit {
       const id = params.get('id');
       this.tenderId = id;
     });
+
   }
 
   ngOnInit(): void {
@@ -74,12 +78,37 @@ export class PQFormComponent implements OnInit {
       workflowStep: ['']
     });
     this.getCommonOptions();
+    this.pqFormDisable();
   }
+
+  //append step state to url from mat-stepper
+  // selectionChange(event: StepperSelectionEvent): void {
+  //   console.log(event.selectedStep.state);
+  //   console.log(this.router.url + '#' + event.selectedStep.state);
+
+  //   this.router.navigate([], {
+  //     relativeTo: this.route,
+  //     queryParams: {
+  //       step: event.selectedStep.state
+  //     },
+  //     queryParamsHandling: 'merge',
+  //     // skipLocationChange: true,
+  //   });
+  // }
+
   ngAfterViewInit() {
     this.pqFormTenderId = this.tender.tenderId;
     //console.log(this.pqformid)
     this.getPQForms(this.pqFormTenderId);
+
+    //default step is 2 for contractor
+    if (this.userRole?.includes('contractor') || this.userRole?.includes('client')) {
+      setTimeout(() => {
+        this.stepper.selectedIndex = 1;
+      });
+    }
   }
+
   getCommonOptions() {
     this.pqdurationList = [{ id: "MONTHS", text: "MONTHS" }, { id: "DAYS", text: "DAYS" }];
   }
@@ -150,7 +179,7 @@ export class PQFormComponent implements OnInit {
       //console.log('update form');
       this.ApiServicesService.updatePQForm(this.tenderId, this.pqFormId, this.adminPqForm.value).subscribe({
         next: ((response: pqFormResponse) => {
-         // console.log('update', response);
+          // console.log('update', response);
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -176,5 +205,9 @@ export class PQFormComponent implements OnInit {
   onSubmit() {
     console.log(this.adminPqForm.value);
   }
-
+  pqFormDisable() {
+    if (this.userRole?.includes("client") || this.userRole?.includes("contractor")) {
+      this.adminPqForm.disable();
+    }
+  }
 }

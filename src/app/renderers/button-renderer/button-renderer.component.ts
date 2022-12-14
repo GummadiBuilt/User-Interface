@@ -1,7 +1,9 @@
 import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { KeycloakService } from 'keycloak-angular';
+import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 
 @Component({
   selector: 'app-button-renderer',
@@ -29,7 +31,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     return false;
   }
   public userRole: string[] | undefined;
-  constructor(private ngZone: NgZone, private router: Router, protected keycloak: KeycloakService,) {
+  constructor(private ngZone: NgZone, private router: Router, protected keycloak: KeycloakService, private dialog: MatDialog) {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
     } catch (e) {
@@ -50,10 +52,20 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
     }
   }
-  // navigateToApplyPQForm() {
-  //   this.router.navigate(['/tenders', this.rowData.tenderId, 'create-applicants-pq-form']);
-  // }
+  viewPQForm() {
+    this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form']);
+  }
+  applyPQForm() {
+    const dlg = this.dialog.open(ConfirmationDlgComponent, {
+      data: { title: 'Are you sure you want to apply?', msg: '' }
+    });
+    dlg.afterClosed().subscribe((submit: boolean) => {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'create-applicants-pq-form']);
+    });
+  }
+
+
   // navigateToApplicants(){
-  //   this.router.navigate(['/tenders', this.rowData.tenderId, 'view-applicants']);
+  //   this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);
   // }
 }

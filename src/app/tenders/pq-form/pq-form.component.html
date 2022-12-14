@@ -29,11 +29,19 @@
                         </button>
                     </div>
                 </mat-step>
-                <ng-template matStepperIcon="add_business">
+                <!-- <div>
+                    <a [routerLink]="['/tenders', this.tenderId, 'view-pq-form']" fragment="project_information">
+                        <ng-template matStepperIcon="add_business">
+                            <mat-icon>add_business</mat-icon>
+                        </ng-template>
+                    </a>
+                </div> -->
+                <ng-template matStepperIcon="project_information">
                     <mat-icon>add_business</mat-icon>
                 </ng-template>
-                <mat-step [stepControl]="adminPqForm" errorMessage="Fill required project details."
-                    label="Project Information" state="add_business" [completed]="false">
+                <mat-step id="project_information" [stepControl]="adminPqForm"
+                    errorMessage="Fill required project details." label="Project Information" state="project_information"
+                    [completed]="false">
                     <form [formGroup]="adminPqForm">
                         <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between"
                             fxLayoutGap="12px grid">
@@ -156,7 +164,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div *ngIf="!userRole?.includes('contractor')" class="action-btn" fxLayout="row"
+                        <div *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
                             fxLayoutAlign="end center" fxLayoutGap="24px">
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center">
