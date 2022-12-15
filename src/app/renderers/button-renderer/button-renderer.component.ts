@@ -47,7 +47,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
   navigateToPQForm() {
     if (this.rowData.pq_id != null) {
-      this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form']);
+      this.router.navigate(['/tenders', this.rowData.tender_id,'edit-pq-form',this.rowData.pq_id]);
     } else {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
     }

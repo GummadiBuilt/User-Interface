@@ -45,12 +45,16 @@ const routes: Routes = [
     children: [
       { path: '', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } } },
       { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
-      { path: 'edit-tender/:id', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
-      { path: ':id/create-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
-      { path: ':id/edit-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
-      { path: ':id/view-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
-      { path: ':id/create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: {} }},
+      { path: 'edit-tender/:tenderId', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
+      { path: ':id/create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: {} } },
       { path: ':id/view-applicants', component: ViewApplicantsComponent, },
+      { path: ':tenderId', data: { breadcrumb: {} },
+        children: [
+          { path: '', component: CreateTenderComponent, data: { breadcrumb: {} } },
+          { path: 'create-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
+          { path: 'edit-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: {} } },
+        ]
+      },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },

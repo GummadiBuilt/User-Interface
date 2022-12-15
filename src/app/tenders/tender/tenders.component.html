@@ -61,7 +61,7 @@
                             <a [routerLink]="['/tenders/edit-tender', tender.tender_id]">
                                 <h3>Tender ID: {{tender.tender_id}}</h3>
                             </a>
-                            <h3>Status: {{tender.workflow_step}}</h3>
+                            <h3>Status:{{StatusValues[tender.workflow_step]}} </h3>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between start">
                             <div fxLayout="column">
@@ -69,7 +69,7 @@
                                     {{tender.establishment_description}}</h5>
                                 <h5><span class="text-maroon">Description:</span> {{tender.work_description}}</h5>
                                 <h5><span class="text-maroon">Type of Contract:</span>
-                                    {{tender.type_of_contract}}{{tender.pq_id}}
+                                    {{tender.type_of_contract}}
                                 </h5>
                             </div>
                             <!-- <div fxLayoutAlign="center center">
@@ -80,11 +80,11 @@
                             <div fxLayoutAlign="center center" *ngIf="tender.pq_id==null"
                                 [routerLink]="['/tenders', tender.tender_id, 'create-pq-form']">
                                 <button mat-stroked-button>
-                                    Create PQ-Form {{tender.pq_id}}
+                                    Create PQ-Form 
                                 </button>
                             </div>
                             <div fxLayoutAlign="center center" *ngIf="tender.pq_id!=null"
-                                [routerLink]="['/tenders', tender.tender_id, 'edit-pq-form']">
+                                [routerLink]="['/tenders', tender.tender_id, 'edit-pq-form',tender.pq_id]">
                                 <button mat-stroked-button>
                                     Edit PQ-Form
                                 </button>

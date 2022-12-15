@@ -1,5 +1,5 @@
 <div class="tender-form">
-    <div class="breadcrumbs" fxLayout="row wrap" *ngIf="!hideBreadcrumbs" fxLayoutAlign="space-between center"
+    <div class="breadcrumbs" fxLayout="row wrap"  fxLayoutAlign="space-between center"
         fxLayoutGap="12px grid">
         <div fxLayoutAlign="center center">
             <xng-breadcrumb [separator]="separatorTemplate">
@@ -34,9 +34,9 @@
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
-                    <mat-form-field appearance="outline" *ngIf="!hideBreadcrumbs && tenderId">
-                        <mat-select placeholder="Actions">
-                            <mat-option [routerLink]="['/tenders', tenderId, 'create-pq-form']">PQ-Form</mat-option>
+                    <mat-form-field appearance="outline" *ngIf="tenderId">
+                        <mat-select placeholder="Actions"  (valueChange)="onSelected($event)">
+                            <mat-option value={{pqID}} >PQ-Form</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>

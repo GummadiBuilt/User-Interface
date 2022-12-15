@@ -108,8 +108,8 @@ export class ApiServicesService {
     return this.httpClient.get(this.url + '/tender/download/'+id);
   }
   //Get PQ Form by tender id
-  public getPQForm(id:any): Observable<pqFormResponse>{
-    return this.httpClient.get<pqFormResponse>(this.url + '/tender/'+id+'/pq-form');
+  public getPQForm(tenderId:any,pqId:any): Observable<pqFormResponse>{
+    return this.httpClient.get<pqFormResponse>(this.url + '/tender/'+tenderId+'/pq-form/'+pqId);
   }
   //Create PQ Form postAPI
   public createPQForm(id:any,data:any): Observable<pqFormResponse>  {

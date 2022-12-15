@@ -43,19 +43,20 @@ export class CreateTenderComponent implements OnInit {
   public downloadBtnState: boolean = false;
   public warningMessage!: string;
   public todayDate!: Date;
-  //to hide breadcrumbs in pq-form
-  @Input() hideBreadcrumbs!: boolean;
+  public pqID!: number;
+
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router, 
+    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router,
     private dialog: MatDialog) {
     this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+      const id = params.get('tenderId');
       this.tenderId = id;
       if (id) {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
-          // console.log('Tender data by id', data);
+           //console.log('Tender data by id', data);
+          this.pqID = data.pqFormId;
           this.editData(data);
           this.tenderFormDisable();
         });
@@ -101,23 +102,34 @@ export class CreateTenderComponent implements OnInit {
     });
   }
   editData(data: any) {
-    this.tenderDetails.get('typeOfWork')?.patchValue(data.typeOfWork.establishmentDescription);
-    this.tenderDetails.get('workDescription')?.patchValue(data.workDescription);
-    this.tenderDetails.get('projectLocation')?.patchValue(data.projectLocation);
-    this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);
-    this.tenderDetails.get('contractDuration')?.patchValue(data.contractDuration);
-    this.tenderDetails.get('durationCounter')?.patchValue(data.durationCounter);
-    const date = data.lastDateOfSubmission;
-    const [day, month, year] = date.split('/');
-    const convertedDate = new Date(+year, +month - 1, +day);
-    this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
-    this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
-    this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
-    if (Object.keys(data.tenderFinanceInfo).length === 0) {
-      this.rowData = [];
-    } else { this.rowData = JSON.parse(data.tenderFinanceInfo); }
-    this.tenderId = data.tenderId;
-    this.fileName = data.tenderDocumentName;
+    if (data.tenderId) {
+      this.tenderDetails.get('typeOfWork')?.patchValue(data.typeOfWork.establishmentDescription);
+      this.tenderDetails.get('workDescription')?.patchValue(data.workDescription);
+      this.tenderDetails.get('projectLocation')?.patchValue(data.projectLocation);
+      this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);
+      this.tenderDetails.get('contractDuration')?.patchValue(data.contractDuration);
+      this.tenderDetails.get('durationCounter')?.patchValue(data.durationCounter);
+      const date = data.lastDateOfSubmission;
+      const [day, month, year] = date.split('/');
+      const convertedDate = new Date(+year, +month - 1, +day);
+      this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
+      this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
+      this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
+      if (Object.keys(data.tenderFinanceInfo).length === 0) {
+        this.rowData = [];
+      } else { this.rowData = JSON.parse(data.tenderFinanceInfo); }
+      this.tenderId = data.tenderId;
+      this.fileName = data.tenderDocumentName;
+    }else{
+      this.toastr.error('No data to display');
+    }
+  }
+  onSelected(event:any){
+    if (event != (null || 0)) {
+      this.router.navigate(['/tenders', this.tenderId,'edit-pq-form',event]);
+    } else {
+      this.router.navigate(['/tenders', this.tenderId, 'create-pq-form']);
+    }
   }
 
   onFileChange(event: any) {
@@ -144,11 +156,11 @@ export class CreateTenderComponent implements OnInit {
     });
   }
   //AG GRID COMPONENTS
-  public appHeaders = ["Item No","Item Description", "Unit", "Quantity"]
+  public appHeaders = ["Item No", "Item Description", "Unit", "Quantity"]
   public gridApi!: GridApi;
   public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
-  public rowData: any[] = [{ "Item No":0,"Item Description": "", "Unit": "", "Quantity": 0 }];
+  public rowData: any[] = [{ "Item No": 0, "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
   public overlayLoadingTemplate =
@@ -347,25 +359,25 @@ export class CreateTenderComponent implements OnInit {
     if (this.tenderId && this.tenderDetails.valid) {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
-        next:((response: tenderResopnse) => {
+        next: ((response: tenderResopnse) => {
           this.toastr.success('Successfully Updated');
         }),
-        error:(error => {
+        error: (error => {
           console.log(error);
         })
-    })
+      })
     } else if (this.tenderDetails.valid && this.file) {
       // console.log('create form');
       this.ApiServicesService.createTender(formData).subscribe({
-        next:((response: tenderResopnse) => {
+        next: ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
           this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),
-        error:(error => {
+        error: (error => {
           console.log(error);
         })
-    })
+      })
     } else if (!this.tenderId && !this.file) {
       //error
       console.log('File upload error');
@@ -395,16 +407,16 @@ export class CreateTenderComponent implements OnInit {
           formDataSubmit.append('tenderDocument', this.file || blob);
           formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
           this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
-            next:(response => {
+            next: (response => {
               // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
             }),
-            error:(error => {
+            error: (error => {
               console.log(error);
             })
-        })
+          })
         }
       });
     } else {
@@ -427,15 +439,15 @@ export class CreateTenderComponent implements OnInit {
       formDataSubmit.append('tenderDocument', this.file || blob);
       formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
       this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
-       next: (response => {
+        next: (response => {
           this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.toastr.success('Successfully Submitted');
           this.tenderFormDisable();
         }),
-        error:(error => {
+        error: (error => {
           console.log(error);
         })
-    });
+      });
     } else {
       //error
       console.log('error');

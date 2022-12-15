@@ -7,6 +7,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
+import { StatusValues } from 'src/app/shared/status-values';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ButtonRendererComponent } from '../../renderers/button-renderer/button-renderer.component';
 import { ApiServicesService } from '../../shared/api-services.service';
@@ -25,6 +26,7 @@ export class TendersComponent implements OnInit {
   public frameworkComponents: any;
   fileName = '';
   public domLayout: any;
+  StatusValues = StatusValues as unknown as keyof typeof StatusValues;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -85,7 +87,12 @@ export class TendersComponent implements OnInit {
     { headerName: 'Description', field: 'work_description', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Type of Contract', field: 'type_of_contract', filter: 'agTextColumnFilter' },
     { headerName: 'Type of Work', field: 'establishment_description', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Status', field: 'workflow_step', filter: 'agTextColumnFilter' },
+    { headerName: 'Status', field: 'workflow_step', filter: 'agTextColumnFilter',
+      cellRenderer:function(data:any) {
+        return (data.value !== null && data.value !== undefined)
+                ? StatusValues[data.value as keyof typeof StatusValues] : 'not found';
+      }
+    },
     { headerName: 'Location', field: 'project_location', filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'last_date_of_submission', filter: 'agDateColumnFilter', filterParams: filterParams },
     { headerName: 'Contract Duration', field: 'contract_duration', filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
@@ -101,7 +108,6 @@ export class TendersComponent implements OnInit {
   ];
 
   downloadDocument(data: any) {
-    debugger;
     const downloadId = data.tender_id ? data.tender_id : data;
     this.ApiServicesService.downloadTechnicalTenderDocument(downloadId).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
@@ -124,7 +130,7 @@ export class TendersComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
-    console.log(this.userRole);
+   // console.log(this.userRole);
     if (this.userRole?.includes("client")) {
       this.agGrid.columnApi.setColumnVisible('company_name', false);
     }
