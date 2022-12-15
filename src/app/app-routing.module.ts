@@ -41,18 +41,20 @@ const routes: Routes = [
   { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },
   { path: 'audit-approvals', component: AuditApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Audit Approvals' } },
   {
-    path: 'tenders', canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } },
+    path: 'tenders', canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } },
     children: [
-      { path: '', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } } },
-      { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
-      { path: 'edit-tender/:tenderId', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
-      { path: ':id/create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: {} } },
-      { path: ':id/view-applicants', component: ViewApplicantsComponent, },
-      { path: ':tenderId', data: { breadcrumb: {} },
+      { path: '', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } } },
+      { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'fa-solid fa-square-plus' } } },
+      { path: 'edit-tender/:tenderId', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'fa-solid fa-pen-to-square' } } },
+      {
+        path: ':tenderId', data: { breadcrumb: {} },
         children: [
           { path: '', component: CreateTenderComponent, data: { breadcrumb: {} } },
-          { path: 'create-pq-form', component: PQFormComponent, data: { breadcrumb: {} } },
-          { path: 'edit-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: {} } },
+          { path: 'create-pq-form', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'edit-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'view-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'view-applicants', component: ViewApplicantsComponent, },
         ]
       },
       { path: '**', redirectTo: '', pathMatch: 'full' },

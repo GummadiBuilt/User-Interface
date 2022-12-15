@@ -29,7 +29,6 @@ import { environment } from '../environments/environment';
 import { ProfileComponent } from './profile/profile.component';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 import { CreateTenderComponent } from './tenders/create-tender/create-tender.component';
-import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { AgGridModule } from 'ag-grid-angular';
 import { ErrorInterceptor } from './guard/error.interceptor';
@@ -114,7 +113,6 @@ export const MY_DATE_FORMATS = {
     ProfileComponent,
     NumbersOnlyDirective,
     CreateTenderComponent,
-    DragDropFileUploadDirective,
     ButtonRendererComponent,
     MyLoaderComponent,
     BlurFormatDirective,

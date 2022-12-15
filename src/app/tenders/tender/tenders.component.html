@@ -4,39 +4,29 @@
             <div fxLayout="row" fxLayoutAlign="center center">
                 <h2>Tenders</h2>
             </div>
-            <!-- <div class="tender-tabs" *ngIf="userRole?.includes('contractor')">
-                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-                    <mat-tab label="Tenders"></mat-tab>
-                    <mat-tab label="Applied Tenders"></mat-tab>
-                </mat-tab-group>
-            </div> -->
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
-                <div *ngIf="userRole?.includes('client')">
-                    <!-- routerLink="/tenders/create-tender" -->
-                    <button mat-raised-button (click)="createTender()">
-                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                            <mat-icon>add_circle</mat-icon>
-                            <span>Create Tender</span>
-                        </div>
-                    </button>
-                </div>
+            <div *ngIf="userRole?.includes('client')">
+                <button mat-raised-button (click)="createTender()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                        <i class="icon-20p fa-solid fa-circle-plus"></i>
+                        <div><span>Create Tender</span></div>
+                    </div>
+                </button>
             </div>
         </div>
-        <!-- <div class="search">
-            <ng-advanced-search [headers]="headers" [inputArray]="rowData" 
-            (outputArray)="displayTender = $event" [showFilterSaving]="true" [savedFilters]="saved">
-            </ng-advanced-search>
-        </div> -->
         <div fxLayout="row" fxLayoutAlign="space-between">
             <div>
                 <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
                     <mat-button-toggle class="toggle-first" [value]="true">
-                        <mat-icon>reorder</mat-icon>
-                        List
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                            <div><i class="fa-solid fa-list"></i></div>
+                            <div>List</div>
+                        </div>
                     </mat-button-toggle>
                     <mat-button-toggle class="toggle-last" [value]="false">
-                        <mat-icon>apps</mat-icon>
-                        Grid
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                            <div><i class="fa-solid fa-grip-vertical"></i></div>
+                            <div>Grid</div>
+                        </div>
                     </mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
@@ -61,7 +51,7 @@
                             <a [routerLink]="['/tenders/edit-tender', tender.tender_id]">
                                 <h3>Tender ID: {{tender.tender_id}}</h3>
                             </a>
-                            <h3>Status:{{StatusValues[tender.workflow_step]}} </h3>
+                            <h3>Status: {{StatusValues[tender.workflow_step]}} </h3>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between start">
                             <div fxLayout="column">
@@ -80,7 +70,7 @@
                             <div fxLayoutAlign="center center" *ngIf="tender.pq_id==null"
                                 [routerLink]="['/tenders', tender.tender_id, 'create-pq-form']">
                                 <button mat-stroked-button>
-                                    Create PQ-Form 
+                                    Create PQ-Form
                                 </button>
                             </div>
                             <div fxLayoutAlign="center center" *ngIf="tender.pq_id!=null"
@@ -92,7 +82,7 @@
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxLayout="row">
-                                <mat-icon class="location-icon">location_on</mat-icon>
+                                <i class="location-icon fa-solid fa-location-dot"></i>
                                 <h5>{{tender.project_location}}</h5>
                             </div>
                             <h5><span class="text-maroon">Contract Duration: </span>{{tender.contract_duration}}
@@ -108,8 +98,6 @@
                                 <div>
                                     <h5 class="text-maroon bold-500">Tender Document</h5>
                                 </div>
-                                <!-- <mat-icon matTooltip="{{tender.tender_document_name}}"
-                                    (click)="downloadDocument(tender.tender_id)">file_download</mat-icon> -->
                                 <span matTooltip="{{tender.tender_document_name}}"
                                     (click)="downloadDocument(tender.tender_id)"><i
                                         class="icon-download fa-solid fa-file-arrow-down"></i></span>

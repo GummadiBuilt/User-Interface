@@ -1,12 +1,10 @@
 <div fxLayout="row">
     <button mat-icon-button type="button" class="icon-approve" matTooltip="Approve"
         (click)="approvedPendingApproval(rowData)" matTooltipPosition="left">
-        <span class="material-icons">task_alt</span>
+        <i class="icon-20p fa-regular fa-circle-check"></i>
     </button>
     <button mat-icon-button type="button" class="icon-reject" matTooltip="Reject"
         (click)="rejectedPendingApproval(rowData)" matTooltipPosition="right">
-        <span class="material-icons">
-            highlight_off
-        </span>
+        <i class="icon-20p fa-regular fa-circle-xmark"></i>
     </button>
 </div>

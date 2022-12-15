@@ -17,8 +17,9 @@ export class ViewApplicantsComponent implements OnInit {
   }
 
   public columnDefs: ColDef[] = [
-    { headerName: 'Contractor Name', field: 'contractorName', rowDrag: true, filter: 'agTextColumnFilter', flex: 2, autoHeight: true, wrapText: true },
+    { headerName: 'Contractor Name', field: 'contractorName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true },
     { headerName: 'Rank', field: 'rank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true },
+    { headerName: 'Remarks', field: 'rearks', filter: 'agTextColumnFilter', flex: 5, autoHeight: true, wrapText: true },
   ];
   public defaultColDef: ColDef = {
     minWidth: 200,

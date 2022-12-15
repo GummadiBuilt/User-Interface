@@ -1,18 +1,20 @@
 <div class="tender-form">
-    <div class="breadcrumbs" fxLayout="row wrap"  fxLayoutAlign="space-between center"
-        fxLayoutGap="12px grid">
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
         <div fxLayoutAlign="center center">
             <xng-breadcrumb [separator]="separatorTemplate">
                 <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                    <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+                    <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
                     <ng-container>{{ breadcrumb }}</ng-container>
                 </ng-container>
             </xng-breadcrumb>
         </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
         <div fxLayoutAlign="center center">
             <div class="warn" *ngIf="warningMessage" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                 <div>
-                    <span class="material-icons">warning</span>
+                    <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
                 </div>
                 <div>
                     <span>{{warningMessage}}</span>
@@ -26,17 +28,14 @@
             </div>
         </div>
     </div>
-    <ng-template #separatorTemplate>
-        <mat-icon>arrow_right</mat-icon>
-    </ng-template>
     <mat-card>
         <form [formGroup]="tenderDetails">
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
                     <mat-form-field appearance="outline" *ngIf="tenderId">
-                        <mat-select placeholder="Actions"  (valueChange)="onSelected($event)">
-                            <mat-option value={{pqID}} >PQ-Form</mat-option>
+                        <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
+                            <mat-option value={{pqID}}>PQ-Form</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -163,7 +162,6 @@
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
                                 fxLayoutGap="8px">
-                                <!-- <span class="material-icons">cloud_upload</span> -->
                                 <i class="fa-icons fa-solid fa-file-arrow-up"></i>
                                 <span class="textLink">Upload File</span>
                             </label>
@@ -181,16 +179,14 @@
                                     <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
                                         matTooltip="Remove Document" matTooltipPosition="right"
                                         (click)="removeSelectedFile(file)">
-                                        <span class="material-icons">cancel</span>
+                                        <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
                                     </button>
                                     <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
                                         matTooltip="Download Document" matTooltipPosition="right"
                                         (click)="downloadSelectedFile(tenderId)">
-                                        <!-- <span class="material-icons">cloud_download</span> -->
                                         <i class="icon-download fa-solid fa-file-arrow-down"></i>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                         <div
@@ -207,10 +203,9 @@
                             <div fxLayout="row" fxLayoutGap="25%">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                     fxLayoutGap="8px">
-                                    <!-- <span class="material-icons">file_upload</span> -->
                                     <i class="fa-icons fa-solid fa-file-import"></i>
                                     <span class="textLink">Import File</span>
-                                    
+
                                     <input id="fileTender" type="file" (change)="importExcel($event)"
                                         accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
@@ -219,7 +214,6 @@
                                 <button type="button" mat-icon-button class="icon-approve"
                                     matTooltip="Download Document" matTooltipPosition="right"
                                     (click)="exportExcelFile()">
-                                    <!-- <span class="material-icons">cloud_download</span> -->
                                     <i class="icon-download fa-solid fa-file-arrow-down"></i>
                                 </button>
                             </div>
@@ -241,22 +235,22 @@
                 <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                     <button *ngIf="userRole?.includes('client')" mat-button style="background-color: grey ;"
                         (click)="onSave()" [disabled]="btnstate">
-                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                            <mat-icon class="Icon">save</mat-icon>
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-save fa-solid fa-floppy-disk"></i>
                             <div>Save</div>
                         </div>
                     </button>
                     <button *ngIf="userRole?.includes('client') && this.tenderId" mat-button (click)="onSubmit()"
                         style="background-color: green ;" [disabled]="btnstate">
-                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                            <mat-icon class="Icon">send</mat-icon>
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-submit fa-solid fa-paper-plane"></i>
                             <div>Submit</div>
                         </div>
                     </button>
                     <button *ngIf="userRole?.includes('admin') && this.tenderId" mat-button (click)="onUpdate()"
                         style="background-color: green ;" [disabled]="btnstate">
-                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                            <mat-icon class="Icon">save</mat-icon>
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-save fa-solid fa-floppy-disk"></i>
                             <div>Update</div>
                         </div>
                     </button>

@@ -1,8 +1,6 @@
 .tenders {
-    width: 100%;
-    min-height: 100%;
-    color: #841618;
     padding: 24px;
+    color: #841618;
 }
 
 .mat-raised-button {
@@ -11,8 +9,6 @@
 }
 
 mat-button-toggle {
-    // color: black;
-    // background-color: rgb(204, 204, 204);
     color: #841618;
     background-color: white;
 }
@@ -140,5 +136,9 @@ mat-button-toggle {
 .icon-download {
     cursor: pointer;
     color: #841618;
+    font-size: 20px;
+}
+
+.icon-20p {
     font-size: 20px;
 }

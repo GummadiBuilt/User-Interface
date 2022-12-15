@@ -7,14 +7,14 @@
             <button [disabled]="allPendingApprovals.length==0 || !selectedDataLength" mat-raised-button
                 class="button-approve" (click)="onApproveSelected()">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="material-icons">task_alt</span>
+                    <i class="icon-20p fa-regular fa-circle-check"></i>
                     <span>Approve</span>
                 </div>
             </button>
             <button [disabled]="allPendingApprovals.length==0 || !selectedDataLength" mat-raised-button
                 class="button-reject" (click)="onRejectSelected()">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <span class="material-icons">highlight_off</span>
+                    <i class="icon-20p fa-regular fa-circle-xmark"></i>
                     <span>Reject</span>
                 </div>
             </button>

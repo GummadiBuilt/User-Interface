@@ -4,8 +4,6 @@
 }
 
 .tender-form {
-    width: 100%;
-    min-height: 100%;
     padding: 24px;
 }
 
@@ -52,6 +50,11 @@ mat-label {
     font-size: 22px;
 }
 
+.icon-warning {
+    color: #841618;
+    font-size: 18px;
+}
+
 .button-upload {
     background-color: white;
     font-weight: 400;
@@ -86,6 +89,10 @@ mat-header-row {
     font-weight: 500;
 }
 
+.text-maroon {
+    color: #841618;
+}
+
 //breadcrumbs
 .breadcrumbs {
     padding: 0px !important;
@@ -96,7 +103,7 @@ mat-header-row {
     color: #756e15;
     background: #fffbd1;
     border: 1px solid #87803e;
-    padding: 4px 12px 4px 12px !important;
+    padding: 6px 16px 6px 16px !important;
 }
 
 .status {
@@ -117,8 +124,8 @@ mat-header-row {
 }
 
 ::ng-deep .icon-breadcrumb {
-    margin-right: 2px !important;
-    font-size: 22px !important;
+    margin-right: 6px !important;
+    font-size: 16px !important;
 }
 
 //ag-grid cell text wrap in words
@@ -134,8 +141,17 @@ mat-header-row {
     background-color: var(--ag-odd-row-background-color) !important;
 }
 
-.Icon {
+.icon-save {
     color: white;
+    font-size: 20px;
+}
+
+.icon-submit {
+    color: white;
+    font-size: 16px;
+}
+
+.icon-20p {
     font-size: 20px;
 }
 

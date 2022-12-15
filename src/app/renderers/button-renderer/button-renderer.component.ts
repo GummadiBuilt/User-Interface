@@ -47,24 +47,27 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
   navigateToPQForm() {
     if (this.rowData.pq_id != null) {
-      this.router.navigate(['/tenders', this.rowData.tender_id,'edit-pq-form',this.rowData.pq_id]);
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form', this.rowData.pq_id]);
     } else {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
     }
   }
   viewPQForm() {
-    this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form']);
+    console.log(this.rowData.pq_id);
+    if (this.rowData.pq_id != null) {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
+    }
   }
   applyPQForm() {
     const dlg = this.dialog.open(ConfirmationDlgComponent, {
       data: { title: 'Are you sure you want to apply?', msg: '' }
     });
     dlg.afterClosed().subscribe((submit: boolean) => {
-      this.router.navigate(['/tenders', this.rowData.tender_id, 'create-applicants-pq-form']);
+      if (submit) {
+        this.router.navigate(['/tenders', this.rowData.tender_id, 'create-applicants-pq-form']);
+      }
     });
   }
-
-
   // navigateToApplicants(){
   //   this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);
   // }

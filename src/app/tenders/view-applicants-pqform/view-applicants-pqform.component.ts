@@ -117,11 +117,11 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
-          <button class="action-button add" type="button" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+          <button class="action-button add" data-action="add">
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
-          <button class="action-button delete" type="button" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+          <button class="action-button delete" data-action="delete">
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;
@@ -189,11 +189,11 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
-          <button class="action-button add" type="button" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+          <button class="action-button add" data-action="add">
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
-          <button class="action-button delete" type="button" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+          <button class="action-button delete" data-action="delete">
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;
@@ -369,10 +369,10 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
           <button class="action-button delete" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;
@@ -433,10 +433,10 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
           <button class="action-button delete" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;
@@ -514,10 +514,10 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
           <button class="action-button delete" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;
@@ -573,10 +573,10 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
           <button class="action-button delete" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;
@@ -632,10 +632,10 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         let divElement = document.createElement("div");
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
           <button class="action-button delete" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         return divElement;

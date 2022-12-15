@@ -2,13 +2,13 @@
     <div class="breadcrumbs">
         <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
             <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+                <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
                 <ng-container>{{ breadcrumb | uppercase }}</ng-container>
             </ng-container>
         </xng-breadcrumb>
     </div>
     <ng-template #separatorTemplate>
-        <mat-icon>arrow_right</mat-icon>
+        <i class="fa-solid fa-caret-right"></i>
     </ng-template>
     <div class="pq-form-body">
         <div class="admin-stepper">
@@ -137,14 +137,14 @@
                     <div *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
                         fxLayoutAlign="end center" fxLayoutGap="24px">
                         <button mat-button (click)="onSave()" style="background-color: grey ;">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                                <mat-icon class="Icon">save</mat-icon>
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                <i class="icon-save fa-solid fa-floppy-disk"></i>
                                 <div>Save</div>
                             </div>
                         </button>
                         <button mat-button (click)="onSubmit()" style="background-color: green ;">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                                <mat-icon class="Icon">send</mat-icon>
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                <i class="icon-submit fa-solid fa-paper-plane"></i>
                                 <div>Submit</div>
                             </div>
                         </button>
@@ -152,8 +152,8 @@
                     <div *ngIf="userRole?.includes('contractor')" class="action-btn" fxLayout="row"
                         fxLayoutAlign="end center" fxLayoutGap="24px">
                         <button class="button-apply" mat-button type="button" (click)="applyPqForm()">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                                <mat-icon class="icon-appy">double_arrow</mat-icon>
+                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                <i class="icon-appy fa-solid fa-angles-right"></i>
                                 <div>Apply</div>
                             </div>
                         </button>

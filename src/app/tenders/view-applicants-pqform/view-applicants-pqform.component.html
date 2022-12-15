@@ -2,20 +2,26 @@
     <div class="breadcrumbs">
         <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
             <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <mat-icon class="icon-breadcrumb" *ngIf="info">{{ info }}</mat-icon>
+                <i *ngIf="info" class="icon-breadcrumb {{info}}"></i>
                 <ng-container>{{ breadcrumb | uppercase }}</ng-container>
             </ng-container>
         </xng-breadcrumb>
     </div>
     <ng-template #separatorTemplate>
-        <mat-icon>arrow_right</mat-icon>
+        <i class="fa-solid fa-caret-right"></i>
     </ng-template>
     <div class="pq-form-body">
         <div class="contractor-stepper">
             <mat-stepper #stepper [orientation]="(stepperOrientation | async)!"
                 *ngIf="userRole?.includes('contractor')">
+                <ng-template matStepperIcon="edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </ng-template>
+                <ng-template matStepperIcon="error">
+                    <i class="icon-error fa-solid fa-triangle-exclamation"></i>
+                </ng-template>
                 <ng-template matStepperIcon="general_notes">
-                    <mat-icon>description</mat-icon>
+                    <i class="fa-solid fa-clipboard"></i>
                 </ng-template>
                 <mat-step label="General Notes" state="general_notes" [completed]="false">
                     <div>
@@ -44,22 +50,16 @@
                         </ol>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
-                        <button mat-button matStepperPrevious>
-                            <div fxLayout="row" fxLayoutAlign="space-between center">
-                                <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
-                                <span>Previous</span>
-                            </div>
-                        </button>
                         <button mat-button matStepperNext>
-                            <div fxLayout="row" fxLayoutAlign="space-between center">
-                                <span>Next</span>
-                                <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                <div><span>Next</span></div>
+                                <div><i class="fa-solid fa-angle-right"></i></div>
                             </div>
                         </button>
                     </div>
                 </mat-step>
                 <ng-template matStepperIcon="vendor_info">
-                    <mat-icon>business</mat-icon>
+                    <i class="fa-solid fa-city"></i>
                 </ng-template>
                 <mat-step label="Vendor's General Company Information" state="vendor_info" [completed]="false">
                     <form [formGroup]="contractorPqForm">
@@ -302,22 +302,22 @@
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                             <button mat-button matStepperPrevious>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
-                                    <span>Previous</span>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <span>Next</span>
-                                    <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><span>Next</span></div>
+                                    <div><i class="fa-solid fa-angle-right"></i></div>
                                 </div>
                             </button>
                         </div>
                     </form>
                 </mat-step>
                 <ng-template matStepperIcon="performance_pref">
-                    <mat-icon>room_preferences</mat-icon>
+                    <i class="fa-solid fa-check-double"></i>
                 </ng-template>
                 <mat-step label="Performance Preferences" state="performance_pref" [completed]="false">
                     <form>
@@ -332,7 +332,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons">label_important_outline</span>
+                                                <i class="icon-20p fa-solid fa-list-check"></i>
                                                 <span>Client References of 3 Major Projects</span>
                                             </div>
                                         </mat-panel-title>
@@ -348,8 +348,8 @@
                                         <div fxLayoutAlign="end">
                                             <button mat-stroked-button *ngIf="clientRefProject2ColumnDefs"
                                                 (click)="onBtIncludeProject2Columns()">
-                                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                                                    <mat-icon style="font-size: 20px;">add</mat-icon>
+                                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                                    <div><i style="font-size: 16px;" class="fa-solid fa-plus"></i></div>
                                                     <span>Add Project</span>
                                                 </div>
                                             </button>
@@ -365,7 +365,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">repeat</span>
+                                                <i class="icon-20p fa-solid fa-layer-group"></i>
                                                 <span>Projects of Similar Nature</span>
                                             </div>
                                         </mat-panel-title>
@@ -390,9 +390,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    privacy_tip
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-building-shield"></i>
                                                 <span>Statutory Compliances</span>
                                             </div>
                                         </mat-panel-title>
@@ -416,9 +414,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    zoom_in
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-hand-fist"></i>
                                                 <span>Employees Strength</span>
                                             </div>
                                         </mat-panel-title>
@@ -443,9 +439,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    category
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-building-circle-check"></i>
                                                 <span>Capital Equipments</span>
                                             </div>
                                         </mat-panel-title>
@@ -471,9 +465,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    lock
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-shield"></i>
                                                 <span>Safety Policy and Systems</span>
                                             </div>
                                         </mat-panel-title>
@@ -496,22 +488,22 @@
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                             <button mat-button matStepperPrevious>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
-                                    <span>Previous</span>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <span>Next</span>
-                                    <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><span>Next</span></div>
+                                    <div><i class="fa-solid fa-angle-right"></i></div>
                                 </div>
                             </button>
                         </div>
                     </form>
                 </mat-step>
                 <ng-template matStepperIcon="financial_info">
-                    <mat-icon>account_balance_wallet</mat-icon>
+                    <i class="fa-solid fa-wallet"></i>
                 </ng-template>
                 <mat-step label="Financial Information" state="financial_info" [completed]="false">
                     <form>
@@ -538,9 +530,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    request_quote
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-indian-rupee-sign"></i>
                                                 <span>Financial Information</span>
                                             </div>
                                         </mat-panel-title>
@@ -565,9 +555,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    account_balance
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-piggy-bank"></i>
                                                 <span>Company Bankers</span>
                                             </div>
                                         </mat-panel-title>
@@ -586,9 +574,7 @@
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                <span class="material-icons-outlined">
-                                                    fact_check
-                                                </span>
+                                                <i class="icon-20p fa-solid fa-person-circle-check"></i>
                                                 <span>Company Auditors</span>
                                             </div>
                                         </mat-panel-title>
@@ -608,22 +594,22 @@
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
                             <button mat-button matStepperPrevious>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
-                                    <span>Previous</span>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <span>Next</span>
-                                    <mat-icon class="arrow-icons">keyboard_arrow_right</mat-icon>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><span>Next</span></div>
+                                    <div><i class="fa-solid fa-angle-right"></i></div>
                                 </div>
                             </button>
                         </div>
                     </form>
                 </mat-step>
                 <ng-template matStepperIcon="undertaking">
-                    <mat-icon>gavel</mat-icon>
+                    <i class="fa-solid fa-gavel"></i>
                 </ng-template>
                 <mat-step label="Undertaking" state="undertaking" [completed]="false">
                     <form>
@@ -637,21 +623,25 @@
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                             <button mat-button matStepperPrevious>
-                                <div fxLayout="row" fxLayoutAlign="space-between center">
-                                    <mat-icon class="arrow-icons">keyboard_arrow_left</mat-icon>
-                                    <span>Previous</span>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
                                 </div>
                             </button>
                             <button mat-button style="background-color: grey;">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                                    <mat-icon class="Icon">save</mat-icon>
-                                    <div>Save</div>
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-save fa-solid fa-floppy-disk"></i>
+                                        <div>Save</div>
+                                    </div>
                                 </div>
                             </button>
                             <button mat-button (click)="onSubmit()" style="background-color: green;">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-                                    <mat-icon class="Icon">send</mat-icon>
-                                    <div>Submit</div>
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>Submit</div>
+                                    </div>
                                 </div>
                             </button>
                         </div>

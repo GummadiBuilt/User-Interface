@@ -23,7 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true },
+      useValue: { displayDefaultIndicatorType: false, showError: true },
     },
   ],
 })
@@ -38,11 +38,11 @@ export class SignupComponent implements OnInit {
 
   //matchips
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  
+
   filteredTypeOfEstablishments!: Observable<String[]>;
   typeOfEstablishment: typeOfEstablishment[] = [];
   allTypeOfEstablishments: typeOfEstablishment[] = [];
-  typeOfEstablishmentCtrl =  new FormControl('',Validators.required);
+  typeOfEstablishmentCtrl = new FormControl('', Validators.required);
   private allowFreeTextAddTypeOfEst = false;
   roleId: any;
 
@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
-      typeOfEstablishmentCtrl: [this.typeOfEstablishment,Validators.required],
+      typeOfEstablishmentCtrl: [this.typeOfEstablishment, Validators.required],
       address: ['', [Validators.required]],
       country: ['', [Validators.required]],
       state: ['', [Validators.required]],
@@ -81,8 +81,8 @@ export class SignupComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
     });
-     this.getMasterdata();
-     //mtachips
+    this.getMasterdata();
+    //mtachips
     this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
       startWith(null),
       map(typeOfEstb => this.filterOnValueChange(typeOfEstb))
@@ -109,20 +109,20 @@ export class SignupComponent implements OnInit {
       this.citiesList = this.cities.slice();
     });
   }
-  onRegisterValueChange(){
+  onRegisterValueChange() {
     const registerValueSelected = this.companyDetails.get('users')?.value
-    if(registerValueSelected !== 2){
-      this.companyDetails.get('typeOfEstablishmentCtrl')?.disable()           
-  } else {                
-      this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();               
-  }
+    if (registerValueSelected !== 2) {
+      this.companyDetails.get('typeOfEstablishmentCtrl')?.disable()
+    } else {
+      this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();
+    }
   }
 
   add(event: MatChipInputEvent): void {
     // Clear the input value
     if (!this.allowFreeTextAddTypeOfEst) {
       // only allowed to select from the filtered autocomplete list
-     // console.log('allowFreeTextAddTypeOfEst is false');
+      // console.log('allowFreeTextAddTypeOfEst is false');
       return;
     }
     // Only add when MatAutocomplete is not open
@@ -224,7 +224,7 @@ export class SignupComponent implements OnInit {
   }
   onSubmit() {
     this.companyDetails.controls['typeOfEstablishmentCtrl'].setValue(this.typeOfEstablishment.map(item => item.establishmentDescription));
-    console.log('cntrl',this.typeOfEstablishmentCtrl);
+    console.log('cntrl', this.typeOfEstablishmentCtrl);
     if (this.companyDetails.valid && this.personalDetails.valid) {
       const registrationObject = Object.assign({}, this.companyDetails.value, this.personalDetails.value);
       const resultRegistrationObject = new userRegistrationResopnse(registrationObject);
@@ -238,7 +238,7 @@ export class SignupComponent implements OnInit {
         }),
         (error => {
           console.log(error);
-         // this.toastr.error(error);
+          // this.toastr.error(error);
         })
       )
     }

@@ -11,19 +11,20 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
       <a href="#"></a>
       <mat-dialog-actions fxLayoutAlign="end center">
          <button mat-button [mat-dialog-close]="true" class="color">
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-               <mat-icon style="font-size:20px;">check</mat-icon>
-               <span>Yes</span>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+               <i class="icon-16p fa-solid fa-check"></i>
+               <div><span>Yes</span></div>
             </div>
          </button>
          <button mat-button [mat-dialog-close]="false" class="colors">
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-               <mat-icon style="font-size:20px;">close</mat-icon>
-               <span>No</span>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+              <i class="icon-16p fa-solid fa-xmark"></i>
+              <div><span>No</span></div>
             </div>
          </button>
       </mat-dialog-actions>`,
    styles: [`
+      .icon-16p {font-size: 18px;}
       .title {font-size: large;}
       .msg {font-size: medium; padding-bottom:12px;}
       .colors {color: white; background-color: #891010;}

@@ -55,7 +55,7 @@ export class CreateTenderComponent implements OnInit {
       this.tenderId = id;
       if (id) {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
-           //console.log('Tender data by id', data);
+          //console.log('Tender data by id', data);
           this.pqID = data.pqFormId;
           this.editData(data);
           this.tenderFormDisable();
@@ -120,14 +120,15 @@ export class CreateTenderComponent implements OnInit {
       } else { this.rowData = JSON.parse(data.tenderFinanceInfo); }
       this.tenderId = data.tenderId;
       this.fileName = data.tenderDocumentName;
-    }else{
+    } else {
       this.toastr.error('No data to display');
     }
   }
-  onSelected(event:any){
+  onSelected(event: any) {
     if (event != (null || 0)) {
-      this.router.navigate(['/tenders', this.tenderId,'edit-pq-form',event]);
-    } else {
+      this.router.navigate(['/tenders', this.tenderId, 'edit-pq-form', event]);
+    }
+    else {
       this.router.navigate(['/tenders', this.tenderId, 'create-pq-form']);
     }
   }
@@ -182,19 +183,19 @@ export class CreateTenderComponent implements OnInit {
         if (this.btnstate) {
           divElement.innerHTML = `
           <button class="action-disable-button add" disabled>
-            <span style="font-size: 20px" class="material-icons">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
           </button>
           <button class="action-disable-button delete" disabled>
-            <span style="font-size: 20px" class="material-icons">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
           </button>
           `;
         } else {
           divElement.innerHTML = `
           <button class="action-button add" data-action="add">
-            <span style="font-size: 20px" class="material-icons" data-action="add">add</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
           <button class="action-button delete" data-action="delete">
-            <span style="font-size: 20px" class="material-icons" data-action="delete">delete</span>
+            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
         }
