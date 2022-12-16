@@ -12,12 +12,18 @@ import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.compon
 })
 export class ButtonRendererComponent implements ICellRendererAngularComp {
   private params: any;
-  label!: string;
+  public label!: string;
   public rowData: any;
+  public buttonLabel!:string;
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
     this.label = this.rowData.tender_document_name || null;
+    if (this.rowData.pq_id != null) {
+      this.buttonLabel = 'Edit PQ-Form' 
+    }else{
+      this.buttonLabel = 'Create PQ-Form'
+    }
   }
 
   btnClickedHandler(data: any) {
@@ -53,7 +59,6 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     }
   }
   viewPQForm() {
-    console.log(this.rowData.pq_id);
     if (this.rowData.pq_id != null) {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
     }

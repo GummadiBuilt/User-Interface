@@ -23,7 +23,7 @@
         </div>
         <div fxLayoutAlign="center center">
             <div class="status" *ngIf="this.tenderDetails.get('workflowStep')?.value">
-                <span>WorkFlowStep : </span>
+                <span>WorkFlow Step : </span>
                 <span class="text-bold">{{this.tenderDetails.get('workflowStep')?.value}}</span>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
-                    <mat-form-field appearance="outline" *ngIf="tenderId">
+                    <mat-form-field appearance="outline" *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='SAVE'">
                         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
                             <mat-option value={{pqID}}>PQ-Form</mat-option>
                         </mat-select>

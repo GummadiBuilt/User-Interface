@@ -27,6 +27,7 @@ export class TendersComponent implements OnInit {
   fileName = '';
   public domLayout: any;
   StatusValues = StatusValues as unknown as keyof typeof StatusValues;
+  public buttonLabel:any[]=[];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -50,7 +51,27 @@ export class TendersComponent implements OnInit {
   getTendersData() {
     this.ApiServicesService.getTenders().subscribe((data: tenderResopnse) => {
       this.rowData = data;
+      this.rowData.map((val: any) =>{
+        if (val.pq_id != null) {
+          this.buttonLabel.push('Edit PQ-Form'); 
+        }else{
+          this.buttonLabel.push('Create PQ-Form');
+        }
+      })
+      
     });
+  }
+  navigateToPQForm(id:any,pqid:any) {
+    if (pqid != null) {
+      this.router.navigate(['/tenders', id, 'edit-pq-form', pqid]);
+    } else {
+      this.router.navigate(['/tenders', id, 'create-pq-form']);
+    }
+  }
+  viewPQForm(TID:any,pqID:any) {
+    if (pqID != null) {
+      this.router.navigate(['/tenders', TID , 'view-pq-form',pqID]);
+    }
   }
   savedFiltersChanged(event: any) {
     localStorage.setItem('saved-filters', JSON.stringify(event));

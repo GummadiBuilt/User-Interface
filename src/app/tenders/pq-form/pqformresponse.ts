@@ -9,6 +9,7 @@ export class pqFormResponse  {
     public pqLastDateOfSubmission: string;
     public tentativeDateOfAward: string;
     public scheduledCompletion: string;
+    public workflowStep:string;
 
      constructor(d: any) {
         this.id = d.id;
@@ -21,5 +22,6 @@ export class pqFormResponse  {
         this.pqLastDateOfSubmission = d.pqLastDateOfSubmission;
         this.tentativeDateOfAward = d.tentativeDateOfAward;
         this.scheduledCompletion = d.scheduledCompletion;
+        this.workflowStep = d.workflowStep;
        }
  }
