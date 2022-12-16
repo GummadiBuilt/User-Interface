@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import * as _ from 'lodash';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
@@ -17,13 +17,15 @@ import { tenderMasterData, typeOfContracts, typeOfEstablishment } from './create
 import { tenderResopnse } from '../tender/tenderResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
+import { DirtyComponent } from 'src/app/shared/can-deactivate/can-deactivate.guard';
+
 @Component({
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
   styleUrls: ['./create-tender.component.scss'],
   providers: [CurrencyPipe]
 })
-export class CreateTenderComponent implements OnInit {
+export class CreateTenderComponent implements OnInit, DirtyComponent {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
   public userRole: string[] | undefined;
@@ -44,7 +46,7 @@ export class CreateTenderComponent implements OnInit {
   public warningMessage!: string;
   public todayDate!: Date;
   public pqID!: number;
-
+  isDirty = false;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -86,8 +88,12 @@ export class CreateTenderComponent implements OnInit {
     this.getTendersMasterData();
     this.getCommonOptionsData();
     this.todayDate = new Date();
-  }
 
+    this.tenderDetails.valueChanges.subscribe(e => this.isDirty = true);
+  }
+  canDeactivate() {
+    return this.isDirty;
+  }
   getTendersMasterData() {
     this.ApiServicesService.getTenderMasterData().subscribe((data: tenderMasterData) => {
       this.typeOfWorks = data.typeOfEstablishments;

@@ -19,6 +19,10 @@ form mat-label {
     margin-top: 24px !important;
 }
 
+.text-bold {
+    font-weight: 500;
+}
+
 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
     padding: 0.4em 0px 0.8em 0px !important;
     font-size: 12px !important;

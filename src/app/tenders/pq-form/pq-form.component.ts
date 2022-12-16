@@ -3,21 +3,21 @@ import { Component, OnInit, ViewChild, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
-
 import { ApiServicesService } from '../../shared/api-services.service';
 import { pqFormResponse } from './pqformresponse';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+
 @Component({
   selector: 'app-pq-form',
   templateUrl: './pq-form.component.html',
-  styleUrls: ['./pq-form.component.scss']
+  styleUrls: ['./pq-form.component.scss'],
 })
 export class PQFormComponent implements OnInit {
   public adminPqForm!: FormGroup;
-
   safteyPolicyForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
@@ -33,7 +33,6 @@ export class PQFormComponent implements OnInit {
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService, private datePipe: DatePipe,
     private route: ActivatedRoute, private router: Router, private dialog: MatDialog) {
-
     this.route.paramMap.subscribe(params => {
       const tenderId = params.get('tenderId');
       const pqId = params.get('pqId');
@@ -43,16 +42,14 @@ export class PQFormComponent implements OnInit {
           this.getPQForms(data);
           this.pqFormDisable();
         });
-      } else{
+      } else {
         this.ApiServicesService.getTendersDatabyId(tenderId).subscribe((data) => {
           this.adminPqForm.get('workPackage')?.patchValue(data.workDescription);
           this.adminPqForm.get('contractDuration')?.patchValue(data.contractDuration);
           this.adminPqForm.get('durationCounter')?.patchValue(data.durationCounter);
         });
       }
-
     });
-
   }
 
   ngOnInit(): void {
@@ -76,8 +73,6 @@ export class PQFormComponent implements OnInit {
       workflowStep: ['']
     });
     this.getCommonOptions();
-   
-
   }
 
   getCommonOptions() {
@@ -98,7 +93,7 @@ export class PQFormComponent implements OnInit {
     if (data.id != 0) {
       this.pqFormId = data.id
     }
-    if(data.pqDocumentIssueDate){
+    if (data.pqDocumentIssueDate) {
       this.pqDocumentIssueDate = data.pqDocumentIssueDate;
     }
   }
@@ -122,6 +117,7 @@ export class PQFormComponent implements OnInit {
   }
 
   onSave() {
+    console.log(this.adminPqForm.value.scheduledCompletion);
     this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
     // if (this.adminPqForm.value.pqDocumentIssueDate) {
     //   this.adminPqForm.value.pqDocumentIssueDate = this.datePipe.transform(this.adminPqForm.value.pqDocumentIssueDate, 'dd/MM/yyyy');
@@ -161,7 +157,7 @@ export class PQFormComponent implements OnInit {
       this.ApiServicesService.createPQForm(this.pqFormTenderId, this.adminPqForm.value).subscribe({
         next: ((response: pqFormResponse) => {
           this.pqFormId = response.id;
-          this.router.navigate(['/tenders', this.pqFormTenderId , 'edit-pq-form',this.pqFormId]);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-pq-form', this.pqFormId]);
           this.toastr.success('Successfully Created');
         }),
         error: (error => {
@@ -174,7 +170,6 @@ export class PQFormComponent implements OnInit {
     }
   }
   onSubmit() {
-    //console.log(this.adminPqForm.value);
     if (this.pqFormId && this.adminPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: 'Are you sure you want to submit the PQ-Form?', msg: 'Submitting will disable further editing of PQ-Form' }
@@ -231,8 +226,8 @@ export class PQFormComponent implements OnInit {
       this.btnState = true;
       this.adminPqForm.disable();
       //this.warningMessage = this.userRole+' dont have permission to edit the values';
-    } else if(this.userRole?.includes("admin") && (this.adminPqForm.get('workflowStep')?.value == 'PUBLISHED' || 
-    this.pqDocumentIssueDate)){
+    } else if (this.userRole?.includes("admin") && (this.adminPqForm.get('workflowStep')?.value == 'PUBLISHED' ||
+      this.pqDocumentIssueDate)) {
       this.adminPqForm.disable();
       this.btnState = true;
       this.warningMessage = 'Cannot edit the values because PQ-Form Published ';

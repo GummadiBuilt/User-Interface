@@ -22,6 +22,7 @@ import { SignupComponent } from './signup/signup.component';
 import { PQFormComponent } from './tenders/pq-form/pq-form.component';
 import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
+import { PendingChangesGuard } from './shared/can-deactivate/can-deactivate.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -44,7 +45,7 @@ const routes: Routes = [
     path: 'tenders', canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } },
     children: [
       { path: '', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } } },
-      { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'fa-solid fa-square-plus' } } },
+      { path: 'create-tender', component: CreateTenderComponent, canDeactivate: [PendingChangesGuard], canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'fa-solid fa-square-plus' } } },
       { path: 'edit-tender/:tenderId', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'fa-solid fa-pen-to-square' } } },
       {
         path: ':tenderId', data: { breadcrumb: {} },

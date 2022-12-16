@@ -1,29 +1,31 @@
 <div class="pq-form">
-    <div class="breadcrumbs">
-        <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
-            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
-                <ng-container>{{ breadcrumb | uppercase }}</ng-container>
-            </ng-container>
-        </xng-breadcrumb>
-    </div>
-    <ng-template #separatorTemplate>
-        <i class="fa-solid fa-caret-right"></i>
-    </ng-template>
-    <div fxLayoutAlign="center center">
-        <div class="warn" *ngIf="warningMessage" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-            <div>
-                <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <div>
-                <span>{{warningMessage}}</span>
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
+        <div class="breadcrumbs">
+            <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
+                    <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
+        <div fxLayoutAlign="center center">
+            <div class="warn" *ngIf="warningMessage" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div>
+                    <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <span>{{warningMessage}}</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div fxLayoutAlign="end center">
-        <div class="status" *ngIf="this.pqDocumentIssueDate">
-            <span>PQ Submitted Date : </span>
-            <span class="text-bold">{{this.pqDocumentIssueDate}}</span>
+        <div fxLayoutAlign="end center">
+            <div class="status" *ngIf="this.pqDocumentIssueDate">
+                <span>PQ Submitted Date : </span>
+                <span class="text-bold">{{this.pqDocumentIssueDate}}</span>
+            </div>
         </div>
     </div>
     <div class="pq-form-body">
@@ -48,7 +50,8 @@
                             fxLayout="column">
                             <mat-label>Name of Work Package</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name of Work Package" formControlName="workPackage" readonly>
+                                <input matInput placeholder="Name of Work Package" formControlName="workPackage"
+                                    readonly>
                                 <!-- <mat-error *ngIf="adminPqForm.get('workPackage')?.errors?.['required']">
                                     Enter Name of Work Package
                                 </mat-error>
@@ -56,7 +59,6 @@
                                     Enter only 50 characters
                                 </mat-error> -->
                             </mat-form-field>
-
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                             fxLayout="column">
@@ -141,7 +143,8 @@
                             <mat-label>Scheduled Completion *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker4" placeholder="DD/MM/YYYY"
-                                    (click)="picker4.open()" formControlName="scheduledCompletion">
+                                    (click)="picker4.open()" formControlName="scheduledCompletion"
+                                    >
                                 <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                                 <mat-datepicker #picker4></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('scheduledCompletion')?.errors?.['required']">
@@ -149,6 +152,8 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
+                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                            fxLayout="column"></div>
                     </div>
                     <div class="action-btn" *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
                         fxLayoutAlign="end center" fxLayoutGap="24px">

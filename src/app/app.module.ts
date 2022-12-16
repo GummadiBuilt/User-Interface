@@ -34,7 +34,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ErrorInterceptor } from './guard/error.interceptor';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { ButtonRendererComponent } from './renderers/button-renderer/button-renderer.component';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MomentDateAdapter, MomentDateModule } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -52,6 +52,8 @@ import { ActionButtonRendererComponent } from './renderers/action-button-rendere
 import { UploadButtonRendererComponent } from './renderers/upload-button-renderer/upload-button-renderer.component';
 import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
+import { PendingChangesGuard } from './shared/can-deactivate/can-deactivate.guard';
+import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -122,7 +124,7 @@ export const MY_DATE_FORMATS = {
     ActionButtonRendererComponent,
     UploadButtonRendererComponent,
     ViewApplicantsPQFormComponent,
-    ViewApplicantsComponent
+    ViewApplicantsComponent,
   ],
   imports: [
     BrowserModule,
@@ -143,10 +145,13 @@ export const MY_DATE_FORMATS = {
     MatProgressSpinnerModule,
     MatProgressBarModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    DateValueAccessorModule,
+    MomentDateModule,
   ],
   providers: [
     DatePipe,
     LoaderService,
+    PendingChangesGuard,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
