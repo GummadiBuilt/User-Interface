@@ -52,12 +52,6 @@
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Name of Work Package" formControlName="workPackage"
                                     readonly>
-                                <!-- <mat-error *ngIf="adminPqForm.get('workPackage')?.errors?.['required']">
-                                    Enter Name of Work Package
-                                </mat-error>
-                                <mat-error *ngIf="adminPqForm.get('workPackage')?.errors?.['maxlength']">
-                                    Enter only 50 characters
-                                </mat-error> -->
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
@@ -80,38 +74,12 @@
                                 <mat-form-field fxFlex="47%" appearance="outline">
                                     <input matInput numbersOnly placeholder="Project Duration"
                                         formControlName="contractDuration" readonly>
-                                    <!-- <mat-error *ngIf="adminPqForm.get('contractDuration')?.errors?.['required']">
-                                        Contract Duration
-                                    </mat-error>
-                                    <mat-error *ngIf="adminPqForm.get('contractDuration')?.errors?.['maxlength']">
-                                        Enter only 5 digits
-                                    </mat-error> -->
                                 </mat-form-field>
                                 <mat-form-field fxFlex="47%" appearance="outline">
-                                    <mat-select placeholder="Months or Days" formControlName="durationCounter">
-                                        <mat-option *ngFor="let item of pqdurationList" [value]="item.id" disabled>
-                                            {{item.text}}
-                                        </mat-option>
-                                    </mat-select>
-                                    <!-- <mat-error *ngIf="adminPqForm.get('durationCounter')?.errors?.['required']">
-                                        Contract Duration
-                                    </mat-error> -->
+                                    <input matInput formControlName="durationCounter" readonly>
                                 </mat-form-field>
                             </div>
                         </div>
-                        <!-- <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column">
-                            <mat-label>Date of Issue of PQ Document *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker1" placeholder="DD/MM/YYYY"
-                                    (click)="picker1.open()" formControlName="pqDocumentIssueDate">
-                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                                <mat-datepicker #picker1></mat-datepicker>
-                                <mat-error *ngIf="adminPqForm.get('pqDocumentIssueDate')?.errors?.['required']">
-                                    Choose date of issue of pq document
-                                </mat-error>
-                            </mat-form-field>
-                        </div> -->
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                             fxLayout="column">
                             <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
@@ -163,7 +131,7 @@
                                 <div>Save</div>
                             </div>
                         </button>
-                        <button mat-button (click)="onSubmit()" style="background-color: green ;" [disabled]="btnState">
+                        <button  *ngIf="pqFormId" mat-button (click)="onSubmit()" style="background-color: green ;" [disabled]="btnState">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i class="icon-submit fa-solid fa-paper-plane"></i>
                                 <div>Submit</div>

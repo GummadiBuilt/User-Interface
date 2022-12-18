@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild, } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ApiServicesService } from '../../shared/api-services.service';
@@ -18,13 +18,10 @@ import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 })
 export class PQFormComponent implements OnInit {
   public adminPqForm!: FormGroup;
-  safteyPolicyForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
   public pqFormTenderId: any;
   public pqFormId!: any;
-  public pqdurationList!: any;
-  loading = false;
   public pqDocumentIssueDate!: any;
   public btnState: boolean = false;
   public warningMessage!: string;
@@ -61,29 +58,23 @@ export class PQFormComponent implements OnInit {
 
     //Project Info (Admin)
     this.adminPqForm = this._formBuilder.group({
-      projectName: ['', Validators.required],
+      projectName: ['', [Validators.required, Validators.maxLength(50)]],
       workPackage: [''],
       typeOfStructure: ['', [Validators.required, Validators.maxLength(50)]],
       contractDuration: [''],
       durationCounter: [''],
-      // pqDocumentIssueDate: ['', [Validators.required]],
       pqLastDateOfSubmission: ['', [Validators.required]],
       tentativeDateOfAward: ['', [Validators.required]],
       scheduledCompletion: ['', Validators.required],
       workflowStep: ['']
     });
-    this.getCommonOptions();
   }
 
-  getCommonOptions() {
-    this.pqdurationList = [{ id: "MONTHS", text: "MONTHS" }, { id: "DAYS", text: "DAYS" }];
-  }
 
   getPQForms(data: any) {
     this.adminPqForm.get('projectName')?.patchValue(data.projectName);
     this.adminPqForm.get('workPackage')?.patchValue(data.workPackage);
     this.adminPqForm.get('typeOfStructure')?.patchValue(data.typeOfStructure);
-    // this.adminPqForm.get('pqDocumentIssueDate')?.patchValue(this.dateConverstion(data.pqDocumentIssueDate));
     this.adminPqForm.get('pqLastDateOfSubmission')?.patchValue(this.dateConverstion(data.pqLastDateOfSubmission));
     this.adminPqForm.get('tentativeDateOfAward')?.patchValue(this.dateConverstion(data.tentativeDateOfAward));
     this.adminPqForm.get('scheduledCompletion')?.patchValue(this.dateConverstion(data.scheduledCompletion));
@@ -117,14 +108,10 @@ export class PQFormComponent implements OnInit {
   }
 
   onSave() {
-    console.log(this.adminPqForm.value.scheduledCompletion);
+    //console.log(this.adminPqForm.value.scheduledCompletion);
     this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
-    // if (this.adminPqForm.value.pqDocumentIssueDate) {
-    //   this.adminPqForm.value.pqDocumentIssueDate = this.datePipe.transform(this.adminPqForm.value.pqDocumentIssueDate, 'dd/MM/yyyy');
-    // } else {
-    //   this.toastr.error('Please Select Valid PQ Document Issue Date');
-    // }
     if (this.adminPqForm.value.pqLastDateOfSubmission) {
+      //console.log('in save',this.adminPqForm.value.pqLastDateOfSubmission);
       this.adminPqForm.value.pqLastDateOfSubmission = this.datePipe.transform(this.adminPqForm.value.pqLastDateOfSubmission, 'dd/MM/yyyy');
     } else {
       this.toastr.error('Please Select Valid PQ Last Date of Submission');
@@ -139,8 +126,6 @@ export class PQFormComponent implements OnInit {
     } else {
       this.toastr.error('Please Select Valid Scheduled Completion');
     }
-
-    this.loading = true;
     //console.log(this.adminPqForm.value, this.pqFormId);
     if (this.pqFormId && this.adminPqForm.valid) {
       //console.log('update form');
@@ -177,11 +162,6 @@ export class PQFormComponent implements OnInit {
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
           this.adminPqForm.controls['workflowStep'].setValue('PUBLISHED');
-          // if (this.adminPqForm.value.pqDocumentIssueDate) {
-          //   this.adminPqForm.value.pqDocumentIssueDate = this.datePipe.transform(this.adminPqForm.value.pqDocumentIssueDate, 'dd/MM/yyyy');
-          // } else {
-          //   this.toastr.error('Please Select Valid PQ Document Issue Date');
-          // }
           if (this.adminPqForm.value.pqLastDateOfSubmission) {
             this.adminPqForm.value.pqLastDateOfSubmission = this.datePipe.transform(this.adminPqForm.value.pqLastDateOfSubmission, 'dd/MM/yyyy');
           } else {
@@ -197,9 +177,6 @@ export class PQFormComponent implements OnInit {
           } else {
             this.toastr.error('Please Select Valid Scheduled Completion');
           }
-
-          this.loading = true;
-
           //console.log('update form');
           this.ApiServicesService.updatePQForm(this.pqFormTenderId, this.pqFormId, this.adminPqForm.value).subscribe({
             next: ((response: pqFormResponse) => {
@@ -225,7 +202,6 @@ export class PQFormComponent implements OnInit {
     if (this.userRole?.includes("client") || this.userRole?.includes("contractor")) {
       this.btnState = true;
       this.adminPqForm.disable();
-      //this.warningMessage = this.userRole+' dont have permission to edit the values';
     } else if (this.userRole?.includes("admin") && (this.adminPqForm.get('workflowStep')?.value == 'PUBLISHED' ||
       this.pqDocumentIssueDate)) {
       this.adminPqForm.disable();

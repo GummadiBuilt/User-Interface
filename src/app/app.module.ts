@@ -53,7 +53,10 @@ import { UploadButtonRendererComponent } from './renderers/upload-button-rendere
 import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 import { PendingChangesGuard } from './shared/can-deactivate/can-deactivate.guard';
-import { DateValueAccessorModule } from 'angular-date-value-accessor';
+import { UnitCellRendererComponent } from './renderers/unit-cell-renderer/unit-cell-renderer.component';
+import { NumericCellRendererComponent } from './renderers/numeric-cell-renderer/numeric-cell-renderer.component';
+import { DateDirective } from './shared/date.directive';
+//import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -125,6 +128,9 @@ export const MY_DATE_FORMATS = {
     UploadButtonRendererComponent,
     ViewApplicantsPQFormComponent,
     ViewApplicantsComponent,
+    UnitCellRendererComponent,
+    NumericCellRendererComponent,
+    DateDirective,
   ],
   imports: [
     BrowserModule,
@@ -145,7 +151,7 @@ export const MY_DATE_FORMATS = {
     MatProgressSpinnerModule,
     MatProgressBarModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    DateValueAccessorModule,
+  //  DateValueAccessorModule,
     MomentDateModule,
   ],
   providers: [

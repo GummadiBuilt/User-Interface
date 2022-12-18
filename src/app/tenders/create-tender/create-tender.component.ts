@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
-import * as _ from 'lodash';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
 import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
@@ -18,6 +17,9 @@ import { tenderResopnse } from '../tender/tenderResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 import { DirtyComponent } from 'src/app/shared/can-deactivate/can-deactivate.guard';
+import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
+import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-create-tender',
@@ -170,13 +172,23 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   public rowData: any[] = [{ "Item No": 0, "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
+  units = ['ton', 'kilogram', 'grams'];
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
     { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
-    { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
-    { field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
+    { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, 
+      cellRenderer: UnitCellRendererComponent,
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: this.units,
+      },  
+    },
+    { field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, 
+      // uses a custom Cell Editor
+      cellEditor: NumericCellRendererComponent
+    },
     {
       headerName: "Action", flex: 1, minWidth: 150,
       cellRenderer: (params: any) => {
@@ -256,7 +268,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
-      const newRow = { 'Item No': 0, 'Item Description': '', 'Unit': '', 'Quantity': 0 };
+      const newRow = { 'Item No': '', 'Item Description': '', 'Unit': '', 'Quantity': '' };
       const newIndex = params.node.rowIndex + 1;
       if (action === "add") {
         this.gridApi.applyTransaction({
