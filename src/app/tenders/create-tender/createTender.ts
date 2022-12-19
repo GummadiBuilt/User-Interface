@@ -20,3 +20,10 @@ export interface tenderMasterData extends typeOfEstablishment, typeOfContracts {
     typeOfEstablishments: Array<typeOfEstablishment>,
     typeOfContracts: Array<typeOfContracts>
 }
+
+export interface tableExport {
+    "Item No": string,
+    "Item Description": string,
+    Unit: string,
+    Quantity: string
+}

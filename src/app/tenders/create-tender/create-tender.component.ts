@@ -12,7 +12,7 @@ import {
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { ApiServicesService, toastPayload } from '../../shared/api-services.service';
-import { tenderMasterData, typeOfContracts, typeOfEstablishment } from './createTender';
+import { tenderMasterData, typeOfContracts, typeOfEstablishment, tableExport } from './createTender';
 import { tenderResopnse } from '../tender/tenderResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
@@ -20,6 +20,7 @@ import { DirtyComponent } from 'src/app/shared/can-deactivate/can-deactivate.gua
 import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import _ from 'lodash';
+import { isNgTemplate } from '@angular/compiler';
 
 @Component({
   selector: 'app-create-tender',
@@ -186,7 +187,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   public rowData: any[] = [{ "Item No": 0, "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
-  units = ['ton', 'kilogram', 'grams'];
+  units = ['Ton', 'Square meter', 'Running meter'];
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
@@ -247,9 +248,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     resizable: true,
   };
   onCellValueChanged(event: CellValueChangedEvent) {
-    // console.log(
-    //   'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
-    // );
     const dataItem = [event.node.data];
     this.gridApi.applyTransaction({
       update: dataItem,
@@ -257,7 +255,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   }
   onRowValueChanged(event: any) {
     var data = event.data;
-    // console.log('rowvalue change',event.rowIndex,event.data);
     if (event.rowIndex == 0) {
       this.gridApi.setRowData(this.rowData);
     } else {
@@ -353,8 +350,17 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
+      
       /* save data */
-      const data = XLSX.utils.sheet_to_json(ws);
+      const data: tableExport[] = XLSX.utils.sheet_to_json(ws);
+
+      const errorData = data.filter(item => !this.units.includes(item.Unit));
+
+      if(errorData.length >0){
+        const errorMessage = errorData.map(item => `Item no ${item['Item No']} has invalid unit ${item.Unit}`);
+        this.toastr.error('Encounreted below error(s) when importing ' + errorMessage.join(', '));
+      }
+
       const dataHeaders: string[] = XLSX.utils.sheet_to_json(ws, { header: 1 });
       const diff = _.difference(this.appHeaders, dataHeaders[0]);
       if (diff.length > 0) {
