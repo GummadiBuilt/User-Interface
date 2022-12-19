@@ -10,11 +10,15 @@ export interface DirtyComponent {
 }
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<DirtyComponent> {
-    
+
     constructor(private dialog: MatDialog) { }
 
-    canDeactivate(component: DirtyComponent, next: ActivatedRouteSnapshot, state: RouterStateSnapshot):
-        CanDeactivateType {
+    canDeactivate(
+        component: DirtyComponent,
+        currentRoute: ActivatedRouteSnapshot,
+        currentState: RouterStateSnapshot,
+        nextState?: RouterStateSnapshot
+    ): CanDeactivateType {
         if (component.canDeactivate()) {
             return this.openUnsavedChangesDialog();
         }
@@ -22,6 +26,7 @@ export class PendingChangesGuard implements CanDeactivate<DirtyComponent> {
             return of(true);
         }
     }
+
     private openUnsavedChangesDialog(): Observable<boolean> {
         const dialogRef = this.dialog.open(ConfirmationDlgComponent, {
             data: { title: 'Confirmation?', msg: 'Are you sure you want to leave the page?' }

@@ -108,7 +108,7 @@ export class PQFormComponent implements OnInit {
   }
 
   onSave() {
-    //console.log(this.adminPqForm.value.scheduledCompletion);
+    console.log(this.adminPqForm.value.scheduledCompletion);
     this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
     if (this.adminPqForm.value.pqLastDateOfSubmission) {
       //console.log('in save',this.adminPqForm.value.pqLastDateOfSubmission);

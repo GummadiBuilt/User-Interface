@@ -27,7 +27,7 @@ export class TendersComponent implements OnInit {
   fileName = '';
   public domLayout: any;
   StatusValues = StatusValues as unknown as keyof typeof StatusValues;
-  public buttonLabel:any[]=[];
+  public buttonLabel: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
@@ -51,26 +51,26 @@ export class TendersComponent implements OnInit {
   getTendersData() {
     this.ApiServicesService.getTenders().subscribe((data: tenderResopnse) => {
       this.rowData = data;
-      this.rowData.map((val: any) =>{
+      this.rowData.map((val: any) => {
         if (val.pq_id != null) {
-          this.buttonLabel.push('Edit PQ-Form'); 
-        }else{
+          this.buttonLabel.push('Edit PQ-Form');
+        } else {
           this.buttonLabel.push('Create PQ-Form');
         }
       })
-      
+
     });
   }
-  navigateToPQForm(id:any,pqid:any) {
+  navigateToPQForm(id: any, pqid: any) {
     if (pqid != null) {
       this.router.navigate(['/tenders', id, 'edit-pq-form', pqid]);
     } else {
       this.router.navigate(['/tenders', id, 'create-pq-form']);
     }
   }
-  viewPQForm(TID:any,pqID:any) {
+  viewPQForm(TID: any, pqID: any) {
     if (pqID != null) {
-      this.router.navigate(['/tenders', TID , 'view-pq-form',pqID]);
+      this.router.navigate(['/tenders', TID, 'view-pq-form', pqID]);
     }
   }
   savedFiltersChanged(event: any) {
@@ -98,27 +98,28 @@ export class TendersComponent implements OnInit {
   public gridOptions!: any;
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Tender ID', field: 'tender_id', filter: 'agTextColumnFilter', pinned: 'left',
+      headerName: 'Tender ID', field: 'tender_id', flex: 1, filter: 'agTextColumnFilter', pinned: 'left',
       cellRenderer: function (params: any) {
         const id = `<a href=/tenders/edit-tender/${params.value}>${params.value}</a>`;
         return id;
       }
     },
-    { headerName: 'Client Name', field: 'company_name', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Description', field: 'work_description', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Type of Contract', field: 'type_of_contract', filter: 'agTextColumnFilter' },
-    { headerName: 'Type of Work', field: 'establishment_description', filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Status', field: 'workflow_step', filter: 'agTextColumnFilter',
-      cellRenderer:function(data:any) {
+    { headerName: 'Client Name', field: 'company_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Description', field: 'work_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Type of Work', field: 'establishment_description', flex: 2, minWidth: 300, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    {
+      headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter',
+      cellRenderer: function (data: any) {
         return (data.value !== null && data.value !== undefined)
-                ? StatusValues[data.value as keyof typeof StatusValues] : 'not found';
+          ? StatusValues[data.value as keyof typeof StatusValues] : 'not found';
       }
     },
-    { headerName: 'Location', field: 'project_location', filter: 'agTextColumnFilter' },
-    { headerName: 'Last Date of Submission', field: 'last_date_of_submission', filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Contract Duration', field: 'contract_duration', filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
+    { headerName: 'Location', field: 'project_location', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
+    { headerName: 'Contract Duration', field: 'contract_duration', flex: 1, filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
     {
-      headerName: 'Action', field: 'tender_document_name', cellRenderer: ButtonRendererComponent,
+      headerName: 'Action', field: 'tender_document_name', flex: 1, cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
         context: this
       },
@@ -138,7 +139,6 @@ export class TendersComponent implements OnInit {
 
   // DefaultColDef sets props common to all Columns
   public defaultColDef: ColDef = {
-    flex: 1,
     minWidth: 200,
     resizable: true,
     menuTabs: ['filterMenuTab'],
@@ -151,7 +151,7 @@ export class TendersComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
-   // console.log(this.userRole);
+    // console.log(this.userRole);
     if (this.userRole?.includes("client")) {
       this.agGrid.columnApi.setColumnVisible('company_name', false);
     }

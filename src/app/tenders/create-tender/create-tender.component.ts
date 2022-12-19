@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
@@ -91,9 +91,21 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     this.getCommonOptionsData();
     this.todayDate = new Date();
 
-    this.tenderDetails.valueChanges.subscribe(e => this.isDirty = true);
+    // console.log(this.tenderDetails);
+    //Unsaved changes alert on page redirection
+    if (!this.tenderId) {
+      this.tenderDetails.valueChanges.subscribe(e => this.isDirty = true);
+    } else if (this.tenderId) {
+      this.tenderDetails.valueChanges.subscribe(e => {
+        if (this.tenderDetails.dirty) {
+          this.isDirty = true;
+        }
+      });
+    }
   }
+
   canDeactivate() {
+    // console.log(this.isDirty);
     return this.isDirty;
   }
   getTendersMasterData() {
@@ -146,6 +158,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     this.isFileUploaded = true;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
+      this.isDirty = true;
     }
     else {
       this.file = null;
@@ -155,6 +168,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   removeSelectedFile(f: any) {
     if (f) {
       this.file = null;
+      this.isDirty = false;
     }
   }
   downloadSelectedFile(id: any) {
@@ -178,14 +192,16 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   public columnDefs: ColDef[] = [
     { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
-    { field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, 
+    {
+      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
       cellRenderer: UnitCellRendererComponent,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
         values: this.units,
-      },  
+      },
     },
-    { field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, 
+    {
+      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
       // uses a custom Cell Editor
       cellEditor: NumericCellRendererComponent
     },
@@ -200,19 +216,19 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
         });
         if (this.btnstate) {
           divElement.innerHTML = `
-          <button class="action-disable-button add" disabled>
+          <button class="action-disable-button add" type="button" disabled>
             <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
           </button>
-          <button class="action-disable-button delete" disabled>
+          <button class="action-disable-button delete" type="button" disabled>
             <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
           </button>
           `;
         } else {
           divElement.innerHTML = `
-          <button class="action-button add" data-action="add">
+          <button class="action-button add" type="button" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
-          <button class="action-button delete" data-action="delete">
+          <button class="action-button delete" type="button" data-action="delete">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
@@ -243,11 +259,12 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     var data = event.data;
     // console.log('rowvalue change',event.rowIndex,event.data);
     if (event.rowIndex == 0) {
-      this.gridApi.setRowData(this.rowData)
+      this.gridApi.setRowData(this.rowData);
     } else {
       const addDataItem = [event.node.data];
       this.gridApi.applyTransaction({ update: addDataItem });
     }
+    this.isDirty = true;
     this.gridApi.refreshCells();
   }
   onBtStopEditing() {
@@ -290,6 +307,9 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
           remove: [params.node.data]
         });
         this.rowData.splice(params.rowIndex, 1);
+        if (params.rowIndex == 0) {
+          this.isDirty = false;
+        }
         this.gridApi.refreshCells();
       }
     }
@@ -343,6 +363,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       else {
         // Data will be logged in array format containing objects
         this.rowData = data;
+        this.isDirty = true;
       }
     };
   }
@@ -379,6 +400,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
         next: ((response: tenderResopnse) => {
+          this.isDirty = false;
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -390,6 +412,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       this.ApiServicesService.createTender(formData).subscribe({
         next: ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
+          this.isDirty = false; //dont ask leaving confirmation on save(redirecting to edit page)
           this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),

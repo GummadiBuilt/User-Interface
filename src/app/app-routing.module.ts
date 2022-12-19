@@ -46,7 +46,7 @@ const routes: Routes = [
     children: [
       { path: '', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } } },
       { path: 'create-tender', component: CreateTenderComponent, canDeactivate: [PendingChangesGuard], canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'fa-solid fa-square-plus' } } },
-      { path: 'edit-tender/:tenderId', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'fa-solid fa-pen-to-square' } } },
+      { path: 'edit-tender/:tenderId', component: CreateTenderComponent, canDeactivate: [PendingChangesGuard], data: { breadcrumb: { label: 'Edit Tender', info: 'fa-solid fa-pen-to-square' } } },
       {
         path: ':tenderId', data: { breadcrumb: {} },
         children: [
