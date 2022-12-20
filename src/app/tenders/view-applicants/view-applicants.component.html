@@ -1,0 +1,10 @@
+<div class="view-applicants">
+    <h2>View Applicants</h2>
+    <div>
+        <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [domLayout]="domLayout" [columnDefs]="columnDefs"
+            [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragManaged]="true"
+            [suppressMoveWhenRowDragging]="true" (gridReady)="onGridReady($event)"
+            (rowDragLeave)="onRowDragLeave($event)">
+        </ag-grid-angular>
+    </div>
+</div>

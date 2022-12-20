@@ -40,11 +40,6 @@ mat-stepper {
     color: #fff !important;
 }
 
-// ::ng-deep .mat-step-icon .mat-icon {
-//     background-color: #841618 !important;
-//     color: #fff !important;
-// }
-
 ::ng-deep .mat-step-header .mat-step-icon-state-edit {
     background-color: #841618 !important;
     color: #fff !important;
@@ -88,4 +83,30 @@ form mat-label {
 ::ng-deep .mat-select-panel {
     margin-left: 8px !important;
     border-radius: 10px !important;
+}
+
+.icon-20p {
+    font-size: 20px;
+}
+
+.icon-gray {
+    color: gray;
+}
+
+.icon-error {
+    font-size: 20px;
+}
+
+::ng-deep .mat-step-header .mat-step-icon {
+    background-color: rgb(0, 99, 165) !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-error {
+    background-color: white !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-edit {
+    background-color: #841618 !important;
+    color: white !important;
 }

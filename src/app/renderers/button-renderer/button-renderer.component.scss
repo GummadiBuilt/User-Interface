@@ -21,9 +21,16 @@
     margin: 0 !important;
 }
 
+::ng-deep .mat-tooltip {
+    background-color: #841618 !important;
+}
 
-::ng-deep .button-download {
-    background-color: #841618;
-    color: white;
-    
+.download-icon {
+    cursor: pointer;
+}
+
+.icon-download {
+    cursor: pointer;
+    color: #841618;
+    font-size: 22px;
 }
