@@ -14,14 +14,17 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   private params: any;
   public label!: string;
   public rowData: any;
-  public buttonLabel!:string;
+  public buttonLabel!: string;
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
     this.label = this.rowData.tender_document_name || null;
-    if (this.rowData.pq_id != null) {
-      this.buttonLabel = 'Edit PQ-Form' 
-    }else{
+    if (this.rowData.pq_id != null && this.rowData.workflow_step == 'YET_TO_BE_PUBLISHED') {
+      this.buttonLabel = 'Edit PQ-Form'
+    } else if (this.rowData.pq_id != null && this.rowData.workflow_step == 'PUBLISHED') {
+      this.buttonLabel = 'View PQ-Form'
+    }
+    else {
       this.buttonLabel = 'Create PQ-Form'
     }
   }

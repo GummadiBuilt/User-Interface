@@ -16,11 +16,10 @@ import { tenderMasterData, typeOfContracts, typeOfEstablishment, tableExport } f
 import { tenderResopnse } from '../tender/tenderResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
-import { DirtyComponent } from 'src/app/shared/can-deactivate/can-deactivate.guard';
 import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import _ from 'lodash';
-import { isNgTemplate } from '@angular/compiler';
+import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 
 @Component({
   selector: 'app-create-tender',
@@ -28,7 +27,7 @@ import { isNgTemplate } from '@angular/compiler';
   styleUrls: ['./create-tender.component.scss'],
   providers: [CurrencyPipe]
 })
-export class CreateTenderComponent implements OnInit, DirtyComponent {
+export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
   public userRole: string[] | undefined;
@@ -49,7 +48,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   public warningMessage!: string;
   public todayDate!: Date;
   public pqID!: number;
-  isDirty = false;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -91,24 +89,12 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     this.getTendersMasterData();
     this.getCommonOptionsData();
     this.todayDate = new Date();
-
-    // console.log(this.tenderDetails);
-    //Unsaved changes alert on page redirection
-    if (!this.tenderId) {
-      this.tenderDetails.valueChanges.subscribe(e => this.isDirty = true);
-    } else if (this.tenderId) {
-      this.tenderDetails.valueChanges.subscribe(e => {
-        if (this.tenderDetails.dirty) {
-          this.isDirty = true;
-        }
-      });
-    }
   }
 
-  canDeactivate() {
-    // console.log(this.isDirty);
-    return this.isDirty;
+  canDeactivate(): boolean {
+    return this.tenderDetails.dirty;
   }
+
   getTendersMasterData() {
     this.ApiServicesService.getTenderMasterData().subscribe((data: tenderMasterData) => {
       this.typeOfWorks = data.typeOfEstablishments;
@@ -159,7 +145,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     this.isFileUploaded = true;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
-      this.isDirty = true;
+      this.tenderDetails.markAsDirty();
     }
     else {
       this.file = null;
@@ -169,7 +155,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   removeSelectedFile(f: any) {
     if (f) {
       this.file = null;
-      this.isDirty = false;
     }
   }
   downloadSelectedFile(id: any) {
@@ -261,7 +246,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       const addDataItem = [event.node.data];
       this.gridApi.applyTransaction({ update: addDataItem });
     }
-    this.isDirty = true;
     this.gridApi.refreshCells();
   }
   onBtStopEditing() {
@@ -304,9 +288,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
           remove: [params.node.data]
         });
         this.rowData.splice(params.rowIndex, 1);
-        if (params.rowIndex == 0) {
-          this.isDirty = false;
-        }
         this.gridApi.refreshCells();
       }
     }
@@ -342,6 +323,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
     const reader: FileReader = new FileReader();
     reader.readAsBinaryString(target.files[0]);
     reader.onload = (e: any) => {
+      this.tenderDetails.markAsDirty();
       /* create workbook */
       const binarystr: string = e.target.result;
       const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
@@ -350,13 +332,13 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-      
+
       /* save data */
       const data: tableExport[] = XLSX.utils.sheet_to_json(ws);
 
       const errorData = data.filter(item => !this.units.includes(item.Unit));
 
-      if(errorData.length >0){
+      if (errorData.length > 0) {
         const errorMessage = errorData.map(item => `Item no ${item['Item No']} has invalid unit ${item.Unit}`);
         this.toastr.error('Encounreted below error(s) when importing ' + errorMessage.join(', '));
       }
@@ -369,7 +351,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       else {
         // Data will be logged in array format containing objects
         this.rowData = data;
-        this.isDirty = true;
       }
     };
   }
@@ -388,8 +369,8 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
   exportExcelFile() {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
-
   onSave() {
+    console.log(this.tenderDetails.value.lastDateOfSubmission);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('SAVE');
     if (this.tenderDetails.value.lastDateOfSubmission) {
@@ -406,7 +387,6 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
         next: ((response: tenderResopnse) => {
-          this.isDirty = false;
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -418,7 +398,7 @@ export class CreateTenderComponent implements OnInit, DirtyComponent {
       this.ApiServicesService.createTender(formData).subscribe({
         next: ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
-          this.isDirty = false; //dont ask leaving confirmation on save(redirecting to edit page)
+          this.tenderDetails.markAsPristine();
           this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),

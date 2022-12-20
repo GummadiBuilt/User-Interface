@@ -195,6 +195,11 @@ li {
     background: white;
     padding: 8px 16px 8px 16px !important;
 }
+
 button.mat-button-disabled {
+    cursor: not-allowed;
+}
+
+.readonly-disabled input:disabled {
     cursor: not-allowed;
 }

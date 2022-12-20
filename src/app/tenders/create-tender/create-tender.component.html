@@ -33,7 +33,8 @@
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
-                    <mat-form-field appearance="outline" *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='SAVE'">
+                    <mat-form-field appearance="outline"
+                        *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='SAVE'">
                         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
                             <mat-option value={{pqID}}>PQ-Form</mat-option>
                         </mat-select>
@@ -133,7 +134,7 @@
                         <mat-label>Last Date of Submission *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="picker" [min]="todayDate" placeholder="DD/MM/YYYY"
-                                formControlName="lastDateOfSubmission" (click)="picker.open()">
+                                [formControlName]="'lastDateOfSubmission'" (click)="picker.open()">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-error *ngIf="tenderDetails.get('lastDateOfSubmission')?.errors?.['required']">

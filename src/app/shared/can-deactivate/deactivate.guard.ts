@@ -1,20 +1,20 @@
-import { Injectable } from "@angular/core";
+import { HostListener, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { ConfirmationDlgComponent } from "../confirmation-dlg.component";
 
 type CanDeactivateType = Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
-export interface DirtyComponent {
+export interface ComponentCanDeactivate {
     canDeactivate: () => CanDeactivateType;
 }
-@Injectable()
-export class PendingChangesGuard implements CanDeactivate<DirtyComponent> {
 
+@Injectable()
+export class DeactivateGuard implements CanDeactivate<ComponentCanDeactivate> {
     constructor(private dialog: MatDialog) { }
 
     canDeactivate(
-        component: DirtyComponent,
+        component: ComponentCanDeactivate,
         currentRoute: ActivatedRouteSnapshot,
         currentState: RouterStateSnapshot,
         nextState?: RouterStateSnapshot

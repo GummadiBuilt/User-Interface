@@ -52,10 +52,10 @@ import { ActionButtonRendererComponent } from './renderers/action-button-rendere
 import { UploadButtonRendererComponent } from './renderers/upload-button-renderer/upload-button-renderer.component';
 import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
-import { PendingChangesGuard } from './shared/can-deactivate/can-deactivate.guard';
 import { UnitCellRendererComponent } from './renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { NumericCellRendererComponent } from './renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import { DateDirective } from './shared/date.directive';
+import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -157,7 +157,7 @@ export const MY_DATE_FORMATS = {
   providers: [
     DatePipe,
     LoaderService,
-    PendingChangesGuard,
+    DeactivateGuard,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,

@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild, } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ApiServicesService } from '../../shared/api-services.service';
@@ -9,14 +9,14 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 
 @Component({
   selector: 'app-pq-form',
   templateUrl: './pq-form.component.html',
   styleUrls: ['./pq-form.component.scss'],
 })
-export class PQFormComponent implements OnInit {
+export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public adminPqForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
@@ -59,10 +59,10 @@ export class PQFormComponent implements OnInit {
     //Project Info (Admin)
     this.adminPqForm = this._formBuilder.group({
       projectName: ['', [Validators.required, Validators.maxLength(50)]],
-      workPackage: [''],
+      workPackage: [{ value: '', disabled: true }],
       typeOfStructure: ['', [Validators.required, Validators.maxLength(50)]],
-      contractDuration: [''],
-      durationCounter: [''],
+      contractDuration: [{ value: '', disabled: true }],
+      durationCounter: [{ value: '', disabled: true }],
       pqLastDateOfSubmission: ['', [Validators.required]],
       tentativeDateOfAward: ['', [Validators.required]],
       scheduledCompletion: ['', Validators.required],
@@ -70,6 +70,9 @@ export class PQFormComponent implements OnInit {
     });
   }
 
+  canDeactivate(): boolean {
+    return this.adminPqForm.dirty;
+  }
 
   getPQForms(data: any) {
     this.adminPqForm.get('projectName')?.patchValue(data.projectName);
@@ -142,6 +145,7 @@ export class PQFormComponent implements OnInit {
       this.ApiServicesService.createPQForm(this.pqFormTenderId, this.adminPqForm.value).subscribe({
         next: ((response: pqFormResponse) => {
           this.pqFormId = response.id;
+          this.adminPqForm.markAsPristine();
           this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-pq-form', this.pqFormId]);
           this.toastr.success('Successfully Created');
         }),
