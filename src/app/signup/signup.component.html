@@ -12,7 +12,7 @@
             </ng-template>
             <mat-step [stepControl]="companyDetails" errorMessage="Fill required company details."
                 label="Company Details" state="company_details" [completed]="false">
-                <form [formGroup]="companyDetails">
+                <form [formGroup]="companyDetails" autocomplete="off">
                     <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
