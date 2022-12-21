@@ -55,6 +55,7 @@ const routes: Routes = [
           { path: 'edit-pq-form/:pqId', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           { path: 'view-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           { path: 'create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'edit-applicants-pq-form/:applicationId', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           { path: 'view-applicants', component: ViewApplicantsComponent, },
         ]
       },

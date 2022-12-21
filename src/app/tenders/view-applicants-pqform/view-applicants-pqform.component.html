@@ -62,7 +62,7 @@
                     <i class="fa-solid fa-city"></i>
                 </ng-template>
                 <mat-step label="Vendor's General Company Information" state="vendor_info" [completed]="false">
-                    <form [formGroup]="contractorPqForm">
+                    <form [formGroup]="applicantPqForm">
                         <div>
                             <h3 class="info-header">Company Details</h3>
                             <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
@@ -70,11 +70,11 @@
                                     fxLayout="column">
                                     <mat-label>Company Name in Full *</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input formControlName="nameOfCompany" matInput placeholder="Company Name">
-                                        <mat-error *ngIf="contractorPqForm.get('nameOfCompany')?.errors?.['required']">
+                                        <input formControlName="companyName" matInput placeholder="Company Name">
+                                        <mat-error *ngIf="applicantPqForm.get('companyName')?.errors?.['required']">
                                             Company Name is required
                                         </mat-error>
-                                        <mat-error *ngIf="contractorPqForm.get('nameOfCompany')?.errors?.['maxlength']">
+                                        <mat-error *ngIf="applicantPqForm.get('companyName')?.errors?.['maxlength']">
                                             Enter only 50 characters
                                         </mat-error>
                                     </mat-form-field>
@@ -86,7 +86,7 @@
                                         <mat-select placeholder="Select Year" formControlName="yearOfEstablishment">
                                             <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="contractorPqForm.get('yearOfEstablishment')?.invalid">
+                                        <mat-error *ngIf="applicantPqForm.get('yearOfEstablishment')?.invalid">
                                             Year of Establishment is required
                                         </mat-error>
                                     </mat-form-field>
@@ -98,7 +98,7 @@
                                         <input formControlName="typeOfEstablishment" matInput
                                             placeholder="Type of Establishment">
                                         <mat-error
-                                            *ngIf="contractorPqForm.get('typeOfEstablishment')?.errors?.['required']">
+                                            *ngIf="applicantPqForm.get('typeOfEstablishment')?.errors?.['required']">
                                             Type of Establishment is required
                                         </mat-error>
                                     </mat-form-field>
@@ -107,10 +107,10 @@
                                     fxLayout="column">
                                     <mat-label>Postal Address [Corporate Office]</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input formControlName="postalAddressCorporate" matInput
+                                        <input formControlName="corpOfficeAddress" matInput
                                             placeholder="Postal Address [Corporate Office]">
                                         <mat-error
-                                            *ngIf="contractorPqForm.get('postalAddressCorporate')?.errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.get('corpOfficeAddress')?.errors?.['maxlength']">
                                             Enter only 250 characters
                                         </mat-error>
                                     </mat-form-field>
@@ -119,27 +119,25 @@
                                     fxLayout="column">
                                     <mat-label>Postal Address [Local Office]</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input formControlName="postalAddressLocal" matInput
+                                        <input formControlName="localOfficeAddress" matInput
                                             placeholder="Postal Address [Local Office]">
                                         <mat-error
-                                            *ngIf="contractorPqForm.get('postalAddressLocal')?.errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.get('localOfficeAddress')?.errors?.['maxlength']">
                                             Enter only 250 characters
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Telephone *</mat-label>
+                                    <mat-label>Telephone</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input numbersOnly formControlName="telephone" matInput placeholder="Telephone">
-                                        <mat-error *ngIf="contractorPqForm.get('telephone')?.errors?.['required']">
-                                            Telephone is required
-                                        </mat-error>
-                                        <mat-error *ngIf="contractorPqForm.controls['telephone'].errors?.['pattern']">
+                                        <input numbersOnly formControlName="telephoneNum" matInput
+                                            placeholder="Telephone">
+                                        <mat-error *ngIf="applicantPqForm.controls['telephoneNum'].errors?.['pattern']">
                                             Please enter valid mobile number
                                         </mat-error>
                                         <mat-error
-                                            *ngIf="contractorPqForm.controls['telephone'].errors?.['minlength'] || contractorPqForm.controls['telephone'].errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.controls['telephoneNum'].errors?.['minlength'] || applicantPqForm.controls['telephoneNum'].errors?.['maxlength']">
                                             Mobile number should be 10 digits
                                         </mat-error>
                                     </mat-form-field>
@@ -148,7 +146,7 @@
                                     fxLayout="column">
                                     <mat-label>Fax</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput formControlName="fax" placeholder="Fax">
+                                        <input matInput formControlName="faxNumber" placeholder="Fax">
                                     </mat-form-field>
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
@@ -162,8 +160,8 @@
                                     fxLayout="column">
                                     <mat-label>Contact Person Name</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput formControlName="contactPerson" placeholder="Contact Person">
-                                        <mat-error *ngIf="contractorPqForm.get('contactPerson')?.errors?.['maxlength']">
+                                        <input matInput formControlName="contactName" placeholder="Contact Person">
+                                        <mat-error *ngIf="applicantPqForm.get('contactName')?.errors?.['maxlength']">
                                             Enter only 50 characters
                                         </mat-error>
                                     </mat-form-field>
@@ -172,10 +170,9 @@
                                     fxLayout="column">
                                     <mat-label>Designation</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput formControlName="contactPersonDesignation"
-                                            placeholder="Designation">
+                                        <input matInput formControlName="contactDesignation" placeholder="Designation">
                                         <mat-error
-                                            *ngIf="contractorPqForm.get('contactPersonDesignation')?.errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.get('contactDesignation')?.errors?.['maxlength']">
                                             Enter only 50 characters
                                         </mat-error>
                                     </mat-form-field>
@@ -184,14 +181,14 @@
                                     fxLayout="column">
                                     <mat-label>Mobile / Tel.</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput numbersOnly formControlName="contactPersonMobile"
+                                        <input matInput numbersOnly formControlName="contactPhoneNum"
                                             placeholder="Mobile / Tel.">
                                         <mat-error
-                                            *ngIf="contractorPqForm.controls['contactPersonMobile'].errors?.['pattern']">
+                                            *ngIf="applicantPqForm.controls['contactPhoneNum'].errors?.['pattern']">
                                             Please enter valid mobile number
                                         </mat-error>
                                         <mat-error
-                                            *ngIf="contractorPqForm.controls['contactPersonMobile'].errors?.['minlength'] || contractorPqForm.controls['contactPersonMobile'].errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.controls['contactPhoneNum'].errors?.['minlength'] || applicantPqForm.controls['contactPhoneNum'].errors?.['maxlength']">
                                             Mobile number should be 10 digits
                                         </mat-error>
                                     </mat-form-field>
@@ -200,9 +197,9 @@
                                     fxLayout="column">
                                     <mat-label>Email ID</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput formControlName="contactPersonEmail" placeholder="Email ID">
+                                        <input matInput formControlName="contactEmailId" placeholder="Email ID">
                                         <mat-error
-                                            *ngIf="contractorPqForm.controls['contactPersonEmail'].errors?.['pattern']">
+                                            *ngIf="applicantPqForm.controls['contactEmailId'].errors?.['pattern']">
                                             Please enter valid email
                                         </mat-error>
                                     </mat-form-field>
@@ -214,10 +211,10 @@
                                     fxLayout="column">
                                     <mat-label>Name of Regional Head / Project Coordinator</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput formControlName="nameOfRegionalHead"
+                                        <input matInput formControlName="regionalHeadName"
                                             placeholder="Name of Regional Head / Project Coordinator">
                                         <mat-error
-                                            *ngIf="contractorPqForm.get('nameOfRegionalHead')?.errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.get('regionalHeadName')?.errors?.['maxlength']">
                                             Enter only 50 characters
                                         </mat-error>
                                     </mat-form-field>
@@ -226,14 +223,14 @@
                                     fxLayout="column">
                                     <mat-label>Mobile No.</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput numbersOnly formControlName="regionalHeadMobile"
+                                        <input matInput numbersOnly formControlName="regionalHeadPhoneNum"
                                             placeholder="Mobile No.">
                                         <mat-error
-                                            *ngIf="contractorPqForm.controls['regionalHeadMobile'].errors?.['pattern']">
+                                            *ngIf="applicantPqForm.controls['regionalHeadPhoneNum'].errors?.['pattern']">
                                             Please enter valid mobile number
                                         </mat-error>
                                         <mat-error
-                                            *ngIf="contractorPqForm.controls['regionalHeadMobile'].errors?.['minlength'] || contractorPqForm.controls['regionalHeadMobile'].errors?.['maxlength']">
+                                            *ngIf="applicantPqForm.controls['regionalHeadPhoneNum'].errors?.['minlength'] || applicantPqForm.controls['regionalHeadPhoneNum'].errors?.['maxlength']">
                                             Mobile number should be 10 digits
                                         </mat-error>
                                     </mat-form-field>
@@ -320,7 +317,7 @@
                     <i class="fa-solid fa-check-double"></i>
                 </ng-template>
                 <mat-step label="Performance Preferences" state="performance_pref" [completed]="false">
-                    <form>
+                    <form [formGroup]="applicantPqForm">
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                 fxLayoutGap="8px">
@@ -357,7 +354,8 @@
                                         <ag-grid-angular class="ag-theme-alpine" [columnDefs]="clientRefColumnDefs"
                                             [defaultColDef]="clientRefDefaultColDef" [rowData]="clientRefRowData"
                                             [domLayout]="domLayout" [editType]="editType"
-                                            (gridReady)="onGridReadyClientRef($event)">
+                                            (gridReady)="onGridReadyClientRef($event)"
+                                            (cellValueChanged)="onCellValueChanged($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -506,7 +504,7 @@
                     <i class="fa-solid fa-wallet"></i>
                 </ng-template>
                 <mat-step label="Financial Information" state="financial_info" [completed]="false">
-                    <form>
+                    <form [formGroup]="applicantPqForm">
                         <div>
                             <ul>
                                 <li>
@@ -612,14 +610,16 @@
                     <i class="fa-solid fa-gavel"></i>
                 </ng-template>
                 <mat-step label="Undertaking" state="undertaking" [completed]="false">
-                    <form>
+                    <form [formGroup]="applicantPqForm">
                         <div class="undertaking" fxLayout="column">
-                            <mat-radio-button class="example-radio-button">
-                                <div>
-                                    The information, facts, details etc disclosed in this document is true and correct.
-                                    We take responsibility for the correctness of the same.
-                                </div>
-                            </mat-radio-button>
+                            <mat-radio-group formControlName="underTaking">
+                                <mat-radio-button class="example-radio-button" [value]="true">
+                                    <div>
+                                        The information, facts, details etc disclosed in this document is true and
+                                        correct. We take responsibility for the correctness of the same.
+                                    </div>
+                                </mat-radio-button>
+                            </mat-radio-group>
                         </div>
                         <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                             <button mat-button matStepperPrevious>
@@ -628,7 +628,7 @@
                                     <div><span>Previous</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;">
+                            <button mat-button style="background-color: grey;" (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -636,7 +636,8 @@
                                     </div>
                                 </div>
                             </button>
-                            <button mat-button (click)="onSubmit()" style="background-color: green;">
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-submit fa-solid fa-paper-plane"></i>

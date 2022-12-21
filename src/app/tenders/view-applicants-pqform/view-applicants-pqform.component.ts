@@ -2,12 +2,16 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CellEditingStartedEvent, CellEditingStoppedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
+import { CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { UploadButtonRendererComponent } from 'src/app/renderers/upload-button-renderer/upload-button-renderer.component';
-
+import { ApiServicesService } from 'src/app/shared/api-services.service';
+import { applicantsPqFormResponse } from './applicantpqformresponse';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 
 @Component({
   selector: 'app-view-applicants-pqform',
@@ -21,15 +25,16 @@ import { UploadButtonRendererComponent } from 'src/app/renderers/upload-button-r
   ],
 })
 export class ViewApplicantsPQFormComponent implements OnInit {
-
   stepperOrientation!: Observable<StepperOrientation>;
-  contractorPqForm!: FormGroup;
+  applicantPqForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
   currentYear: number = new Date().getFullYear();
-  years: number[] = [];
+  years: any[] = [];
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
-    private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,) {
+    private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
+    private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
+    private router: Router, private dialog: MatDialog) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -39,6 +44,17 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     for (let i = (this.currentYear - 20); i < (this.currentYear + 1); i++) {
       this.years.push(i);
     }
+
+    this.route.paramMap.subscribe(params => {
+      const tenderId = params.get('tenderId');
+      const applicationId = params.get('applicationId');
+      this.pqFormTenderId = tenderId;
+      if (tenderId && applicationId) {
+        this.ApiServicesService.getApplicantPQForm(tenderId, applicationId).subscribe((data: applicantsPqFormResponse) => {
+          this.getApplicantPQForms(data);
+        });
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -48,39 +64,64 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       console.log('Failed to load user details', e);
     }
     //Vendor General Company info & etc (Contractor)
-    this.contractorPqForm = this._formBuilder.group({
-      nameOfCompany: ['', [Validators.required, Validators.maxLength(50)]],
+    this.applicantPqForm = this._formBuilder.group({
+      companyName: ['', [Validators.required, Validators.maxLength(50)]],
       yearOfEstablishment: ['', [Validators.required,]],
       typeOfEstablishment: ['', [Validators.required,]],
-      postalAddressCorporate: ['', Validators.maxLength(250)],
-      postalAddressLocal: ['', Validators.maxLength(250)],
-      telephone: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
-      Validators.minLength(10), Validators.maxLength(10)]],
-      fax: [''],
-      contactPerson: ['', Validators.maxLength(50)],
-      contactPersonDesignation: ['', Validators.maxLength(50)],
-      contactPersonMobile: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-      contactPersonEmail: ['', [Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
-      nameOfRegionalHead: ['', Validators.maxLength(50)],
-      regionalHeadMobile: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-      turnover: '',
-      similarProjects: '',
+      corpOfficeAddress: ['', Validators.maxLength(250)],
+      localOfficeAddress: ['', Validators.maxLength(250)],
+      telephoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      faxNumber: [''],
+      contactName: ['', Validators.maxLength(50)],
+      contactDesignation: ['', Validators.maxLength(50)],
+      contactPhoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      contactEmailId: ['', [Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
+      regionalHeadName: ['', Validators.maxLength(50)],
+      regionalHeadPhoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
 
-      clientReferences: '',
-      projectsSmilarNature: '',
-      statutoryCompliances: '',
-      employeeStrength: '',
-      capitalEquipments: '',
-      safteyPolicySystems: '',
+      similarProjects: {},
+      clientReferences: {},
+      similarProjectNature: {},
 
-      financialInfo: '',
-      companyBankers: '',
-      companyAuditors: '',
-      undertaking: ['', Validators.required]
+      esiRegistration: '',
+      epfRegistration: '',
+      gstRegistration: '',
+      panNumber: '',
+
+      employeesStrength: {},
+      capitalEquipment: {},
+
+      safetyPolicyManual: '',
+      ppeToStaff: '',
+      ppeToWorkMen: '',
+      safetyOfficeAvailability: '',
+
+      financialInformation: {},
+      companyBankers: {},
+      companyAuditors: {},
+
+      underTaking: [false, Validators.required],
+      actionTaken: ['']
     });
   }
-  onSubmit() {
-    console.log(this.contractorPqForm.value.yearOfEstablishment);
+
+  getApplicantPQForms(data: any) {
+    this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
+    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
+    this.applicantPqForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
+    this.applicantPqForm.get('corpOfficeAddress')?.patchValue(data.corpOfficeAddress);
+    this.applicantPqForm.get('localOfficeAddress')?.patchValue(data.localOfficeAddress);
+    this.applicantPqForm.get('telephoneNum')?.patchValue(data.telephoneNum);
+    this.applicantPqForm.get('faxNumber')?.patchValue(data.faxNumber);
+    this.applicantPqForm.get('contactName')?.patchValue(data.contactName);
+    this.applicantPqForm.get('contactDesignation')?.patchValue(data.contactDesignation);
+    this.applicantPqForm.get('contactPhoneNum')?.patchValue(data.contactPhoneNum);
+    this.applicantPqForm.get('contactEmailId')?.patchValue(data.contactEmailId);
+    this.applicantPqForm.get('regionalHeadName')?.patchValue(data.regionalHeadName);
+    this.applicantPqForm.get('regionalHeadPhoneNum')?.patchValue(data.regionalHeadPhoneNum);
+    if (data.applicationId != 0) {
+      this.applicantPqFormId = data.applicationId
+    }
   }
 
   //dates range
@@ -243,7 +284,9 @@ export class ViewApplicantsPQFormComponent implements OnInit {
   //Section C of PQ-Form: Client References of 3 Major Projects
   public clientRefColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
-    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
+    {
+      headerName: 'Project 1', field: 'project1', editable: true, wrapText: true,
+    },
   ];
   public clientRefProject2ColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
@@ -275,8 +318,11 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     }
   }
   gridApiClientRef!: GridApi;
+  columnApiClientRef!: ColumnApi;
   onGridReadyClientRef(params: GridReadyEvent) {
     this.gridApiClientRef = params.api;
+    this.columnApiClientRef = params.columnApi;
+    console.log(this.columnApiClientRef);
   }
   public clientRefDefaultColDef: ColDef = {
     flex: 1,
@@ -297,6 +343,18 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     { details: 'Contact details', project1: '', project2: '', project3: '', },
     { details: 'Remarks if any', project1: '', project2: '', project3: '', },
   ];
+
+  onCellValueChanged(event: CellValueChangedEvent) {
+    event.data.modified = true;
+    console.log(event.data);
+    const gridData = this.getAllData();
+    console.log(gridData);
+  }
+
+  getAllData() {
+    this.gridApi.forEachNode(node => this.clientRefRowData.push(node.data));
+    return this.clientRefRowData;  
+  }
 
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
@@ -678,6 +736,66 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         });
         this.companyAuditorsDetails.splice(params.rowIndex, 1);
       }
+    }
+  }
+
+  public pqFormTenderId: any;
+  public applicantPqFormId: any;
+  onSave() {
+    this.applicantPqForm.controls['actionTaken'].setValue('SAVE');
+    console.log(this.applicantPqForm.value);
+
+    if (this.applicantPqFormId && this.applicantPqForm.valid) {
+      //console.log('update form');
+      this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
+        next: ((response: applicantsPqFormResponse) => {
+          // console.log('update', response);
+          this.toastr.success('Successfully Updated');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
+    } else if (this.pqFormTenderId && this.applicantPqForm.valid) {
+      this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
+        next: ((response: applicantsPqFormResponse) => {
+          this.applicantPqFormId = response.applicationId;
+          console.log(response);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-applicants-pq-form', this.applicantPqFormId]);
+          this.toastr.success('Successfully Created');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      });
+    } else {
+      console.log('error');
+      this.toastr.error('Error in Creation Applicant PQ Form');
+    }
+  }
+
+  onSubmit() {
+    this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
+    if (this.applicantPqFormId && this.applicantPqForm.valid) {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: 'Are you sure you want to submit the Applicant PQ-Form?', msg: 'Submitting will disable further editing of PQ-Form' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
+            next: ((response: applicantsPqFormResponse) => {
+              this.applicantPqForm.controls['actionTaken'].setValue(response.actionTaken);
+              this.toastr.success('Successfully Submitted');
+            }),
+            error: (error => {
+              console.log(error);
+            })
+          })
+        }
+      });
+    } else {
+      console.log('error');
+      this.toastr.error('Error in Submitting Applicant PQ-Form');
     }
   }
 
