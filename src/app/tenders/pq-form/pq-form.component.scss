@@ -1,0 +1,205 @@
+.pq-form {
+    padding: 24px;
+}
+
+form mat-label {
+    color: #841618;
+}
+
+.action-btn {
+    padding-top: 12px;
+}
+
+.pq-form .mat-button {
+    background-color: #841618;
+    color: white;
+}
+
+.project-info {
+    margin-top: 24px !important;
+}
+
+.text-bold {
+    font-weight: 500;
+}
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+//breadcrumbs
+.pq-form .breadcrumbs {
+    padding: 0 0 12px 0;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 6px !important;
+    font-size: 16px !important;
+}
+
+//accordion or Expansion Panel
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-headers-align .mat-mdc-form-field+.mat-mdc-form-field {
+    margin-left: 8px;
+}
+
+.mat-expansion-panel-header-title {
+    color: #841618;
+    font-weight: 500;
+}
+
+::ng-deep .mat-expansion-panel {
+    border: rgb(211, 211, 211) 1px solid !important;
+}
+
+//radio button
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #841618 !important;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #841618 !important;
+}
+
+//undertaking
+.undertaking {
+    margin: 24px 0px 24px 0px;
+}
+
+.example-wrapper {
+    margin-bottom: 24px;
+}
+
+.info-header {
+    color: #841618;
+    font-weight: 500;
+}
+
+.financial-wrapper {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.financial-conditions {
+    margin-top: 12px;
+}
+
+.Icon {
+    color: white;
+    font-size: 20px;
+}
+
+.icon-appy {
+    color: white;
+    font-size: 20px;
+}
+
+.icon-save {
+    color: white;
+    font-size: 20px;
+}
+
+.icon-submit {
+    color: white;
+    font-size: 16px;
+}
+
+::ng-deep .button-apply {
+    background-color: green !important;
+}
+
+//stepper custom css
+
+mat-stepper {
+    padding: 0 16px 0 16px;
+}
+
+::ng-deep .mat-step-header[aria-selected="true"] {
+    height: 40px !important;
+    background-color: #ffeaea !important;
+}
+
+::ng-deep .mat-step-header:hover {
+    height: 40px !important;
+    margin: 16px 0 16px 0 !important;
+}
+
+// ::ng-deep .mat-vertical-stepper-header[aria-selected="true"] {
+//     height: 40px !important;
+//     background-color: #ffeaea !important;
+// }
+
+// ::ng-deep .mat-vertical-stepper-header:hover {
+//     height: 40px !important;
+// }
+
+::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+    color: #841618 !important;
+}
+
+::ng-deep .admin-stepper .mat-horizontal-stepper-header-container {
+    width: 600px !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon {
+    background-color: rgb(0, 99, 165) !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-error {
+    background-color: white !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-edit {
+    background-color: #841618 !important;
+    color: white !important;
+}
+
+.expansion-panel-buttons {
+    padding-bottom: 8px;
+}
+
+li {
+    line-height: 30px !important;
+}
+
+.warn {
+    color: #756e15;
+    background: #fffbd1;
+    border: 1px solid #87803e;
+    padding: 6px 16px 6px 16px !important;
+}
+
+.status {
+    color: #841618;
+    background: white;
+    padding: 8px 16px 8px 16px !important;
+}
+
+button.mat-button-disabled {
+    cursor: not-allowed;
+}
+
+.readonly-disabled input:disabled {
+    cursor: not-allowed;
+}

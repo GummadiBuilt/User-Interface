@@ -4,7 +4,7 @@
       <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
         <div fxShow="true" fxHide.gt-sm="true">
           <button mat-icon-button (click)="sidenav.toggle()">
-            <mat-icon>menu</mat-icon>
+            <i class="icon-20p fa-solid fa-bars"></i>
           </button>
         </div>
         <a routerLink="home" fxShow="true" fxHide.lt-md>
@@ -18,7 +18,7 @@
         <span class="nav-divider">|</span>
       </div>
       <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn">
-        <a class="nav-links" mat-button routerLink="tenders/tender" routerLinkActive="router-link-active">Tenders</a>
+        <a class="nav-links" mat-button routerLink="tenders" routerLinkActive="router-link-active">Tenders</a>
         <span class="nav-divider">|</span>
       </div>
       <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center"
@@ -26,14 +26,34 @@
         <!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
         <a class="nav-links" mat-button [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
           <mat-menu #menu="matMenu">
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/clients"
-              routerLinkActive="router-link-active">Clients</a>
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/contractors"
-              routerLinkActive="router-link-active">Contractors</a>
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/pending-approvals"
-              routerLinkActive="router-link-active">Pending Approvals</a>
-            <a class="nav-links" mat-button fxLayoutAlign="center center" routerLink="/audit-approvals"
-              routerLinkActive="router-link-active">Audit Approvals</a>
+            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/clients"
+              routerLinkActive="router-link-active">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div><i class="fa-solid fa-user"></i></div>
+                <div>Clients</div>
+              </div>
+            </a>
+            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/contractors"
+              routerLinkActive="router-link-active">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div><i class="fa-solid fa-user-gear"></i></div>
+                <div>Contractors</div>
+              </div>
+            </a>
+            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/pending-approvals"
+              routerLinkActive="router-link-active">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div><i class="fa-solid fa-user-clock"></i></div>
+                <div>Pending Approvals</div>
+              </div>
+            </a>
+            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/audit-approvals"
+              routerLinkActive="router-link-active">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div><i class="fa-solid fa-user-check"></i></div>
+                <div>Audit Approvals</div>
+              </div>
+            </a>
           </mat-menu>
         </a>
         <span class="nav-divider">|</span>
@@ -63,14 +83,34 @@
           <a *ngIf="isLoggedIn && userRoleEnable?.includes('admin')" class="nav-links" mat-button
             [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
             <mat-menu #menu="matMenu">
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
-                routerLink="clients" routerLinkActive="router-link-active">Clients</a>
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
-                routerLink="contractors" routerLinkActive="router-link-active">Contractors</a>
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
-                routerLink="pending-approvals" routerLinkActive="router-link-active">Pending Approvals</a>
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="center center"
-                routerLink="audit-approvals" routerLinkActive="router-link-active">Audit Approvals</a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center" routerLink="clients"
+                routerLinkActive="router-link-active">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                  <div><i class="fa-solid fa-user"></i></div>
+                  <div>Clients</div>
+                </div>
+              </a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+                routerLink="contractors" routerLinkActive="router-link-active">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                  <div><i class="fa-solid fa-user-gear"></i></div>
+                  <div>Contractors</div>
+                </div>
+              </a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+                routerLink="pending-approvals" routerLinkActive="router-link-active">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                  <div><i class="fa-solid fa-user-clock"></i></div>
+                  <div>Pending Approvals</div>
+                </div>
+              </a>
+              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+                routerLink="audit-approvals" routerLinkActive="router-link-active">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                  <div><i class="fa-solid fa-user-check"></i></div>
+                  <div>Audit Approvals</div>
+                </div>
+              </a>
             </mat-menu>
           </a>
           <a (click)="clickHandler();login();" *ngIf="!isLoggedIn" class="login-button" mat-button>Login</a>

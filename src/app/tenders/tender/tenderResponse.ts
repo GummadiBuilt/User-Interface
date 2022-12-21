@@ -15,6 +15,7 @@ export class tenderResopnse  {
     public tenderFinanceInfo: string;
     public tenderDocumentSize: number;
     public changeTracking:object;
+    public pqFormId:number;
 
      constructor(d: any) {
         this.contractDuration = d.contractDuration;
@@ -31,5 +32,6 @@ export class tenderResopnse  {
         this.tenderFinanceInfo = d.tenderFinanceInfo;
         this.tenderDocumentSize = d.tenderDocumentSize;
         this.changeTracking = d.changeTracking;
+        this.pqFormId = d.pqFormId;
        }
  }

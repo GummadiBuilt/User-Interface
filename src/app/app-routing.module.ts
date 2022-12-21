@@ -19,6 +19,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ServiceComponent } from './service/service.component';
 import { SignupComponent } from './signup/signup.component';
+import { PQFormComponent } from './tenders/pq-form/pq-form.component';
+import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
+import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
+import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -38,18 +42,26 @@ const routes: Routes = [
   { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },
   { path: 'audit-approvals', component: AuditApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Audit Approvals' } },
   {
-    path: 'tenders', canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } },
+    path: 'tenders', canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } },
     children: [
-      { path: 'tender', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'receipt_long' } } },
-      { path: 'create-tender', component: CreateTenderComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'add_circle' } } },
-      { path: 'edit-tender/:id', component: CreateTenderComponent, data: { breadcrumb: { label: 'Edit Tender', info: 'edit' } } },
-      { path: '**', redirectTo: 'tender', pathMatch: 'full' },
-  ]
+      { path: '', component: TendersComponent, data: { breadcrumb: { label: 'Tenders', info: 'fa-solid fa-file-invoice' } } },
+      { path: 'create-tender', component: CreateTenderComponent, canDeactivate: [DeactivateGuard], canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Create Tender', info: 'fa-solid fa-square-plus' } } },
+      { path: 'edit-tender/:tenderId', component: CreateTenderComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { label: 'Edit Tender', info: 'fa-solid fa-pen-to-square' } } },
+      {
+        path: ':tenderId', data: { breadcrumb: {} },
+        children: [
+          { path: '', component: CreateTenderComponent, data: { breadcrumb: {} } },
+          { path: 'create-pq-form', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'edit-pq-form/:pqId', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'view-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'edit-applicants-pq-form/:applicationId', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'view-applicants', component: ViewApplicantsComponent, },
+        ]
+      },
+      { path: '**', redirectTo: '', pathMatch: 'full' },
+    ]
   },
-
-  
-
-  
 ];
 
 @NgModule({

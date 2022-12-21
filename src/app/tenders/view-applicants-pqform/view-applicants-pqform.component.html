@@ -1,0 +1,654 @@
+<div class="pq-form">
+    <div class="breadcrumbs">
+        <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
+            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                <i *ngIf="info" class="icon-breadcrumb {{info}}"></i>
+                <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+            </ng-container>
+        </xng-breadcrumb>
+    </div>
+    <ng-template #separatorTemplate>
+        <i class="fa-solid fa-caret-right"></i>
+    </ng-template>
+    <div class="pq-form-body">
+        <div class="contractor-stepper">
+            <mat-stepper #stepper [orientation]="(stepperOrientation | async)!"
+                *ngIf="userRole?.includes('contractor')">
+                <ng-template matStepperIcon="edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </ng-template>
+                <ng-template matStepperIcon="error">
+                    <i class="icon-error fa-solid fa-triangle-exclamation"></i>
+                </ng-template>
+                <ng-template matStepperIcon="general_notes">
+                    <i class="fa-solid fa-clipboard"></i>
+                </ng-template>
+                <mat-step label="General Notes" state="general_notes" [completed]="false">
+                    <div>
+                        <ol>
+                            <li>The pre-qualification document shall be submitted in a sealed cover clearly indicating
+                                the Name of the project on top of the cover. Though soft copy form shall be accepted to
+                                expedite the process, the hard copy duly signed by contractor shall form the basis of
+                                final assessment.
+                            </li>
+                            <li>The last date for receipt of completed pre-qualification documents with all the
+                                necessary certificates, is as specified in the initial section - 'Project Information'
+                            </li>
+                            <li>Incomplete or incorrect information provided herein by the agency shall result in
+                                automatic disqualification including cancellation of the order.
+                            </li>
+                            <li>TIME shall be the essence of the contract.
+
+                            </li>
+                            <li>Only the successful pre-qualified Contractors will be intimated for further.</li>
+                            <li>Clients reserve the right to accept or reject any or all applications of
+                                pre-qualification without assigning any reasons thereof.
+                            </li>
+                            <li>Please attach copies Certificates, Work orders, Project photographs, Company Profile etc
+                                in support of the information disclosed in this bid.
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <button mat-button matStepperNext>
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                <div><span>Next</span></div>
+                                <div><i class="fa-solid fa-angle-right"></i></div>
+                            </div>
+                        </button>
+                    </div>
+                </mat-step>
+                <ng-template matStepperIcon="vendor_info">
+                    <i class="fa-solid fa-city"></i>
+                </ng-template>
+                <mat-step label="Vendor's General Company Information" state="vendor_info" [completed]="false">
+                    <form [formGroup]="applicantPqForm">
+                        <div>
+                            <h3 class="info-header">Company Details</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Company Name in Full *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="companyName" matInput placeholder="Company Name">
+                                        <mat-error *ngIf="applicantPqForm.get('companyName')?.errors?.['required']">
+                                            Company Name is required
+                                        </mat-error>
+                                        <mat-error *ngIf="applicantPqForm.get('companyName')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Year of Establishment *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <mat-select placeholder="Select Year" formControlName="yearOfEstablishment">
+                                            <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="applicantPqForm.get('yearOfEstablishment')?.invalid">
+                                            Year of Establishment is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Type of Establishment *</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="typeOfEstablishment" matInput
+                                            placeholder="Type of Establishment">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.get('typeOfEstablishment')?.errors?.['required']">
+                                            Type of Establishment is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Postal Address [Corporate Office]</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="corpOfficeAddress" matInput
+                                            placeholder="Postal Address [Corporate Office]">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.get('corpOfficeAddress')?.errors?.['maxlength']">
+                                            Enter only 250 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Postal Address [Local Office]</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input formControlName="localOfficeAddress" matInput
+                                            placeholder="Postal Address [Local Office]">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.get('localOfficeAddress')?.errors?.['maxlength']">
+                                            Enter only 250 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Telephone</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input numbersOnly formControlName="telephoneNum" matInput
+                                            placeholder="Telephone">
+                                        <mat-error *ngIf="applicantPqForm.controls['telephoneNum'].errors?.['pattern']">
+                                            Please enter valid mobile number
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="applicantPqForm.controls['telephoneNum'].errors?.['minlength'] || applicantPqForm.controls['telephoneNum'].errors?.['maxlength']">
+                                            Mobile number should be 10 digits
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Fax</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="faxNumber" placeholder="Fax">
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+                            <h3 class="info-header">Contact Person Information</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Contact Person Name</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="contactName" placeholder="Contact Person">
+                                        <mat-error *ngIf="applicantPqForm.get('contactName')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Designation</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="contactDesignation" placeholder="Designation">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.get('contactDesignation')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Mobile / Tel.</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput numbersOnly formControlName="contactPhoneNum"
+                                            placeholder="Mobile / Tel.">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.controls['contactPhoneNum'].errors?.['pattern']">
+                                            Please enter valid mobile number
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="applicantPqForm.controls['contactPhoneNum'].errors?.['minlength'] || applicantPqForm.controls['contactPhoneNum'].errors?.['maxlength']">
+                                            Mobile number should be 10 digits
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Email ID</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="contactEmailId" placeholder="Email ID">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.controls['contactEmailId'].errors?.['pattern']">
+                                            Please enter valid email
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <h3 class="info-header">Regional Head / Project Coordinator</h3>
+                            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Name of Regional Head / Project Coordinator</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput formControlName="regionalHeadName"
+                                            placeholder="Name of Regional Head / Project Coordinator">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.get('regionalHeadName')?.errors?.['maxlength']">
+                                            Enter only 50 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+                                    <mat-label>Mobile No.</mat-label>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput numbersOnly formControlName="regionalHeadPhoneNum"
+                                            placeholder="Mobile No.">
+                                        <mat-error
+                                            *ngIf="applicantPqForm.controls['regionalHeadPhoneNum'].errors?.['pattern']">
+                                            Please enter valid mobile number
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="applicantPqForm.controls['regionalHeadPhoneNum'].errors?.['minlength'] || applicantPqForm.controls['regionalHeadPhoneNum'].errors?.['maxlength']">
+                                            Mobile number should be 10 digits
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                                    fxLayout="column">
+
+                                </div>
+                            </div>
+                            <!-- <div>
+                        <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
+                            fxLayoutGap="8px">
+                            <button mat-stroked-button type="button"
+                                (click)="accordionTurnover.openAll()">Expand All
+                            </button>
+                            <button mat-stroked-button type="button"
+                                (click)="accordionTurnover.closeAll()">Collapse All
+                            </button>
+                        </div>
+                        <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                            <mat-icon>currency_rupee</mat-icon>
+                                            <span>Turnover Details (Last 3 Years)</span>
+                                        </div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="turnoverColumnDefs"
+                                        [defaultColDef]="turnoverDefaultColDef" [rowData]="turnoverDetails"
+                                        [domLayout]="domLayout" [editType]="editType"
+                                        (gridReady)="onGridReadyTurnover($event)"
+                                        (cellClicked)="onCellClickedTurnover($event)"
+                                        (rowValueChanged)="onRowValueChangedTurnover($event)">
+                                    </ag-grid-angular>
+                                </div>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                            <mat-icon>repeat</mat-icon>
+                                            <span>Similar Projects</span>
+                                        </div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="example-wrapper">
+                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                        [columnDefs]="similarProjectsColumnDefs"
+                                        [defaultColDef]="similarProjectsDefaultColDef"
+                                        [rowData]="similarProjectsDetails" [domLayout]="domLayout"
+                                        [editType]="editType" (gridReady)="onGridReadySimilarProjects($event)"
+                                        (cellClicked)="onCellClickedSimilarProjects($event)">
+                                    </ag-grid-angular>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div> -->
+                        </div>
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                            <button mat-button matStepperPrevious>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button matStepperNext>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><span>Next</span></div>
+                                    <div><i class="fa-solid fa-angle-right"></i></div>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+                <ng-template matStepperIcon="performance_pref">
+                    <i class="fa-solid fa-check-double"></i>
+                </ng-template>
+                <mat-step label="Performance Preferences" state="performance_pref" [completed]="false">
+                    <form [formGroup]="applicantPqForm">
+                        <div>
+                            <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
+                                fxLayoutGap="8px">
+                                <button mat-stroked-button (click)="accordion.openAll()">Expand All </button>
+                                <button mat-stroked-button (click)="accordion.closeAll()">Collapse All </button>
+                            </div>
+                            <mat-accordion class="example-headers-align" #accordion="matAccordion" multi>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-list-check"></i>
+                                                <span>Client References of 3 Major Projects</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>List maximum 3 major projects executed.</li>
+                                            <li>Client reserves the right to approach those named to seek a performance
+                                                reference and rely on you having obtained the necessary consents.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <div fxLayoutAlign="end">
+                                            <button mat-stroked-button *ngIf="clientRefProject2ColumnDefs"
+                                                (click)="onBtIncludeProject2Columns()">
+                                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                                    <div><i style="font-size: 16px;" class="fa-solid fa-plus"></i></div>
+                                                    <span>Add Project</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="clientRefColumnDefs"
+                                            [defaultColDef]="clientRefDefaultColDef" [rowData]="clientRefRowData"
+                                            [domLayout]="domLayout" [editType]="editType"
+                                            (gridReady)="onGridReadyClientRef($event)"
+                                            (cellValueChanged)="onCellValueChanged($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-layer-group"></i>
+                                                <span>Projects of Similar Nature</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>List maximum 3 major projects of similar nature.</li>
+                                            <li>Client reserves the right to approach those named to seek a performance
+                                                reference and rely on you having obtained the necessary consents.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="similarNatureColumnDefs"
+                                            [defaultColDef]="similarNatureDefaultColDef"
+                                            [rowData]="similarNatureRowData" [domLayout]="domLayout"
+                                            [editType]="editType" (gridReady)="onGridReadySimilarNature($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-building-shield"></i>
+                                                <span>Statutory Compliances</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>Give references to documents pertaining to statutory compliances here
+                                                Specify NA if not available or applicable.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="statutoryCompliancesColumnDefs"
+                                            [defaultColDef]="statutoryCompliancesDefaultColDef"
+                                            [rowData]="statutoryCompliancesRowData" [domLayout]="domLayout"
+                                            [editType]="editType">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-hand-fist"></i>
+                                                <span>Employees Strength</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>List out the details of Key Professional Staff with relevant experience.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="employeesStrengthColumnDefs"
+                                            [defaultColDef]="employeesStrengthDefaultColDef"
+                                            [rowData]="employeesStrengthRowData" [domLayout]="domLayout"
+                                            [editType]="editType" (gridReady)="onGridReadyEmployeesStrength($event)"
+                                            (cellClicked)="onCellClickedEmployeesStrength($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-building-circle-check"></i>
+                                                <span>Capital Equipments</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>Major Equipments owned by the company be listed here.</li>
+                                            <li>Refer enclosed List of Plant, Machineries, Tools & Equipments available
+                                                with us and proposed to be deployed for the project</li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="capitalEquipmentsColumnDefs"
+                                            [defaultColDef]="capitalEquipmentsDefaultColDef"
+                                            [rowData]="capitalEquipmentsRowData" [domLayout]="domLayout"
+                                            [editType]="editType" (gridReady)="onGridReadyCapitalEquipments($event)"
+                                            (cellClicked)="onCellClickedCapitalEquipments($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-shield"></i>
+                                                <span>Safety Policy and Systems</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>Company's policy and resources pertaining to safety may be listed below.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="safteyPolicyColumnDefs"
+                                            [defaultColDef]="safteyPolicyDefaultColDef" [rowData]="safteyPolicyRowData"
+                                            [domLayout]="domLayout" [editType]="editType">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </div>
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                            <button mat-button matStepperPrevious>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button matStepperNext>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><span>Next</span></div>
+                                    <div><i class="fa-solid fa-angle-right"></i></div>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+                <ng-template matStepperIcon="financial_info">
+                    <i class="fa-solid fa-wallet"></i>
+                </ng-template>
+                <mat-step label="Financial Information" state="financial_info" [completed]="false">
+                    <form [formGroup]="applicantPqForm">
+                        <div>
+                            <ul>
+                                <li>
+                                    Provide the following information for the last 3 years for the company (Attach
+                                    Annexure if required)
+                                </li>
+                                <li>
+                                    Client reserves the right to approach those named to seek reference and rely on you
+                                    having obtained the necessary consents.
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
+                                fxLayoutGap="8px">
+                                <button mat-stroked-button (click)="accordionFin.openAll()">Expand All </button>
+                                <button mat-stroked-button (click)="accordionFin.closeAll()">Collapse All </button>
+                            </div>
+                            <mat-accordion class="example-headers-align" #accordionFin="matAccordion" multi>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-indian-rupee-sign"></i>
+                                                <span>Financial Information</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+                                        <ul>
+                                            <li>
+                                                Enter Rupees in Lakhs
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
+                                            [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType"
+                                            (gridReady)="onGridReadyFinancialDetails($event)"
+                                            (cellClicked)="onCellClickedFinancialDetails($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-piggy-bank"></i>
+                                                <span>Company Bankers</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="companyBankersColumnDefs"
+                                            [defaultColDef]="companyBankersDefaultColDef"
+                                            [rowData]="companyBankersDetails" [domLayout]="domLayout"
+                                            [editType]="editType" (gridReady)="onGridReadyCompanyBankersDetails($event)"
+                                            (cellClicked)="onCellClickedCompanyBankersDetails($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                <i class="icon-20p fa-solid fa-person-circle-check"></i>
+                                                <span>Company Auditors</span>
+                                            </div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="example-wrapper">
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="companyAuditorsColumnDefs"
+                                            [defaultColDef]="companyAuditorsDefaultColDef"
+                                            [rowData]="companyAuditorsDetails" [domLayout]="domLayout"
+                                            [editType]="editType"
+                                            (gridReady)="onGridReadyCompanyAuditorsDetails($event)"
+                                            (cellClicked)="onCellClickedCompanyAuditorsDetails($event)">
+                                        </ag-grid-angular>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </div>
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                            <button mat-button matStepperPrevious>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button matStepperNext>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><span>Next</span></div>
+                                    <div><i class="fa-solid fa-angle-right"></i></div>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+                <ng-template matStepperIcon="undertaking">
+                    <i class="fa-solid fa-gavel"></i>
+                </ng-template>
+                <mat-step label="Undertaking" state="undertaking" [completed]="false">
+                    <form [formGroup]="applicantPqForm">
+                        <div class="undertaking" fxLayout="column">
+                            <mat-radio-group formControlName="underTaking">
+                                <mat-radio-button class="example-radio-button" [value]="true">
+                                    <div>
+                                        The information, facts, details etc disclosed in this document is true and
+                                        correct. We take responsibility for the correctness of the same.
+                                    </div>
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
+                            <button mat-button matStepperPrevious>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+                                    <div><i class="fa-solid fa-angle-left"></i></div>
+                                    <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-save fa-solid fa-floppy-disk"></i>
+                                        <div>Save</div>
+                                    </div>
+                                </div>
+                            </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>Submit</div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </div>
+    </div>
+</div>

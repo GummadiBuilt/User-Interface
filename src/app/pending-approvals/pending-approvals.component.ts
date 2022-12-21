@@ -1,258 +1,174 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ApiServicesService } from '../shared/api-services.service';
 import { registrationApprovalResopnse } from '../commonservices/approvalsUserData';
+import { CheckboxSelectionCallbackParams, ColDef, GridApi, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, SelectionChangedEvent } from 'ag-grid-community';
+import { ActionButtonRendererComponent } from '../renderers/action-button-renderer/action-button-renderer.component';
 
 @Component({
   selector: 'app-pending-approvals',
   templateUrl: './pending-approvals.component.html',
   styleUrls: ['./pending-approvals.component.scss']
 })
-export class PendingApprovalsComponent implements OnInit, AfterViewInit {
-
-  displayedColumns: string[] = ['select',  'companyName',
-    'yearOfEstablishment', 'typeOfEstablishment', 'address', 'city', 'state', 'country', 'contactFirstName','contactLastName', 'contactDesignation',
-    'contactPhoneNumber', 'contactEmailAddress', 'actions'];
+export class PendingApprovalsComponent implements OnInit {
 
   allPendingApprovals: any = [];
-  dataSource = new MatTableDataSource<registrationApprovalResopnse>();
-
-  idFilter = new FormControl();
-  companyNameFilter = new FormControl();
-  yearOfEstablishmentFilter = new FormControl();
-  typeOfEstablishmentFilter = new FormControl();
-  addressFilter = new FormControl();
-  cityFilter = new FormControl();
-  stateFilter = new FormControl();
-  countryFilter = new FormControl();
-  contactFirstNameFilter = new FormControl();
-  contactLastNameFilter = new FormControl();
-  contactDesignationFilter = new FormControl();
-  contactPhoneFilter = new FormControl();
-  contactEmailAddressFilter = new FormControl();
-
-  filteredValues = {
-    id: '', companyName: '',
-    yearOfEstablishment: '', typeOfEstablishment: '', address: '', city: '', state: '', country: '',
-    contactFirstName: '', contactLastName: '', contactDesignation: '', contactPhoneNumber: '', contactEmailAddress: ''
-  };
-
-  selection = new SelectionModel<registrationApprovalResopnse>(true, []);
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    // console.log(this.selection.selected.map(({id})=>this.requestId));
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-    this.selection.select(...this.dataSource.data);
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: registrationApprovalResopnse): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.applicationRoleId + 1}`;
-  }
+  selectedData: any;
+  selectedDataLength: any;
+  domLayout: any;
 
   constructor(private ApiServicesService: ApiServicesService, private toastr: ToastrService) {
-
+    this.domLayout = "autoHeight";
   }
 
   ngOnInit(): void {
-    this.companyNameFilter.valueChanges.subscribe((companyNameFilterValue) => {
-      this.filteredValues['companyName'] = companyNameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.yearOfEstablishmentFilter.valueChanges.subscribe((yearOfEstablishmentFilterValue) => {
-      this.filteredValues['yearOfEstablishment'] = yearOfEstablishmentFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.typeOfEstablishmentFilter.valueChanges.subscribe((typeOfEstablishmentFilterValue) => {
-      this.filteredValues['typeOfEstablishment'] = typeOfEstablishmentFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.addressFilter.valueChanges.subscribe((addressFilterValue) => {
-      this.filteredValues['address'] = addressFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.cityFilter.valueChanges.subscribe((cityFilterValue) => {
-      this.filteredValues['city'] = cityFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.stateFilter.valueChanges.subscribe((stateFilterValue) => {
-      this.filteredValues['state'] = stateFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.countryFilter.valueChanges.subscribe((countryFilterValue) => {
-      this.filteredValues['country'] = countryFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.contactFirstNameFilter.valueChanges.subscribe((contactFirstNameFilterValue) => {
-      this.filteredValues['contactFirstName'] = contactFirstNameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.contactLastNameFilter.valueChanges.subscribe((contactLastNameFilterValue) => {
-      this.filteredValues['contactLastName'] = contactLastNameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.contactDesignationFilter.valueChanges.subscribe((contactDesignationFilterValue) => {
-      this.filteredValues['contactDesignation'] = contactDesignationFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.contactPhoneFilter.valueChanges.subscribe((contactPhoneFilterValue) => {
-      this.filteredValues['contactPhoneNumber'] = contactPhoneFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-    this.contactEmailAddressFilter.valueChanges.subscribe((contactEmailAddressFilterValue) => {
-      this.filteredValues['contactEmailAddress'] = contactEmailAddressFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filteredValues);
-    });
-
     this.getPendingApprovalsdata();
-    this.dataSource.filterPredicate = this.customFilterPredicate();
   }
-  customFilterPredicate() {
-    const myFilterPredicate = function (data: registrationApprovalResopnse, filter: string): boolean {
-      const city = Object.values(data.city)[1].toString();
-      const state = Object.values(data.state)[1].toString();
-      const country = Object.values(data.country)[1].toString();
-      let searchString = JSON.parse(filter);
-      let companyNameFound = data.companyName.toString().trim().toLowerCase().indexOf(searchString.companyName.toLowerCase()) !== -1
-      let yearOfEstablishmentFound = data.yearOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.yearOfEstablishment.toLowerCase()) !== -1
-      let typeOfEstablishmentFound = data.typeOfEstablishment.toString().trim().toLowerCase().indexOf(searchString.typeOfEstablishment.toLowerCase()) !== -1
-      let addressFound = data.address.toString().trim().toLowerCase().indexOf(searchString.address.toLowerCase()) !== -1
-      let cityFound = city.toString().trim().toLowerCase().indexOf(searchString.city.toLowerCase()) !== -1
-      let stateFound = state.toString().trim().toLowerCase().indexOf(searchString.state.toLowerCase()) !== -1
-      let countryFound = country.toString().trim().toLowerCase().indexOf(searchString.country.toLowerCase()) !== -1
 
-      let contactFirstNameFound = data.contactFirstName.toString().trim().toLowerCase().indexOf(searchString.contactFirstName.toLowerCase()) !== -1
-      let contactLastNameFound = data.contactLastName.toString().trim().toLowerCase().indexOf(searchString.contactLastName.toLowerCase()) !== -1
-      let contactDesignationFound = data.contactDesignation.toString().trim().toLowerCase().indexOf(searchString.contactDesignation.toLowerCase()) !== -1
-      let contactPhoneFound = data.contactPhoneNumber.toString().trim().toLowerCase().indexOf(searchString.contactPhoneNumber.toLowerCase()) !== -1
-      let contactEmailAddressFound = data.contactEmailAddress.toString().trim().toLowerCase().indexOf(searchString.contactEmailAddress.toLowerCase()) !== -1
-
-      if (searchString.topFilter) {
-        return  companyNameFound || yearOfEstablishmentFound ||
-          typeOfEstablishmentFound || addressFound || cityFound || stateFound || countryFound ||
-          contactFirstNameFound || contactLastNameFound || contactDesignationFound || contactPhoneFound || contactEmailAddressFound
-      } else {
-        return companyNameFound && yearOfEstablishmentFound &&
-          typeOfEstablishmentFound && addressFound && cityFound && stateFound && countryFound &&
-          contactFirstNameFound && contactLastNameFound && contactDesignationFound && contactPhoneFound && contactEmailAddressFound
-      }
-    }
-    return myFilterPredicate;
+  //to disable approve/reject buttons
+  onSelectionChanged(event: SelectionChangedEvent) {
+    this.selectedData = this.gridApi.getSelectedRows();
+    this.selectedDataLength = this.selectedData.length;
   }
 
   //get list of data
   getPendingApprovalsdata() {
     this.ApiServicesService.getRegistrationPendingApproval().subscribe((data: registrationApprovalResopnse) => {
       this.allPendingApprovals = data;
-      this.dataSource.data = this.allPendingApprovals;
-      console.log(this.dataSource.data);
     });
   }
 
-  requestId: any;
-  getApproveID(id: any) {
-    this.requestId = Array.from(String(id), Number);
-    // console.log(this.requestId);
-    this.approve();
-  }
-  getRejectID(id: any) {
-    this.requestId = Array.from(String(id), Number);
-    // console.log(this.requestId);
-    this.reject();
+  //Ag-Grid
+  private gridApi!: GridApi;
+  public rowSelection: 'single' | 'multiple' = 'multiple';
+
+  public ColumnDefs: ColDef[] = [
+    {
+      headerName: 'Company Name', field: 'companyName', flex: 2,
+      checkboxSelection: checkboxSelection,
+      headerCheckboxSelection: headerCheckboxSelection,
+    },
+    { headerName: 'Year of Establishment', field: 'yearOfEstablishment', flex: 2, minWidth: 200, },
+    { headerName: 'Type of Establishment', field: 'typeOfEstablishment', flex: 4 },
+    { headerName: 'Address', field: 'address', flex: 4 },
+    { headerName: 'City', field: 'city.cityName', flex: 4 },
+    { headerName: 'State', field: 'state.stateName', flex: 4 },
+    { headerName: 'Country', field: 'country.countryName', flex: 4 },
+    { headerName: 'Contact First Name', field: 'contactFirstName', flex: 4 },
+    { headerName: 'Contact Last Name', field: 'contactLastName', flex: 4 },
+    { headerName: 'Contact Designation', field: 'contactDesignation', flex: 4 },
+    { headerName: 'Contact Phone Number', field: 'contactPhoneNumber', flex: 4 },
+    { headerName: 'Contact Email Address', field: 'contactEmailAddress', flex: 6 },
+    {
+      headerName: "Action", field: 'action', flex: 1, pinned: 'right', filter: false, maxWidth: 150,
+      cellRenderer: ActionButtonRendererComponent,
+      cellRendererParams: {
+        context: this
+      },
+    }
+  ];
+  public autoGroupColumnDef: ColDef = {
+    headerName: 'Group',
+    minWidth: 170,
+    field: 'companyName',
+    headerCheckboxSelection: true,
+    cellRenderer: 'agGroupCellRenderer',
+    cellRendererParams: {
+      checkbox: true,
+    },
+  };
+  public DefaultColDef: ColDef = {
+    minWidth: 250,
+    resizable: true,
+    editable: false,
+    wrapText: true,
+    autoHeight: true,
+    menuTabs: ['filterMenuTab'],
+    filter: true,
+    floatingFilter: true,
+  };
+  public paginationPageSize = 30;
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
   }
 
-  selectedIds: any = [];
-  getAllApproveIDs(id: any) {
-    this.selection.selected.forEach(item => {
-      let index: any = this.dataSource.data.find(d => d == item);
-      this.selectedIds.push(index.id);
-    });
-    // console.log(this.selectedIds)
-    this.requestId = this.selectedIds;
-    this.approve();
-  }
-
-  getAllRejectIDs(id: any) {
-    this.selection.selected.forEach(item => {
-      let index: any = this.dataSource.data.find(d => d == item);
-      this.selectedIds.push(index.id);
-    });
-    //console.log(this.selectedIds)
-    this.requestId = this.selectedIds;
-    this.reject();
-  }
-
-  approve() {
-    this.ApiServicesService.postRegistrationPendingApproval(this.requestId, { "requestId": this.requestId, "actionTaken": 'APPROVE' }).subscribe(
-      (response => {
+  //approve all selected records
+  onApproveSelected() {
+    const selectedData = this.gridApi.getSelectedRows();
+    //conversion to array
+    let selectedGridIds = selectedData.map(i => i.id);
+    console.log("requestId:" + selectedGridIds);
+    this.ApiServicesService.postRegistrationPendingApproval(selectedData, { "requestId": selectedGridIds, "actionTaken": 'APPROVE' }).subscribe(
+      response => {
         if (response['status'] == 200) {
-          // console.log(response.body);
           this.toastr.success('Approved');
           this.allPendingApprovals = response.body;
-          this.dataSource.data = this.allPendingApprovals;
-          // console.log('approve',this.dataSource.data);
         }
-      }),
-      (error => {
+      },
+      error => {
         console.log(error);
-       // this.toastr.error(error);
-      }));
+      }
+    );
   }
-  reject() {
-    this.ApiServicesService.postRegistrationPendingApproval(this.requestId, { "requestId": this.requestId, "actionTaken": 'REJECT' }).subscribe(
-      (response => {
+
+  //reject all selected records
+  onRejectSelected() {
+    const selectedData = this.gridApi.getSelectedRows();
+    let selectedGridIds = selectedData.map(i => i.id);
+    this.ApiServicesService.postRegistrationPendingApproval(selectedData, { "requestId": selectedGridIds, "actionTaken": 'REJECT' }).subscribe(
+      response => {
         if (response['status'] == 200) {
-          // console.log(response.body);
           this.toastr.success('Rejected');
           this.allPendingApprovals = response.body;
-          this.dataSource.data = this.allPendingApprovals;
-          //  console.log('reject',this.dataSource.data);
         }
-      }),
-      (error => {
+      },
+      error => {
         console.log(error);
-        //this.toastr.error(error);
-      }));
+      });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  //approve record by action button inside ag-grid cell
+  onApproveClicked(id: any) {
+    let selectedGridId = id;
+    //single value conversion to array
+    let selectedGridIds = [selectedGridId];
+    this.ApiServicesService.postRegistrationPendingApproval(selectedGridIds, { "requestId": selectedGridIds, "actionTaken": 'APPROVE' }).subscribe(
+      response => {
+        if (response['status'] == 200) {
+          this.toastr.success('Approved');
+          this.allPendingApprovals = response.body;
+        }
+      },
+      error => {
+        console.log(error);
+      });
   }
 
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
-
-  clearFilters() {
-    this.dataSource.filter = '';
+  //reject record by action button inside ag-grid cell
+  onApproveRejected(id: any) {
+    let selectedGridId = id;
+    let selectedGridIds = [selectedGridId];
+    this.ApiServicesService.postRegistrationPendingApproval(selectedGridIds, { "requestId": selectedGridIds, "actionTaken": 'REJECT' }).subscribe(
+      response => {
+        if (response['status'] == 200) {
+          this.toastr.success('Rejected');
+          this.allPendingApprovals = response.body;
+        }
+      },
+      error => {
+        console.log(error);
+      });
   }
 
 }
+
+//check box selection AG-Grid
+var checkboxSelection = function (params: CheckboxSelectionCallbackParams) {
+  // we put checkbox on the name if we are not doing grouping
+  return params.columnApi.getRowGroupColumns().length === 0;
+};
+var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackParams) {
+  // we put checkbox on the name if we are not doing grouping
+  return params.columnApi.getRowGroupColumns().length === 0;
+};

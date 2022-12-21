@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -10,17 +10,28 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
       </div>
       <a href="#"></a>
       <mat-dialog-actions fxLayoutAlign="end center">
-         <button mat-button [mat-dialog-close]="true" class="color"><mat-icon>check</mat-icon>Yes</button>
-         <button mat-button [mat-dialog-close]="false" class="colors"><mat-icon>close</mat-icon>No</button>
+         <button mat-button [mat-dialog-close]="true" class="color">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+               <i class="icon-16p fa-solid fa-check"></i>
+               <div><span>Yes</span></div>
+            </div>
+         </button>
+         <button mat-button [mat-dialog-close]="false" class="colors">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+              <i class="icon-16p fa-solid fa-xmark"></i>
+              <div><span>No</span></div>
+            </div>
+         </button>
       </mat-dialog-actions>`,
    styles: [`
+      .icon-16p {font-size: 18px;}
       .title {font-size: large;}
-      .msg {font-size: medium;}
+      .msg {font-size: medium; padding-bottom:12px;}
       .colors {color: white; background-color: #891010;}
       .color {color: white; background-color: #008000;}
       button {flex-basis: 100px;}
    `]
 })
 export class ConfirmationDlgComponent {
-   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+   constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 }
