@@ -1,3 +1,41 @@
+# [1.5.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.4.0...v1.5.0) (2022-12-21)
+
+
+### Bug Fixes
+
+* **create-tender:** error handling for file import ([c16eaaf](https://github.com/GummadiBuilt/User-Interface/commit/c16eaaff4fc9148e159fb639f53e4975fe7e8243))
+* **forms:** forms auto-complete turned off ([09ced77](https://github.com/GummadiBuilt/User-Interface/commit/09ced774baa74ecdcc76a8136ba985e1abf28c1f))
+
+
+### Features
+
+* configured font awsome icons ([bf3ea83](https://github.com/GummadiBuilt/User-Interface/commit/bf3ea83a460a2063354e57f4f3698e4787ca2492))
+* **create tender and pq form:** create tender and pq form changes ([ec38f59](https://github.com/GummadiBuilt/User-Interface/commit/ec38f59ac38c545782086cbd18f881c82e709313))
+* **create tender:** added download excel,changed few field names ([ac92722](https://github.com/GummadiBuilt/User-Interface/commit/ac92722ba9da56e5fbfc3701229eed12a09266ec))
+* **create tender:** added missing hideBreadCrumbs ([bc77520](https://github.com/GummadiBuilt/User-Interface/commit/bc775201cb977deecfd3f2beb8b98065668a5b6a))
+* **create-pq-form.ts:** disabled form fields ([e608b77](https://github.com/GummadiBuilt/User-Interface/commit/e608b777592d0b098a0b01f230012260ea1763f4))
+* **create-tender.ts:** leave page alert functionality ([e09c242](https://github.com/GummadiBuilt/User-Interface/commit/e09c242460685c529c13511fd3d1a7bd81ffe644))
+* **create-tender.ts:** leave page functionality ([9ca24ac](https://github.com/GummadiBuilt/User-Interface/commit/9ca24acbb49ea9611401dc2053509dec27fd518d))
+* **currency formatter:** currency formatter directive changes ([7d78589](https://github.com/GummadiBuilt/User-Interface/commit/7d78589a0e823e7737ab5ee2e9dfac4c5452d430))
+* **index.html:** migrated to font awesome ([8401047](https://github.com/GummadiBuilt/User-Interface/commit/84010475e0e85f63e223615873936f70219b0044))
+* **mat table change to ag-grid:** addded ag-grid in admin pending/audit approvals ([d065c82](https://github.com/GummadiBuilt/User-Interface/commit/d065c820b7a1fa150479fbe74539d3618b45a80d))
+* **pending-approvals.ts:** added ag-grid and functionalities ([85dd70e](https://github.com/GummadiBuilt/User-Interface/commit/85dd70e874b2fd85c6fd3349154c5274b7105dba))
+* **pq form create tender:** pq form api integrations and tenders retrieve api changes ([de16161](https://github.com/GummadiBuilt/User-Interface/commit/de161614e2035937a84999329da3a2158ab3f871))
+* **pq form tenders components:** role based enable Api integration for submit in pq forms ([78af031](https://github.com/GummadiBuilt/User-Interface/commit/78af031fd1ab1153d2ac7bd0b991d99f5cc79e64))
+* **pq-form.ts:** added icons and updates in component ([fea6e42](https://github.com/GummadiBuilt/User-Interface/commit/fea6e42bf26f8f8d0deef4b3f16750febe2efe8d))
+* **pq-form.ts:** create pq-form ([4e1949d](https://github.com/GummadiBuilt/User-Interface/commit/4e1949de5f43f7268605617ab954447424835e2a))
+* **pq-form.ts:** design changes ([d08b3f4](https://github.com/GummadiBuilt/User-Interface/commit/d08b3f4c82289007bd7472c00a04cd853e99831d))
+* **pq-form.ts:** design changes ([fe92e06](https://github.com/GummadiBuilt/User-Interface/commit/fe92e068716dfc0db69ed0bb6071bcbb4784f118))
+* **pq-form.ts:** design changes ([fe4bb42](https://github.com/GummadiBuilt/User-Interface/commit/fe4bb42f000d23fbe1e9bd3cc74a5a8840836f39))
+* **pq-form.ts:** design changes ([99c89b7](https://github.com/GummadiBuilt/User-Interface/commit/99c89b750cc9a932b83a042409217d6d4ce35e3e))
+* **pq-form.ts:** design changes ([22639e2](https://github.com/GummadiBuilt/User-Interface/commit/22639e25a7c32775d46a2bfdaa4c87dd7fc47320))
+* **pq-form.ts:** design changes in pq-form ([eecc9a2](https://github.com/GummadiBuilt/User-Interface/commit/eecc9a2eceb04ff60aea65e840ae06ba8e224eb6))
+* **pqform:** pqform component and view applicant ([4fbac36](https://github.com/GummadiBuilt/User-Interface/commit/4fbac36cf24305175d5fdeb47bc1dfc44a2b8c9d))
+* **route changes:** routing changes ([f480f67](https://github.com/GummadiBuilt/User-Interface/commit/f480f67ea2b61e405eebe86cb0d4365f52c5c1fc))
+* **tender component:** added download tender list to tender component ([bad580b](https://github.com/GummadiBuilt/User-Interface/commit/bad580b5060384957dbca8c653ef5967337c249b))
+* **view-applicant-pq-form.ts:** aPI integration in applicant pq-form ([45f4a59](https://github.com/GummadiBuilt/User-Interface/commit/45f4a59052c446a7ba35e35898db9d6ef04388f6))
+* **view-applicants.ts:** added view applicants ([706ab24](https://github.com/GummadiBuilt/User-Interface/commit/706ab244e3e465f7e132d4b2e74c0eacc2ee3554))
+
 # [1.4.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.3.0...v1.4.0) (2022-12-06)
 
 
