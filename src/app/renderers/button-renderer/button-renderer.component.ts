@@ -68,7 +68,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
   applyPQForm() {
     const dlg = this.dialog.open(ConfirmationDlgComponent, {
-      data: { title: 'Are you sure you want to apply?', msg: '' }
+      data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
     });
     dlg.afterClosed().subscribe((submit: boolean) => {
       if (submit) {

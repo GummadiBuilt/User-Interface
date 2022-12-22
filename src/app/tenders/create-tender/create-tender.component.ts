@@ -76,6 +76,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     }
     this.tenderDetails = this._formBuilder.group({
       typeOfWork: ['', Validators.required],
+      projectName: ['', [Validators.required, Validators.maxLength(50)]],
       workDescription: ['', [Validators.required, Validators.maxLength(50)]],
       projectLocation: ['', [Validators.required, Validators.maxLength(50)]],
       typeOfContract: ['', [Validators.required]],
@@ -111,6 +112,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   editData(data: any) {
     if (data.tenderId) {
       this.tenderDetails.get('typeOfWork')?.patchValue(data.typeOfWork.establishmentDescription);
+      this.tenderDetails.get('projectName')?.patchValue(data.projectName);
       this.tenderDetails.get('workDescription')?.patchValue(data.workDescription);
       this.tenderDetails.get('projectLocation')?.patchValue(data.projectLocation);
       this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);

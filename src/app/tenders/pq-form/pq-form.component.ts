@@ -58,11 +58,6 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
 
     //Project Info (Admin)
     this.adminPqForm = this._formBuilder.group({
-      projectName: ['', [Validators.required, Validators.maxLength(50)]],
-      workPackage: [{ value: '', disabled: true }],
-      typeOfStructure: ['', [Validators.required, Validators.maxLength(50)]],
-      contractDuration: [{ value: '', disabled: true }],
-      durationCounter: [{ value: '', disabled: true }],
       pqLastDateOfSubmission: ['', [Validators.required]],
       tentativeDateOfAward: ['', [Validators.required]],
       scheduledCompletion: ['', Validators.required],
@@ -75,14 +70,9 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   getPQForms(data: any) {
-    this.adminPqForm.get('projectName')?.patchValue(data.projectName);
-    this.adminPqForm.get('workPackage')?.patchValue(data.workPackage);
-    this.adminPqForm.get('typeOfStructure')?.patchValue(data.typeOfStructure);
     this.adminPqForm.get('pqLastDateOfSubmission')?.patchValue(this.dateConverstion(data.pqLastDateOfSubmission));
     this.adminPqForm.get('tentativeDateOfAward')?.patchValue(this.dateConverstion(data.tentativeDateOfAward));
     this.adminPqForm.get('scheduledCompletion')?.patchValue(this.dateConverstion(data.scheduledCompletion));
-    this.adminPqForm.get('contractDuration')?.patchValue(data.contractDuration);
-    this.adminPqForm.get('durationCounter')?.patchValue(data.durationCounter);
     // this.pqFormTenderId = data.tenderId;
     if (data.id != 0) {
       this.pqFormId = data.id
@@ -103,7 +93,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
 
   applyPqForm() {
     const dlg = this.dialog.open(ConfirmationDlgComponent, {
-      data: { title: 'Are you sure you want to apply?', msg: '' }
+      data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
     });
     dlg.afterClosed().subscribe((submit: boolean) => {
       this.router.navigate(['/tenders', this.pqFormTenderId, 'create-applicants-pq-form']);
@@ -111,7 +101,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   onSave() {
-    console.log(this.adminPqForm.value.scheduledCompletion);
+    //console.log(this.adminPqForm.value.scheduledCompletion);
     this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
     if (this.adminPqForm.value.pqLastDateOfSubmission) {
       //console.log('in save',this.adminPqForm.value.pqLastDateOfSubmission);
