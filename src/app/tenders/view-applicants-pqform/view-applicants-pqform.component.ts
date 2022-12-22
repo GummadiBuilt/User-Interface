@@ -51,6 +51,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       this.pqFormTenderId = tenderId;
       if (tenderId && applicationId) {
         this.ApiServicesService.getApplicantPQForm(tenderId, applicationId).subscribe((data: applicantsPqFormResponse) => {
+          console.log(data);
           this.getApplicantPQForms(data);
         });
       }
@@ -83,29 +84,30 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       clientReferences: {},
       similarProjectNature: {},
 
-      esiRegistration: '',
-      epfRegistration: '',
-      gstRegistration: '',
-      panNumber: '',
+      esiRegistration: ['', Validators.maxLength(50)],
+      epfRegistration: ['', Validators.maxLength(50)],
+      gstRegistration: ['', Validators.maxLength(50)],
+      panNumber: ['', Validators.maxLength(50)],
 
       employeesStrength: {},
       capitalEquipment: {},
 
-      safetyPolicyManual: '',
-      ppeToStaff: '',
-      ppeToWorkMen: '',
-      safetyOfficeAvailability: '',
+      safetyPolicyManual: ['', Validators.maxLength(50)],
+      ppeToStaff: ['', Validators.maxLength(50)],
+      ppeToWorkMen: ['', Validators.maxLength(50)],
+      safetyOfficeAvailability: ['', Validators.maxLength(50)],
 
       financialInformation: {},
       companyBankers: {},
       companyAuditors: {},
 
-      underTaking: [false, Validators.required],
+      underTaking: [true, Validators.required],
       actionTaken: ['']
     });
   }
 
   getApplicantPQForms(data: any) {
+    console.log(data);
     this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
     this.applicantPqForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
     this.applicantPqForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
@@ -119,6 +121,22 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.applicantPqForm.get('contactEmailId')?.patchValue(data.contactEmailId);
     this.applicantPqForm.get('regionalHeadName')?.patchValue(data.regionalHeadName);
     this.applicantPqForm.get('regionalHeadPhoneNum')?.patchValue(data.regionalHeadPhoneNum);
+
+    this.applicantPqForm.get('esiRegistration')?.patchValue(data.esiRegistration);
+    this.applicantPqForm.get('epfRegistration')?.patchValue(data.epfRegistration);
+    this.applicantPqForm.get('gstRegistration')?.patchValue(data.gstRegistration);
+    this.applicantPqForm.get('panNumber')?.patchValue(data.panNumber);
+
+    this.applicantPqForm.get('safetyPolicyManual')?.patchValue(data.safetyPolicyManual);
+    this.applicantPqForm.get('ppeToStaff')?.patchValue(data.ppeToStaff);
+    this.applicantPqForm.get('ppeToWorkMen')?.patchValue(data.ppeToWorkMen);
+    this.applicantPqForm.get('safetyOfficeAvailability')?.patchValue(data.safetyOfficeAvailability);
+    if (Object.keys(data.similarProjects).length === 0) {
+      this.similarProjectsDetails = [];
+    } else {
+      this.similarProjectsDetails = JSON.parse(data.similarProjects);
+    }
+
     if (data.applicationId != 0) {
       this.applicantPqFormId = data.applicationId
     }
@@ -229,6 +247,10 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        const editingCells = params.api.getEditingCells();
+        const isCurrentRowEditing = editingCells.some((cell: any) => {
+          return cell.rowIndex === params.node.rowIndex;
+        });
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -247,7 +269,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     minWidth: 150,
     resizable: true,
   };
-  public similarProjectsDetails = [
+  public similarProjectsDetails: any[] = [
     { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
   ];
   private gridApiSimilarProjects!: GridApi;
@@ -279,6 +301,50 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         this.similarProjectsDetails.splice(params.rowIndex, 1);
       }
     }
+  }
+  onBtStartEditingSimilarProjects() {
+    this.gridApiSimilarProjects.setFocusedCell(1, 'SI No');
+    this.gridApiSimilarProjects.startEditingCell({
+      rowIndex: 1,
+      colKey: 'SI No',
+    });
+  }
+  onCellValueChangedSimilarProjects(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiSimilarProjects.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedSimilarProjects(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiSimilarProjects.applyTransaction({ update: addDataItem });
+      // this.gridApiSimilarProjects.forEachNode( (node) => {
+      //   this.similarProjectsDetails.push(node.data);
+      // });
+    }
+    this.gridApiSimilarProjects.refreshCells();
+  }
+  onCellEditingStoppedSimilarProjects(event: CellEditingStoppedEvent) {
+    this.gridApiSimilarProjects.stopEditing();
+  }
+  onRowEditingStartedSimilarProjects(params: any) {
+    params.api.refreshCells({
+      columns: ["action"],
+      rowNodes: [params.node],
+      force: true
+    });
+  }
+  onRowEditingStoppedSimilarProjects(params: any) {
+    params.api.refreshCells({
+      columns: ["action"],
+      rowNodes: [params.node],
+      force: true
+    });
+    this.gridApiSimilarProjects.stopEditing();
   }
 
   //Section C of PQ-Form: Client References of 3 Major Projects
@@ -353,7 +419,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
 
   getAllData() {
     this.gridApi.forEachNode(node => this.clientRefRowData.push(node.data));
-    return this.clientRefRowData;  
+    return this.clientRefRowData;
   }
 
   //Section C of PQ-Form: Projects of similar Nature
@@ -743,6 +809,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
   public applicantPqFormId: any;
   onSave() {
     this.applicantPqForm.controls['actionTaken'].setValue('SAVE');
+    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     console.log(this.applicantPqForm.value);
 
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
@@ -798,5 +865,4 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       this.toastr.error('Error in Submitting Applicant PQ-Form');
     }
   }
-
 }

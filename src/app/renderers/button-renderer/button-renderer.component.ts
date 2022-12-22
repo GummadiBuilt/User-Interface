@@ -76,6 +76,12 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
       }
     });
   }
+  updatePQForm() {
+    console.log(this.rowData);
+    // if (this.rowData.pq_id != null) {
+    //   this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-applicants-pq-form', this.rowData.applicant_id]);
+    // }
+  }
   // navigateToApplicants(){
   //   this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);
   // }

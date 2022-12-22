@@ -44,7 +44,8 @@
         </div>
         <div *ngIf="!toggle" class="tenders-page" fxLayout="row wrap" fxLayoutAlign="start center"
             fxLayoutGap="20px grid">
-            <div fxFlex="50%" fxFlex.md="50%" fxFlex.xs="100%" fxFlex.sm="100%" *ngFor="let tender of rowData;let indexOfelement=index;">
+            <div fxFlex="50%" fxFlex.md="50%" fxFlex.xs="100%" fxFlex.sm="100%"
+                *ngFor="let tender of rowData;let indexOfelement=index;">
                 <mat-card>
                     <div fxLayout="column" fxLayoutGap="12px">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -69,11 +70,12 @@
                             </div> -->
                             <div fxLayoutAlign="center center">
                                 <button mat-stroked-button *ngIf="userRole?.includes('admin')"
-                                (click)="navigateToPQForm(tender.tender_id,tender.pq_id)">
-                                    {{buttonLabel[indexOfelement]}}   
+                                    (click)="navigateToPQForm(tender.tender_id,tender.pq_id)">
+                                    {{buttonLabel[indexOfelement]}}
                                 </button>
                                 <button *ngIf="!userRole?.includes('admin') && tender.workflow_step != 'SAVE'"
-                                 mat-stroked-button (click)="viewPQForm(tender.tender_id,tender.pq_id)">View PQ-Form</button>
+                                    mat-stroked-button (click)="viewPQForm(tender.tender_id,tender.pq_id)">View
+                                    PQ-Form</button>
                             </div>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between center">

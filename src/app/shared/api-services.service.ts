@@ -13,6 +13,8 @@ import { tenderResopnse } from '../tenders/tender/tenderResponse';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { pqFormResponse } from '../tenders/pq-form/pqformresponse';
 import { applicantsPqFormResponse } from '../tenders/view-applicants-pqform/applicantpqformresponse';
+import { clientUsersResponse } from './clientUsersResponse';
+import { contractorUsersResponse } from './contractorUsersResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -121,6 +123,17 @@ export class ApiServicesService {
   //Update Applicant PQ Form putAPI
   public updateApplicantPQForm(tenderId: any, applicationId: any, data: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.put<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/update', data);
+  }
+
+
+  //client users getAPI
+  public getClientUsers(): Observable<clientUsersResponse> {
+    return this.httpClient.get<clientUsersResponse>(this.url + '/client-users/getAll');
+  }
+
+  //contractor users getAPI
+  public getContractorUsers(): Observable<contractorUsersResponse> {
+    return this.httpClient.get<contractorUsersResponse>(this.url + '/contractor-users/getAll');
   }
 
 

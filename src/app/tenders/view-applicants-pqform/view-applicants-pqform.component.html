@@ -61,7 +61,8 @@
                 <ng-template matStepperIcon="vendor_info">
                     <i class="fa-solid fa-city"></i>
                 </ng-template>
-                <mat-step label="Vendor's General Company Information" state="vendor_info" [completed]="false">
+                <mat-step [stepControl]="applicantPqForm" errorMessage="Fill required company details."
+                    label="Vendor's General Company Information" state="vendor_info" [completed]="false">
                     <form [formGroup]="applicantPqForm">
                         <div>
                             <h3 class="info-header">Company Details</h3>
@@ -84,7 +85,8 @@
                                     <mat-label>Year of Establishment *</mat-label>
                                     <mat-form-field appearance="outline">
                                         <mat-select placeholder="Select Year" formControlName="yearOfEstablishment">
-                                            <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+                                            <mat-option *ngFor="let year of years"
+                                                value="{{year}}">{{year}}</mat-option>
                                         </mat-select>
                                         <mat-error *ngIf="applicantPqForm.get('yearOfEstablishment')?.invalid">
                                             Year of Establishment is required
@@ -244,64 +246,77 @@
 
                                 </div>
                             </div>
-                            <!-- <div>
-                        <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
-                            fxLayoutGap="8px">
-                            <button mat-stroked-button type="button"
-                                (click)="accordionTurnover.openAll()">Expand All
-                            </button>
-                            <button mat-stroked-button type="button"
-                                (click)="accordionTurnover.closeAll()">Collapse All
-                            </button>
-                        </div>
-                        <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
-                            <mat-expansion-panel>
-                                <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                            <mat-icon>currency_rupee</mat-icon>
-                                            <span>Turnover Details (Last 3 Years)</span>
-                                        </div>
-                                    </mat-panel-title>
-                                </mat-expansion-panel-header>
-                                <div class="example-wrapper">
-                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                        [columnDefs]="turnoverColumnDefs"
-                                        [defaultColDef]="turnoverDefaultColDef" [rowData]="turnoverDetails"
-                                        [domLayout]="domLayout" [editType]="editType"
-                                        (gridReady)="onGridReadyTurnover($event)"
-                                        (cellClicked)="onCellClickedTurnover($event)"
-                                        (rowValueChanged)="onRowValueChangedTurnover($event)">
-                                    </ag-grid-angular>
+                            <div>
+                                <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
+                                    fxLayoutGap="8px">
+                                    <button mat-stroked-button type="button"
+                                        (click)="accordionTurnover.openAll()">Expand All
+                                    </button>
+                                    <button mat-stroked-button type="button"
+                                        (click)="accordionTurnover.closeAll()">Collapse All
+                                    </button>
                                 </div>
-                            </mat-expansion-panel>
-                            <mat-expansion-panel>
-                                <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                            <mat-icon>repeat</mat-icon>
-                                            <span>Similar Projects</span>
+                                <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-20p fa-solid fa-indian-rupee-sign"></i>
+                                                    <span>Turnover Details (Last 3 Years)</span>
+                                                </div>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div class="example-wrapper">
+                                            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                                [columnDefs]="turnoverColumnDefs"
+                                                [defaultColDef]="turnoverDefaultColDef" [rowData]="turnoverDetails"
+                                                [domLayout]="domLayout" [editType]="editType"
+                                                (gridReady)="onGridReadyTurnover($event)"
+                                                (cellClicked)="onCellClickedTurnover($event)"
+                                                (rowValueChanged)="onRowValueChangedTurnover($event)">
+                                            </ag-grid-angular>
                                         </div>
-                                    </mat-panel-title>
-                                </mat-expansion-panel-header>
-                                <div class="example-wrapper">
-                                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                        [columnDefs]="similarProjectsColumnDefs"
-                                        [defaultColDef]="similarProjectsDefaultColDef"
-                                        [rowData]="similarProjectsDetails" [domLayout]="domLayout"
-                                        [editType]="editType" (gridReady)="onGridReadySimilarProjects($event)"
-                                        (cellClicked)="onCellClickedSimilarProjects($event)">
-                                    </ag-grid-angular>
-                                </div>
-                            </mat-expansion-panel>
-                        </mat-accordion>
-                    </div> -->
+                                    </mat-expansion-panel>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-20p fa-solid fa-layer-group"></i>
+                                                    <span>Similar Projects</span>
+                                                </div>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div class="example-wrapper">
+                                            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                                [columnDefs]="similarProjectsColumnDefs"
+                                                [defaultColDef]="similarProjectsDefaultColDef"
+                                                [rowData]="similarProjectsDetails" [domLayout]="domLayout"
+                                                [editType]="editType" (gridReady)="onGridReadySimilarProjects($event)"
+                                                (cellClicked)="onCellClickedSimilarProjects($event)"
+                                                (cellValueChanged)="onCellValueChangedSimilarProjects($event)"
+                                                (rowValueChanged)="onRowValueChangedSimilarProjects($event)"
+                                                (cellEditingStopped)="onCellEditingStoppedSimilarProjects($event)"
+                                                (rowEditingStarted)="onRowEditingStartedSimilarProjects($event)"
+                                                (rowEditingStopped)="onRowEditingStoppedSimilarProjects($event)">
+                                            </ag-grid-angular>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
                         </div>
-                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="16px">
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
                                     <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-save fa-solid fa-floppy-disk"></i>
+                                        <div>Save</div>
+                                    </div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
@@ -399,13 +414,55 @@
                                                 Specify NA if not available or applicable.</li>
                                         </ul>
                                     </div>
-                                    <div class="example-wrapper">
-                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                            [columnDefs]="statutoryCompliancesColumnDefs"
-                                            [defaultColDef]="statutoryCompliancesDefaultColDef"
-                                            [rowData]="statutoryCompliancesRowData" [domLayout]="domLayout"
-                                            [editType]="editType">
-                                        </ag-grid-angular>
+                                    <div fxLayout="row wrap" fxLayoutAlign="space-between center"
+                                        fxLayoutGap="12px grid">
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>ESI Registration</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="ESI Registration"
+                                                    formControlName="esiRegistration">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>EPF Registration</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="EPF Registration"
+                                                    formControlName="epfRegistration">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>GST Registration</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="GST Registration"
+                                                    formControlName="gstRegistration">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>PAN Number</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="PAN Number" formControlName="panNumber">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
                                     </div>
                                 </mat-expansion-panel>
                                 <mat-expansion-panel>
@@ -474,21 +531,72 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="example-wrapper">
-                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                            [columnDefs]="safteyPolicyColumnDefs"
-                                            [defaultColDef]="safteyPolicyDefaultColDef" [rowData]="safteyPolicyRowData"
-                                            [domLayout]="domLayout" [editType]="editType">
-                                        </ag-grid-angular>
+                                    <div fxLayout="row wrap" fxLayoutAlign="space-between center"
+                                        fxLayoutGap="12px grid">
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>Safety Policy Manual</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Safety Policy Manual"
+                                                    formControlName="safetyPolicyManual">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('safetyPolicyManual')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>PPE to Staff</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="PPE to Staff" formControlName="ppeToStaff">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('ppeToStaff')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>PPE to Work Men</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="PPE to Work Men"
+                                                    formControlName="ppeToWorkMen">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('ppeToWorkMen')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                                            fxFlex.xl="24%" fxLayout="column">
+                                            <mat-label>Safety Office Availability</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput placeholder="Safety Office Availability"
+                                                    formControlName="safetyOfficeAvailability">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('safetyOfficeAvailability')?.errors?.['maxlength']">
+                                                    Enter only 50 characters
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
                                     </div>
                                 </mat-expansion-panel>
                             </mat-accordion>
                         </div>
-                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="16px">
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
                                     <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-save fa-solid fa-floppy-disk"></i>
+                                        <div>Save</div>
+                                    </div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
@@ -590,11 +698,19 @@
                                 </mat-expansion-panel>
                             </mat-accordion>
                         </div>
-                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="16px">
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
                                     <div><span>Previous</span></div>
+                                </div>
+                            </button>
+                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-save fa-solid fa-floppy-disk"></i>
+                                        <div>Save</div>
+                                    </div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
@@ -621,7 +737,7 @@
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
-                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
+                        <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px">
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>

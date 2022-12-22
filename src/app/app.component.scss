@@ -62,14 +62,14 @@ a {
     background: linear-gradient(#e73a3d, #841618);
 }
 
-.login-button {
-    font-size: 14px !important;
-    color: white;
-    background: linear-gradient(#e73a3d, #841618);
-    font-weight: 500;
-    margin-left: 20px !important;
-    margin-right: 20px !important;
-}
+// .login-button {
+//     font-size: 14px !important;
+//     color: white;
+//     background: linear-gradient(#e73a3d, #841618);
+//     font-weight: 500;
+//     margin-left: 20px !important;
+//     margin-right: 20px !important;
+// }
 
 button.mat-menu:hover {
     color: white;
@@ -78,4 +78,12 @@ button.mat-menu:hover {
 
 .icon-20p {
     font-size: 20px;
+}
+
+.notifications {
+    cursor: pointer;
+}
+
+.user-menu {
+    cursor: pointer;
 }

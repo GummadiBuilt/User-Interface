@@ -5,3 +5,103 @@
 .text-maroon {
     color: #841618;
 }
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.bold-700 {
+    font-weight: 700;
+}
+
+//ag-grid
+::ng-deep ag-grid-angular {
+    width: 100% !important;
+}
+
+::ng-deep .ag-root-wrapper-body.ag-layout-normal.ag-focus-managed {
+    height: 100% !important;
+}
+
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
+
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}
+
+//ag-grid cell text wrap in words
+::ng-deep .ag-cell-wrap-text {
+    word-break: break-word !important;
+}
+
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
+
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}
+
+.toggle-group {
+    margin-bottom: 4px;
+}
+
+mat-button-toggle {
+    color: #841618;
+    background-color: white;
+}
+
+.mat-button-toggle-checked {
+    color: white;
+    background-color: #841618;
+}
+
+::ng-deep .mat-button-toggle .mat-icon {
+    color: black;
+    font-size: 22px;
+}
+
+::ng-deep .mat-button-toggle-checked .mat-icon {
+    color: white;
+    font-size: 22px;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 32px !important;
+}
+
+.icon-20p {
+    font-size: 20px;
+}
+
+//matcard styles
+.clients-page mat-card {
+    border-radius: 0px !important;
+    padding: 24px !important;
+}
+
+.clients-page mat-card h3 {
+    color: #841618;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.clients-page mat-card h4 {
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.count-tenders {
+    background-color: rgb(245, 245, 245);
+    padding: 0px 12px 0px 12px;
+}
+
+::ng-deep .mat-divider-vertical {
+    background-color: #841618 !important;
+}
+
+.count {
+    padding: 16px;
+}

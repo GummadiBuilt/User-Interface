@@ -1,26 +1,42 @@
-
-<!-- 
-<button *ngIf="isLogIn" type="button" (click)="logout()">Log out</button>
-<button *ngIf="!isLogIn" type="button" (click)="login()">Log in</button> -->
-
-<ng-container *ngIf="agentProfile">
-  <h2>User information</h2>
-  <table>
-    <tr *ngIf="agentProfile.username">
-      <th scope="row">Username</th>
-      <td>{{ agentProfile.username }}</td>
-    </tr>
-    <tr *ngIf="agentProfile.firstName">
-      <th scope="row">First name</th>
-      <td>{{ agentProfile.firstName }}</td>
-    </tr>
-    <tr *ngIf="agentProfile.lastName">
-      <th scope="row">First name</th>
-      <td>{{ agentProfile.lastName }}</td>
-    </tr>
-    <tr *ngIf="agentProfile.email">
-      <th scope="row">E-mail</th>
-      <td>{{ agentProfile.email }}</td>
-    </tr>
-  </table>
-</ng-container>
+<div class="profile">
+  <h2>User Information</h2>
+  <div fxLayout="column">
+    <div fxLayout="row">
+      <span>Username</span>
+      <span>:&ensp;{{ agentProfile.username }}</span>
+    </div>
+    <div fxLayout="row">
+      <span>First Name</span>
+      <span>:&ensp;{{ agentProfile.firstName }}</span>
+    </div>
+    <div fxLayout="row">
+      <span>Last Name</span>
+      <span>:&ensp;{{ agentProfile.lastName }}</span>
+    </div>
+    <div fxLayout="row">
+      <span>E-Mail</span>
+      <span>:&ensp;{{ agentProfile.email }}</span>
+    </div>
+  </div>
+  <!-- <ng-container *ngIf="agentProfile">
+    <h2>User information</h2>
+    <table>
+      <tr *ngIf="agentProfile.username">
+        <th scope="row">Username</th>
+        <td>{{ agentProfile.username }}</td>
+      </tr>
+      <tr *ngIf="agentProfile.firstName">
+        <th scope="row">First name</th>
+        <td>{{ agentProfile.firstName }}</td>
+      </tr>
+      <tr *ngIf="agentProfile.lastName">
+        <th scope="row">First name</th>
+        <td>{{ agentProfile.lastName }}</td>
+      </tr>
+      <tr *ngIf="agentProfile.email">
+        <th scope="row">E-mail</th>
+        <td>{{ agentProfile.email }}</td>
+      </tr>
+    </table>
+  </ng-container> -->
+</div>

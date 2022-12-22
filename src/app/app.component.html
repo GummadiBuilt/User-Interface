@@ -1,126 +1,139 @@
 <div class="nav-bar">
-  <mat-toolbar class="mat-elevation-z6">
-    <mat-toolbar-row>
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
-        <div fxShow="true" fxHide.gt-sm="true">
-          <button mat-icon-button (click)="sidenav.toggle()">
-            <i class="icon-20p fa-solid fa-bars"></i>
-          </button>
-        </div>
-        <a routerLink="home" fxShow="true" fxHide.lt-md>
-          <img class="logo" src="assets/images/logo.png">
-        </a>
-      </div>
+	<mat-toolbar class="mat-elevation-z6">
+		<mat-toolbar-row>
+			<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
+				<div fxShow="true" fxHide.gt-sm="true">
+					<button mat-icon-button (click)="sidenav.toggle()">
+						<i class="icon-20p fa-solid fa-bars"></i>
+					</button>
+				</div>
+				<a routerLink="home" fxShow="true" fxHide.lt-md>
+					<img class="logo" src="assets/images/logo.png">
+				</a>
+			</div>
 
-      <span class="menu-spacer"></span>
-      <div fxShow="true" fxHide.lt-md *ngFor="let link of links; index as i" fxLayoutAlign="center center">
-        <a class="nav-links" mat-button [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
-        <span class="nav-divider">|</span>
-      </div>
-      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn">
-        <a class="nav-links" mat-button routerLink="tenders" routerLinkActive="router-link-active">Tenders</a>
-        <span class="nav-divider">|</span>
-      </div>
-      <div fxShow="true" fxHide.lt-md fxLayoutAlign="center center"
-        *ngIf="isLoggedIn && userRoleEnable?.includes('admin')">
-        <!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
-        <a class="nav-links" mat-button [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
-          <mat-menu #menu="matMenu">
-            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/clients"
-              routerLinkActive="router-link-active">
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                <div><i class="fa-solid fa-user"></i></div>
-                <div>Clients</div>
-              </div>
-            </a>
-            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/contractors"
-              routerLinkActive="router-link-active">
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                <div><i class="fa-solid fa-user-gear"></i></div>
-                <div>Contractors</div>
-              </div>
-            </a>
-            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/pending-approvals"
-              routerLinkActive="router-link-active">
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                <div><i class="fa-solid fa-user-clock"></i></div>
-                <div>Pending Approvals</div>
-              </div>
-            </a>
-            <a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/audit-approvals"
-              routerLinkActive="router-link-active">
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                <div><i class="fa-solid fa-user-check"></i></div>
-                <div>Audit Approvals</div>
-              </div>
-            </a>
-          </mat-menu>
-        </a>
-        <span class="nav-divider">|</span>
-      </div>
-      <div fxHide.lt-md class="submit-form" fxLayout="column" fxLayoutGap="12px">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <button class="login-button" fxShow="true" mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
-          <button class="login-button" fxShow="true" mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
-        </div>
-      </div>
+			<span class="menu-spacer"></span>
+			<div fxShow="true" fxHide.lt-md *ngFor="let link of links; index as i" fxLayoutAlign="center center">
+				<a class="nav-links" mat-button [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
+				<span class="nav-divider">|</span>
+			</div>
+			<div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
+				<button class="nav-links" mat-button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+			</div>
+			<div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn">
+				<a class="nav-links" mat-button routerLink="tenders" routerLinkActive="router-link-active">Tenders</a>
+				<span *ngIf="userRoleEnable?.includes('admin')" class="nav-divider">|</span>
+			</div>
+			<div fxShow="true" fxHide.lt-md fxLayoutAlign="center center"
+				*ngIf="isLoggedIn && userRoleEnable?.includes('admin')">
+				<!-- <a class="nav-links" mat-button routerLink="pending-approvals" routerLinkActive="router-link-active">Admin</a> -->
+				<a class="nav-links" mat-button [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
+					<mat-menu #menu="matMenu">
+						<a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/clients"
+							routerLinkActive="router-link-active">
+							<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+								<div><i class="fa-solid fa-user"></i></div>
+								<div>Clients</div>
+							</div>
+						</a>
+						<a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/contractors"
+							routerLinkActive="router-link-active">
+							<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+								<div><i class="fa-solid fa-user-gear"></i></div>
+								<div>Contractors</div>
+							</div>
+						</a>
+						<a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/pending-approvals"
+							routerLinkActive="router-link-active">
+							<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+								<div><i class="fa-solid fa-user-clock"></i></div>
+								<div>Pending Approvals</div>
+							</div>
+						</a>
+						<a class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/audit-approvals"
+							routerLinkActive="router-link-active">
+							<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+								<div><i class="fa-solid fa-user-check"></i></div>
+								<div>Audit Approvals</div>
+							</div>
+						</a>
+					</mat-menu>
+				</a>
+			</div>
+			<div *ngIf="isLoggedIn" fxHide.lt-md fxLayout="row" fxLayoutGap="24px">
+				<div class="notifications">
+					<i class="fa-solid fa-bell"></i>
+				</div>
+				<div class="user-menu" [matMenuTriggerFor]="userMenu">
+					<i class="fa-solid fa-user"></i>
+				</div>
+			</div>
+			<mat-menu #userMenu="matMenu">
+				<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
+					<a style="width: 90%;" class="nav-links" mat-button fxLayoutAlign="start center" routerLink="/profile"
+						routerLinkActive="router-link-active">
+						<div>My Profile</div>
+					</a>
+					<a style="width: 90%;" mat-button fxLayoutAlign="start center" *ngIf="isLoggedIn"
+						(click)="logout()">Logout</a>
+				</div>
+			</mat-menu>
 
+			<a routerLink="home" fxShow="true" fxHide.gt-sm="true">
+				<img class="logo" src="assets/images/logo.png">
+			</a>
+		</mat-toolbar-row>
+	</mat-toolbar>
 
-      <a routerLink="home" fxShow="true" fxHide.gt-sm="true">
-        <img class="logo" src="assets/images/logo.png">
-      </a>
-    </mat-toolbar-row>
-  </mat-toolbar>
-
-  <mat-sidenav-container fxFlexFill>
-    <mat-sidenav #sidenav>
-      <mat-nav-list>
-        <div fxLayout="column" fxLayoutGap="12px">
-          <a (click)="clickHandler()" class="nav-links" *ngFor="let link of links; index as i" mat-button
-            [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
-          <a (click)="clickHandler()" *ngIf="isLoggedIn" class="nav-links" mat-button routerLink="tenders"
-            routerLinkActive="router-link-active">Tenders</a>
-          <a *ngIf="isLoggedIn && userRoleEnable?.includes('admin')" class="nav-links" mat-button
-            [matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
-            <mat-menu #menu="matMenu">
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center" routerLink="clients"
-                routerLinkActive="router-link-active">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                  <div><i class="fa-solid fa-user"></i></div>
-                  <div>Clients</div>
-                </div>
-              </a>
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
-                routerLink="contractors" routerLinkActive="router-link-active">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                  <div><i class="fa-solid fa-user-gear"></i></div>
-                  <div>Contractors</div>
-                </div>
-              </a>
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
-                routerLink="pending-approvals" routerLinkActive="router-link-active">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                  <div><i class="fa-solid fa-user-clock"></i></div>
-                  <div>Pending Approvals</div>
-                </div>
-              </a>
-              <a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
-                routerLink="audit-approvals" routerLinkActive="router-link-active">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                  <div><i class="fa-solid fa-user-check"></i></div>
-                  <div>Audit Approvals</div>
-                </div>
-              </a>
-            </mat-menu>
-          </a>
-          <a (click)="clickHandler();login();" *ngIf="!isLoggedIn" class="login-button" mat-button>Login</a>
-          <a (click)="clickHandler();logout();" *ngIf="isLoggedIn" class="login-button" mat-button>Logout</a>
-        </div>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content fxFlexFill class="sidenav-container">
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+	<mat-sidenav-container fxFlexFill>
+		<mat-sidenav #sidenav>
+			<mat-nav-list>
+				<div fxLayout="column" fxLayoutGap="12px">
+					<a (click)="clickHandler()" class="nav-links" *ngFor="let link of links; index as i" mat-button
+						[routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
+					<a (click)="clickHandler()" *ngIf="isLoggedIn" class="nav-links" mat-button routerLink="tenders"
+						routerLinkActive="router-link-active">Tenders</a>
+					<a *ngIf="isLoggedIn && userRoleEnable?.includes('admin')" class="nav-links" mat-button
+						[matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
+						<mat-menu #menu="matMenu">
+							<a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center" routerLink="clients"
+								routerLinkActive="router-link-active">
+								<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+									<div><i class="fa-solid fa-user"></i></div>
+									<div>Clients</div>
+								</div>
+							</a>
+							<a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+								routerLink="contractors" routerLinkActive="router-link-active">
+								<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+									<div><i class="fa-solid fa-user-gear"></i></div>
+									<div>Contractors</div>
+								</div>
+							</a>
+							<a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+								routerLink="pending-approvals" routerLinkActive="router-link-active">
+								<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+									<div><i class="fa-solid fa-user-clock"></i></div>
+									<div>Pending Approvals</div>
+								</div>
+							</a>
+							<a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+								routerLink="audit-approvals" routerLinkActive="router-link-active">
+								<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+									<div><i class="fa-solid fa-user-check"></i></div>
+									<div>Audit Approvals</div>
+								</div>
+							</a>
+						</mat-menu>
+					</a>
+					<a (click)="clickHandler();login();" *ngIf="!isLoggedIn" class="login-button" mat-button>Login</a>
+					<a (click)="clickHandler();logout();" *ngIf="isLoggedIn" class="login-button" mat-button>Logout</a>
+				</div>
+			</mat-nav-list>
+		</mat-sidenav>
+		<mat-sidenav-content fxFlexFill class="sidenav-container">
+			<router-outlet></router-outlet>
+		</mat-sidenav-content>
+	</mat-sidenav-container>
 </div>
 <app-my-loader></app-my-loader>
