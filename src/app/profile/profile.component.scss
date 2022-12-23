@@ -2,3 +2,12 @@
     color: #841618;
     padding: 24px;
 }
+
+::ng-deep .profile mat-card {
+    border-radius: 0px !important;
+    padding: 24px !important;
+}
+
+::ng-deep .mat-stroked-button {
+    background-color: white;
+}

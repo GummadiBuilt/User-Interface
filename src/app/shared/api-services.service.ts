@@ -15,6 +15,7 @@ import { pqFormResponse } from '../tenders/pq-form/pqformresponse';
 import { applicantsPqFormResponse } from '../tenders/view-applicants-pqform/applicantpqformresponse';
 import { clientUsersResponse } from './clientUsersResponse';
 import { contractorUsersResponse } from './contractorUsersResponse';
+import { userProfileResopnse } from '../profile/userProfileResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -136,6 +137,10 @@ export class ApiServicesService {
     return this.httpClient.get<contractorUsersResponse>(this.url + '/contractor-users/getAll');
   }
 
+  //user profile getAPI
+  public getUserProfile(): Observable<userProfileResopnse> {
+    return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile');
+  }
 
   //download files converstion
   downloadFile(data: any) {

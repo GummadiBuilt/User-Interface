@@ -1,42 +1,35 @@
 <div class="profile">
-  <h2>User Information</h2>
-  <div fxLayout="column">
-    <div fxLayout="row">
-      <span>Username</span>
-      <span>:&ensp;{{ agentProfile.username }}</span>
-    </div>
-    <div fxLayout="row">
-      <span>First Name</span>
-      <span>:&ensp;{{ agentProfile.firstName }}</span>
-    </div>
-    <div fxLayout="row">
-      <span>Last Name</span>
-      <span>:&ensp;{{ agentProfile.lastName }}</span>
-    </div>
-    <div fxLayout="row">
-      <span>E-Mail</span>
-      <span>:&ensp;{{ agentProfile.email }}</span>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <h2>User Information</h2>
+    <div fxLayout="row" fxLayoutGap="8px">
+      <a mat-stroked-button href="http://localhost:8080/realms/Local-Realm/protocol/openid-connect/auth?response_type=code&client_id=gummadi-local&redirect_uri=http://localhost:4200&kc_action=UPDATE_PASSWORD">
+        <div fxLayout="row" fxLayoutGap="8px">
+          <div><i class="fa-solid fa-lock"></i></div>
+          <div>Change Password</div>
+        </div>
+      </a>
+      <button mat-stroked-button>
+        <div fxLayout="row" fxLayoutGap="8px">
+          <div><i class="fa-solid fa-user-pen"></i></div>
+          <div>Edit User Profile</div>
+        </div>
+      </button>
     </div>
   </div>
-  <!-- <ng-container *ngIf="agentProfile">
-    <h2>User information</h2>
-    <table>
-      <tr *ngIf="agentProfile.username">
-        <th scope="row">Username</th>
-        <td>{{ agentProfile.username }}</td>
-      </tr>
-      <tr *ngIf="agentProfile.firstName">
-        <th scope="row">First name</th>
-        <td>{{ agentProfile.firstName }}</td>
-      </tr>
-      <tr *ngIf="agentProfile.lastName">
-        <th scope="row">First name</th>
-        <td>{{ agentProfile.lastName }}</td>
-      </tr>
-      <tr *ngIf="agentProfile.email">
-        <th scope="row">E-mail</th>
-        <td>{{ agentProfile.email }}</td>
-      </tr>
-    </table>
-  </ng-container> -->
+  <mat-card>
+    <div fxLayout="column">
+      <div fxLayout="row">
+        <span>First Name</span>
+        <span>:&ensp;{{ userData?.contactFirstName }}</span>
+      </div>
+      <div fxLayout="row">
+        <span>Last Name</span>
+        <span>:&ensp;{{ userData?.contactLastName }}</span>
+      </div>
+      <div fxLayout="row">
+        <span>Mobile</span>
+        <span>:&ensp;{{ userData?.contactPhoneNumber }}</span>
+      </div>
+    </div>
+  </mat-card>
 </div>

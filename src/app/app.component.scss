@@ -84,6 +84,8 @@ button.mat-menu:hover {
     cursor: pointer;
 }
 
-.user-menu {
+.example-header-image {
     cursor: pointer;
+    background-image: url('^assets/images/user-profile.png');
+    background-size: cover;
 }
