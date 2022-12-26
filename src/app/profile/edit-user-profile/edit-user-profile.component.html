@@ -1,0 +1,190 @@
+<div class="edit-user">
+    <h2>Update User</h2>
+    <mat-card class="update-form">
+        <form [formGroup]="editUserForm">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>First Name</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                            formControlName="contactFirstName" #nameInput>
+                        <mat-error *ngIf="editUserForm.controls['contactFirstName'].errors?.['required']">First Name
+                            is
+                            required
+                        </mat-error>
+                        <mat-error *ngIf="editUserForm.get('contactFirstName')?.errors?.['minlength']">First
+                            Name should
+                            be 3 character.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Last Name</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                            formControlName="contactLastName" #nameInput>
+                        <mat-error *ngIf="editUserForm.controls['contactLastName'].errors?.['required']">Last
+                            Name is
+                            required
+                        </mat-error>
+                        <mat-error *ngIf="editUserForm.get('contactLastName')?.errors?.['minlength']">Last
+                            Name should
+                            be 3 character.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Designation</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Designation" formControlName="contactDesignation">
+                        <mat-error *ngIf="editUserForm.controls['contactDesignation'].errors?.['required']">
+                            Designation is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Mobile</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
+                        <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
+                        <mat-error *ngIf="editUserForm.controls['contactPhoneNumber'].errors?.['required']">
+                            Mobile Number is required
+                        </mat-error>
+                        <mat-error *ngIf="editUserForm.controls['contactPhoneNumber'].errors?.['pattern']">
+                            Please enter valid mobile number
+                        </mat-error>
+                        <mat-error
+                            *ngIf="editUserForm.controls['contactPhoneNumber'].errors?.['minlength'] || editUserForm.controls['contactPhoneNumber'].errors?.['maxlength']">
+                            Mobile number should be 10 digits
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Email Id</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
+                        <i matSuffix class="icon-20p icon-gray fa-regular fa-envelope"></i>
+                        <mat-error *ngIf="editUserForm.controls['contactEmailAddress'].errors?.['required']">
+                            Email ID is required
+                        </mat-error>
+                        <mat-error *ngIf="editUserForm.controls['contactEmailAddress'].errors?.['pattern']">
+                            Please enter valid email
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Company Name</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Company Name" minlength="3" maxlength="50" inputmode="tel"
+                            formControlName="companyName" #nameInput>
+                        <mat-error *ngIf="editUserForm.get('companyName')?.errors?.['required']">Company Name
+                            is required</mat-error>
+                        <mat-error *ngIf="editUserForm.get('companyName')?.errors?.['minlength']">Name should
+                            be 3 character.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Year of Establishment</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Year of Establishment" formControlName="yearOfEstablishment"
+                            numbersOnly>
+                        <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['required']">
+                            Year of Establishment is required</mat-error>
+                        <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['pattern']">
+                            Please enter valid year</mat-error>
+                        <mat-error
+                            *ngIf="(editUserForm.get('yearOfEstablishment')?.errors?.['minlength'] || editUserForm.get('yearOfEstablishment')?.errors?.['maxlength']) && !editUserForm.controls['yearOfEstablishment'].errors?.['pattern']">
+                            Year must be 4 digits</mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Type of Establishment</mat-label>
+                    <mat-form-field class="example-chip-list" appearance="outline">
+                        <mat-chip-list #chipList aria-label="Type of Establishment selection"
+                            formControlName="typeOfEstablishmentCtrl">
+                            <mat-chip *ngFor="let typeOfEst of typeOfEstablishment" (removed)="remove(typeOfEst)">
+                                {{typeOfEst.establishmentDescription}}
+                                <button matChipRemove>
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </mat-chip>
+                            <input placeholder="Select type..." #typeOfEstablishmentInput
+                                formControlName="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
+                                [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]=true (matChipInputTokenEnd)="add($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                            <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
+                                [value]="typeOfEstab">
+                                {{typeOfEstab}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="editUserForm.get('typeOfEstablishmentCtrl')?.errors?.['required']">
+                            Atleast 1 type should be selected
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Address</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Company Address" formControlName="address">
+                        <mat-error *ngIf="editUserForm.get('address')?.errors?.['required']">
+                            Company Address is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                    fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>Country</mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-select placeholder="Select a Country" formControlName="country"
+                            (selectionChange)="onCountrySelectEvent($event.value)">
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'countryName'"
+                                [array]="countries" (filteredReturn)="countryList =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of countryList" [value]="item">
+                                {{item.countryName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="editUserForm.get('country')?.errors?.['required']">
+                            Country is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                    fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>State</mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-select placeholder="Select a State" formControlName="state"
+                            (selectionChange)="onStateSelectEvent($event.value)">
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'stateName'" [array]="states"
+                                (filteredReturn)="statesList =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of statesList" [value]="item">
+                                {{item.stateName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="editUserForm.get('state')?.errors?.['required']">
+                            State is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
+                    fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>City</mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-select placeholder="Select a City" formControlName="city">
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'cityName'" [array]="cities"
+                                (filteredReturn)="citiesList =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of citiesList" [value]="item">
+                                {{item.cityName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="editUserForm.get('city')?.errors?.['required']">
+                            City is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="action-btn" fxLayout="row" fxLayoutAlign="end">
+                <button mat-raised-button color="primary">Update</button>
+            </div>
+        </form>
+    </mat-card>
+</div>

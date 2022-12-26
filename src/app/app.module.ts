@@ -56,6 +56,7 @@ import { UnitCellRendererComponent } from './renderers/unit-cell-renderer/unit-c
 import { NumericCellRendererComponent } from './renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import { DateDirective } from './shared/date.directive';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
+import { EditUserProfileComponent } from './profile/edit-user-profile/edit-user-profile.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -131,6 +132,7 @@ export const MY_DATE_FORMATS = {
     UnitCellRendererComponent,
     NumericCellRendererComponent,
     DateDirective,
+    EditUserProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -23,6 +23,7 @@ import { PQFormComponent } from './tenders/pq-form/pq-form.component';
 import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
+import { EditUserProfileComponent } from './profile/edit-user-profile/edit-user-profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -36,7 +37,8 @@ const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'corevalues', component: CorevaluesComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard], },
+  { path: 'update-user', component: EditUserProfileComponent, canActivate: [AppAuthGuard] },
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },
   { path: 'contractors', component: ContractorsComponent, data: { breadcrumb: 'Contractors' } },
   { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },

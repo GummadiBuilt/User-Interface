@@ -62,15 +62,6 @@ a {
     background: linear-gradient(#e73a3d, #841618);
 }
 
-// .login-button {
-//     font-size: 14px !important;
-//     color: white;
-//     background: linear-gradient(#e73a3d, #841618);
-//     font-weight: 500;
-//     margin-left: 20px !important;
-//     margin-right: 20px !important;
-// }
-
 button.mat-menu:hover {
     color: white;
     background: linear-gradient(#e73a3d, #841618);
@@ -80,12 +71,54 @@ button.mat-menu:hover {
     font-size: 20px;
 }
 
+.icon-24p {
+    font-size: 24px;
+}
+
 .notifications {
     cursor: pointer;
 }
 
-.example-header-image {
+.profile-icon {
     cursor: pointer;
-    background-image: url('^assets/images/user-profile.png');
-    background-size: cover;
+}
+
+::ng-deep .profile-divider .mat-divider {
+    background-color: rgb(236, 236, 236) !important;
+}
+
+.initials {
+    color: #FFFFFF;
+    font-size: 20px;
+    line-height: 19px;
+    letter-spacing: 0.2625px;
+}
+
+.text-maroon {
+    color: #841618;
+}
+
+.text-grey {
+    color: rgb(75, 75, 75);
+}
+
+::ng-deep .profile-menu {
+    padding: 8px;
+}
+
+::ng-deep .cdk-overlay-container .profile-menu {
+    margin-top: 8px;
+}
+
+::ng-deep .cdk-overlay-container .notification-menu {
+    margin-top: 8px;
+}
+
+::ng-deep .mat-badge-content {
+    background-color: #841618 !important;
+    color: white !important;
+}
+
+::ng-deep .notification-menu {
+    padding: 8px;
 }

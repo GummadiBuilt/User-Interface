@@ -14,7 +14,8 @@
 
 			<span class="menu-spacer"></span>
 			<div fxShow="true" fxHide.lt-md *ngFor="let link of links; index as i" fxLayoutAlign="center center">
-				<a class="nav-links" mat-button [routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
+				<a class="nav-links" mat-button [routerLink]="link"
+					routerLinkActive="router-link-active">{{titles[i]}}</a>
 				<span class="nav-divider">|</span>
 			</div>
 			<div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
@@ -61,16 +62,32 @@
 				</a>
 			</div>
 			<div *ngIf="isLoggedIn" fxHide.lt-md fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px">
-				<div class="notifications">
-					<i class="fa-solid fa-bell"></i>
+				<div class="notifications" [matMenuTriggerFor]="notificationMenu" fxLayoutAlign="center center">
+					<i [matBadge]="badgeContent" matBadgeSize="small" [matBadgeHidden]="isBadgeHidden"
+						(click)="isBadgeHidden = !isBadgeHidden" class="icon-24p fa-regular fa-bell"></i>
 				</div>
 				<mat-card style="display: none"></mat-card>
-				<div class="user-menu" [matMenuTriggerFor]="userMenu" mat-card-avatar class="example-header-image"></div>
+				<div class="profile-icon" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center" mat-card-avatar
+					[ngStyle]="{'background-color':  circleColor }">
+					<!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
+					<div class="initials" *ngIf="showInitials">{{initials}}</div>
+				</div>
 			</div>
-			<mat-menu #userMenu="matMenu">
+			<mat-menu class="profile-menu" #userMenu="matMenu">
 				<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
-					<a style="width: 90%;" class="nav-links" mat-button routerLink="/profile"
-						routerLinkActive="router-link-active">
+					<div class="text-grey" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
+						<div fxLayoutAlign="center center" mat-card-avatar
+							[ngStyle]="{'background-color':  circleColor }">
+							<!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
+							<div class="initials" *ngIf="showInitials">{{initials}}</div>
+						</div>
+						<div>{{userProfile?.firstName+" "+userProfile?.lastName}}</div>
+						<div>{{userProfile?.email}}</div>
+						<div style="width: 100%;" class="profile-divider">
+							<mat-divider></mat-divider>
+						</div>
+					</div>
+					<a style="width: 90%;" class="nav-links" mat-button routerLink="/profile">
 						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
 							<div><i class="fa-regular fa-circle-user"></i></div>
 							<div>My Profile</div>
@@ -78,10 +95,17 @@
 					</a>
 					<a style="width: 90%;" mat-button *ngIf="isLoggedIn" (click)="logout()">
 						<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-							<div><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+							<div><i class="fa-solid fa-power-off"></i></div>
 							<div>Logout</div>
 						</div>
 					</a>
+				</div>
+			</mat-menu>
+
+			<mat-menu class="notification-menu" #notificationMenu="matMenu">
+				<div fxLayout="column">
+					<a mat-button>Notification 1</a>
+					<a mat-button>Notification 2</a>
 				</div>
 			</mat-menu>
 
@@ -102,8 +126,8 @@
 					<a *ngIf="isLoggedIn && userRoleEnable?.includes('admin')" class="nav-links" mat-button
 						[matMenuTriggerFor]="menu" routerLinkActive="router-link-active">Admin
 						<mat-menu #menu="matMenu">
-							<a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center" routerLink="clients"
-								routerLinkActive="router-link-active">
+							<a (click)="clickHandler()" class="nav-links" mat-button fxLayoutAlign="start center"
+								routerLink="clients" routerLinkActive="router-link-active">
 								<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
 									<div><i class="fa-solid fa-user"></i></div>
 									<div>Clients</div>

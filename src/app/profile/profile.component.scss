@@ -11,3 +11,20 @@
 ::ng-deep .mat-stroked-button {
     background-color: white;
 }
+
+.action-buttons {
+    margin-bottom: 8px;
+}
+
+.initials {
+    color: #FFFFFF;
+    font-size: 20px;
+    line-height: 19px;
+    letter-spacing: 0.2625px;
+}
+
+::ng-deep h3 {
+    font-weight: 500 !important;
+    color: #841618 !important;
+    margin-bottom: 0px !important;
+}
