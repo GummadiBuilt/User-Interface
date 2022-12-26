@@ -26,27 +26,13 @@
                 <mat-step label="General Notes" state="general_notes" [completed]="false">
                     <div>
                         <ol>
-                            <li>The pre-qualification document shall be submitted in a sealed cover clearly indicating
-                                the Name of the project on top of the cover. Though soft copy form shall be accepted to
-                                expedite the process, the hard copy duly signed by contractor shall form the basis of
-                                final assessment.
-                            </li>
-                            <li>The last date for receipt of completed pre-qualification documents with all the
-                                necessary certificates, is as specified in the initial section - 'Project Information'
-                            </li>
-                            <li>Incomplete or incorrect information provided herein by the agency shall result in
-                                automatic disqualification including cancellation of the order.
-                            </li>
-                            <li>TIME shall be the essence of the contract.
-
-                            </li>
-                            <li>Only the successful pre-qualified Contractors will be intimated for further.</li>
-                            <li>Clients reserve the right to accept or reject any or all applications of
-                                pre-qualification without assigning any reasons thereof.
-                            </li>
-                            <li>Please attach copies Certificates, Work orders, Project photographs, Company Profile etc
-                                in support of the information disclosed in this bid.
-                            </li>
+                            <li>{{constantVariable.preQualification}}</li>
+                            <li>{{constantVariable.projectInformation}}</li>
+                            <li>{{constantVariable.incomplete}}</li>
+                            <li>{{constantVariable.time}}</li>
+                            <li>{{constantVariable.success}}</li>
+                            <li>{{constantVariable.clientApplication}}</li>
+                            <li>{{constantVariable.noteInfo}}</li>
                         </ol>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
@@ -80,18 +66,19 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
+                                
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
                                     <mat-label>Year of Establishment *</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <mat-select placeholder="Select Year" formControlName="yearOfEstablishment">
-                                            <mat-option *ngFor="let year of years"
-                                                value="{{year}}">{{year}}</mat-option>
-                                        </mat-select>
+                                        <input matInput [matDatepicker]="dp" formControlName="yearOfEstablishment" readonly>
+                                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)">
+                                        </mat-datepicker>
                                         <mat-error *ngIf="applicantPqForm.get('yearOfEstablishment')?.invalid">
                                             Year of Establishment is required
                                         </mat-error>
-                                    </mat-form-field>
+                                      </mat-form-field>
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
@@ -297,7 +284,8 @@
                                                 (rowValueChanged)="onRowValueChangedSimilarProjects($event)"
                                                 (cellEditingStopped)="onCellEditingStoppedSimilarProjects($event)"
                                                 (rowEditingStarted)="onRowEditingStartedSimilarProjects($event)"
-                                                (rowEditingStopped)="onRowEditingStoppedSimilarProjects($event)">
+                                                (rowEditingStopped)="onRowEditingStoppedSimilarProjects($event)"
+                                                [stopEditingWhenCellsLoseFocus]=true>
                                             </ag-grid-angular>
                                         </div>
                                     </mat-expansion-panel>
@@ -366,11 +354,13 @@
                                                 </div>
                                             </button>
                                         </div>
+                                        
                                         <ag-grid-angular class="ag-theme-alpine" [columnDefs]="clientRefColumnDefs"
                                             [defaultColDef]="clientRefDefaultColDef" [rowData]="clientRefRowData"
                                             [domLayout]="domLayout" [editType]="editType"
                                             (gridReady)="onGridReadyClientRef($event)"
-                                            (cellValueChanged)="onCellValueChanged($event)">
+                                            (cellValueChanged)="onCellValueChanged($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -486,7 +476,10 @@
                                             [defaultColDef]="employeesStrengthDefaultColDef"
                                             [rowData]="employeesStrengthRowData" [domLayout]="domLayout"
                                             [editType]="editType" (gridReady)="onGridReadyEmployeesStrength($event)"
-                                            (cellClicked)="onCellClickedEmployeesStrength($event)">
+                                            (cellClicked)="onCellClickedEmployeesStrength($event)"
+                                            (cellValueChanged)="onCellValueChangedEmployeesStrength($event)"
+                                            (rowValueChanged)="onRowValueChangedEmployeesStrength($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -512,7 +505,10 @@
                                             [defaultColDef]="capitalEquipmentsDefaultColDef"
                                             [rowData]="capitalEquipmentsRowData" [domLayout]="domLayout"
                                             [editType]="editType" (gridReady)="onGridReadyCapitalEquipments($event)"
-                                            (cellClicked)="onCellClickedCapitalEquipments($event)">
+                                            (cellClicked)="onCellClickedCapitalEquipments($event)"
+                                            (cellValueChanged)="onCellValueChangedCapitalEquipments($event)"
+                                            (rowValueChanged)="onRowValueChangedCapitalEquipments($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -653,7 +649,10 @@
                                             [columnDefs]="financialColumnDefs" [defaultColDef]="financialDefaultColDef"
                                             [rowData]="financialDetails" [domLayout]="domLayout" [editType]="editType"
                                             (gridReady)="onGridReadyFinancialDetails($event)"
-                                            (cellClicked)="onCellClickedFinancialDetails($event)">
+                                            (cellClicked)="onCellClickedFinancialDetails($event)"
+                                            (cellValueChanged)="onCellValueChangedFinancialDetails($event)"
+                                            (rowValueChanged)="onRowValueChangedFinancialDetails($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -672,7 +671,10 @@
                                             [defaultColDef]="companyBankersDefaultColDef"
                                             [rowData]="companyBankersDetails" [domLayout]="domLayout"
                                             [editType]="editType" (gridReady)="onGridReadyCompanyBankersDetails($event)"
-                                            (cellClicked)="onCellClickedCompanyBankersDetails($event)">
+                                            (cellClicked)="onCellClickedCompanyBankersDetails($event)"
+                                            (cellValueChanged)="onCellValueChangedBankersDetails($event)"
+                                            (rowValueChanged)="onRowValueChangedBankersDetails($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -692,7 +694,10 @@
                                             [rowData]="companyAuditorsDetails" [domLayout]="domLayout"
                                             [editType]="editType"
                                             (gridReady)="onGridReadyCompanyAuditorsDetails($event)"
-                                            (cellClicked)="onCellClickedCompanyAuditorsDetails($event)">
+                                            (cellClicked)="onCellClickedCompanyAuditorsDetails($event)"
+                                            (cellValueChanged)="onCellValueChangedCompanyAuditorsDetails($event)"
+                                            (rowValueChanged)="onRowValueChangedCompanyAuditorsDetails($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>

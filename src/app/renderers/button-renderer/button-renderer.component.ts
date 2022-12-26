@@ -55,8 +55,10 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
 
   navigateToPQForm() {
-    if (this.rowData.pq_id != null) {
+    if (this.buttonLabel == 'Edit PQ-Form') {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form', this.rowData.pq_id]);
+    } else if (this.buttonLabel == 'View PQ-Form') {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
     } else {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
     }
@@ -72,7 +74,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     });
     dlg.afterClosed().subscribe((submit: boolean) => {
       if (submit) {
-        this.router.navigate(['/tenders', this.rowData.tender_id, 'create-applicants-pq-form']);
+        this.router.navigate(['/tenders', this.rowData.tender_id,'view-pq-form',this.rowData.pq_id,'tender-application-form']);
       }
     });
   }

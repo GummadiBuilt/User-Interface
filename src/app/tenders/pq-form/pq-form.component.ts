@@ -96,7 +96,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
     });
     dlg.afterClosed().subscribe((submit: boolean) => {
-      this.router.navigate(['/tenders', this.pqFormTenderId, 'create-applicants-pq-form']);
+      this.router.navigate(['/tenders', this.pqFormTenderId,'view-pq-form',this.pqFormId,'tender-application-form']);
     });
   }
 

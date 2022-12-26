@@ -12,7 +12,7 @@ import { commonOptionsData } from './commonOptions';
 import { tenderResopnse } from '../tenders/tender/tenderResponse';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { pqFormResponse } from '../tenders/pq-form/pqformresponse';
-import { applicantsPqFormResponse } from '../tenders/view-applicants-pqform/applicantpqformresponse';
+import { applicantsPqFormResponse } from '../tenders/tender-application-form/applicantpqformresponse';
 import { clientUsersResponse } from './clientUsersResponse';
 import { contractorUsersResponse } from './contractorUsersResponse';
 import { userProfileResopnse } from '../profile/userProfileResponse';

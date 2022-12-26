@@ -50,7 +50,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CurrencyFormatterDirective } from './shared/currency-formatter.directive';
 import { ActionButtonRendererComponent } from './renderers/action-button-renderer/action-button-renderer.component';
 import { UploadButtonRendererComponent } from './renderers/upload-button-renderer/upload-button-renderer.component';
-import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
+import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 import { UnitCellRendererComponent } from './renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { NumericCellRendererComponent } from './renderers/numeric-cell-renderer/numeric-cell-renderer.component';
@@ -127,7 +127,7 @@ export const MY_DATE_FORMATS = {
     CurrencyFormatterDirective,
     ActionButtonRendererComponent,
     UploadButtonRendererComponent,
-    ViewApplicantsPQFormComponent,
+    TenderApplicationFormComponent,
     ViewApplicantsComponent,
     UnitCellRendererComponent,
     NumericCellRendererComponent,
