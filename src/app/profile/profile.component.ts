@@ -49,6 +49,8 @@ export class ProfileComponent implements OnInit {
   getUserProfileData() {
     this.ApiServicesService.getUserProfile().subscribe((data: userProfileResopnse) => {
       this.userData = data;
+      // set data in service which is to be shared
+      this.ApiServicesService.setUserProfileData(data)
       console.log(this.userData);
 
 

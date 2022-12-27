@@ -49,7 +49,7 @@
                 </ng-template>
                 <mat-step [stepControl]="applicantPqForm" errorMessage="Fill required company details."
                     label="Vendor's General Company Information" state="vendor_info" [completed]="false">
-                    <form [formGroup]="applicantPqForm">
+                    <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <h3 class="info-header">Company Details</h3>
                             <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
@@ -320,7 +320,7 @@
                     <i class="fa-solid fa-check-double"></i>
                 </ng-template>
                 <mat-step label="Performance Preferences" state="performance_pref" [completed]="false">
-                    <form [formGroup]="applicantPqForm">
+                    <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                 fxLayoutGap="8px">
@@ -346,7 +346,7 @@
                                     </div>
                                     <div class="example-wrapper">
                                         <div fxLayoutAlign="end">
-                                            <button mat-stroked-button *ngIf="clientRefProject2ColumnDefs"
+                                            <button mat-stroked-button [disabled]="btnstate"
                                                 (click)="onBtIncludeProject2Columns()">
                                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                                     <div><i style="font-size: 16px;" class="fa-solid fa-plus"></i></div>
@@ -359,7 +359,7 @@
                                             [defaultColDef]="clientRefDefaultColDef" [rowData]="clientRefRowData"
                                             [domLayout]="domLayout" [editType]="editType"
                                             (gridReady)="onGridReadyClientRef($event)"
-                                            (cellValueChanged)="onCellValueChanged($event)"
+                                            
                                             [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
@@ -608,7 +608,7 @@
                     <i class="fa-solid fa-wallet"></i>
                 </ng-template>
                 <mat-step label="Financial Information" state="financial_info" [completed]="false">
-                    <form [formGroup]="applicantPqForm">
+                    <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <ul>
                                 <li>
@@ -731,7 +731,7 @@
                     <i class="fa-solid fa-gavel"></i>
                 </ng-template>
                 <mat-step label="Undertaking" state="undertaking" [completed]="false">
-                    <form [formGroup]="applicantPqForm">
+                    <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div class="undertaking" fxLayout="column">
                             <mat-radio-group formControlName="underTaking">
                                 <mat-radio-button class="example-radio-button" [value]="true">

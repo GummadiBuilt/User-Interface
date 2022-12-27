@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { registrationMasterData, registrationStatesData, registrationCitiesData } from './responses';
 import { ErrorServiceService } from './error-service.service';
@@ -29,6 +29,10 @@ export interface toastPayload {
 export class ApiServicesService {
   public navigation = new Subject<any>();
   public navigation$ = this.navigation.asObservable();
+
+  private apiProfileData = new BehaviorSubject<any>(null);
+  public apiProfileData$ = this.apiProfileData.asObservable();
+
   private url: string = environment.apiUrl;
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService, private kcService: KeycloakService,
     private toastr: ToastrService) {
@@ -140,6 +144,11 @@ export class ApiServicesService {
   //user profile getAPI
   public getUserProfile(): Observable<userProfileResopnse> {
     return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile');
+  }
+
+  // here we set/change value of the observable
+  setUserProfileData(data:any) { 
+    this.apiProfileData.next(data)
   }
 
   //Get profile by user id

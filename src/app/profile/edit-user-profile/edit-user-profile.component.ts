@@ -46,8 +46,9 @@ export class EditUserProfileComponent implements OnInit {
   stateIsoCode: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
-    private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService, private route: ActivatedRoute, private sharedService: SharedService) {
-
+    private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService, 
+    private route: ActivatedRoute, private sharedService: SharedService) {
+      ApiServicesService.apiProfileData$.subscribe(data => console.log('profile',data))
   }
 
   ngOnInit(): void {

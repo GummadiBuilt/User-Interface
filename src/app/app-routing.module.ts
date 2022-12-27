@@ -60,7 +60,7 @@ const routes: Routes = [
             children: [
               { path: '', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
               { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
-              { path: 'edit-applicants-pq-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+              { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
             ]              
           },
           { path: 'view-applicants', component: ViewApplicantsComponent, },

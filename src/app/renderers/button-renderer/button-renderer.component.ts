@@ -15,6 +15,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   public label!: string;
   public rowData: any;
   public buttonLabel!: string;
+  public applyBtnLabel!:string;
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
@@ -26,6 +27,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     }
     else {
       this.buttonLabel = 'Create PQ-Form'
+    }
+    if (this.rowData.application_form_id != null) {
+      this.applyBtnLabel = 'View/Edit'
+    } else {
+      this.applyBtnLabel = 'Apply'
     }
   }
 
@@ -73,7 +79,9 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
       data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
     });
     dlg.afterClosed().subscribe((submit: boolean) => {
-      if (submit) {
+      if (submit && this.rowData.application_form_id) { //edit-applicants-pq-form/:applicationId
+        this.router.navigate(['/tenders', this.rowData.tender_id,'view-pq-form',this.rowData.pq_id,'edit-tender-application-form',this.rowData.application_form_id]);
+      }else{
         this.router.navigate(['/tenders', this.rowData.tender_id,'view-pq-form',this.rowData.pq_id,'tender-application-form']);
       }
     });
