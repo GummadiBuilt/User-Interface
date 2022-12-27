@@ -139,7 +139,7 @@
                             (selectionChange)="onCountrySelectEvent($event.value)">
                             <mat-select-filter [placeholder]="'Search'" [displayMember]="'countryName'"
                                 [array]="countries" (filteredReturn)="countryList =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of countryList" [value]="item">
+                            <mat-option *ngFor="let item of countryList" [value]="item.countryIsoCode">
                                 {{item.countryName}}
                             </mat-option>
                         </mat-select>
@@ -156,7 +156,7 @@
                             (selectionChange)="onStateSelectEvent($event.value)">
                             <mat-select-filter [placeholder]="'Search'" [displayMember]="'stateName'" [array]="states"
                                 (filteredReturn)="statesList =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of statesList" [value]="item">
+                            <mat-option *ngFor="let item of statesList" [value]="item.stateIsoCode">
                                 {{item.stateName}}
                             </mat-option>
                         </mat-select>
@@ -172,7 +172,7 @@
                         <mat-select placeholder="Select a City" formControlName="city">
                             <mat-select-filter [placeholder]="'Search'" [displayMember]="'cityName'" [array]="cities"
                                 (filteredReturn)="citiesList =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of citiesList" [value]="item">
+                            <mat-option *ngFor="let item of citiesList" [value]="item.id">
                                 {{item.cityName}}
                             </mat-option>
                         </mat-select>

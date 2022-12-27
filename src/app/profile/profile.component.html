@@ -18,19 +18,7 @@
     </div>
   </div>
   <div fxLayout="row wrap" fxLayoutGap="24px grid">
-    <div fxFlex="15" fxFlex.lg="20" fxFlex.md="40" fxFlex.sm="40" fxFlex.xs="100">
-      <mat-card>
-        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
-          <div fxLayoutAlign="center center" mat-card-avatar [ngStyle]="{'background-color':  circleColor }">
-            <!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
-            <div class="initials" *ngIf="showInitials">{{initials}}</div>
-          </div>
-          <div>{{userData?.contactFirstName+" "+userData?.contactLastName}}</div>
-          <div>{{userData?.contactEmailAddress}}</div>
-        </div>
-      </mat-card>
-    </div>
-    <div fxFlex="85" fxFlex.lg="80" fxFlex.md="60" fxFlex.sm="60" fxFlex.xs="100">
+    <div fxFlex="100">
       <mat-card>
         <div fxLayout="column" fxLayoutGap="24px">
           <div>
@@ -40,8 +28,16 @@
             <div>Phone: {{userData?.contactPhoneNumber}}</div>
           </div>
           <div>
-            <h3>Address</h3>
-            <div>Area: {{userData?.address}}</div>
+            <h3>Role Information</h3>
+            <div>Role Name: {{userData?.applicationRoleDto?.roleName}}</div>
+            <div>Role Description: {{userData?.applicationRoleDto?.roleDescription}}</div>
+          </div>
+          <div>
+            <h3>Company Details</h3>
+            <div>Company Name: {{userData?.companyName}}</div>
+            <div *ngIf="userData?.typeOfEstablishment">Type of Establishment: {{userData?.typeOfEstablishment}}</div>
+            <div>Year of Establishment: {{userData?.yearOfEstablishment}}</div>
+            <div>Address: {{userData?.address}}</div>
             <div>City: {{userData?.city?.cityName}}</div>
             <div>State: {{userData?.state?.stateName}}</div>
             <div>Country: {{userData?.country?.countryName}}</div>

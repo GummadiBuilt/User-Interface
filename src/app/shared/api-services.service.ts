@@ -142,6 +142,16 @@ export class ApiServicesService {
     return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile');
   }
 
+  //Get profile by user id
+  public getUserProfileById(): Observable<userProfileResopnse> {
+    return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile/');
+  }
+
+  //Update user profile putAPI
+  public updateUserProfile(data: any): Observable<userProfileResopnse> {
+    return this.httpClient.put<userProfileResopnse>(this.url + '/user-profile/update', data);
+  }
+
   //download files converstion
   downloadFile(data: any) {
     const downlodFile = this.ConvertFile(data);

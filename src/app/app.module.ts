@@ -57,6 +57,7 @@ import { NumericCellRendererComponent } from './renderers/numeric-cell-renderer/
 import { DateDirective } from './shared/date.directive';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 import { EditUserProfileComponent } from './profile/edit-user-profile/edit-user-profile.component';
+import { DateAgoPipe } from './shared/date-ago.pipe';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -133,6 +134,7 @@ export const MY_DATE_FORMATS = {
     NumericCellRendererComponent,
     DateDirective,
     EditUserProfileComponent,
+    DateAgoPipe,
   ],
   imports: [
     BrowserModule,

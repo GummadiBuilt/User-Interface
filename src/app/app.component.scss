@@ -67,12 +67,32 @@ button.mat-menu:hover {
     background: linear-gradient(#e73a3d, #841618);
 }
 
+.icon-16p {
+    font-size: 16px;
+}
+
 .icon-20p {
     font-size: 20px;
 }
 
 .icon-24p {
     font-size: 24px;
+}
+
+.icon-6p {
+    font-size: 6px;
+}
+
+.icon-warn {
+    color: orange;
+}
+
+.text-500 {
+    font-weight: 500;
+}
+
+.text-600 {
+    font-weight: 600;
 }
 
 .notifications {
@@ -120,5 +140,11 @@ button.mat-menu:hover {
 }
 
 ::ng-deep .notification-menu {
-    padding: 8px;
+    padding: 20px;
+}
+
+.icon-read {
+    font-size: 16px;
+    color: #841618;
+    cursor: pointer;
 }

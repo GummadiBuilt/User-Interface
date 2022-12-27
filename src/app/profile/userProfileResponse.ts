@@ -1,5 +1,5 @@
 export class userProfileResopnse {
-    private id: number;
+    private id: string;
     private applicationRoleDto: string;
     private companyName: string;
     private yearOfEstablishment: number;
@@ -7,9 +7,9 @@ export class userProfileResopnse {
         string
     ];
     private address: string;
-    private country: string;
-    private state: string;
-    private city: number;
+    private countryIsoCode: string;
+    private stateIsoCode: string;
+    private cityId: number;
     private contactFirstName: string;
     private contactLastName: string;
     private contactDesignation: string;
@@ -23,9 +23,9 @@ export class userProfileResopnse {
         this.yearOfEstablishment = d.yearOfEstablishment;
         this.typeOfEstablishment = d.typeOfEstablishmentCtrl;
         this.address = d.address;
-        this.country = d.country.country;
-        this.state = d.state;
-        this.city = d.city;
+        this.countryIsoCode = d.country.countryIsoCode;
+        this.stateIsoCode = d.state.stateIsoCode;
+        this.cityId = d.city.id;
         this.contactFirstName = d.contactFirstName;
         this.contactLastName = d.contactLastName;
         this.contactDesignation = d.contactDesignation;

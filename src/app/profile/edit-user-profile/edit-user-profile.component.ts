@@ -3,11 +3,15 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { ActivatedRoute } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { map, Observable, startWith } from 'rxjs';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { countries, registrationCitiesData, registrationMasterData, registrationStatesData, typeOfEstablishment } from 'src/app/shared/responses';
+import { ProfileComponent } from '../profile.component';
+import { SharedService } from '../shared.service';
+import { userProfileResopnse } from '../userProfileResponse';
 
 @Component({
   selector: 'app-edit-user-profile',
@@ -17,27 +21,34 @@ import { countries, registrationCitiesData, registrationMasterData, registration
 export class EditUserProfileComponent implements OnInit {
   public userRole: string[] | undefined;
   public editUserForm!: FormGroup;
-  filteredTypeOfEstablishments!: Observable<String[]>;
-  typeOfEstablishment: typeOfEstablishment[] = [];
-  allTypeOfEstablishments: typeOfEstablishment[] = [];
-  typeOfEstablishmentCtrl = new FormControl('', Validators.required);
-  private allowFreeTextAddTypeOfEst = false;
-  //matchips
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  
-  @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
 
   countries = new Array<countries>();
   states = new Array<registrationStatesData>();
   cities = new Array<registrationCitiesData>();
 
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  filteredTypeOfEstablishments!: Observable<String[]>;
+  typeOfEstablishment: typeOfEstablishment[] = [];
+  allTypeOfEstablishments: typeOfEstablishment[] = [];
+  typeOfEstablishmentCtrl = new FormControl('', Validators.required);
+  private allowFreeTextAddTypeOfEst = false;
+
+  @ViewChild(ProfileComponent) userData!: any;
+  @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
+
   countryList = new Array<countries>();
   statesList = new Array<registrationStatesData>();
   citiesList = new Array<registrationCitiesData>();
+  userId: any;
+  countryIsoCode: any;
+  stateIsoCode: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
-    private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService,) { }
+    private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService, private route: ActivatedRoute, private sharedService: SharedService) {
+
+  }
 
   ngOnInit(): void {
     try {
@@ -72,6 +83,8 @@ export class EditUserProfileComponent implements OnInit {
     );
   }
 
+
+
   getMasterdata() {
     this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
       this.allTypeOfEstablishments = data.typeOfEstablishments;
@@ -79,18 +92,20 @@ export class EditUserProfileComponent implements OnInit {
       this.countryList = this.countries.slice();
     });
   }
-  onCountrySelectEvent(id: any) {
-    this.ApiServicesService.getRegistrationStatesData(id.countryIsoCode).subscribe((data: registrationStatesData[]) => {
+
+  onCountrySelectEvent(countryIsoCode: any) {
+    this.ApiServicesService.getRegistrationStatesData(countryIsoCode).subscribe((data: registrationStatesData[]) => {
       this.states = data;
       this.statesList = this.states.slice();
     });
   }
-  onStateSelectEvent(value: any) {
-    this.ApiServicesService.getRegistrationCitiesData(value.stateIsoCode).subscribe((data: registrationCitiesData[]) => {
+  onStateSelectEvent(stateIsoCode: any) {
+    this.ApiServicesService.getRegistrationCitiesData(stateIsoCode).subscribe((data: registrationCitiesData[]) => {
       this.cities = data;
       this.citiesList = this.cities.slice();
     });
   }
+
 
   add(event: MatChipInputEvent): void {
     // Clear the input value
@@ -152,21 +167,26 @@ export class EditUserProfileComponent implements OnInit {
     const filterValue = establishmentDescription.toLowerCase();
     let typeOfEstablishmentMatchingName = typeOfEstabList.filter(val => val.establishmentDescription.toLowerCase().indexOf(filterValue) === 0);
     if (typeOfEstablishmentMatchingName.length || this.allowFreeTextAddTypeOfEst) {
+      //
       // either the TypeOfEstablish name matched some autocomplete options 
       // or the name didn't match but we're allowing 
       // non-autocomplete TypeOfEstablish names to be entered
+      //
       filteredtypeOfEstablishmentList = typeOfEstablishmentMatchingName;
     } else {
+      //
       // the TypeOfEstablish name didn't match the autocomplete list 
       // and we're only allowing TypeOfEstablish to be selected from the list
       // so we show the whole list
+      // 
       filteredtypeOfEstablishmentList = typeOfEstabList;
     }
+    //
     // Convert filtered list of TypeOfEstablish objects to list of TypeOfEstablish 
     // name strings and return it
+    //
     return filteredtypeOfEstablishmentList.map(data => data.establishmentDescription);
   }
-
   private selectTypeOfEstByName(establishmentDescription: string) {
     let foundTypeOfEstablish = this.allTypeOfEstablishments.filter(value => value.establishmentDescription == establishmentDescription);
     if (foundTypeOfEstablish.length) {
@@ -191,5 +211,6 @@ export class EditUserProfileComponent implements OnInit {
       });
     }
   }
+
 
 }

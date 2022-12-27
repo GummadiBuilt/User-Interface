@@ -4,6 +4,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile, KeycloakRoles } from 'keycloak-js';
 import { Router } from '@angular/router';
 import { AppAuthGuard } from './guard/auth.guard';
+import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -25,6 +26,8 @@ export class AppComponent {
     this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin');
     //console.log('ser Role in constructor', this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin'))
     this.badgeContent = 10;
+
+    this.dataLoad();
   }
   @ViewChild('sidenav') sidenav!: MatSidenav;
   opened!: boolean;
@@ -43,6 +46,27 @@ export class AppComponent {
 
   clickHandler() {
     this.sidenav.close();
+  }
+
+  public notifications: any;
+  public resultData: any[] = [];
+  dataLoad() {
+    this.notifications = [
+      { date: '2022-12-27 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
+      { date: '2022-12-27 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
+      { date: '2022-12-26 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
+      { date: '2022-12-26 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender and submitted succesfully' },
+      { date: '2022-12-25 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
+      { date: '2021-12-24 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender and submitted succesfully' },
+    ]
+
+    let data = new Set(this.notifications.map((item: any) => item.date));
+    data.forEach((date) => {
+      this.resultData.push({
+        date: date,
+        notifications: this.notifications.filter((i: any) => i.date === date)
+      });
+    });
   }
 
   public async ngOnInit() {
