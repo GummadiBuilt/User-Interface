@@ -2,8 +2,7 @@
   <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
     <h2>User Information</h2>
     <div class="action-buttons" fxLayout="row" fxLayoutGap="8px">
-      <a mat-stroked-button
-        href="http://localhost:8080/realms/Local-Realm/protocol/openid-connect/auth?response_type=code&client_id=gummadi-local&redirect_uri=http://localhost:4200&kc_action=UPDATE_PASSWORD">
+      <a mat-stroked-button href="{{updatePwdUrl}}">
         <div fxLayout="row" fxLayoutGap="8px">
           <div><i class="fa-solid fa-lock"></i></div>
           <div>Change Password</div>

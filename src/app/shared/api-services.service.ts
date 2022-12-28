@@ -33,6 +33,15 @@ export class ApiServicesService {
   private apiProfileData = new BehaviorSubject<any>(null);
   public apiProfileData$ = this.apiProfileData.asObservable();
 
+  // here we set/change value of the observable
+  setUserProfileData(data: any) {
+    this.apiProfileData.next(data)
+  }
+
+  // getUserProfileData(): Observable<any[]> {
+  //   return this.apiProfileData.asObservable();
+  // }
+
   private url: string = environment.apiUrl;
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService, private kcService: KeycloakService,
     private toastr: ToastrService) {
@@ -144,11 +153,6 @@ export class ApiServicesService {
   //user profile getAPI
   public getUserProfile(): Observable<userProfileResopnse> {
     return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile');
-  }
-
-  // here we set/change value of the observable
-  setUserProfileData(data:any) { 
-    this.apiProfileData.next(data)
   }
 
   //Get profile by user id

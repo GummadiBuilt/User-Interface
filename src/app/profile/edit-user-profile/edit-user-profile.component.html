@@ -96,18 +96,21 @@
                     </mat-form-field>
                 </div>
                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+
+                </div>
+                <div *ngIf="userRole?.includes('contractor')" fxFlex="100%" fxLayout="column">
                     <mat-label>Type of Establishment</mat-label>
                     <mat-form-field class="example-chip-list" appearance="outline">
                         <mat-chip-list #chipList aria-label="Type of Establishment selection"
-                            formControlName="typeOfEstablishmentCtrl">
+                            formControlName="typeOfEstablishment">
                             <mat-chip *ngFor="let typeOfEst of typeOfEstablishment" (removed)="remove(typeOfEst)">
-                                {{typeOfEst.establishmentDescription}}
+                                {{typeOfEst}}
                                 <button matChipRemove>
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </mat-chip>
                             <input placeholder="Select type..." #typeOfEstablishmentInput
-                                formControlName="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
+                                formControlName="typeOfEstablishment" [matAutocomplete]="auto"
                                 [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                 [matChipInputAddOnBlur]=true (matChipInputTokenEnd)="add($event)">
                         </mat-chip-list>
@@ -117,7 +120,7 @@
                                 {{typeOfEstab}}
                             </mat-option>
                         </mat-autocomplete>
-                        <mat-error *ngIf="editUserForm.get('typeOfEstablishmentCtrl')?.errors?.['required']">
+                        <mat-error *ngIf="editUserForm.get('typeOfEstablishment')?.errors?.['required']">
                             Atleast 1 type should be selected
                         </mat-error>
                     </mat-form-field>
@@ -135,7 +138,7 @@
                     fxFlex.xl="24%" fxLayout="column">
                     <mat-label>Country</mat-label>
                     <mat-form-field appearance="outline">
-                        <mat-select placeholder="Select a Country" formControlName="country"
+                        <mat-select placeholder="Select a Country" formControlName="countryIsoCode"
                             (selectionChange)="onCountrySelectEvent($event.value)">
                             <mat-select-filter [placeholder]="'Search'" [displayMember]="'countryName'"
                                 [array]="countries" (filteredReturn)="countryList =$event"></mat-select-filter>
@@ -152,7 +155,7 @@
                     fxFlex.xl="24%" fxLayout="column">
                     <mat-label>State</mat-label>
                     <mat-form-field appearance="outline">
-                        <mat-select placeholder="Select a State" formControlName="state"
+                        <mat-select placeholder="Select a State" formControlName="stateIsoCode"
                             (selectionChange)="onStateSelectEvent($event.value)">
                             <mat-select-filter [placeholder]="'Search'" [displayMember]="'stateName'" [array]="states"
                                 (filteredReturn)="statesList =$event"></mat-select-filter>
@@ -169,7 +172,7 @@
                     fxFlex.xl="24%" fxLayout="column">
                     <mat-label>City</mat-label>
                     <mat-form-field appearance="outline">
-                        <mat-select placeholder="Select a City" formControlName="city">
+                        <mat-select placeholder="Select a City" formControlName="cityId">
                             <mat-select-filter [placeholder]="'Search'" [displayMember]="'cityName'" [array]="cities"
                                 (filteredReturn)="citiesList =$event"></mat-select-filter>
                             <mat-option *ngFor="let item of citiesList" [value]="item.id">
@@ -183,7 +186,7 @@
                 </div>
             </div>
             <div class="action-btn" fxLayout="row" fxLayoutAlign="end">
-                <button mat-raised-button color="primary">Update</button>
+                <button mat-raised-button color="primary" (click)="update()">Update</button>
             </div>
         </form>
     </mat-card>

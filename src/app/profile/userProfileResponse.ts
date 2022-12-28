@@ -1,24 +1,22 @@
 export class userProfileResopnse {
-    private id: string;
-    private applicationRoleDto: string;
-    private companyName: string;
-    private yearOfEstablishment: number;
-    private typeOfEstablishment: [
+    public id: string;
+    public companyName: string;
+    public yearOfEstablishment: number;
+    public typeOfEstablishment: [
         string
     ];
-    private address: string;
-    private countryIsoCode: string;
-    private stateIsoCode: string;
-    private cityId: number;
-    private contactFirstName: string;
-    private contactLastName: string;
-    private contactDesignation: string;
-    private contactPhoneNumber: string;
-    private contactEmailAddress: string;
+    public address: string;
+    public countryIsoCode: string;
+    public stateIsoCode: string;
+    public cityId: number;
+    public contactFirstName: string;
+    public contactLastName: string;
+    public contactDesignation: string;
+    public contactPhoneNumber: string;
+    public contactEmailAddress: string;
 
     constructor(d: any) {
         this.id = d.id;
-        this.applicationRoleDto = d.applicationRoleDto;
         this.companyName = d.companyName;
         this.yearOfEstablishment = d.yearOfEstablishment;
         this.typeOfEstablishment = d.typeOfEstablishmentCtrl;

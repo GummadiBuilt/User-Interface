@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import { environment } from 'src/environments/environment';
 import { ApiServicesService } from '../shared/api-services.service';
-import { SharedService } from './shared.service';
 import { userProfileResopnse } from './userProfileResponse';
 
 @Component({
@@ -25,9 +25,10 @@ export class ProfileComponent implements OnInit {
     '#3670B2', // blue
   ];
 
+  updatePwdUrl : string = environment.updatePwdUrl;
 
   constructor(private readonly keycloak: KeycloakService,
-    private ApiServicesService: ApiServicesService, private router: Router, private sharedService: SharedService) { }
+    private ApiServicesService: ApiServicesService, private router: Router) { }
 
   ngOnInit() {
     this.keycloak.loadUserProfile().then(user => {
@@ -49,10 +50,9 @@ export class ProfileComponent implements OnInit {
   getUserProfileData() {
     this.ApiServicesService.getUserProfile().subscribe((data: userProfileResopnse) => {
       this.userData = data;
+      console.log(this.userData);
       // set data in service which is to be shared
       this.ApiServicesService.setUserProfileData(data)
-      console.log(this.userData);
-
 
       //generate profile photo with initials
       let initials = "";
@@ -71,6 +71,5 @@ export class ProfileComponent implements OnInit {
       }
       this.initials = initials;
     });
-    return this.userData;
   }
 }

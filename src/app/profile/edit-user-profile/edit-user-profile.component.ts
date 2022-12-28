@@ -9,8 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { map, Observable, startWith } from 'rxjs';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { countries, registrationCitiesData, registrationMasterData, registrationStatesData, typeOfEstablishment } from 'src/app/shared/responses';
-import { ProfileComponent } from '../profile.component';
-import { SharedService } from '../shared.service';
 import { userProfileResopnse } from '../userProfileResponse';
 
 @Component({
@@ -29,12 +27,10 @@ export class EditUserProfileComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   filteredTypeOfEstablishments!: Observable<String[]>;
-  typeOfEstablishment: typeOfEstablishment[] = [];
+  typeOfEstablishment: any[] = [];
   allTypeOfEstablishments: typeOfEstablishment[] = [];
-  typeOfEstablishmentCtrl = new FormControl('', Validators.required);
-  private allowFreeTextAddTypeOfEst = false;
 
-  @ViewChild(ProfileComponent) userData!: any;
+
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete!: MatAutocomplete;
 
@@ -44,11 +40,31 @@ export class EditUserProfileComponent implements OnInit {
   userId: any;
   countryIsoCode: any;
   stateIsoCode: any;
+  userData!: any;
+  typeOfEstablishmentCtrl = new FormControl('', Validators.required);
+  private allowFreeTextAddTypeOfEst = false;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
-    private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService, 
-    private route: ActivatedRoute, private sharedService: SharedService) {
-      ApiServicesService.apiProfileData$.subscribe(data => console.log('profile',data))
+    private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService,
+    private route: ActivatedRoute) {
+
+    ApiServicesService.apiProfileData$.subscribe(data => {
+      this.userData = data;
+      console.log(this.userData);
+    });
+    
+    if (this.userData?.typeOfEstablishment) {
+      this.typeOfEstablishment = this.userData?.typeOfEstablishment;
+      console.log(this.typeOfEstablishment);
+    }
+    this.ApiServicesService.getRegistrationStatesData(this.userData?.country?.countryIsoCode).subscribe((data: registrationStatesData[]) => {
+      this.states = data;
+      this.statesList = this.states.slice();
+    });
+    this.ApiServicesService.getRegistrationCitiesData(this.userData?.state?.stateIsoCode).subscribe((data: registrationCitiesData[]) => {
+      this.cities = data;
+      this.citiesList = this.cities.slice();
+    });
   }
 
   ngOnInit(): void {
@@ -57,34 +73,30 @@ export class EditUserProfileComponent implements OnInit {
     } catch (e) {
       console.log('Failed to load user details', e);
     }
-
     //Project Info (Admin)
     this.editUserForm = this._formBuilder.group({
-      contactFirstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      contactLastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      contactDesignation: ['', Validators.required],
-      contactPhoneNumber: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
+      contactFirstName: [this.userData?.contactFirstName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      contactLastName: [this.userData?.contactLastName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      contactDesignation: [this.userData?.contactDesignation, Validators.required],
+      contactPhoneNumber: [this.userData?.contactPhoneNumber, [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
-      contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
-      companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      typeOfEstablishmentCtrl: [this.typeOfEstablishment, Validators.required],
-      yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
+      contactEmailAddress: [this.userData?.contactEmailAddress, [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
+      companyName: [this.userData?.companyName, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      typeOfEstablishment: [this.typeOfEstablishment, Validators.required],
+      yearOfEstablishment: [this.userData?.yearOfEstablishment, [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
-      address: ['', Validators.required],
-      city: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-      country: ['', Validators.required],
+      address: [this.userData?.address, Validators.required],
+      countryIsoCode: [this.userData?.country?.countryIsoCode, Validators.required],
+      stateIsoCode: [this.userData?.state?.stateIsoCode, [Validators.required]],
+      cityId: [this.userData?.city?.id, [Validators.required]],
     });
     this.getMasterdata();
 
-    //mtachips
     this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
       startWith(null),
       map(typeOfEstb => this.filterOnValueChange(typeOfEstb))
     );
   }
-
-
 
   getMasterdata() {
     this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
@@ -107,26 +119,18 @@ export class EditUserProfileComponent implements OnInit {
     });
   }
 
-
   add(event: MatChipInputEvent): void {
-    // Clear the input value
     if (!this.allowFreeTextAddTypeOfEst) {
-      // only allowed to select from the filtered autocomplete list
-      // console.log('allowFreeTextAddTypeOfEst is false');
       return;
     }
-    // Only add when MatAutocomplete is not open
-    // To make sure this does not conflict with OptionSelected Event
     if (this.matAutocomplete.isOpen) {
       return;
     }
-
-    // Add TYPE OF ESTAB
     const value = event.value;
     if ((value || '').trim()) {
-      this.selectTypeOfEstByName(value.trim());
+      // this.selectTypeOfEstByName(value.trim());
+      this.typeOfEstablishment.push(value.trim());
     }
-
     this.resetInputs();
   }
 
@@ -139,21 +143,19 @@ export class EditUserProfileComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectTypeOfEstByName(event.option.value);
-    this.resetInputs();
+    // this.selectTypeOfEstByName(event.option.value);
+    this.typeOfEstablishment.push(event.option.value);
+    console.log(this.typeOfEstablishment);
+    this.typeOfEstablishmentCtrl.setValue(null);
   }
   private resetInputs() {
-    // clear input element
     this.typeOfEstablishmentInput.nativeElement.value = '';
-    // clear control value and trigger typeOfEstablishmentCtrl.valueChanges event 
     this.typeOfEstablishmentCtrl.setValue(null);
   }
 
   // Compute a new autocomplete list each time control value changes
   private filterOnValueChange(establishmentDescription: string | null): String[] {
     let result: String[] = [];
-    // Remove the typeOfEstab we have already selected from all typeOfEstab to
-    // get a starting point for the autocomplete list.
     let alltypeOfEstLessSelected = this.allTypeOfEstablishments.filter(toe => this.typeOfEstablishment.indexOf(toe) < 0);
     if (establishmentDescription) {
       result = this.filterTypeOfEstablish(alltypeOfEstLessSelected, establishmentDescription);
@@ -168,50 +170,49 @@ export class EditUserProfileComponent implements OnInit {
     const filterValue = establishmentDescription.toLowerCase();
     let typeOfEstablishmentMatchingName = typeOfEstabList.filter(val => val.establishmentDescription.toLowerCase().indexOf(filterValue) === 0);
     if (typeOfEstablishmentMatchingName.length || this.allowFreeTextAddTypeOfEst) {
-      //
-      // either the TypeOfEstablish name matched some autocomplete options 
-      // or the name didn't match but we're allowing 
-      // non-autocomplete TypeOfEstablish names to be entered
-      //
       filteredtypeOfEstablishmentList = typeOfEstablishmentMatchingName;
     } else {
-      //
-      // the TypeOfEstablish name didn't match the autocomplete list 
-      // and we're only allowing TypeOfEstablish to be selected from the list
-      // so we show the whole list
-      // 
       filteredtypeOfEstablishmentList = typeOfEstabList;
     }
-    //
-    // Convert filtered list of TypeOfEstablish objects to list of TypeOfEstablish 
-    // name strings and return it
-    //
     return filteredtypeOfEstablishmentList.map(data => data.establishmentDescription);
   }
-  private selectTypeOfEstByName(establishmentDescription: string) {
-    let foundTypeOfEstablish = this.allTypeOfEstablishments.filter(value => value.establishmentDescription == establishmentDescription);
-    if (foundTypeOfEstablish.length) {
-      // We found the TypeOfEstablish name in the allTypeOfEstablishments list
-      this.typeOfEstablishment.push(foundTypeOfEstablish[0]);
+  // private selectTypeOfEstByName(establishmentDescription: string) {
+  //   let foundTypeOfEstablish = this.allTypeOfEstablishments.filter(value => value.establishmentDescription == establishmentDescription);
+  //   if (foundTypeOfEstablish.length) {
+  //     this.typeOfEstablishment.push(foundTypeOfEstablish[0]);
+  //   } else {
+  //     this.typeOfEstablishment.push({
+  //       establishmentDescription: establishmentDescription,
+  //       changeTracking: {
+  //         createdBy: '',
+  //         createdDate: 0,
+  //         modifiedBy: '',
+  //         modifiedDate: 0
+  //       },
+  //       active: false,
+  //       createdBy: '',
+  //       createdDate: 0,
+  //       modifiedBy: '',
+  //       modifiedDate: 0
+  //     });
+  //   }
+  // }
+
+  update() {
+    if (this.editUserForm.valid) {
+      console.log('update', this.editUserForm.value);
+      this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({
+        next: ((response: userProfileResopnse) => {
+          // console.log('update', response);
+          this.toastr.success('Successfully Updated');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
     } else {
-      // Create a new TypeOfEstablishments
-      // This is the use case when allowFreeTextAddTypeOfEst is true
-      this.typeOfEstablishment.push({
-        establishmentDescription: establishmentDescription,
-        changeTracking: {
-          createdBy: '',
-          createdDate: 0,
-          modifiedBy: '',
-          modifiedDate: 0
-        },
-        active: false,
-        createdBy: '',
-        createdDate: 0,
-        modifiedBy: '',
-        modifiedDate: 0
-      });
+      console.log('error');
     }
   }
-
 
 }
