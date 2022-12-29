@@ -49,10 +49,11 @@ export class EditUserProfileComponent implements OnInit {
     private route: ActivatedRoute) {
 
     ApiServicesService.apiProfileData$.subscribe(data => {
-      this.userData = data;
+      let currentUser = localStorage.getItem("currentUser");
+      this.userData = JSON.parse(currentUser || '{}');
       console.log(this.userData);
     });
-    
+
     if (this.userData?.typeOfEstablishment) {
       this.typeOfEstablishment = this.userData?.typeOfEstablishment;
       console.log(this.typeOfEstablishment);

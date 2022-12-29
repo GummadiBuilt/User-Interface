@@ -19,27 +19,43 @@
   <div fxLayout="row wrap" fxLayoutGap="24px grid">
     <div fxFlex="100">
       <mat-card>
-        <div fxLayout="column" fxLayoutGap="24px">
-          <div>
-            <h3>Personal Details</h3>
-            <div>Full Name: {{userData?.contactFirstName+" "+userData?.contactLastName}}</div>
-            <div>Email: {{userData?.contactEmailAddress}}</div>
-            <div>Phone: {{userData?.contactPhoneNumber}}</div>
+        <div fxLayout="column" fxLayoutGap="48px">
+          <div fxLayoutAlign="center center" mat-card-avatar [ngStyle]="{'background-color':  circleColor }">
+            <!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
+            <div class="initials" *ngIf="showInitials">{{initials}}</div>
           </div>
-          <div>
-            <h3>Role Information</h3>
-            <div>Role Name: {{userData?.applicationRoleDto?.roleName}}</div>
-            <div>Role Description: {{userData?.applicationRoleDto?.roleDescription}}</div>
+          <div fxLayout="row" fxLayoutGap="48px">
+            <div fxLayout="column" fxLayoutGap="12px">
+              <div><i class="icon-32p  fa-solid fa-user"></i></div>
+              <div>
+                <h3>Personal Details</h3>
+                <div>Full Name: {{userData?.contactFirstName+" "+userData?.contactLastName}}</div>
+                <div>Email: {{userData?.contactEmailAddress}}</div>
+                <div>Phone: {{userData?.contactPhoneNumber}}</div>
+              </div>
+            </div>
+            <div fxLayout="column" fxLayoutGap="12px">
+              <div><i class="icon-32p  fa-solid fa-circle-info"></i></div>
+              <div>
+                <h3>Role Information</h3>
+                <div>Role Name: {{userData?.applicationRoleDto?.roleName}}</div>
+                <div>Role Description: {{userData?.applicationRoleDto?.roleDescription}}</div>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3>Company Details</h3>
-            <div>Company Name: {{userData?.companyName}}</div>
-            <div *ngIf="userData?.typeOfEstablishment">Type of Establishment: {{userData?.typeOfEstablishment}}</div>
-            <div>Year of Establishment: {{userData?.yearOfEstablishment}}</div>
-            <div>Address: {{userData?.address}}</div>
-            <div>City: {{userData?.city?.cityName}}</div>
-            <div>State: {{userData?.state?.stateName}}</div>
-            <div>Country: {{userData?.country?.countryName}}</div>
+          <div fxLayout="column" fxLayoutGap="12px">
+            <div><i class="icon-32p fa-solid fa-building"></i></div>
+            <div>
+              <h3>Company Details</h3>
+              <div>Company Name: {{userData?.companyName}}</div>
+              <div *ngIf="userData?.typeOfEstablishment">Type of Establishment: {{userData?.typeOfEstablishment}}
+              </div>
+              <div>Year of Establishment: {{userData?.yearOfEstablishment}}</div>
+              <div>Address: {{userData?.address}}</div>
+              <div>City: {{userData?.city?.cityName}}</div>
+              <div>State: {{userData?.state?.stateName}}</div>
+              <div>Country: {{userData?.country?.countryName}}</div>
+            </div>
           </div>
         </div>
       </mat-card>

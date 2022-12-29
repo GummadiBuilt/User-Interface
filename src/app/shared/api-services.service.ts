@@ -35,6 +35,7 @@ export class ApiServicesService {
 
   // here we set/change value of the observable
   setUserProfileData(data: any) {
+    localStorage.setItem('currentUser', JSON.stringify(data));
     this.apiProfileData.next(data)
   }
 
