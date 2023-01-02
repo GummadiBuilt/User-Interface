@@ -16,6 +16,7 @@ import { applicantsPqFormResponse } from '../tenders/tender-application-form/app
 import { clientUsersResponse } from './clientUsersResponse';
 import { contractorUsersResponse } from './contractorUsersResponse';
 import { userProfileResopnse } from '../profile/userProfileResponse';
+import { appliedTenderResopnse } from '../tenders/applied-tenders/appliedTenderResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -99,6 +100,11 @@ export class ApiServicesService {
   // Tender data GETApI
   public getTenders(): Observable<tenderResopnse> {
     return this.httpClient.get<tenderResopnse>(this.url + '/tender/getAll');
+  }
+
+  // Applied Tender data GETApI
+  public getAppliedTenders(): Observable<appliedTenderResopnse> {
+    return this.httpClient.get<appliedTenderResopnse>(this.url + '/tender/applied-tenders');
   }
 
   // Tender data GETApI

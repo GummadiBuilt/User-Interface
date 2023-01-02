@@ -38,3 +38,34 @@
     font-size: 32px;
     color: #841618;
 }
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.font-20p {
+    font-size: 20px;
+}
+
+.font-grey {
+    color: gray;
+}
+
+
+//
+.profile .example-container {
+    height: calc(100vh - 256px) !important;
+}
+
+.profile .mat-drawer {
+    width: 25%;
+}
+
+.profile .mat-drawer-content {
+    width: 75%;
+    background-color: white;
+}
+
+.profile .drawer-content {
+    padding-left: 40px;
+}

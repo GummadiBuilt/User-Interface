@@ -19,9 +19,9 @@
   <div fxLayout="row wrap" fxLayoutGap="24px grid">
     <div fxFlex="100">
       <mat-card>
-        <div fxLayout="column" fxLayoutGap="48px">
+        <!-- <div fxLayout="column" fxLayoutGap="48px">
           <div fxLayoutAlign="center center" mat-card-avatar [ngStyle]="{'background-color':  circleColor }">
-            <!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
+            <img *ngIf="!showInitials" src="{{photoUrl}}">
             <div class="initials" *ngIf="showInitials">{{initials}}</div>
           </div>
           <div fxLayout="row" fxLayoutGap="48px">
@@ -57,7 +57,115 @@
               <div>Country: {{userData?.country?.countryName}}</div>
             </div>
           </div>
-        </div>
+        </div> -->
+        <mat-drawer-container class="example-container">
+          <mat-drawer class="mat-drawer" mode="side" opened>
+            <div class="profile-info" fxLayout="column" fxLayoutGap="28px">
+              <div fxLayoutAlign="center center" mat-card-avatar [ngStyle]="{'background-color':  circleColor }">
+                <div class="initials" *ngIf="showInitials">{{initials}}</div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="48px">
+                <div fxLayout="column" fxLayoutGap="20px">
+                  <div class="bold-500 font-20p">{{userData?.contactFirstName+" "+userData?.contactLastName}}</div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Designation</div>
+                    <div>{{userData?.contactDesignation}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Phone Number</div>
+                    <div>{{userData?.contactPhoneNumber}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Email Address</div>
+                    <div>{{userData?.contactEmailAddress}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-drawer>
+          <mat-drawer-content class="mat-drawer-content">
+            <div class="drawer-content" fxLayout="column" fxLayoutGap="20px">
+              <div fxLayout="column" fxLayoutGap="8px">
+                <div>
+                  <h3>Company Details</h3>
+                </div>
+                <div fxLayout="row" fxLayoutGap="40px">
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Full Name</div>
+                    <div>{{userData?.contactFirstName+" "+userData?.contactLastName}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Phone Number</div>
+                    <div>{{userData?.contactPhoneNumber}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Email Address</div>
+                    <div>{{userData?.contactEmailAddress}}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div fxLayout="column" fxLayoutGap="8px">
+                <div>
+                  <h3>Role Information</h3>
+                </div>
+                <div fxLayout="row" fxLayoutGap="40px">
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Role Name</div>
+                    <div>{{userData?.applicationRoleDto?.roleName}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Role Description</div>
+                    <div>{{userData?.applicationRoleDto?.roleDescription}}</div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutGap="8px">
+                <div>
+                  <h3>Company Details</h3>
+                </div>
+                <div fxLayout="row" fxLayoutGap="40px">
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Company Name</div>
+                    <div>{{userData?.companyName}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Type of Establishment</div>
+                    <div>{{userData?.typeOfEstablishment}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Year of Establishment</div>
+                    <div>{{userData?.yearOfEstablishment}}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div fxLayout="column" fxLayoutGap="8px">
+                <div>
+                  <h3>Address</h3>
+                </div>
+                <div fxLayout="row" fxLayoutGap="40px">
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Address</div>
+                    <div>{{userData?.address}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">City</div>
+                    <div>{{userData?.city?.cityName}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">State</div>
+                    <div>{{userData?.state?.stateName}}</div>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="4px">
+                    <div class="font-grey">Country</div>
+                    <div>{{userData?.country?.countryName}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-drawer-content>
+        </mat-drawer-container>
       </mat-card>
     </div>
   </div>

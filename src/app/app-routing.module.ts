@@ -24,6 +24,7 @@ import { ViewApplicantsComponent } from './tenders/view-applicants/view-applican
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 import { EditUserProfileComponent } from './profile/edit-user-profile/edit-user-profile.component';
 import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
+import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -61,7 +62,7 @@ const routes: Routes = [
               { path: '', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
               { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
               { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
-            ]              
+            ]
           },
           { path: 'view-applicants', component: ViewApplicantsComponent, },
         ]
@@ -69,6 +70,7 @@ const routes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
+  { path: 'applied-tenders', component: AppliedTendersComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Applied Tenders', info: 'fa-solid fa-file-invoice' } } },
 ];
 
 @NgModule({

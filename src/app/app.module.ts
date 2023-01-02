@@ -58,6 +58,8 @@ import { DateDirective } from './shared/date.directive';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 import { EditUserProfileComponent } from './profile/edit-user-profile/edit-user-profile.component';
 import { DateAgoPipe } from './shared/date-ago.pipe';
+import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
+import { INRCurrencyPipe } from './shared/inrcurrency.pipe';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -135,6 +137,8 @@ export const MY_DATE_FORMATS = {
     DateDirective,
     EditUserProfileComponent,
     DateAgoPipe,
+    AppliedTendersComponent,
+    INRCurrencyPipe,
   ],
   imports: [
     BrowserModule,
