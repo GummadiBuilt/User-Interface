@@ -71,14 +71,16 @@
                                     fxLayout="column">
                                     <mat-label>Year of Establishment *</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput [matDatepicker]="dp" formControlName="yearOfEstablishment" readonly>
+                                        <input matInput [matDatepicker]="dp" formControlName="yearOfEstablishment"
+                                            readonly>
                                         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-                                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)">
+                                        <mat-datepicker #dp startView="multi-year"
+                                            (yearSelected)="chosenYearHandler($event, dp)">
                                         </mat-datepicker>
                                         <mat-error *ngIf="applicantPqForm.get('yearOfEstablishment')?.invalid">
                                             Year of Establishment is required
                                         </mat-error>
-                                      </mat-form-field>
+                                    </mat-form-field>
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
@@ -259,8 +261,9 @@
                                                 [defaultColDef]="turnoverDefaultColDef" [rowData]="turnoverDetails"
                                                 [domLayout]="domLayout" [editType]="editType"
                                                 (gridReady)="onGridReadyTurnover($event)"
-                                                (cellClicked)="onCellClickedTurnover($event)"
-                                                (rowValueChanged)="onRowValueChangedTurnover($event)">
+                                                (cellValueChanged)="onCellValueChangedTurnover($event)"
+                                                (rowValueChanged)="onRowValueChangedTurnover($event)"
+                                                [stopEditingWhenCellsLoseFocus]=true>
                                             </ag-grid-angular>
                                         </div>
                                     </mat-expansion-panel>
@@ -299,7 +302,7 @@
                                     <div><span>Previous</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -354,12 +357,12 @@
                                                 </div>
                                             </button>
                                         </div>
-                                        
-                                        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="clientRefColumnDefs"
-                                            [defaultColDef]="clientRefDefaultColDef" [rowData]="clientRefRowData"
-                                            [domLayout]="domLayout" [editType]="editType"
+
+                                        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                            [columnDefs]="clientRefColumnDefs"
+                                            [defaultColDef]="clientRefDefaultColDef" 
+                                            [rowData]="clientRefRowData" [domLayout]="domLayout" [editType]="editType"
                                             (gridReady)="onGridReadyClientRef($event)"
-                                            
                                             [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
@@ -385,7 +388,8 @@
                                             [columnDefs]="similarNatureColumnDefs"
                                             [defaultColDef]="similarNatureDefaultColDef"
                                             [rowData]="similarNatureRowData" [domLayout]="domLayout"
-                                            [editType]="editType" (gridReady)="onGridReadySimilarNature($event)">
+                                            [editType]="editType" (gridReady)="onGridReadySimilarNature($event)"
+                                            [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -587,7 +591,7 @@
                                     <div><span>Previous</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -710,7 +714,7 @@
                                     <div><span>Previous</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -749,7 +753,7 @@
                                     <div><span>Previous</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -758,7 +762,7 @@
                                 </div>
                             </button>
                             <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
-                                (click)="onSubmit()">
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-submit fa-solid fa-paper-plane"></i>

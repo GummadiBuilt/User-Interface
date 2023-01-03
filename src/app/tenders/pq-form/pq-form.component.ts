@@ -25,6 +25,8 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public pqDocumentIssueDate!: any;
   public btnState: boolean = false;
   public warningMessage!: string;
+  public applyBtnLabel: string = 'Apply';
+  public applicationFormId: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -80,6 +82,12 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
     if (data.pqDocumentIssueDate) {
       this.pqDocumentIssueDate = data.pqDocumentIssueDate;
     }
+    this.applicationFormId = data.applicationFormId;
+    if (this.applicationFormId != 0) {
+      this.applyBtnLabel = 'View/Edit'
+    } else {
+      this.applyBtnLabel = 'Apply'
+    }
   }
   dateConverstion(input: any) {
     if (input) {
@@ -92,12 +100,18 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   applyPqForm() {
-    const dlg = this.dialog.open(ConfirmationDlgComponent, {
-      data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
-    });
-    dlg.afterClosed().subscribe((submit: boolean) => {
-      this.router.navigate(['/tenders', this.pqFormTenderId,'view-pq-form',this.pqFormId,'tender-application-form']);
-    });
+    if (this.applyBtnLabel == 'Apply') {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'tender-application-form']);
+        }
+      });
+    } else {
+      this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'edit-tender-application-form', this.applicationFormId]);
+    }
   }
 
   onSave() {

@@ -1,10 +1,12 @@
-<div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-    <label class="icon-button" for="file" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+<div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px" >
+    
+    <!-- <label for="file" class="file-input">
+       
+    </label> -->
+    <input id="files" type="file" class="form-control" (change)="onFileChange($event)" matTooltip=" " [disabled]=fileUploadbtn>
+    <!-- <label class="icon-button" for="files" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
         <i class="fa-icons fa-icons fa-solid fa-file-arrow-up"></i>
-    </label>
-    <label for="file" class="file-input">
-        <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden>
-    </label>
+    </label> -->
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
         <div>
             <span *ngIf="!file?.name && !fileName">No file Choosen</span>
@@ -12,12 +14,12 @@
             <span>{{file?.name}}</span>
         </div>
         <div>
-            <button *ngIf="file?.name" type="button" mat-icon-button matTooltip="Remove Document"
-                matTooltipPosition="right" (click)="removeSelectedFile(file)">
+            <button *ngIf="file?.name || fileName" type="button" mat-icon-button matTooltip="Remove Document"
+                matTooltipPosition="right" (click)="removeSelectedFile(file || fileName)" disabled={{fileUploadbtn}}>
                 <i class="fa-icons fa-regular fa-circle-xmark"></i>
             </button>
             <button *ngIf="fileName" type="button" mat-icon-button matTooltip="Download Document"
-                matTooltipPosition="right">
+                matTooltipPosition="right" disabled={{fileUploadbtn}}>
                 <i class="fa-icons icon-download fa-solid fa-file-arrow-down"></i>
             </button>
         </div>

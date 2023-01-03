@@ -51,7 +51,7 @@ export class TendersComponent implements OnInit {
   getTendersData() {
     this.ApiServicesService.getTenders().subscribe((data: tenderResopnse) => {
       this.rowData = data;
-      console.log('All tenders', this.rowData);
+      //console.log('All tenders', this.rowData);
       this.rowData.map((val: any) => {
         if (val.pq_id != null) {
           this.buttonLabel.push('Edit PQ-Form');

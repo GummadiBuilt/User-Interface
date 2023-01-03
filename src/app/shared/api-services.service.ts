@@ -145,8 +145,10 @@ export class ApiServicesService {
   public updateApplicantPQForm(tenderId: any, applicationId: any, data: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.put<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/update', data);
   }
-
-
+  //file upload in update tender application form
+  public updateApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any,file:any) {
+    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/'+fileYear,file);
+  }
   //client users getAPI
   public getClientUsers(): Observable<clientUsersResponse> {
     return this.httpClient.get<clientUsersResponse>(this.url + '/client-users/getAll');

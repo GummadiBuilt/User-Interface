@@ -13,3 +13,11 @@
 ::ng-deep .file-input {
     margin-right: 0px !important;
 }
+input[type=file] {
+    color: transparent !important;
+}
+input[type=file]::before {
+  content: " ";
+  color: black;
+  margin-right: 10px; 
+}

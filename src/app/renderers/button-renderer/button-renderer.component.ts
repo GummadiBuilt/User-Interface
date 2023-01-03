@@ -75,16 +75,19 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     }
   }
   applyPQForm() {
-    const dlg = this.dialog.open(ConfirmationDlgComponent, {
-      data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
-    });
-    dlg.afterClosed().subscribe((submit: boolean) => {
-      if (submit && this.rowData.application_form_id) { //edit-applicants-pq-form/:applicationId
-        this.router.navigate(['/tenders', this.rowData.tender_id,'view-pq-form',this.rowData.pq_id,'edit-tender-application-form',this.rowData.application_form_id]);
-      }else{
-        this.router.navigate(['/tenders', this.rowData.tender_id,'view-pq-form',this.rowData.pq_id,'tender-application-form']);
-      }
-    });
+    //console.log(this.rowData)
+    if (this.applyBtnLabel == 'Apply') {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id, 'tender-application-form']);
+        }
+      });
+    } else {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id, 'edit-tender-application-form', this.rowData.application_form_id]);
+    }
   }
   updatePQForm() {
     console.log(this.rowData);

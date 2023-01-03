@@ -87,7 +87,7 @@ export class AppComponent {
 
         //generate profile photo with initials
         this.name = this.userProfile.firstName + " " + this.userProfile.lastName;
-        console.log(this.name);
+       // console.log(this.name);
         let initials = "";
         for (let i = 0; i < this.name.length; i++) {
           if (this.name.charAt(i) === ' ') {

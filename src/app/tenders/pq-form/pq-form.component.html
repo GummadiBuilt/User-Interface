@@ -95,8 +95,9 @@
                         fxLayoutAlign="end center" fxLayoutGap="24px">
                         <button class="button-apply" mat-button type="button" (click)="applyPqForm()">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                <i class="icon-appy fa-solid fa-angles-right"></i>
-                                <div>Apply</div>
+                                <i *ngIf="applicationFormId == 0" class="icon-appy fa-solid fa-angles-right"></i>
+                                <i *ngIf="applicationFormId" class="fa-solid fa-pen-to-square"></i>
+                                <div>{{applyBtnLabel}}</div>
                             </div>
                         </button>
                     </div>
