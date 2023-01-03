@@ -29,14 +29,15 @@
                     </mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <button type="button" mat-icon-button matTooltip="Download Tender List" matTooltipPosition="left">
+            <button type="button" mat-icon-button matTooltip="Download Tender List" matTooltipPosition="left"
+                (click)="exportTendersFile()">
                 <i class="icon-size fa-solid fa-file-csv"></i>
             </button>
         </div>
         <div *ngIf="toggle">
             <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
                 [pagination]="true" [rowData]="rowData" [animateRows]="true" [sideBar]="sideBar"
-                (gridReady)="onGridReady($event)" [domLayout]="domLayout">
+                (gridReady)="onGridReady($event)" [frameworkComponents]="frameworkComponents" [domLayout]="domLayout">
             </ag-grid-angular>
         </div>
         <div *ngIf="!toggle" class="applied-tenders-page" fxLayout="row wrap" fxLayoutAlign="start center"

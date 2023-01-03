@@ -19,6 +19,7 @@ export class AppliedTendersComponent implements OnInit {
   public toggle: boolean = true;
   public rowData: any;
   public domLayout: any;
+  public frameworkComponents: any;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
   constructor(protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService, private toastr: ToastrService,) {
@@ -38,31 +39,9 @@ export class AppliedTendersComponent implements OnInit {
   getAppliedTendersData() {
     this.ApiServicesService.getAppliedTenders().subscribe((data: appliedTenderResopnse) => {
       this.rowData = data;
-      console.log(this.rowData);
+      console.log('Applied tenders', this.rowData);
     });
   }
-
-  // rowData = [
-  //   {
-  //     "application_form_id": "FormID-1",
-  //     "establishment_description": "test1",
-  //     "work_description": "Construction",
-  //     "type_of_contract": "Design & Build",
-  //     "contract_duration": 30,
-  //     "last_date_of_submission": "19/02/2023",
-  //     "duration_counter": "DAYS",
-  //     "estimated_budget": 1000000,
-  //     "tender_document_name": "tender.csv",
-  //     "tender_document_size": 5,
-  //     "project_location": "Hyderabad",
-  //     "created_by": "Abhiram, KVH",
-  //     "project_name": "Prime Heights",
-  //     "tender_id": "D&B123-2",
-  //     "pq_id": "2",
-  //     "workflow_step": "SUBMIT",
-  //     "company_name": "Abhi Constructions"
-  //   },
-  // ]
 
   toggleView(change: MatButtonToggleChange) {
     this.toggle = change.value;
@@ -84,14 +63,20 @@ export class AppliedTendersComponent implements OnInit {
     { headerName: 'Client Name', field: 'company_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Project Name', field: 'project_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Work Description', field: 'work_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Type of Work', field: 'establishment_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Type of Work', field: 'establishment_description', flex: 2, minWidth: 300, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Contract Duration', field: 'contract_duration', flex: 1, filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
     {
       headerName: 'Estimated Budget', field: 'estimated_budget', flex: 1, filter: 'agTextColumnFilter',
       valueFormatter: params => currencyFormatter(params.data.estimated_budget, '₹ '),
     },
-    { headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter', },
+    {
+      headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter',
+      cellRenderer: function (data: any) {
+        return (data.value !== null && data.value !== undefined)
+          ? StatusValues[data.value as keyof typeof StatusValues] : 'not found';
+      }
+    },
     { headerName: 'Location', field: 'project_location', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
     { headerName: 'Tender Document Size', field: 'tender_document_size', flex: 1, valueGetter: `data.tender_document_size  +' MB'` },

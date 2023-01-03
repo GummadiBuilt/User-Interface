@@ -22,7 +22,6 @@ import { SignupComponent } from './signup/signup.component';
 import { PQFormComponent } from './tenders/pq-form/pq-form.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
-import { EditUserProfileComponent } from './profile/edit-user-profile/edit-user-profile.component';
 import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
 import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
 
@@ -39,7 +38,6 @@ const routes: Routes = [
   { path: 'corevalues', component: CorevaluesComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard], },
-  { path: 'update-user', component: EditUserProfileComponent, canActivate: [AppAuthGuard] },
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },
   { path: 'contractors', component: ContractorsComponent, data: { breadcrumb: 'Contractors' } },
   { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },
