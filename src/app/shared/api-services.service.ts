@@ -31,19 +31,6 @@ export class ApiServicesService {
   public navigation = new Subject<any>();
   public navigation$ = this.navigation.asObservable();
 
-  private apiProfileData = new BehaviorSubject<any>(null);
-  public apiProfileData$ = this.apiProfileData.asObservable();
-
-  // here we set/change value of the observable
-  setUserProfileData(data: any) {
-    localStorage.setItem('currentUser', JSON.stringify(data));
-    this.apiProfileData.next(data)
-  }
-
-  // getUserProfileData(): Observable<any[]> {
-  //   return this.apiProfileData.asObservable();
-  // }
-
   private url: string = environment.apiUrl;
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService, private kcService: KeycloakService,
     private toastr: ToastrService) {
@@ -162,11 +149,6 @@ export class ApiServicesService {
   //user profile getAPI
   public getUserProfile(): Observable<userProfileResopnse> {
     return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile');
-  }
-
-  //Get profile by user id
-  public getUserProfileById(): Observable<userProfileResopnse> {
-    return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile/');
   }
 
   //Update user profile putAPI

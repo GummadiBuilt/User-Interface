@@ -59,6 +59,7 @@ import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 import { DateAgoPipe } from './shared/date-ago.pipe';
 import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
 import { INRCurrencyPipe } from './shared/inrcurrency.pipe';
+import { HighchartsChartModule } from 'highcharts-angular';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -159,6 +160,7 @@ export const MY_DATE_FORMATS = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   //  DateValueAccessorModule,
     MomentDateModule,
+    HighchartsChartModule
   ],
   providers: [
     DatePipe,

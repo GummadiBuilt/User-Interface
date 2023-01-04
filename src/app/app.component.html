@@ -67,19 +67,17 @@
 						(click)="isBadgeHidden = !isBadgeHidden" class="icon-24p fa-regular fa-bell"></i>
 				</div>
 				<mat-card style="display: none"></mat-card>
-				<div class="profile-icon" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center" mat-card-avatar
-					[ngStyle]="{'background-color':  circleColor }">
-					<!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
-					<div class="initials" *ngIf="showInitials">{{initials}}</div>
+				<div class="profile-icon bg-grey" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center" mat-card-avatar>
+					<!-- <img src="{{photoUrl}}"> -->
+					<div class="initials">{{initials}}</div>
 				</div>
 			</div>
 			<mat-menu class="profile-menu" #userMenu="matMenu">
 				<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<div class="text-grey" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
-						<div fxLayoutAlign="center center" mat-card-avatar
-							[ngStyle]="{'background-color':  circleColor }">
-							<!-- <img *ngIf="!showInitials" src="{{photoUrl}}"> -->
-							<div class="initials" *ngIf="showInitials">{{initials}}</div>
+						<div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
+							<!-- <img src="{{photoUrl}}"> -->
+							<div class="initials">{{initials}}</div>
 						</div>
 						<div>{{userProfile?.firstName+" "+userProfile?.lastName}}</div>
 						<div>{{userProfile?.email}}</div>

@@ -1,4 +1,5 @@
 export class userProfileResopnse {
+    [x: string]: any;
     public id: string;
     public companyName: string;
     public yearOfEstablishment: number;

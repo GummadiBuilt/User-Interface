@@ -8,7 +8,7 @@
           <div>Change Password</div>
         </div>
       </a>
-      <button mat-stroked-button (click)="enableForm(this.editUserForm, true)">
+      <button mat-stroked-button (click)="enableForm(true)">
         <div fxLayout="row" fxLayoutGap="8px">
           <div><i class="fa-solid fa-user-pen"></i></div>
           <div>Edit User Profile</div>
@@ -22,8 +22,8 @@
       <mat-drawer-container class="example-container">
         <mat-drawer class="mat-drawer" mode="side" opened>
           <div class="profile-info" fxLayout="column" fxLayoutGap="28px">
-            <div fxLayoutAlign="center center" mat-card-avatar [ngStyle]="{'background-color':  circleColor }">
-              <div class="initials" *ngIf="showInitials">{{initials}}</div>
+            <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
+              <div class="initials">{{initials}}</div>
             </div>
             <div fxLayout="row" fxLayoutGap="48px">
               <div fxLayout="column" fxLayoutGap="20px">
@@ -36,10 +36,6 @@
                   <div class="font-grey">Email Address</div>
                   <div>{{userData?.contactEmailAddress}}</div>
                 </div>
-                <div fxLayout="column" fxLayoutGap="4px">
-                  <div class="font-grey">Designation</div>
-                  <div>{{userData?.contactDesignation}}</div>
-                </div>
               </div>
             </div>
           </div>
@@ -48,36 +44,42 @@
           <div class="drawer-content">
             <form [formGroup]="editUserForm">
               <div class="drawer-content" fxLayout="column" fxLayoutGap="20px">
-                <div fxLayout="column" fxLayoutGap="8px">
-                  <div>
-                    <h3>Company Details</h3>
+                <div fxLayout="column">
+                  <div fxLayout="column" fxLayoutGap="8px">
+                    <div>
+                      <h3>Company Details</h3>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                      <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
+                        fxLayout="column">
+                        <mat-label>Year of Establishment</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Year of Establishment" formControlName="yearOfEstablishment"
+                            numbersOnly>
+                          <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['required']">
+                            Year of Establishment is required</mat-error>
+                          <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['pattern']">
+                            Please enter valid year</mat-error>
+                          <mat-error
+                            *ngIf="(editUserForm.get('yearOfEstablishment')?.errors?.['minlength'] || editUserForm.get('yearOfEstablishment')?.errors?.['maxlength']) && !editUserForm.controls['yearOfEstablishment'].errors?.['pattern']">
+                            Year must be 4 digits</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="66%" fxFlex.xl="50%"
+                        fxLayout="column">
+                        <mat-label>Address</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Company Address" formControlName="address">
+                          <mat-error *ngIf="editUserForm.get('address')?.errors?.['required']">
+                            Company Address is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
+                        fxLayout="column"></div>
+                    </div>
                   </div>
                   <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
-                      fxLayout="column">
-                      <mat-label>Year of Establishment</mat-label>
-                      <mat-form-field appearance="outline">
-                        <input matInput placeholder="Year of Establishment" formControlName="yearOfEstablishment"
-                          numbersOnly>
-                        <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['required']">
-                          Year of Establishment is required</mat-error>
-                        <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['pattern']">
-                          Please enter valid year</mat-error>
-                        <mat-error
-                          *ngIf="(editUserForm.get('yearOfEstablishment')?.errors?.['minlength'] || editUserForm.get('yearOfEstablishment')?.errors?.['maxlength']) && !editUserForm.controls['yearOfEstablishment'].errors?.['pattern']">
-                          Year must be 4 digits</mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
-                      fxLayout="column">
-                      <mat-label>Address</mat-label>
-                      <mat-form-field appearance="outline">
-                        <input matInput placeholder="Company Address" formControlName="address">
-                        <mat-error *ngIf="editUserForm.get('address')?.errors?.['required']">
-                          Company Address is required
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
                       fxLayout="column">
                       <mat-label>Country</mat-label>
@@ -130,26 +132,28 @@
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
                       fxLayout="column"></div>
+                  </div>
+                  <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                     <div *ngIf="userRole?.includes('contractor')" fxFlex="100%" fxLayout="column">
                       <mat-label>Type of Establishment</mat-label>
                       <mat-form-field class="example-chip-list" appearance="outline">
                         <mat-chip-list #chipList aria-label="Type of Establishment selection"
                           formControlName="typeOfEstablishment">
-                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishment" (removed)="remove(typeOfEst)">
-                            {{typeOfEst}}
+                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true
+                            [selected]="typeOfEst.selected ? '': null" [removable]=true (removed)="remove(typeOfEst)">
+                            {{typeOfEst.establishmentDescription}}
                             <button matChipRemove>
                               <i class="fa-solid fa-xmark"></i>
                             </button>
                           </mat-chip>
-                          <input placeholder="Select type..." #typeOfEstablishmentInput
-                            formControlName="typeOfEstablishment" [matAutocomplete]="auto" [matChipInputFor]="chipList"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]=true
-                            (matChipInputTokenEnd)="add($event)">
+                          <input placeholder="Select type..." #typeOfEstablishmentInput matChipInput
+                            [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            [matChipInputAddOnBlur]=true (matChipInputTokenEnd)="add($event)">
                         </mat-chip-list>
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
-                            [value]="typeOfEstab">
-                            {{typeOfEstab}}
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="add($event)">
+                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async" [value]="typeOfEstab">
+                            {{typeOfEstab.establishmentDescription}}
                           </mat-option>
                         </mat-autocomplete>
                         <mat-error *ngIf="editUserForm.get('typeOfEstablishment')?.errors?.['required']">
@@ -172,12 +176,10 @@
                         <input matInput placeholder="Name" minlength="3" inputmode="tel"
                           formControlName="contactFirstName" #nameInput>
                         <mat-error *ngIf="editUserForm.controls['contactFirstName'].errors?.['required']">First Name
-                          is
-                          required
+                          is required
                         </mat-error>
                         <mat-error *ngIf="editUserForm.get('contactFirstName')?.errors?.['minlength']">First
-                          Name should
-                          be 3 character.</mat-error>
+                          Name should be 3 character.</mat-error>
                       </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"

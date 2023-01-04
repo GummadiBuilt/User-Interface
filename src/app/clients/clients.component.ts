@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ColDef } from 'ag-grid-community';
+import Highcharts from 'highcharts';
 import { ApiServicesService } from '../shared/api-services.service';
 import { clientUsersResponse } from '../shared/clientUsersResponse';
 
@@ -61,4 +62,32 @@ export class ClientsComponent implements OnInit {
   toggleView(change: MatButtonToggleChange) {
     this.toggle = change.value;
   }
+
+  //highcharts bar chart
+  highcharts = Highcharts;
+  chartOptions: Highcharts.Options = {
+    chart: {
+      type: 'bar'
+    },
+    title: {
+      text: 'Tenders Info Chart'
+    },
+    xAxis: {
+      categories:['Types']
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Count',
+      }
+    },
+    plotOptions: {
+      bar: {
+        dataLabels: {
+          enabled: true
+        }
+      }
+    },
+    
+  };
 }

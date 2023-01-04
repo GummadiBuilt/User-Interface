@@ -5,6 +5,7 @@ import { KeycloakProfile, KeycloakRoles } from 'keycloak-js';
 import { Router } from '@angular/router';
 import { AppAuthGuard } from './guard/auth.guard';
 import { MatMenuTrigger } from '@angular/material/menu';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,7 +17,7 @@ export class AppComponent {
   titles = ['Home', 'About Us', 'Service', 'Projects', 'Core Values', 'Contact Us'];
   activeLink = this.links[0];
   public isLoggedIn = false;
-  public userProfile: KeycloakProfile | null = null;
+  public userProfile: KeycloakProfile | any = null;
   public userRole: boolean | undefined;
   public menuName = 'Login';
   public userRoleEnable: string[] | undefined;
@@ -35,13 +36,6 @@ export class AppComponent {
   public showInitials = false;
   public initials!: string;
   name: any;
-  public circleColor!: string;
-  private colors = [
-    '#EB7181', // red
-    '#468547', // green
-    '#FFD558', // yellow
-    '#3670B2', // blue
-  ];
   isBadgeHidden = false;
 
   clickHandler() {
@@ -86,31 +80,10 @@ export class AppComponent {
         this.userProfile = await this.keycloak.loadUserProfile();
 
         //generate profile photo with initials
-        this.name = this.userProfile.firstName + " " + this.userProfile.lastName;
-       // console.log(this.name);
-        let initials = "";
-        for (let i = 0; i < this.name.length; i++) {
-          if (this.name.charAt(i) === ' ') {
-            continue;
-          }
-          if (this.name.charAt(i) === this.name.charAt(i).toUpperCase()) {
-            initials += this.name.charAt(i);
-
-            if (initials.length == 2) {
-              break;
-            }
-          }
-        }
-        this.initials = initials;
+        const shortName = this.userProfile.firstName.substring(0, 1) + this.userProfile.lastName.substring(0, 1);
+        this.initials = shortName;
       }
     });
-
-    if (!this.photoUrl) {
-      this.showInitials = true;
-      const randomIndex = Math.floor(Math.random() * Math.floor(this.colors.length));
-      this.circleColor = this.colors[randomIndex];
-    }
-
   }
   public login() {
     this.keycloak.login();
