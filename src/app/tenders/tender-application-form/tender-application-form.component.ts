@@ -335,6 +335,16 @@ export class TenderApplicationFormComponent implements OnInit {
         const isCurrentRowEditing = editingCells.some((cell: any) => {
           return cell.rowIndex === params.node.rowIndex;
         });
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -343,6 +353,7 @@ export class TenderApplicationFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -569,6 +580,16 @@ export class TenderApplicationFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -577,6 +598,7 @@ export class TenderApplicationFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -653,6 +675,16 @@ export class TenderApplicationFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -661,6 +693,7 @@ export class TenderApplicationFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -754,6 +787,16 @@ export class TenderApplicationFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -762,6 +805,7 @@ export class TenderApplicationFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -833,6 +877,16 @@ export class TenderApplicationFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -841,6 +895,7 @@ export class TenderApplicationFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -912,6 +967,16 @@ export class TenderApplicationFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -920,6 +985,7 @@ export class TenderApplicationFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -1071,6 +1137,7 @@ export class TenderApplicationFormComponent implements OnInit {
   }
   tenderApplicantFormDisable() {
     if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT') {
+      this.btnstate = true;
       this.btnsDisable = true;
       this.applicantPqForm.disable();
       this.gridOptionsTurnover.getColumns().forEach((colTurnover: any) => {

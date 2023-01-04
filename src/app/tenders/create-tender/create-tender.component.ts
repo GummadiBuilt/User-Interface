@@ -372,7 +372,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
   onSave() {
-    console.log(this.tenderDetails.value.lastDateOfSubmission);
+    //console.log(this.tenderDetails.value.lastDateOfSubmission);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('SAVE');
     if (this.tenderDetails.value.lastDateOfSubmission) {
