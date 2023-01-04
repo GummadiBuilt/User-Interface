@@ -6,7 +6,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
-import { map, Observable, startWith } from 'rxjs';
+import { Observable } from 'rxjs';
+import { finalize, map, of, startWith, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiServicesService } from '../shared/api-services.service';
 import { countries, registrationCitiesData, registrationMasterData, registrationStatesData, typeOfEstablishment } from '../shared/responses';
@@ -35,8 +36,8 @@ export class ProfileComponent implements OnInit {
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   typeOfEstablishments: any[] = [];
-  allTypeOfEstablishments: typeOfEstablishment[] = [];
-  filteredTypeOfEstablishments!: Observable<any[]>;
+  allTypeOfEstablishments: string[] = [];
+  filteredTypeOfEstablishments!: Observable<string[]>;
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete!: MatAutocomplete;
   typeOfEstablishmentCtrl = new FormControl();
@@ -51,16 +52,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private toastr: ToastrService, private readonly keycloak: KeycloakService,
     private ApiServicesService: ApiServicesService, private router: Router,
-    private _formBuilder: FormBuilder, private route: ActivatedRoute,) {
-
-    this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
-      startWith(null),
-      map((te: string | null) => te ? this._filter(te) : this.allTypeOfEstablishments.slice()));
-  }
-
-  private _filter(value: any): any[] {
-    return this.typeOfEstablishments.filter(te => te.establishmentDescription.toLowerCase().includes(value.toLowerCase()));
-  }
+    private _formBuilder: FormBuilder, private route: ActivatedRoute,) { }
 
   ngOnInit() {
     try {
@@ -77,7 +69,7 @@ export class ProfileComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      typeOfEstablishment: [''],
+      typeOfEstablishment: [],
       yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
       address: ['', Validators.required],
@@ -89,6 +81,13 @@ export class ProfileComponent implements OnInit {
     this.getUserProfileData();
     this.getMasterdata();
     this.enableForm(false);
+    this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
+      startWith(' '),
+      map((te: string | null) => te ? this._filter(te) : this.allTypeOfEstablishments.slice()));
+  }
+  _filter(value: any): any[] {
+    const string = this.allTypeOfEstablishments.filter(te => te.toLowerCase().includes(value.toLowerCase()));
+    return string;
   }
   getUserProfileData() {
     this.ApiServicesService.getUserProfile().subscribe((data: any) => {
@@ -99,12 +98,8 @@ export class ProfileComponent implements OnInit {
       this.editUserForm.get('contactPhoneNumber')?.patchValue(data.contactPhoneNumber);
       this.editUserForm.get('contactEmailAddress')?.patchValue(data.contactEmailAddress);
       this.editUserForm.get('companyName')?.patchValue(data.companyName);
-      if (this.userData?.typeOfEstablishment) {
-        this.typeOfEstablishments = this.userData?.typeOfEstablishment.map((e: any) => {
-          return { establishmentDescription: e };
-        });
-      }
-      this.editUserForm.get('typeOfEstablishment')?.patchValue(this.typeOfEstablishments);
+      this.typeOfEstablishments = data.typeOfEstablishment;
+      this.editUserForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
       this.editUserForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
       this.editUserForm.get('address')?.patchValue(data.address);
       this.editUserForm.get('countryIsoCode')?.patchValue(data.country.countryIsoCode);
@@ -118,40 +113,17 @@ export class ProfileComponent implements OnInit {
     });
   }
   //mat-chips
-  add(event: any): void {
-    if (event) {
-      let newChip: any;
-      if (event.option) {
-        newChip = event.option.value;
-      }
-      if (event.value) {
-        this.allTypeOfEstablishments.forEach((c, i) => {
-          if (c.establishmentDescription.toLowerCase() === event.value.toLowerCase()) {
-            newChip = c;
-          }
-          if (event.input) {
-            event.input.value = '';
-          }
-        });
-      }
-      if (newChip) {
-        this.typeOfEstablishments.push(newChip);
-        this.allTypeOfEstablishments.forEach((c, i) => {
-          if (c.establishmentDescription === newChip.establishmentDescription) {
-            this.allTypeOfEstablishments.splice(i, 1);
-          }
-        });
-      }
-    }
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.typeOfEstablishments.push(event.option.viewValue);
+    this.typeOfEstablishmentInput.nativeElement.value = '';
+    this.typeOfEstablishmentCtrl.setValue(null);
   }
 
   remove(chip: any): void {
-    this.typeOfEstablishments.forEach((c, i) => {
-      if (c.establishmentDescription === chip.establishmentDescription) {
-        this.typeOfEstablishments.splice(i, 1);
-      }
-    });
-    this.allTypeOfEstablishments.push(chip);
+    const index = this.typeOfEstablishments.indexOf(chip);
+    if (index >= 0) {
+      this.typeOfEstablishments.splice(index, 1);
+    }
   }
 
   //disable form on page load and enable on button click
@@ -187,7 +159,8 @@ export class ProfileComponent implements OnInit {
 
   getMasterdata() {
     this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
-      this.allTypeOfEstablishments = data.typeOfEstablishments;
+      this.allTypeOfEstablishments = data.typeOfEstablishments.map(establishment => establishment.establishmentDescription);
+      //this.filteredTypeOfEstablishments = data.typeOfEstablishments.map(establishment => establishment.establishmentDescription);
       this.countries = data.countries;
       this.countryList = this.countries.slice();
     });
@@ -207,9 +180,7 @@ export class ProfileComponent implements OnInit {
   }
 
   update() {
-    this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments.map(el => {
-      return el.establishmentDescription;
-    }));
+    this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
     if (this.editUserForm.valid) {
       this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({
         next: ((response: userProfileResopnse) => {

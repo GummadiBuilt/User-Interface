@@ -140,8 +140,8 @@
                         <mat-chip-list #chipList aria-label="Type of Establishment selection"
                           formControlName="typeOfEstablishment">
                           <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true
-                            [selected]="typeOfEst.selected ? '': null" [removable]=true (removed)="remove(typeOfEst)">
-                            {{typeOfEst.establishmentDescription}}
+                            [removable]=true (removed)="remove(typeOfEst)">
+                            {{typeOfEst}}
                             <button matChipRemove>
                               <i class="fa-solid fa-xmark"></i>
                             </button>
@@ -149,11 +149,11 @@
                           <input placeholder="Select type..." #typeOfEstablishmentInput matChipInput
                             [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
                             [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                            [matChipInputAddOnBlur]=true (matChipInputTokenEnd)="add($event)">
+                            [matChipInputAddOnBlur]=true >
                         </mat-chip-list>
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="add($event)">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                           <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async" [value]="typeOfEstab">
-                            {{typeOfEstab.establishmentDescription}}
+                            {{typeOfEstab}}
                           </mat-option>
                         </mat-autocomplete>
                         <mat-error *ngIf="editUserForm.get('typeOfEstablishment')?.errors?.['required']">
