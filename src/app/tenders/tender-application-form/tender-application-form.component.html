@@ -239,10 +239,10 @@
                                 <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                     fxLayoutGap="8px">
                                     <button mat-stroked-button type="button"
-                                        (click)="accordionTurnover.openAll()">Expand All
+                                        (click)="accordionTurnover.openAll()">{{constantVariable.expandAllBtn}}
                                     </button>
                                     <button mat-stroked-button type="button"
-                                        (click)="accordionTurnover.closeAll()">Collapse All
+                                        (click)="accordionTurnover.closeAll()">{{constantVariable.collapseAllBtn}}
                                     </button>
                                 </div>
                                 <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
@@ -299,20 +299,20 @@
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
-                                    <div><span>Previous</span></div>
+                                    <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
                             <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                        <div>Save</div>
+                                        <div>{{constantVariable.saveBtn}}</div>
                                     </div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-                                    <div><span>Next</span></div>
+                                    <div><span>{{constantVariable.nextBtn}}</span></div>
                                     <div><i class="fa-solid fa-angle-right"></i></div>
                                 </div>
                             </button>
@@ -327,8 +327,8 @@
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                 fxLayoutGap="8px">
-                                <button mat-stroked-button (click)="accordion.openAll()">Expand All </button>
-                                <button mat-stroked-button (click)="accordion.closeAll()">Collapse All </button>
+                                <button mat-stroked-button (click)="accordion.openAll()">{{constantVariable.expandAllBtn}} </button>
+                                <button mat-stroked-button (click)="accordion.closeAll()">{{constantVariable.collapseAllBtn}} </button>
                             </div>
                             <mat-accordion class="example-headers-align" #accordion="matAccordion" multi>
                                 <mat-expansion-panel>
@@ -342,9 +342,8 @@
                                     </mat-expansion-panel-header>
                                     <div>
                                         <ul>
-                                            <li>List maximum 3 major projects executed.</li>
-                                            <li>Client reserves the right to approach those named to seek a performance
-                                                reference and rely on you having obtained the necessary consents.</li>
+                                            <li>{{constantVariable.listofthreeProjects}}</li>
+                                            <li>{{constantVariable.clientReference}}</li>
                                         </ul>
                                     </div>
                                     <div class="example-wrapper">
@@ -353,7 +352,7 @@
                                                 (click)="onBtIncludeProject2Columns()">
                                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                                     <div><i style="font-size: 16px;" class="fa-solid fa-plus"></i></div>
-                                                    <span>Add Project</span>
+                                                    <span>{{constantVariable.addProjectBtn}}</span>
                                                 </div>
                                             </button>
                                         </div>
@@ -588,20 +587,20 @@
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
-                                    <div><span>Previous</span></div>
+                                    <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
                             <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                        <div>Save</div>
+                                        <div>{{constantVariable.saveBtn}}</div>
                                     </div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-                                    <div><span>Next</span></div>
+                                    <div><span>{{constantVariable.nextBtn}}</span></div>
                                     <div><i class="fa-solid fa-angle-right"></i></div>
                                 </div>
                             </button>
@@ -628,8 +627,8 @@
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                 fxLayoutGap="8px">
-                                <button mat-stroked-button (click)="accordionFin.openAll()">Expand All </button>
-                                <button mat-stroked-button (click)="accordionFin.closeAll()">Collapse All </button>
+                                <button mat-stroked-button (click)="accordionFin.openAll()">{{constantVariable.expandAllBtn}}</button>
+                                <button mat-stroked-button (click)="accordionFin.closeAll()">{{constantVariable.collapseAllBtn}}</button>
                             </div>
                             <mat-accordion class="example-headers-align" #accordionFin="matAccordion" multi>
                                 <mat-expansion-panel>
@@ -711,20 +710,20 @@
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
-                                    <div><span>Previous</span></div>
+                                    <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
                             <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                        <div>Save</div>
+                                        <div>{{constantVariable.saveBtn}}</div>
                                     </div>
                                 </div>
                             </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-                                    <div><span>Next</span></div>
+                                    <div><span>{{constantVariable.nextBtn}}</span></div>
                                     <div><i class="fa-solid fa-angle-right"></i></div>
                                 </div>
                             </button>
@@ -739,10 +738,7 @@
                         <div class="undertaking" fxLayout="column">
                             <mat-radio-group formControlName="underTaking">
                                 <mat-radio-button class="example-radio-button" [value]="true">
-                                    <div>
-                                        The information, facts, details etc disclosed in this document is true and
-                                        correct. We take responsibility for the correctness of the same.
-                                    </div>
+                                    <div>{{constantVariable.undertakingNote}}</div>
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
@@ -750,14 +746,14 @@
                             <button mat-button matStepperPrevious>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><i class="fa-solid fa-angle-left"></i></div>
-                                    <div><span>Previous</span></div>
+                                    <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
                             <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                        <div>Save</div>
+                                        <div>{{constantVariable.saveBtn}}</div>
                                     </div>
                                 </div>
                             </button>
@@ -766,7 +762,7 @@
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-submit fa-solid fa-paper-plane"></i>
-                                        <div>Submit</div>
+                                        <div>{{constantVariable.submitBtn}}</div>
                                     </div>
                                 </div>
                             </button>

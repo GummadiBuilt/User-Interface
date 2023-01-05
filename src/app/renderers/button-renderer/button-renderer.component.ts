@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { KeycloakService } from 'keycloak-angular';
+import { PageConstants } from 'src/app/shared/application.constants';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 
 @Component({
@@ -14,6 +15,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   private params: any;
   public label!: string;
   public rowData: any;
+  public constantVariables = PageConstants;
   public buttonLabel!: string;
   public applyBtnLabel!:string;
   agInit(params: any): void {
@@ -21,17 +23,17 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     this.params = params;
     this.label = this.rowData.tender_document_name || null;
     if (this.rowData.pq_id != null && this.rowData.workflow_step == 'YET_TO_BE_PUBLISHED') {
-      this.buttonLabel = 'Edit PQ-Form'
+      this.buttonLabel = this.constantVariables.editPQFormBtn;
     } else if (this.rowData.pq_id != null && this.rowData.workflow_step == 'PUBLISHED') {
-      this.buttonLabel = 'View PQ-Form'
+      this.buttonLabel = this.constantVariables.viewPQFormBtn;
     }
     else {
-      this.buttonLabel = 'Create PQ-Form'
+      this.buttonLabel = this.constantVariables.createPQFormBtn;
     }
     if (this.rowData.application_form_id != null) {
-      this.applyBtnLabel = 'View/Edit'
+      this.applyBtnLabel = this.constantVariables.viewEditBtn;
     } else {
-      this.applyBtnLabel = 'Apply'
+      this.applyBtnLabel = this.constantVariables.applyBtn;
     }
   }
 
@@ -78,7 +80,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     //console.log(this.rowData)
     if (this.applyBtnLabel == 'Apply') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to apply for this tender?', msg: '' }
+        data: { title: this.constantVariables.applyTenderMsg, msg: '' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {

@@ -80,14 +80,14 @@
                         <button mat-button (click)="onSave()" style="background-color: grey ;" [disabled]="btnState">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                <div>Save</div>
+                                <div>{{constVariable.saveBtn}}</div>
                             </div>
                         </button>
                         <button *ngIf="pqFormId" mat-button (click)="onSubmit()" style="background-color: green ;"
                             [disabled]="btnState">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i class="icon-submit fa-solid fa-paper-plane"></i>
-                                <div>Submit</div>
+                                <div>{{constVariable.submitBtn}}</div>
                             </div>
                         </button>
                     </div>

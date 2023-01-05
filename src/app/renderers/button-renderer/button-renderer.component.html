@@ -5,7 +5,7 @@
 
    <button mat-stroked-button *ngIf="userRole?.includes('admin')"
       (click)="navigateToPQForm()">{{buttonLabel}}</button>
-   <button *ngIf="!userRole?.includes('admin') && rowData.workflow_step != 'SAVE'" mat-stroked-button (click)="viewPQForm()">View PQ-Form</button>
+   <button *ngIf="!userRole?.includes('admin') && rowData.workflow_step != 'SAVE'" mat-stroked-button (click)="viewPQForm()">{{constantVariables.viewPQFormBtn}}</button>
    <button *ngIf="userRole?.includes('contractor')" mat-stroked-button (click)="applyPQForm()">{{applyBtnLabel}}</button>
    <!-- <button *ngIf="userRole?.includes('contractor')" mat-stroked-button (click)="updatePQForm()">Update PQ-Form</button> -->
 </div>

@@ -20,6 +20,7 @@ import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import _ from 'lodash';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
+import { PageConstants } from 'src/app/shared/application.constants';
 
 @Component({
   selector: 'app-create-tender',
@@ -30,6 +31,7 @@ import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate
 export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
+  public constantVariable = PageConstants;
   public userRole: string[] | undefined;
   public typeOfWorksList = new Array<typeOfEstablishment>();
   public typeOfContractsList = new Array<typeOfContracts>();
@@ -421,7 +423,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onSubmit() {
     if (this.tenderId && this.tenderDetails.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the tender?', msg: 'Submitting this tender will disable further editing and will be sent to Admins for review' }
+        data: { title: this.constantVariable.submitTenderTitle, msg: this.constantVariable.submitTenderMsg }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -486,7 +488,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
-    const warningMessage = `You cannot edit a tender when its in ${workFlowStep} step`;
+    const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
     if ((this.userRole?.includes("client") && (workFlowStep == 'Yet to be published'
       || workFlowStep == 'Published'))) {        
       this.tenderDetails.disable();

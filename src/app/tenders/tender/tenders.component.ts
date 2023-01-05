@@ -7,6 +7,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
+import { PageConstants } from 'src/app/shared/application.constants';
 import { StatusValues } from 'src/app/shared/status-values';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ButtonRendererComponent } from '../../renderers/button-renderer/button-renderer.component';
@@ -27,6 +28,7 @@ export class TendersComponent implements OnInit {
   fileName = '';
   public domLayout: any;
   StatusValues = StatusValues as unknown as keyof typeof StatusValues;
+  public constVariable = PageConstants;
   public buttonLabel: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -54,9 +56,9 @@ export class TendersComponent implements OnInit {
       //console.log('All tenders', this.rowData);
       this.rowData.map((val: any) => {
         if (val.pq_id != null) {
-          this.buttonLabel.push('Edit PQ-Form');
+          this.buttonLabel.push(this.constVariable.editPQFormBtn);
         } else {
-          this.buttonLabel.push('Create PQ-Form');
+          this.buttonLabel.push(this.constVariable.createPQFormBtn);
         }
       })
 

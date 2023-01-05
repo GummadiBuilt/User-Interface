@@ -39,7 +39,7 @@ export class AppliedTendersComponent implements OnInit {
   getAppliedTendersData() {
     this.ApiServicesService.getAppliedTenders().subscribe((data: appliedTenderResopnse) => {
       this.rowData = data;
-      console.log('Applied tenders', this.rowData);
+     // console.log('Applied tenders', this.rowData);
     });
   }
 

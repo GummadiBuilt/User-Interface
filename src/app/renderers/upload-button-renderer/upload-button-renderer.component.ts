@@ -41,7 +41,7 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
     this.isFileUploaded = true;
     const pqFormTenderId = this.params.context.pqFormTenderId;
     const applicantPqFormId = this.params.context.applicantPqFormId;
-    let yearRow = this.params.data.row;
+    const yearRow = this.params.data.row;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.params.data.fileName = event.target.files[0].name
