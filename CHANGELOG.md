@@ -1,3 +1,30 @@
+# [1.6.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.5.0...v1.6.0) (2023-01-05)
+
+
+### Bug Fixes
+
+* **message changes:** modified user messages ([abf8358](https://github.com/GummadiBuilt/User-Interface/commit/abf8358923bb51973692af6c5b5c24277f6951c0))
+* **prod.ts:** added change password uri ([9654fae](https://github.com/GummadiBuilt/User-Interface/commit/9654fae4a4b3448b293f0817c58e524c97c2a66e))
+* **profile component:** type of establishment fix in profile ([59ada2d](https://github.com/GummadiBuilt/User-Interface/commit/59ada2d57ee529a5b9134c3e213476522dfb54ef))
+* **tender pq form compoenents:** client requested changes in tenders and pq form ([8ae071c](https://github.com/GummadiBuilt/User-Interface/commit/8ae071c057e99377d2881329240c31ae3514e113))
+
+
+### Features
+
+* **applied-tenders.ts:** api integration in applied tenders ([84d1493](https://github.com/GummadiBuilt/User-Interface/commit/84d1493a2591ffbeaeca505ee930a817b8b7894a))
+* **client.ts:** design and API integration Clients & Contractors ([dd77994](https://github.com/GummadiBuilt/User-Interface/commit/dd779940fd8f8867eba7c975c6c32177f9ae05e2))
+* **edit-user-profile.t:** getting user data in update user component ([1eb7378](https://github.com/GummadiBuilt/User-Interface/commit/1eb7378660e01ebffb88bd8cdcc7cbcc58041ca2))
+* **edit-user-profile.ts:** fixed losing data on refresh edit user profile ([5bb5746](https://github.com/GummadiBuilt/User-Interface/commit/5bb5746bb0b4bb91b829276f025072e74ab1cc76))
+* **profile.ts:** aPI integration in profile component ([0439e22](https://github.com/GummadiBuilt/User-Interface/commit/0439e22e1b30b635897d19b324b3cb17a6a5e698))
+* **profile.ts:** design changes ([d3b286a](https://github.com/GummadiBuilt/User-Interface/commit/d3b286a3969b910b97ee1f77642335290f00a138))
+* **profile.ts:** design changes in profile ([f050b69](https://github.com/GummadiBuilt/User-Interface/commit/f050b693587fed3f789ef3082f8bb4c4b9e6aebc))
+* **profile.ts:** merged edit profile component in profile component ([57a6d04](https://github.com/GummadiBuilt/User-Interface/commit/57a6d0446a01b00d8f0c50f320a6e5a68cbcc81e))
+* **profile.ts:** timeAgo pipe and groupBy in notifications ([b7b58c7](https://github.com/GummadiBuilt/User-Interface/commit/b7b58c77637d30e8e72c7ce2428379c96a12f355))
+* **tender applicants:** tender applicants api integration upload files ([7db716b](https://github.com/GummadiBuilt/User-Interface/commit/7db716bb0936df6e4fb507aebc5962cc4d49a861))
+* **tender application form:** added disable to table buttons when form disabled in tender ([5702901](https://github.com/GummadiBuilt/User-Interface/commit/5702901b71f19f22826ca45671a5566008ef82af))
+* **tender application:** api integration in tender application form ([1b55e26](https://github.com/GummadiBuilt/User-Interface/commit/1b55e26b81365ce3b146ff19048762e5460fa817))
+* **tender application:** apply pq form api integration ([05088a8](https://github.com/GummadiBuilt/User-Interface/commit/05088a85fdc971f5707f391bd37c4b81f8cd8fdc))
+
 # [1.5.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.4.0...v1.5.0) (2022-12-21)
 
 
