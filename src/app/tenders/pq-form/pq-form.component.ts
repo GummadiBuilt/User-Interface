@@ -102,7 +102,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   applyPqForm() {
     if (this.applyBtnLabel == 'Apply') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
+        data: { title: 'Are you sure you want to apply for this tender?', msg: '' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -165,7 +165,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   onSubmit() {
     if (this.pqFormId && this.adminPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the PQ-Form?', msg: 'Submitting will disable further editing of PQ-Form' }
+        data: { title: 'Are you sure you want to submit the PQ-Form?', msg: 'Submitting will publish the tender and will be visible to contractors' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {

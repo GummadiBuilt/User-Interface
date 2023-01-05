@@ -78,7 +78,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     //console.log(this.rowData)
     if (this.applyBtnLabel == 'Apply') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to apply for this Tender?', msg: '' }
+        data: { title: 'Are you sure you want to apply for this tender?', msg: '' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {

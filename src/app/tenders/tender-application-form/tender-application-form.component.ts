@@ -465,7 +465,7 @@ export class TenderApplicationFormComponent implements OnInit {
       this.gridApiSimilarNature.setColumnDefs(value);
     } else {
       this.btnstate = true;
-      this.toastr.error('Users cannot add more than 3 Projects');
+      this.toastr.error('A maximum of three client references are allowed');
     }
   }
 
@@ -1114,7 +1114,7 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the Tender Applicant Form?', msg: 'Submitting will disable further editing of Tender Applicant Form' }
+        data: { title: 'Submit your application for this tender?', msg: 'Submit action disables further editing of your application' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -1122,7 +1122,7 @@ export class TenderApplicationFormComponent implements OnInit {
             next: ((response: applicantsPqFormResponse) => {
               this.applicantPqForm.controls['actionTaken'].setValue(response.actionTaken);
               this.tenderApplicantFormDisable();
-              this.toastr.success('Successfully Submitted');
+              this.toastr.success('You successfully submitted your application. You will receive further steps if your application is shortlisted');
             }),
             error: (error => {
               console.log(error);
@@ -1131,7 +1131,6 @@ export class TenderApplicationFormComponent implements OnInit {
         }
       });
     } else {
-      console.log('error');
       this.toastr.error('Error in Submitting Applicant PQ-Form');
     }
   }

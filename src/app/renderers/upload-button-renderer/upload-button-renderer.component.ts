@@ -53,30 +53,27 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
     const blob = new Blob();
     formData.append('yearDocument', this.file || blob);
 
-    if (pqFormTenderId && applicantPqFormId && this.params.data.year) {
-     // console.log('update form', formData);
+    if (pqFormTenderId && applicantPqFormId) {
       this.ApiServicesService.updateApplicantPQFormFile(pqFormTenderId, applicantPqFormId, yearRow, formData).subscribe({
         next: ((response) => {
-          //console.log(response)
-         // this.fileName = this.params.data.fileName;
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
           console.log(error);
         })
       })
-    } else if (!applicantPqFormId || !this.params.data.year) {
+    } else if (!applicantPqFormId) {
       //error
       this.file = null;
       this.fileName = '';
       console.log('File upload error');
-      this.toastr.error('Please save the form & row data before uploading file');
+      this.toastr.error('Please save the form before uploading the file');
     } else {
       //error
       console.log('error');
       this.file = null;
       this.fileName = '';
-      this.toastr.error('Please upload the file');
+      this.toastr.error('Please upload a file');
     }
   }
 
