@@ -37,6 +37,9 @@ export class CurrencyFormatterDirective implements OnInit, OnDestroy {
     this.setValue(!!inputVal ?
       this.validateDecimalValue(inputVal.replace(/[^0-9.]/g, '')) : '');
   }
+  @HostListener('focus') onFocus() {
+    this.setValue(this.unformatValue(this.ngControl.value));
+  }
 
   @HostListener('blur') onBlur() {
     let value = this.ngControl.control?.value || '';
@@ -45,6 +48,9 @@ export class CurrencyFormatterDirective implements OnInit, OnDestroy {
 
   formatPrice(v: number | bigint) {
     return this.formatter.format(v);
+  }
+  unformatValue(v:any) {
+    return v.replace(/,/g, '');
   }
 
   validateDecimalValue(v: any) {

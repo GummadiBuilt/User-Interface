@@ -1,0 +1,96 @@
+.profile {
+    color: #841618;
+    padding: 24px;
+}
+
+::ng-deep .profile mat-card {
+    border-radius: 0px !important;
+    padding: 48px !important;
+}
+
+::ng-deep .mat-stroked-button {
+    background-color: white;
+}
+
+.action-buttons {
+    margin-bottom: 8px;
+}
+
+.initials {
+    color: #FFFFFF;
+    line-height: 19px;
+    letter-spacing: 0.2625px;
+}
+
+::ng-deep h3 {
+    font-weight: 500 !important;
+    color: #841618 !important;
+    margin-bottom: 0px !important;
+}
+
+::ng-deep .profile .mat-card-avatar {
+    width: 100px !important;
+    height: 100px !important;
+    font-size: 60px !important;
+}
+
+.icon-32p {
+    font-size: 32px;
+    color: #841618;
+}
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.font-20p {
+    font-size: 20px;
+}
+
+.font-grey {
+    color: gray;
+}
+
+
+//
+.profile .example-container {
+    height: calc(100vh - 256px) !important;
+}
+
+.profile .mat-drawer {
+    width: 25%;
+}
+
+.profile .mat-drawer-content {
+    width: 75%;
+    background-color: white;
+}
+
+.profile .drawer-content {
+    padding: 8px 24px 8px 24px;
+}
+
+::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+form mat-label {
+    color: #841618;
+}
+
+.icon-20p {
+    font-size: 20px;
+}
+
+.icon-gray {
+    color: gray;
+}
+
+.icon-error {
+    font-size: 20px;
+}
+
+.bg-grey {
+    background-color: rgb(150, 150, 150);
+}

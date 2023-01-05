@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit, } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit, } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
@@ -12,29 +12,59 @@ import { applicantsPqFormResponse } from './applicantpqformresponse';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
+import { PageConstants } from '../../shared/application.constants';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import * as _moment from 'moment';
+import { default as _rollupMoment, Moment } from 'moment';
+import { DatePipe } from '@angular/common';
+import { CdkPortal } from '@angular/cdk/portal';
+
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'YYYY'
+  },
+  display: {
+    dateInput: 'YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 
 @Component({
-  selector: 'app-view-applicants-pqform',
-  templateUrl: './view-applicants-pqform.component.html',
-  styleUrls: ['./view-applicants-pqform.component.scss'],
+  selector: 'app-tender-application-form',
+  templateUrl: './tender-application-form.component.html',
+  styleUrls: ['./tender-application-form.component.scss'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false, showError: true },
     },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class ViewApplicantsPQFormComponent implements OnInit {
+export class TenderApplicationFormComponent implements OnInit {
   stepperOrientation!: Observable<StepperOrientation>;
   applicantPqForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
   currentYear: number = new Date().getFullYear();
   years: any[] = [];
+  public constantVariable = PageConstants;
+  btnsDisable: boolean = false;
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
-    private router: Router, private dialog: MatDialog) {
+    private router: Router, private dialog: MatDialog, private datePipe: DatePipe,) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
@@ -47,10 +77,13 @@ export class ViewApplicantsPQFormComponent implements OnInit {
 
     this.route.paramMap.subscribe(params => {
       const tenderId = params.get('tenderId');
+      const pqFormId = params.get('pqId');
       const applicationId = params.get('applicationId');
       this.pqFormTenderId = tenderId;
+      this.PQFormId = pqFormId;
       if (tenderId && applicationId) {
         this.ApiServicesService.getApplicantPQForm(tenderId, applicationId).subscribe((data: applicantsPqFormResponse) => {
+          //console.log(data);
           this.getApplicantPQForms(data);
         });
       }
@@ -66,7 +99,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     //Vendor General Company info & etc (Contractor)
     this.applicantPqForm = this._formBuilder.group({
       companyName: ['', [Validators.required, Validators.maxLength(50)]],
-      yearOfEstablishment: ['', [Validators.required,]],
+      yearOfEstablishment: new FormControl(moment(), [Validators.required]),
       typeOfEstablishment: ['', [Validators.required,]],
       corpOfficeAddress: ['', Validators.maxLength(250)],
       localOfficeAddress: ['', Validators.maxLength(250)],
@@ -79,33 +112,44 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       regionalHeadName: ['', Validators.maxLength(50)],
       regionalHeadPhoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
 
+      turnOverDetails: {},
       similarProjects: {},
       clientReferences: {},
       similarProjectNature: {},
 
-      esiRegistration: '',
-      epfRegistration: '',
-      gstRegistration: '',
-      panNumber: '',
+      esiRegistration: ['', Validators.maxLength(50)],
+      epfRegistration: ['', Validators.maxLength(50)],
+      gstRegistration: ['', Validators.maxLength(50)],
+      panNumber: ['', Validators.maxLength(50)],
 
       employeesStrength: {},
       capitalEquipment: {},
 
-      safetyPolicyManual: '',
-      ppeToStaff: '',
-      ppeToWorkMen: '',
-      safetyOfficeAvailability: '',
+      safetyPolicyManual: ['', Validators.maxLength(50)],
+      ppeToStaff: ['', Validators.maxLength(50)],
+      ppeToWorkMen: ['', Validators.maxLength(50)],
+      safetyOfficeAvailability: ['', Validators.maxLength(50)],
 
       financialInformation: {},
       companyBankers: {},
       companyAuditors: {},
 
-      underTaking: [false, Validators.required],
+      underTaking: [true, Validators.required],
       actionTaken: ['']
     });
   }
+  chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+
+    const ctrlValue = this.applicantPqForm.controls['yearOfEstablishment'].value;
+    ctrlValue?.year(normalizedYear.year());
+    // console.log(ctrlValue);
+    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(ctrlValue);
+    datepicker.close();
+    //  console.log(this.applicantPqForm.controls['yearOfEstablishment'].value);
+  }
 
   getApplicantPQForms(data: any) {
+    //console.log(data);
     this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
     this.applicantPqForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
     this.applicantPqForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
@@ -119,8 +163,87 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.applicantPqForm.get('contactEmailId')?.patchValue(data.contactEmailId);
     this.applicantPqForm.get('regionalHeadName')?.patchValue(data.regionalHeadName);
     this.applicantPqForm.get('regionalHeadPhoneNum')?.patchValue(data.regionalHeadPhoneNum);
+
+    this.applicantPqForm.get('esiRegistration')?.patchValue(data.esiRegistration);
+    this.applicantPqForm.get('epfRegistration')?.patchValue(data.epfRegistration);
+    this.applicantPqForm.get('gstRegistration')?.patchValue(data.gstRegistration);
+    this.applicantPqForm.get('panNumber')?.patchValue(data.panNumber);
+
+    this.applicantPqForm.get('safetyPolicyManual')?.patchValue(data.safetyPolicyManual);
+    this.applicantPqForm.get('ppeToStaff')?.patchValue(data.ppeToStaff);
+    this.applicantPqForm.get('ppeToWorkMen')?.patchValue(data.ppeToWorkMen);
+    this.applicantPqForm.get('safetyOfficeAvailability')?.patchValue(data.safetyOfficeAvailability);
+    if (data.turnOverDetails != null) {
+      this.turnoverDetails = data.turnOverDetails;
+    }
+    if (Object.keys(data.similarProjects).length === 0) {
+      this.similarProjectsDetails = [];
+    } else {
+      this.similarProjectsDetails = JSON.parse(data.similarProjects);
+    }
+    if (Object.keys(data.clientReferences).length === 0) {
+      this.clientRefRowData = [];
+    } else {
+      // set the column headers from the data        
+      const colDefs = this.gridApiClientRef.getColumnDefs();
+      const dataRef = JSON.parse(data.clientReferences);
+      const keys = Object.keys(dataRef[0]);
+      if (colDefs?.length) {
+        colDefs.length = 0;
+        keys.forEach(key => colDefs?.push({ field: key }));
+        this.gridApiClientRef.setColumnDefs(colDefs);
+        this.clientRefRowData = JSON.parse(data.clientReferences);
+        if (colDefs.length == 4) {
+          this.btnstate = true;
+        }
+      }
+    }
+    if (Object.keys(data.similarProjectNature).length === 0) {
+      this.similarNatureRowData = [];
+    } else {
+      // set the column headers from the data        
+      const colDefsSim = this.gridApiSimilarNature.getColumnDefs();
+      const dataSimRef = JSON.parse(data.similarProjectNature);
+      const keys = Object.keys(dataSimRef[0]);
+      if (colDefsSim?.length) {
+        colDefsSim.length = 0;
+        keys.forEach(key => colDefsSim?.push({ field: key }));
+        this.gridApiSimilarNature.setColumnDefs(colDefsSim);
+        this.similarNatureRowData = JSON.parse(data.similarProjectNature);
+      }
+    }
+    if (Object.keys(data.employeesStrength).length === 0) {
+      this.employeesStrengthRowData = [];
+    } else {
+      this.employeesStrengthRowData = JSON.parse(data.employeesStrength);
+    }
+    if (Object.keys(data.capitalEquipment).length === 0) {
+      this.capitalEquipmentsRowData = [];
+    } else {
+      this.capitalEquipmentsRowData = JSON.parse(data.capitalEquipment);
+    }
+    if (Object.keys(data.financialInformation).length === 0) {
+      this.financialDetails = [];
+    } else {
+      this.financialDetails = JSON.parse(data.financialInformation);
+    }
+    if (Object.keys(data.companyBankers).length === 0) {
+      this.companyBankersDetails = [];
+    } else {
+      this.companyBankersDetails = JSON.parse(data.companyBankers);
+    }
+    if (Object.keys(data.companyAuditors).length === 0) {
+      this.companyAuditorsDetails = [];
+    } else {
+      this.companyAuditorsDetails = JSON.parse(data.companyAuditors);
+    }
+
     if (data.applicationId != 0) {
       this.applicantPqFormId = data.applicationId
+    }
+    if (data.actionTaken == "SUBMIT") {
+      this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
+      this.tenderApplicantFormDisable();
     }
   }
 
@@ -141,42 +264,32 @@ export class ViewApplicantsPQFormComponent implements OnInit {
 
   //ag-grid
   public editType: 'fullRow' = 'fullRow';
-
+  public blob = new Blob();
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
-    { headerName: 'Year', field: 'year', editable: true, flex: 4 },
-    { headerName: 'Rs in Crores', field: 'rupees', editable: true, flex: 4 },
+    { headerName: 'Year', field: 'year' },
+    { headerName: 'Rs in Crores', field: 'revenue' },
+    { headerName: 'row', field: 'row', hide: true },
     {
-      headerName: 'Remarks (Financial Statement for Reference)', field: 'remarks', editable: false, flex: 4,
+      headerName: 'Remarks (Financial Statement for Reference)', field: 'fileName', editable: false,
       cellRenderer: UploadButtonRendererComponent,
       cellRendererParams: {
         context: this,
       },
     },
-    {
-      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
-      cellRenderer: (params: any) => {
-        let divElement = document.createElement("div");
-        divElement.innerHTML = `
-          <button class="action-button add" data-action="add">
-            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
-          </button>
-          <button class="action-button delete" data-action="delete">
-            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
-          </button>
-          `;
-        return divElement;
-      },
-    }
   ];
   public turnoverDefaultColDef: ColDef = {
-    flex: 1,
-    editable: true,
+    flex: 4,
+    //editable: true,
     minWidth: 200,
     resizable: true,
+    editable: true
   };
+
   public turnoverDetails = [
-    { year: '', rupees: '', remarks: '' },
+    { year: '', revenue: '', row: 'YEAR_ONE', fileName: '' },
+    { year: '', revenue: '', row: 'YEAR_TWO', fileName: '' },
+    { year: '', revenue: '', row: 'YEAR_THREE', fileName: '' },
   ];
   private gridApiTurnover!: GridApi;
   public gridOptionsTurnover!: any;
@@ -185,31 +298,20 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.gridApiTurnover = params.api;
     this.gridOptionsTurnover = params.columnApi;
   }
-  onCellClickedTurnover(params: any) {
-    // Handle click event for action cells
-    if (params.column.colId === "action" && params.event.target.dataset.action) {
-      let action = params.event.target.dataset.action;
-      if (action === "add") {
-        console.log('add', params.node.rowIndex);
-        this.gridApiTurnover.applyTransaction({
-          add: [{ 'year': '', 'rupees': '', 'remarks': '' }],
-          addIndex: params.node.rowIndex + 1
-        });
-        this.gridApiTurnover.startEditingCell({
-          rowIndex: params.node.rowIndex + 1,
-          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
-        });
-      }
-      if (action === "delete") {
-        console.log('delete');
-        params.api.applyTransaction({
-          remove: [params.node.data]
-        });
-        this.turnoverDetails.splice(params.rowIndex, 1);
-      }
-    }
+  onCellValueChangedTurnover(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiTurnover.applyTransaction({
+      update: dataItem,
+    });
   }
   onRowValueChangedTurnover(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiTurnover.setRowData(this.turnoverDetails);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiTurnover.applyTransaction({ update: addDataItem });
+    }
     this.gridApiTurnover.refreshCells();
   }
   //download Financial Reference Document
@@ -229,6 +331,20 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        const editingCells = params.api.getEditingCells();
+        const isCurrentRowEditing = editingCells.some((cell: any) => {
+          return cell.rowIndex === params.node.rowIndex;
+        });
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -237,6 +353,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -247,7 +364,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     minWidth: 150,
     resizable: true,
   };
-  public similarProjectsDetails = [
+  public similarProjectsDetails: any[] = [
     { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
   ];
   private gridApiSimilarProjects!: GridApi;
@@ -261,18 +378,22 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
       if (action === "add") {
-        console.log('add', params.node.rowIndex);
+        // console.log('add', params.node.rowIndex);
+        const similarProjectsNewRow = { 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' };
+        const similarProjectsNewIndex = params.node.rowIndex + 1;
         this.gridApiSimilarProjects.applyTransaction({
-          add: [{ 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' }],
-          addIndex: params.node.rowIndex + 1
+          add: [similarProjectsNewRow],
+          addIndex: similarProjectsNewIndex
         });
+        this.similarProjectsDetails.splice(similarProjectsNewIndex, 0, similarProjectsNewRow);
+        this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
         this.gridApiSimilarProjects.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
       if (action === "delete") {
-        console.log('delete');
+        //console.log('delete');
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -280,49 +401,92 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       }
     }
   }
+  onBtStartEditingSimilarProjects() {
+    this.gridApiSimilarProjects.setFocusedCell(1, 'SI No');
+    this.gridApiSimilarProjects.startEditingCell({
+      rowIndex: 1,
+      colKey: 'SI No',
+    });
+  }
+  onCellValueChangedSimilarProjects(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiSimilarProjects.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedSimilarProjects(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiSimilarProjects.applyTransaction({ update: addDataItem });
+      // this.gridApiSimilarProjects.forEachNode( (node) => {
+      //   this.similarProjectsDetails.push(node.data);
+      // });
+    }
+    this.gridApiSimilarProjects.refreshCells();
+  }
+  onCellEditingStoppedSimilarProjects(event: CellEditingStoppedEvent) {
+    this.gridApiSimilarProjects.stopEditing();
+  }
+  onRowEditingStartedSimilarProjects(params: any) {
+    params.api.refreshCells({
+      columns: ["action"],
+      rowNodes: [params.node],
+      force: true
+    });
+  }
+  onRowEditingStoppedSimilarProjects(params: any) {
+    params.api.refreshCells({
+      columns: ["action"],
+      rowNodes: [params.node],
+      force: true
+    });
+    this.gridApiSimilarProjects.stopEditing();
+  }
 
   //Section C of PQ-Form: Client References of 3 Major Projects
-  public clientRefColumnDefs: ColDef[] = [
-    { headerName: 'Details', field: 'details', editable: false },
-    {
-      headerName: 'Project 1', field: 'project1', editable: true, wrapText: true,
-    },
-  ];
-  public clientRefProject2ColumnDefs: ColDef[] = [
-    { headerName: 'Details', field: 'details', editable: false },
-    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
-    { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
-  ];
-  public clientRefProject3ColumnDefs: ColDef[] = [
-    { headerName: 'Details', field: 'details', editable: false },
-    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
-    { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
-    { headerName: 'Project 3', field: 'project3', editable: true, wrapText: true },
-  ];
-  onBtExcludeProjectColumns() {
-    this.gridApiClientRef.setColumnDefs(this.clientRefColumnDefs);
-  }
-  projectCount = 0;
+  public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
+  public projectInfoColumnDef: ColDef[] = [
+    this.project[0]
+  ]
+  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details', editable: false },
+  this.projectInfoColumnDef[0]];
+
+
+
   onBtIncludeProject2Columns() {
-    console.log('Add Project');
-    console.log(this.projectCount++);
-    if (this.projectCount == 1) {
-      this.gridApiClientRef.setColumnDefs(this.clientRefProject2ColumnDefs);
-      this.gridApiSimilarNature.setColumnDefs(this.similarNatureProject2ColumnDefs);
-    } else if (this.projectCount == 2) {
-      this.gridApiClientRef.setColumnDefs(this.clientRefProject3ColumnDefs);
-      this.gridApiSimilarNature.setColumnDefs(this.similarNatureProject3ColumnDefs);
-    }
-    else {
-      this.toastr.warning("Only 3 Projects are allowed to add");
+    const value = this.getColumnDefs();
+    // console.log('columns', value.length)
+    if (value.length <= 4) {
+      this.gridApiClientRef.setColumnDefs(value);
+      // console.log('columns', this.gridApiClientRef.getColumnDefs())
+      this.gridApiSimilarNature.setColumnDefs(value);
+    } else {
+      this.btnstate = true;
+      this.toastr.error('A maximum of three client references are allowed');
     }
   }
+
+  private getColumnDefs() {
+    const cols = this.columnApiClientRef.getColumns()!;
+    const colDef = this.gridApiClientRef.getColumnDefs();
+    this.project.forEach(item => {
+      item.headerName = 'Project ' + colDef?.length,
+        item.field = 'Project ' + colDef?.length
+    })
+    // console.log('project ',this.project[0]);
+    colDef?.push(this.project[0]);
+    return JSON.parse(JSON.stringify(colDef));
+  }
+
   gridApiClientRef!: GridApi;
   columnApiClientRef!: ColumnApi;
+  btnstate: boolean = false;
   onGridReadyClientRef(params: GridReadyEvent) {
     this.gridApiClientRef = params.api;
     this.columnApiClientRef = params.columnApi;
-    console.log(this.columnApiClientRef);
   }
   public clientRefDefaultColDef: ColDef = {
     flex: 1,
@@ -331,50 +495,41 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     resizable: true,
   };
   public clientRefRowData = [
-    { details: 'Name & Location of Project:', project1: '', project2: '', project3: '', },
-    { details: 'Scope of Contract:', project1: '', project2: '', project3: '', },
-    { details: 'Built Up Area:', project1: '', project2: '', project3: '', },
-    { details: 'Contract Duration:', project1: '', project2: '', project3: '', },
-    { details: 'Contract Value:', project1: '', project2: '', project3: '', },
-    { details: 'Current Status (If completed date of completion):', project1: '', project2: '', project3: '', },
-    { details: 'Employers Name & Address', project1: '', project2: '', project3: '', },
-    { details: 'Referee’s Name', project1: '', project2: '', project3: '', },
-    { details: 'Referee’s Position', project1: '', project2: '', project3: '', },
-    { details: 'Contact details', project1: '', project2: '', project3: '', },
-    { details: 'Remarks if any', project1: '', project2: '', project3: '', },
+    { details: 'Name & Location of Project:', 'Project 1': '' },
+    { details: 'Scope of Contract:', 'Project 1': '' },
+    { details: 'Built Up Area:', 'Project 1': '' },
+    { details: 'Contract Duration:', 'Project 1': '' },
+    { details: 'Contract Value:', 'Project 1': '' },
+    { details: 'Current Status (If completed date of completion):', 'Project 1': '' },
+    { details: 'Employers Name & Address', 'Project 1': '' },
+    { details: 'Referee’s Name', 'Project 1': '' },
+    { details: 'Referee’s Position', 'Project 1': '' },
+    { details: 'Contact details', 'Project 1': '' },
+    { details: 'Remarks if any', 'Project 1': '' },
   ];
 
-  onCellValueChanged(event: CellValueChangedEvent) {
-    event.data.modified = true;
-    console.log(event.data);
-    const gridData = this.getAllData();
-    console.log(gridData);
-  }
+  // onCellValueChanged(event: CellValueChangedEvent) {
+  //   event.data.modified = true;
+  //  // console.log(event.data);
+  //   const gridData = this.getAllData();
+  //   console.log(gridData);
+  // }
 
-  getAllData() {
-    this.gridApi.forEachNode(node => this.clientRefRowData.push(node.data));
-    return this.clientRefRowData;  
-  }
+  // getAllData() {
+  //   //this.gridApiClientRef.forEachNode(node => (node.data)?this.clientRefRowData.push(node.data):'');
+  //   return this.clientRefRowData;
+  // }
 
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
-    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
-  ];
-  public similarNatureProject2ColumnDefs: ColDef[] = [
-    { headerName: 'Details', field: 'details', editable: false },
-    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
-    { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
-  ];
-  public similarNatureProject3ColumnDefs: ColDef[] = [
-    { headerName: 'Details', field: 'details', editable: false },
-    { headerName: 'Project 1', field: 'project1', editable: true, wrapText: true },
-    { headerName: 'Project 2', field: 'project2', editable: true, wrapText: true },
-    { headerName: 'Project 3', field: 'project3', editable: true, wrapText: true },
+    this.project[0]
   ];
   gridApiSimilarNature!: GridApi;
+  columnApiSimilarNature!: ColumnApi;
   onGridReadySimilarNature(params: GridReadyEvent) {
     this.gridApiSimilarNature = params.api;
+    this.columnApiSimilarNature = params.columnApi;
   }
   public similarNatureDefaultColDef: ColDef = {
     flex: 1,
@@ -383,17 +538,17 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     resizable: true,
   };
   public similarNatureRowData = [
-    { details: 'Name & Location of Project:', project1: '', project2: '', project3: '', },
-    { details: 'Scope of Contract:', project1: '', project2: '', project3: '', },
-    { details: 'Built Up Area:', project1: '', project2: '', project3: '', },
-    { details: 'Contract Duration:', project1: '', project2: '', project3: '', },
-    { details: 'Contract Value:', project1: '', project2: '', project3: '', },
-    { details: 'Current Status:', project1: '', project2: '', project3: '', },
-    { details: 'Employers Name & Address', project1: '', project2: '', project3: '', },
-    { details: 'Referee’s Name', project1: '', project2: '', project3: '', },
-    { details: 'Referee’s Position', project1: '', project2: '', project3: '', },
-    { details: 'Contact details', project1: '', project2: '', project3: '', },
-    { details: 'Remarks if any', project1: '', project2: '', project3: '', },
+    { details: 'Name & Location of Project:', 'Project 1': '' },
+    { details: 'Scope of Contract:', 'Project 1': '' },
+    { details: 'Built Up Area:', 'Project 1': '' },
+    { details: 'Contract Duration:', 'Project 1': '' },
+    { details: 'Contract Value:', 'Project 1': '' },
+    { details: 'Current Status:', 'Project 1': '' },
+    { details: 'Employers Name & Address', 'Project 1': '' },
+    { details: 'Referee’s Name', 'Project 1': '' },
+    { details: 'Referee’s Position', 'Project 1': '' },
+    { details: 'Contact details', 'Project 1': '' },
+    { details: 'Remarks if any', 'Project 1': '' },
   ];
 
   //Section C of PQ-Form: Statutory Compliances
@@ -425,6 +580,16 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -433,6 +598,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -447,29 +613,49 @@ export class ViewApplicantsPQFormComponent implements OnInit {
   public employeesStrengthRowData: any[] = [
     { name: '', designation: '', qualification: '', totalExp: '', totalExpPresent: '', },
   ];
-  private gridApi!: GridApi;
-  public gridOptions!: any;
+  private gridApiEmployeesStrength!: GridApi;
+  public gridOptionsEmployeesStrength!: any;
   onGridReadyEmployeesStrength(params: GridReadyEvent) {
-    this.gridApi = params.api;
-    this.gridOptions = params.columnApi;
+    this.gridApiEmployeesStrength = params.api;
+    this.gridOptionsEmployeesStrength = params.columnApi;
+  }
+  onCellValueChangedEmployeesStrength(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiEmployeesStrength.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedEmployeesStrength(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiEmployeesStrength.setRowData(this.employeesStrengthRowData);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiEmployeesStrength.applyTransaction({ update: addDataItem });
+    }
+    this.gridApiEmployeesStrength.refreshCells();
   }
   onCellClickedEmployeesStrength(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
       if (action === "add") {
-        console.log('add', params.node.rowIndex);
-        this.gridApi.applyTransaction({
-          add: [{ 'name': '', 'designation': '', 'qualification': '', 'totalExp': '', 'totalExpPresent': '', }],
-          addIndex: params.node.rowIndex + 1
+        // console.log('add', params.node.rowIndex);
+        const employeeStrengthNewRow = { 'name': '', 'designation': '', 'qualification': '', 'totalExp': '', 'totalExpPresent': '', };
+        const employeeStrengthNewIndex = params.node.rowIndex + 1;
+        this.gridApiEmployeesStrength.applyTransaction({
+          add: [employeeStrengthNewRow],
+          addIndex: employeeStrengthNewIndex
         });
-        this.gridApi.startEditingCell({
+        this.employeesStrengthRowData.splice(employeeStrengthNewIndex, 0, employeeStrengthNewRow);
+        this.gridApiEmployeesStrength.setRowData(this.employeesStrengthRowData);
+        this.gridApiEmployeesStrength.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
       if (action === "delete") {
-        console.log('delete');
+        //console.log('delete');
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -489,6 +675,16 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -497,6 +693,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -516,15 +713,35 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.gridApiCapitalEquipments = params.api;
     this.gridOptionsCapitalEquipments = params.columnApi;
   }
+  onCellValueChangedCapitalEquipments(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiCapitalEquipments.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedCapitalEquipments(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiCapitalEquipments.setRowData(this.capitalEquipmentsRowData);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiCapitalEquipments.applyTransaction({ update: addDataItem });
+    }
+    this.gridApiCapitalEquipments.refreshCells();
+  }
   onCellClickedCapitalEquipments(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
       if (action === "add") {
+        const capitalEquipmentsNewRow = { 'description': '', 'quantity': '', 'own_rented': '', 'capacity_size': '', 'age_condition': '' };
+        const capitalEquipmentsNewIndex = params.node.rowIndex + 1;
         this.gridApiCapitalEquipments.applyTransaction({
-          add: [{ 'description': '', 'quantity': '', 'own_rented': '', 'capacity_size': '', 'age_condition': '' }],
-          addIndex: params.node.rowIndex + 1
+          add: [capitalEquipmentsNewRow],
+          addIndex: capitalEquipmentsNewIndex
         });
+        this.capitalEquipmentsRowData.splice(capitalEquipmentsNewIndex, 0, capitalEquipmentsNewRow);
+        this.gridApiCapitalEquipments.setRowData(this.capitalEquipmentsRowData);
         this.gridApiCapitalEquipments.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           //   // gets the first columnKey
@@ -570,6 +787,16 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -578,6 +805,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -597,15 +825,35 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.gridApiFinancialDetails = params.api;
     this.gridOptionsFinancialDetails = params.columnApi;
   }
+  onCellValueChangedFinancialDetails(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiFinancialDetails.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedFinancialDetails(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiFinancialDetails.setRowData(this.financialDetails);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiFinancialDetails.applyTransaction({ update: addDataItem });
+    }
+    this.gridApiFinancialDetails.refreshCells();
+  }
   onCellClickedFinancialDetails(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
+      const financialDetailsNewRow = { 'f_year': '', 'gross_turnover': '', 'net_profit': '', 'profit_after_tax': '', 'current_assets': '', 'current_liabilities': '' };
+      const financialDetailsNewIndex = params.node.rowIndex + 1;
       if (action === "add") {
         this.gridApiFinancialDetails.applyTransaction({
-          add: [{ 'f_year': '', 'gross_turnover': '', 'net_profit': '', 'profit_after_tax': '', 'current_assets': '', 'current_liabilities': '' }],
-          addIndex: params.node.rowIndex + 1
+          add: [financialDetailsNewRow],
+          addIndex: financialDetailsNewIndex
         });
+        this.financialDetails.splice(financialDetailsNewIndex, 0, financialDetailsNewRow);
+        this.gridApiFinancialDetails.setRowData(this.financialDetails);
         this.gridApiFinancialDetails.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           //   // gets the first columnKey
@@ -629,6 +877,16 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -637,6 +895,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -656,15 +915,35 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.gridApiCompanyBankersDetails = params.api;
     this.gridOptionsCompanyBankersDetails = params.columnApi;
   }
+  onCellValueChangedBankersDetails(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiCompanyBankersDetails.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedBankersDetails(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiCompanyBankersDetails.setRowData(this.companyBankersDetails);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiCompanyBankersDetails.applyTransaction({ update: addDataItem });
+    }
+    this.gridApiCompanyBankersDetails.refreshCells();
+  }
   onCellClickedCompanyBankersDetails(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
+      const companyBankersNewRow = { 'name': '', 'address': '' };
+      const companyBankersNewIndex = params.node.rowIndex + 1;
       if (action === "add") {
         this.gridApiCompanyBankersDetails.applyTransaction({
-          add: [{ 'name': '', 'address': '' }],
-          addIndex: params.node.rowIndex + 1
+          add: [companyBankersNewRow],
+          addIndex: companyBankersNewIndex
         });
+        this.companyBankersDetails.splice(companyBankersNewIndex, 0, companyBankersNewRow);
+        this.gridApiCompanyBankersDetails.setRowData(this.companyBankersDetails);
         this.gridApiCompanyBankersDetails.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           //   // gets the first columnKey
@@ -688,6 +967,16 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
+        if (this.btnsDisable) {
+          divElement.innerHTML = `
+          <button class="action-disable-button add" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+          </button>
+          <button class="action-disable-button delete" type="button" disabled>
+            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+          </button>
+          `;
+        } else {
         divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
@@ -696,6 +985,7 @@ export class ViewApplicantsPQFormComponent implements OnInit {
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
           </button>
           `;
+        }
         return divElement;
       },
     }
@@ -715,15 +1005,35 @@ export class ViewApplicantsPQFormComponent implements OnInit {
     this.gridApiCompanyAuditorsDetails = params.api;
     this.gridOptionsCompanyAuditorsDetails = params.columnApi;
   }
+  onCellValueChangedCompanyAuditorsDetails(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiCompanyAuditorsDetails.applyTransaction({
+      update: dataItem,
+    });
+  }
+  onRowValueChangedCompanyAuditorsDetails(event: any) {
+    var data = event.data;
+    if (event.rowIndex == 0) {
+      this.gridApiCompanyAuditorsDetails.setRowData(this.companyAuditorsDetails);
+    } else {
+      const addDataItem = [event.node.data];
+      this.gridApiCompanyAuditorsDetails.applyTransaction({ update: addDataItem });
+    }
+    this.gridApiCompanyAuditorsDetails.refreshCells();
+  }
   onCellClickedCompanyAuditorsDetails(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
       let action = params.event.target.dataset.action;
+      const companyAuditorsNewRow = { 'name': '', 'address': '' };
+      const companyAuditorsNewIndex = params.node.rowIndex + 1;
       if (action === "add") {
         this.gridApiCompanyAuditorsDetails.applyTransaction({
-          add: [{ 'name': '', 'address': '' }],
+          add: [],
           addIndex: params.node.rowIndex + 1
         });
+        this.companyAuditorsDetails.splice(companyAuditorsNewIndex, 0, companyAuditorsNewRow);
+        this.gridApiCompanyAuditorsDetails.setRowData(this.companyAuditorsDetails);
         this.gridApiCompanyAuditorsDetails.startEditingCell({
           rowIndex: params.node.rowIndex + 1,
           //   // gets the first columnKey
@@ -741,15 +1051,28 @@ export class ViewApplicantsPQFormComponent implements OnInit {
 
   public pqFormTenderId: any;
   public applicantPqFormId: any;
+  public PQFormId: any;
   onSave() {
     this.applicantPqForm.controls['actionTaken'].setValue('SAVE');
-    console.log(this.applicantPqForm.value);
-
+    if (this.applicantPqForm.value.yearOfEstablishment) {
+      const dateTran = this.datePipe.transform(this.applicantPqForm.value.yearOfEstablishment, 'YYYY');
+      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
+    }
+    this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
+    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+    this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
+    this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
+    this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
+    this.applicantPqForm.controls['companyBankers'].setValue(JSON.stringify(this.companyBankersDetails));
+    this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
+    this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
+    this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       //console.log('update form');
       this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
           // console.log('update', response);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.PQFormId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -760,8 +1083,8 @@ export class ViewApplicantsPQFormComponent implements OnInit {
       this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
           this.applicantPqFormId = response.applicationId;
-          console.log(response);
-          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-applicants-pq-form', this.applicantPqFormId]);
+          // console.log(response);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.PQFormId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Created');
         }),
         error: (error => {
@@ -776,16 +1099,30 @@ export class ViewApplicantsPQFormComponent implements OnInit {
 
   onSubmit() {
     this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
+    if (this.applicantPqForm.value.yearOfEstablishment) {
+      const dateTran = this.datePipe.transform(this.applicantPqForm.value.yearOfEstablishment, 'YYYY');
+      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
+    }
+    this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
+    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+    this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
+    this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
+    this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
+    this.applicantPqForm.controls['companyBankers'].setValue(JSON.stringify(this.companyBankersDetails));
+    this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
+    this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
+    this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the Applicant PQ-Form?', msg: 'Submitting will disable further editing of PQ-Form' }
+        data: { title: 'Submit your application for this tender?', msg: 'Submit action disables further editing of your application' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
           this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
             next: ((response: applicantsPqFormResponse) => {
               this.applicantPqForm.controls['actionTaken'].setValue(response.actionTaken);
-              this.toastr.success('Successfully Submitted');
+              this.tenderApplicantFormDisable();
+              this.toastr.success('You successfully submitted your application. You will receive further steps if your application is shortlisted');
             }),
             error: (error => {
               console.log(error);
@@ -794,9 +1131,41 @@ export class ViewApplicantsPQFormComponent implements OnInit {
         }
       });
     } else {
-      console.log('error');
       this.toastr.error('Error in Submitting Applicant PQ-Form');
     }
   }
-
+  tenderApplicantFormDisable() {
+    if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT') {
+      this.btnstate = true;
+      this.btnsDisable = true;
+      this.applicantPqForm.disable();
+      this.gridOptionsTurnover.getColumns().forEach((colTurnover: any) => {
+        colTurnover.colDef.editable = false;
+      })
+      this.gridOptionsSimilarProjects.getColumns().forEach((colSimilarProjects: any) => {
+        colSimilarProjects.colDef.editable = false;
+      })
+      this.columnApiClientRef.getColumns()?.forEach((colClientRef: any) => {
+        colClientRef.colDef.editable = false;
+      })
+      this.columnApiSimilarNature.getColumns()?.forEach((colSimilarNature: any) => {
+        colSimilarNature.colDef.editable = false;
+      })
+      this.gridOptionsEmployeesStrength.getColumns().forEach((colEmployeesStrength: any) => {
+        colEmployeesStrength.colDef.editable = false;
+      })
+      this.gridOptionsCapitalEquipments.getColumns().forEach((colCapitalEquipments: any) => {
+        colCapitalEquipments.colDef.editable = false;
+      })
+      this.gridOptionsFinancialDetails.getColumns().forEach((colFinancialDetails: any) => {
+        colFinancialDetails.colDef.editable = false;
+      })
+      this.gridOptionsCompanyBankersDetails.getColumns().forEach((colCompanyBankers: any) => {
+        colCompanyBankers.colDef.editable = false;
+      })
+      this.gridOptionsCompanyAuditorsDetails.getColumns().forEach((colCompanyAuditors: any) => {
+        colCompanyAuditors.colDef.editable = false;
+      })
+    }
+  }
 }

@@ -15,6 +15,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   public label!: string;
   public rowData: any;
   public buttonLabel!: string;
+  public applyBtnLabel!:string;
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
@@ -26,6 +27,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     }
     else {
       this.buttonLabel = 'Create PQ-Form'
+    }
+    if (this.rowData.application_form_id != null) {
+      this.applyBtnLabel = 'View/Edit'
+    } else {
+      this.applyBtnLabel = 'Apply'
     }
   }
 
@@ -55,8 +61,10 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
 
   navigateToPQForm() {
-    if (this.rowData.pq_id != null) {
+    if (this.buttonLabel == 'Edit PQ-Form') {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form', this.rowData.pq_id]);
+    } else if (this.buttonLabel == 'View PQ-Form') {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
     } else {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
     }
@@ -67,14 +75,25 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     }
   }
   applyPQForm() {
-    const dlg = this.dialog.open(ConfirmationDlgComponent, {
-      data: { title: 'Are you sure you want to apply?', msg: '' }
-    });
-    dlg.afterClosed().subscribe((submit: boolean) => {
-      if (submit) {
-        this.router.navigate(['/tenders', this.rowData.tender_id, 'create-applicants-pq-form']);
-      }
-    });
+    //console.log(this.rowData)
+    if (this.applyBtnLabel == 'Apply') {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: 'Are you sure you want to apply for this tender?', msg: '' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id, 'tender-application-form']);
+        }
+      });
+    } else {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id, 'edit-tender-application-form', this.rowData.application_form_id]);
+    }
+  }
+  updatePQForm() {
+    console.log(this.rowData);
+    // if (this.rowData.pq_id != null) {
+    //   this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-applicants-pq-form', this.rowData.applicant_id]);
+    // }
   }
   // navigateToApplicants(){
   //   this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);

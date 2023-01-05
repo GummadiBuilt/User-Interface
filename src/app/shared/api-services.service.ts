@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { registrationMasterData, registrationStatesData, registrationCitiesData } from './responses';
 import { ErrorServiceService } from './error-service.service';
@@ -12,7 +12,11 @@ import { commonOptionsData } from './commonOptions';
 import { tenderResopnse } from '../tenders/tender/tenderResponse';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { pqFormResponse } from '../tenders/pq-form/pqformresponse';
-import { applicantsPqFormResponse } from '../tenders/view-applicants-pqform/applicantpqformresponse';
+import { applicantsPqFormResponse } from '../tenders/tender-application-form/applicantpqformresponse';
+import { clientUsersResponse } from './clientUsersResponse';
+import { contractorUsersResponse } from './contractorUsersResponse';
+import { userProfileResopnse } from '../profile/userProfileResponse';
+import { appliedTenderResopnse } from '../tenders/applied-tenders/appliedTenderResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -26,6 +30,7 @@ export interface toastPayload {
 export class ApiServicesService {
   public navigation = new Subject<any>();
   public navigation$ = this.navigation.asObservable();
+
   private url: string = environment.apiUrl;
   constructor(private httpClient: HttpClient, private errorService: ErrorServiceService, private kcService: KeycloakService,
     private toastr: ToastrService) {
@@ -84,6 +89,11 @@ export class ApiServicesService {
     return this.httpClient.get<tenderResopnse>(this.url + '/tender/getAll');
   }
 
+  // Applied Tender data GETApI
+  public getAppliedTenders(): Observable<appliedTenderResopnse> {
+    return this.httpClient.get<appliedTenderResopnse>(this.url + '/tender/applied-tenders');
+  }
+
   // Tender data GETApI
   public getTendersDatabyId(id: any): Observable<tenderResopnse> {
     return this.httpClient.get<tenderResopnse>(this.url + '/tender/get/' + id);
@@ -122,7 +132,29 @@ export class ApiServicesService {
   public updateApplicantPQForm(tenderId: any, applicationId: any, data: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.put<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/update', data);
   }
+  //file upload in update tender application form
+  public updateApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any,file:any) {
+    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/'+fileYear,file);
+  }
+  //client users getAPI
+  public getClientUsers(): Observable<clientUsersResponse> {
+    return this.httpClient.get<clientUsersResponse>(this.url + '/client-users/getAll');
+  }
 
+  //contractor users getAPI
+  public getContractorUsers(): Observable<contractorUsersResponse> {
+    return this.httpClient.get<contractorUsersResponse>(this.url + '/contractor-users/getAll');
+  }
+
+  //user profile getAPI
+  public getUserProfile(): Observable<userProfileResopnse> {
+    return this.httpClient.get<userProfileResopnse>(this.url + '/user-profile');
+  }
+
+  //Update user profile putAPI
+  public updateUserProfile(data: any): Observable<userProfileResopnse> {
+    return this.httpClient.put<userProfileResopnse>(this.url + '/user-profile/update', data);
+  }
 
   //download files converstion
   downloadFile(data: any) {

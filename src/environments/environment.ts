@@ -8,7 +8,8 @@ const environment = {
   KEYCLOAK_URL: 'http://localhost:8080',
   KEYCLOAK_REALM: 'Local-Realm',
   KEYCLOAK_CLIENT_ID: 'gummadi-local',
-  apiUrl: 'http://localhost:9001/api'
+  apiUrl: 'http://localhost:9001/api',
+  updatePwdUrl: 'http://localhost:8080/realms/Local-Realm/protocol/openid-connect/auth?response_type=code&client_id=gummadi-local&redirect_uri=http://localhost:4200&kc_action=UPDATE_PASSWORD'
 };
 
 export { environment as environment }

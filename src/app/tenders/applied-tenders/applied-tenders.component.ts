@@ -1,97 +1,50 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
+import { ButtonRendererComponent } from 'src/app/renderers/button-renderer/button-renderer.component';
+import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { StatusValues } from 'src/app/shared/status-values';
-import { BreadcrumbService } from 'xng-breadcrumb';
-import { ButtonRendererComponent } from '../../renderers/button-renderer/button-renderer.component';
-import { ApiServicesService } from '../../shared/api-services.service';
-import { tenderResopnse } from './tenderResponse';
-@Component({
-  selector: 'app-tenders',
-  templateUrl: './tenders.component.html',
-  styleUrls: ['./tenders.component.scss']
-})
-export class TendersComponent implements OnInit {
+import { appliedTenderResopnse } from './appliedTenderResponse';
 
+@Component({
+  selector: 'app-applied-tenders',
+  templateUrl: './applied-tenders.component.html',
+  styleUrls: ['./applied-tenders.component.scss']
+})
+export class AppliedTendersComponent implements OnInit {
   public userRole: string[] | undefined;
   public toggle: boolean = true;
-  public editId: string | null | undefined;
   public rowData: any;
-  public frameworkComponents: any;
-  fileName = '';
   public domLayout: any;
-  StatusValues = StatusValues as unknown as keyof typeof StatusValues;
-  public buttonLabel: any[] = [];
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  public frameworkComponents: any;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
-  constructor(protected keycloak: KeycloakService, public router: Router, private route: ActivatedRoute,
-    private ApiServicesService: ApiServicesService, private toastr: ToastrService,) {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.editId = id;
-    });
+  constructor(protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService, private toastr: ToastrService,) {
     this.domLayout = "autoHeight";
   }
+
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
     } catch (e) {
       console.log('Failed to load user details', e);
     }
-    this.getTendersData();
-  }
-  getTendersData() {
-    this.ApiServicesService.getTenders().subscribe((data: tenderResopnse) => {
-      this.rowData = data;
-      //console.log('All tenders', this.rowData);
-      this.rowData.map((val: any) => {
-        if (val.pq_id != null) {
-          this.buttonLabel.push('Edit PQ-Form');
-        } else {
-          this.buttonLabel.push('Create PQ-Form');
-        }
-      })
 
+    this.getAppliedTendersData();
+  }
+
+  getAppliedTendersData() {
+    this.ApiServicesService.getAppliedTenders().subscribe((data: appliedTenderResopnse) => {
+      this.rowData = data;
+      console.log('Applied tenders', this.rowData);
     });
-  }
-  navigateToPQForm(id: any, pqid: any) {
-    if (pqid != null) {
-      this.router.navigate(['/tenders', id, 'edit-pq-form', pqid]);
-    } else {
-      this.router.navigate(['/tenders', id, 'create-pq-form']);
-    }
-  }
-  viewPQForm(TID: any, pqID: any) {
-    if (pqID != null) {
-      this.router.navigate(['/tenders', TID, 'view-pq-form', pqID]);
-    }
-  }
-  savedFiltersChanged(event: any) {
-    localStorage.setItem('saved-filters', JSON.stringify(event));
   }
 
   toggleView(change: MatButtonToggleChange) {
     this.toggle = change.value;
-  }
-
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.fileName = file.name;
-      const formData = new FormData();
-      formData.append("thumbnail", file);
-    }
-  }
-  createTender() {
-    this.router.navigate(['/tenders/create-tender'], { relativeTo: this.route });
   }
 
   // Each Column Definition results in one Column.
@@ -105,11 +58,18 @@ export class TendersComponent implements OnInit {
         return id;
       }
     },
+    { headerName: 'Application Form ID', field: 'application_form_id', flex: 1, filter: 'agTextColumnFilter', },
+    { headerName: 'PQ ID', field: 'pq_id', flex: 1, filter: 'agTextColumnFilter', },
     { headerName: 'Client Name', field: 'company_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Project Name', field: 'project_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Work Description', field: 'work_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Type of Work', field: 'establishment_description', flex: 2, minWidth: 300, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Contract Duration', field: 'contract_duration', flex: 1, filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
+    {
+      headerName: 'Estimated Budget', field: 'estimated_budget', flex: 1, filter: 'agTextColumnFilter',
+      valueFormatter: params => currencyFormatter(params.data.estimated_budget, '₹ '),
+    },
     {
       headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter',
       cellRenderer: function (data: any) {
@@ -119,7 +79,8 @@ export class TendersComponent implements OnInit {
     },
     { headerName: 'Location', field: 'project_location', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Contract Duration', field: 'contract_duration', flex: 1, filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
+    { headerName: 'Tender Document Size', field: 'tender_document_size', flex: 1, valueGetter: `data.tender_document_size  +' MB'` },
+    { headerName: 'Created by', field: 'created_by', flex: 1 },
     {
       headerName: 'Action', field: 'tender_document_name', flex: 1, cellRenderer: ButtonRendererComponent,
       cellRendererParams: {
@@ -127,8 +88,8 @@ export class TendersComponent implements OnInit {
       },
       filter: false,
       colId: "action",
-      minWidth: 350,
-    }
+      minWidth: 300,
+    },
   ];
 
   downloadDocument(data: any) {
@@ -203,3 +164,14 @@ var filterParams = {
   },
   browserDatePicker: true
 };
+
+//indian currency formatter
+function currencyFormatter(currency: number, sign: string) {
+  var x = currency.toString();
+  var lastThree = x.substring(x.length - 3);
+  var otherNumbers = x.substring(0, x.length - 3);
+  if (otherNumbers != '')
+    lastThree = ',' + lastThree;
+  var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+  return sign + `${res}`;
+}

@@ -25,6 +25,8 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public pqDocumentIssueDate!: any;
   public btnState: boolean = false;
   public warningMessage!: string;
+  public applyBtnLabel: string = 'Apply';
+  public applicationFormId: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -58,11 +60,6 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
 
     //Project Info (Admin)
     this.adminPqForm = this._formBuilder.group({
-      projectName: ['', [Validators.required, Validators.maxLength(50)]],
-      workPackage: [{ value: '', disabled: true }],
-      typeOfStructure: ['', [Validators.required, Validators.maxLength(50)]],
-      contractDuration: [{ value: '', disabled: true }],
-      durationCounter: [{ value: '', disabled: true }],
       pqLastDateOfSubmission: ['', [Validators.required]],
       tentativeDateOfAward: ['', [Validators.required]],
       scheduledCompletion: ['', Validators.required],
@@ -75,20 +72,21 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   getPQForms(data: any) {
-    this.adminPqForm.get('projectName')?.patchValue(data.projectName);
-    this.adminPqForm.get('workPackage')?.patchValue(data.workPackage);
-    this.adminPqForm.get('typeOfStructure')?.patchValue(data.typeOfStructure);
     this.adminPqForm.get('pqLastDateOfSubmission')?.patchValue(this.dateConverstion(data.pqLastDateOfSubmission));
     this.adminPqForm.get('tentativeDateOfAward')?.patchValue(this.dateConverstion(data.tentativeDateOfAward));
     this.adminPqForm.get('scheduledCompletion')?.patchValue(this.dateConverstion(data.scheduledCompletion));
-    this.adminPqForm.get('contractDuration')?.patchValue(data.contractDuration);
-    this.adminPqForm.get('durationCounter')?.patchValue(data.durationCounter);
     // this.pqFormTenderId = data.tenderId;
     if (data.id != 0) {
       this.pqFormId = data.id
     }
     if (data.pqDocumentIssueDate) {
       this.pqDocumentIssueDate = data.pqDocumentIssueDate;
+    }
+    this.applicationFormId = data.applicationFormId;
+    if (this.applicationFormId != 0) {
+      this.applyBtnLabel = 'View/Edit'
+    } else {
+      this.applyBtnLabel = 'Apply'
     }
   }
   dateConverstion(input: any) {
@@ -102,16 +100,22 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   applyPqForm() {
-    const dlg = this.dialog.open(ConfirmationDlgComponent, {
-      data: { title: 'Are you sure you want to apply?', msg: '' }
-    });
-    dlg.afterClosed().subscribe((submit: boolean) => {
-      this.router.navigate(['/tenders', this.pqFormTenderId, 'create-applicants-pq-form']);
-    });
+    if (this.applyBtnLabel == 'Apply') {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: 'Are you sure you want to apply for this tender?', msg: '' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'tender-application-form']);
+        }
+      });
+    } else {
+      this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'edit-tender-application-form', this.applicationFormId]);
+    }
   }
 
   onSave() {
-    console.log(this.adminPqForm.value.scheduledCompletion);
+    //console.log(this.adminPqForm.value.scheduledCompletion);
     this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
     if (this.adminPqForm.value.pqLastDateOfSubmission) {
       //console.log('in save',this.adminPqForm.value.pqLastDateOfSubmission);
@@ -161,7 +165,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   onSubmit() {
     if (this.pqFormId && this.adminPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the PQ-Form?', msg: 'Submitting will disable further editing of PQ-Form' }
+        data: { title: 'Are you sure you want to submit the PQ-Form?', msg: 'Submitting will publish the tender and will be visible to contractors' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {

@@ -23,7 +23,7 @@
         </div>
         <div fxLayoutAlign="end center">
             <div class="status" *ngIf="this.pqDocumentIssueDate">
-                <span>PQ Submitted Date : </span>
+                <span>PQ Published Date : </span>
                 <span class="text-bold">{{this.pqDocumentIssueDate}}</span>
             </div>
         </div>
@@ -33,53 +33,6 @@
             <mat-card>
                 <form [formGroup]="adminPqForm" autocomplete="off">
                     <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column">
-                            <mat-label>Name of Project *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name of Project" formControlName="projectName">
-                                <mat-error *ngIf="adminPqForm.get('projectName')?.errors?.['required']">
-                                    Enter Name of Project
-                                </mat-error>
-                                <mat-error *ngIf="adminPqForm.get('projectName')?.errors?.['maxlength']">
-                                    Enter only 50 characters
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="readonly-disabled" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                            fxFlex.xl="24%" fxLayout="column">
-                            <mat-label>Name of Work Package</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name of Work Package" formControlName="workPackage"
-                                    readonly>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column">
-                            <mat-label>Nature of Structure *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput placeholder="Nature of Structure" formControlName="typeOfStructure">
-                                <mat-error *ngIf="adminPqForm.get('typeOfStructure')?.errors?.['required']">
-                                    Enter Nature of Structure
-                                </mat-error>
-                                <mat-error *ngIf="adminPqForm.get('typeOfStructure')?.errors?.['maxlength']">
-                                    Enter only 50 characters
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="readonly-disabled" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
-                            fxFlex.xl="24%" fxLayout="column">
-                            <mat-label>Project Duration (Months or Days)</mat-label>
-                            <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
-                                <mat-form-field fxFlex="47%" appearance="outline">
-                                    <input matInput numbersOnly placeholder="Project Duration"
-                                        formControlName="contractDuration" readonly>
-                                </mat-form-field>
-                                <mat-form-field fxFlex="47%" appearance="outline">
-                                    <input matInput formControlName="durationCounter" readonly>
-                                </mat-form-field>
-                            </div>
-                        </div>
                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                             fxLayout="column">
                             <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
@@ -142,8 +95,9 @@
                         fxLayoutAlign="end center" fxLayoutGap="24px">
                         <button class="button-apply" mat-button type="button" (click)="applyPqForm()">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                <i class="icon-appy fa-solid fa-angles-right"></i>
-                                <div>Apply</div>
+                                <i *ngIf="applicationFormId == 0" class="icon-appy fa-solid fa-angles-right"></i>
+                                <i *ngIf="applicationFormId" class="fa-solid fa-pen-to-square"></i>
+                                <div>{{applyBtnLabel}}</div>
                             </div>
                         </button>
                     </div>

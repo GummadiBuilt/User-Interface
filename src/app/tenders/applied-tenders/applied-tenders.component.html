@@ -1,11 +1,8 @@
-<div class="tenders">
+<div class="all-applied-tenders">
     <div>
         <div class="action-bar" fxLayout="row" fxLayoutAlign="space-between center">
-            <div *ngIf="!userRole?.includes('contractor')" fxLayout="row" fxLayoutAlign="center center">
-                <h2>Tenders</h2>
-            </div>
-            <div class="list-grid" *ngIf="userRole?.includes('contractor')">
-                <mat-button-toggle-group class="all-tenders">
+            <div class="applied-toggle" *ngIf="userRole?.includes('contractor')">
+                <mat-button-toggle-group class="applied-tenders">
                     <mat-button-toggle class="toggle-first" routerLink="/tenders">
                         <div>All Tenders</div>
                     </mat-button-toggle>
@@ -13,14 +10,6 @@
                         <div>Applied Tenders</div>
                     </mat-button-toggle>
                 </mat-button-toggle-group>
-            </div>
-            <div *ngIf="userRole?.includes('client')">
-                <button mat-raised-button (click)="createTender()">
-                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                        <i class="icon-20p fa-solid fa-circle-plus"></i>
-                        <div><span>Create Tender</span></div>
-                    </div>
-                </button>
             </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="space-between">
@@ -51,7 +40,7 @@
                 (gridReady)="onGridReady($event)" [frameworkComponents]="frameworkComponents" [domLayout]="domLayout">
             </ag-grid-angular>
         </div>
-        <div *ngIf="!toggle" class="tenders-page" fxLayout="row wrap" fxLayoutAlign="start center"
+        <div *ngIf="!toggle" class="applied-tenders-page" fxLayout="row wrap" fxLayoutAlign="start center"
             fxLayoutGap="20px grid">
             <div fxFlex="50%" fxFlex.md="50%" fxFlex.xs="100%" fxFlex.sm="100%"
                 *ngFor="let tender of rowData;let indexOfelement=index;">
@@ -61,7 +50,7 @@
                             <a [routerLink]="['/tenders/edit-tender', tender.tender_id]">
                                 <h3>Tender ID: {{tender.tender_id}}</h3>
                             </a>
-                            <h3>Status: {{StatusValues[tender.workflow_step]}} </h3>
+                            <h3>Status: {{tender.workflow_step}}</h3>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between start">
                             <div fxLayout="column">
@@ -74,20 +63,15 @@
                                 <h5><span class="text-maroon">Type of Contract:</span>
                                     {{tender.type_of_contract}}
                                 </h5>
+                                <h5><span class="text-maroon">Estimated Budget:</span>
+                                    {{tender.estimated_budget | INRCurrency}}
+                                </h5>
+                                <h5><span class="text-maroon">Company Name:</span>
+                                    {{tender.company_name}}
+                                </h5>
                             </div>
-                            <!-- <div fxLayoutAlign="center center">
-                                <button mat-stroked-button>
-                                    Contractors Applied
-                                </button>
-                            </div> -->
                             <div fxLayoutAlign="center center">
-                                <button mat-stroked-button *ngIf="userRole?.includes('admin')"
-                                    (click)="navigateToPQForm(tender.tender_id,tender.pq_id)">
-                                    {{buttonLabel[indexOfelement]}}
-                                </button>
-                                <button *ngIf="!userRole?.includes('admin') && tender.workflow_step != 'SAVE'"
-                                    mat-stroked-button (click)="viewPQForm(tender.tender_id,tender.pq_id)">View
-                                    PQ-Form</button>
+
                             </div>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between center">

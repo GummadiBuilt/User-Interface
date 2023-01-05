@@ -2,5 +2,55 @@
     <div class="text-maroon" fxLayout="row" fxLayoutAlign="start center">
         <h2>Contractors</h2>
     </div>
+    <div class="toggle-group" fxLayoutAlign="space-between">
+        <div>
+            <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
+                <mat-button-toggle [value]="true">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                        <div><i class="fa-solid fa-list"></i></div>
+                        <div>List</div>
+                    </div>
+                </mat-button-toggle>
+                <mat-button-toggle [value]="false">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                        <div><i class="fa-solid fa-grip-vertical"></i></div>
+                        <div>Grid</div>
+                    </div>
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+    <div *ngIf="toggle">
+        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="ColumnDefs" [defaultColDef]="DefaultColDef"
+            [rowData]="allContractorUsers" [domLayout]="domLayout" [pagination]="true"
+            [paginationPageSize]="paginationPageSize">
+        </ag-grid-angular>
+    </div>
+    <div *ngIf="!toggle" class="contractors-page" fxLayout="row wrap" fxLayoutAlign="start center"
+        fxLayoutGap="20px grid">
+        <div fxFlex="25%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.xs="100%" fxFlex.sm="100%"
+            *ngFor="let contractor of allContractorUsers">
+            <mat-card>
+                <div fxLayout="column" fxLayoutGap="4px">
+                    <div fxLayout="row">
+                        <span fxFlex="30">Contact Name</span>
+                        <span class="text-maroon bold-500">:&ensp;{{contractor.contact_first_name}}
+                            {{contractor.contact_last_name}}</span>
+                    </div>
+                    <div fxLayout="row">
+                        <span fxFlex="30">Company Name</span>
+                        <span class="text-maroon bold-500">:&ensp;{{contractor.company_name}}</span>
+                    </div>
+                    <div fxLayout="row">
+                        <span fxFlex="30">Mail ID</span>
+                        <span class="text-maroon bold-500">:&ensp;{{contractor.contact_email_address}}</span>
+                    </div>
+                    <div fxLayout="row">
+                        <span fxFlex="30">Applied Tenders</span>
+                        <span class="text-maroon bold-500">:&ensp;{{contractor.applied_tenders}}</span>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
 </div>
-

@@ -174,3 +174,10 @@ mat-stepper {
 li {
     line-height: 30px !important;
 }
+button.mat-button-disabled {
+    cursor: not-allowed;
+}
+
+input[type="file" i]:disabled {
+    cursor: not-allowed;
+}

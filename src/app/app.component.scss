@@ -62,20 +62,93 @@ a {
     background: linear-gradient(#e73a3d, #841618);
 }
 
-.login-button {
-    font-size: 14px !important;
-    color: white;
-    background: linear-gradient(#e73a3d, #841618);
-    font-weight: 500;
-    margin-left: 20px !important;
-    margin-right: 20px !important;
-}
-
 button.mat-menu:hover {
     color: white;
     background: linear-gradient(#e73a3d, #841618);
 }
 
+.icon-16p {
+    font-size: 16px;
+}
+
 .icon-20p {
     font-size: 20px;
+}
+
+.icon-24p {
+    font-size: 24px;
+}
+
+.icon-6p {
+    font-size: 6px;
+}
+
+.icon-warn {
+    color: orange;
+}
+
+.text-500 {
+    font-weight: 500;
+}
+
+.text-600 {
+    font-weight: 600;
+}
+
+.notifications {
+    cursor: pointer;
+}
+
+.profile-icon {
+    cursor: pointer;
+}
+
+::ng-deep .profile-divider .mat-divider {
+    background-color: rgb(236, 236, 236) !important;
+}
+
+.initials {
+    color: #FFFFFF;
+    font-size: 20px;
+    line-height: 19px;
+    letter-spacing: 0.2625px;
+}
+
+.text-maroon {
+    color: #841618;
+}
+
+.text-grey {
+    color: rgb(75, 75, 75);
+}
+
+.bg-grey {
+    background-color: rgb(150, 150, 150);
+}
+
+::ng-deep .profile-menu {
+    padding: 8px;
+}
+
+::ng-deep .cdk-overlay-container .profile-menu {
+    margin-top: 8px;
+}
+
+::ng-deep .cdk-overlay-container .notification-menu {
+    margin-top: 8px;
+}
+
+::ng-deep .mat-badge-content {
+    background-color: #841618 !important;
+    color: white !important;
+}
+
+::ng-deep .notification-menu {
+    padding: 20px;
+}
+
+.icon-read {
+    font-size: 16px;
+    color: #841618;
+    cursor: pointer;
 }

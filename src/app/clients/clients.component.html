@@ -2,4 +2,61 @@
     <div class="text-maroon" fxLayout="row" fxLayoutAlign="start center">
         <h2>Clients</h2>
     </div>
+    <div class="toggle-group">
+        <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
+            <mat-button-toggle [value]="true">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                    <div><i class="fa-solid fa-list"></i></div>
+                    <div>List</div>
+                </div>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="false">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                    <div><i class="fa-solid fa-grip-vertical"></i></div>
+                    <div>Grid</div>
+                </div>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <div *ngIf="toggle">
+        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="ColumnDefs" [defaultColDef]="DefaultColDef"
+            [rowData]="allClientUsers" [domLayout]="domLayout" [pagination]="true"
+            [paginationPageSize]="paginationPageSize">
+        </ag-grid-angular>
+    </div>
+    <div *ngIf="!toggle" class="clients-page" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="20px grid">
+        <div fxFlex="25%" fxFlex.lg="50%" fxFlex.md="50%" fxFlex.xs="100%" fxFlex.sm="100%"
+            *ngFor="let client of allClientUsers">
+            <mat-card>
+                <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="8px">
+                    <div>
+                        <h3>Contact Name: <span class="bold-500">{{client.contact_first_name}}
+                                {{client.contact_last_name}}</span></h3>
+                        <h3>Company Name: <span class="bold-500">{{client.company_name}}</span></h3>
+                    </div>
+                    <div class="count-tenders">
+                        <!-- <div fxLayout="row" fxLayoutAlign="space-evenly">
+                            <div class="count" fxLayout="column" fxLayoutAlign="center center">
+                                <h3><span class="bold-500">{{client.total_tenders}}</span></h3>
+                                <h4>Total Tenders</h4>
+                            </div>
+                            <mat-divider vertical></mat-divider>
+                            <div class="count" fxLayout="column" fxLayoutAlign="center center">
+                                <h3><span class="bold-500">{{client.under_process_step}}</span></h3>
+                                <h4>Under Process</h4>
+                            </div>
+                            <mat-divider vertical></mat-divider>
+                            <div class="count" fxLayout="column" fxLayoutAlign="center center">
+                                <h3><span class="bold-500">{{client.publish_step}}</span></h3>
+                                <h4>Published</h4>
+                            </div>
+                        </div> -->
+                    </div>
+                    <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions"
+                        style="width: 100%; height: 200px; display: block;">
+                    </highcharts-chart>
+                </div>
+            </mat-card>
+        </div>
+    </div>
 </div>

@@ -20,9 +20,10 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ServiceComponent } from './service/service.component';
 import { SignupComponent } from './signup/signup.component';
 import { PQFormComponent } from './tenders/pq-form/pq-form.component';
-import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
+import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
+import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -36,7 +37,7 @@ const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'corevalues', component: CorevaluesComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard], },
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },
   { path: 'contractors', component: ContractorsComponent, data: { breadcrumb: 'Contractors' } },
   { path: 'pending-approvals', component: PendingApprovalsComponent, canActivate: [AppAuthGuard], data: { breadcrumb: 'Pending Approvals' } },
@@ -53,15 +54,21 @@ const routes: Routes = [
           { path: '', component: CreateTenderComponent, data: { breadcrumb: {} } },
           { path: 'create-pq-form', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
           { path: 'edit-pq-form/:pqId', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
-          { path: 'view-pq-form/:pqId', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
-          { path: 'create-applicants-pq-form', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
-          { path: 'edit-applicants-pq-form/:applicationId', component: ViewApplicantsPQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          {
+            path: 'view-pq-form/:pqId', data: { breadcrumb: {} },
+            children: [
+              { path: '', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+              { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+              { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+            ]
+          },
           { path: 'view-applicants', component: ViewApplicantsComponent, },
         ]
       },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
+  { path: 'applied-tenders', component: AppliedTendersComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { label: 'Applied Tenders', info: 'fa-solid fa-file-invoice' } } },
 ];
 
 @NgModule({

@@ -76,7 +76,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     }
     this.tenderDetails = this._formBuilder.group({
       typeOfWork: ['', Validators.required],
-      workDescription: ['', [Validators.required, Validators.maxLength(50)]],
+      projectName: ['', [Validators.required, Validators.maxLength(50)]],
+      workDescription: ['', [Validators.required, Validators.maxLength(2500)]],
       projectLocation: ['', [Validators.required, Validators.maxLength(50)]],
       typeOfContract: ['', [Validators.required]],
       contractDuration: ['', [Validators.required, Validators.maxLength(5)]],
@@ -111,6 +112,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   editData(data: any) {
     if (data.tenderId) {
       this.tenderDetails.get('typeOfWork')?.patchValue(data.typeOfWork.establishmentDescription);
+      this.tenderDetails.get('projectName')?.patchValue(data.projectName);
       this.tenderDetails.get('workDescription')?.patchValue(data.workDescription);
       this.tenderDetails.get('projectLocation')?.patchValue(data.projectLocation);
       this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);
@@ -370,7 +372,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
   onSave() {
-    console.log(this.tenderDetails.value.lastDateOfSubmission);
+    //console.log(this.tenderDetails.value.lastDateOfSubmission);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('SAVE');
     if (this.tenderDetails.value.lastDateOfSubmission) {
@@ -419,7 +421,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onSubmit() {
     if (this.tenderId && this.tenderDetails.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the tender?', msg: 'Submitting will disable further editing of Tender and will be sent to Admins for review' }
+        data: { title: 'Are you sure you want to submit the tender?', msg: 'Submitting this tender will disable further editing and will be sent to Admins for review' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -483,9 +485,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     }
   }
   tenderFormDisable() {
-    if ((this.userRole?.includes("client") && (this.tenderDetails.get('workflowStep')?.value == 'Yet to be published'
-      || this.tenderDetails.get('workflowStep')?.value == 'Published'))) {
-      // console.log('inside',this.tenderDetails.controls['workflowStep'].value);
+    const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
+    const warningMessage = `You cannot edit a tender when its in ${workFlowStep} step`;
+    if ((this.userRole?.includes("client") && (workFlowStep == 'Yet to be published'
+      || workFlowStep == 'Published'))) {        
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
@@ -493,8 +496,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
-      this.warningMessage = 'User cannot edit values because form already Submitted ';
-    } else if (this.userRole?.includes("admin") && (this.tenderDetails.get('workflowStep')?.value == 'Published')) {
+      this.warningMessage = warningMessage;
+    } else if (this.userRole?.includes("admin") && (workFlowStep == 'Published')) {
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
@@ -502,7 +505,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
-      this.warningMessage = 'Admin cannot edit values because form already Published ';
+      this.warningMessage = warningMessage;
     } else if (this.userRole?.includes("contractor")) {
       this.tenderDetails.disable();
       this.btnstate = true;

@@ -50,12 +50,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CurrencyFormatterDirective } from './shared/currency-formatter.directive';
 import { ActionButtonRendererComponent } from './renderers/action-button-renderer/action-button-renderer.component';
 import { UploadButtonRendererComponent } from './renderers/upload-button-renderer/upload-button-renderer.component';
-import { ViewApplicantsPQFormComponent } from './tenders/view-applicants-pqform/view-applicants-pqform.component';
+import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
 import { ViewApplicantsComponent } from './tenders/view-applicants/view-applicants.component';
 import { UnitCellRendererComponent } from './renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { NumericCellRendererComponent } from './renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import { DateDirective } from './shared/date.directive';
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
+import { DateAgoPipe } from './shared/date-ago.pipe';
+import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
+import { INRCurrencyPipe } from './shared/inrcurrency.pipe';
+import { HighchartsChartModule } from 'highcharts-angular';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -126,11 +130,14 @@ export const MY_DATE_FORMATS = {
     CurrencyFormatterDirective,
     ActionButtonRendererComponent,
     UploadButtonRendererComponent,
-    ViewApplicantsPQFormComponent,
+    TenderApplicationFormComponent,
     ViewApplicantsComponent,
     UnitCellRendererComponent,
     NumericCellRendererComponent,
     DateDirective,
+    DateAgoPipe,
+    AppliedTendersComponent,
+    INRCurrencyPipe,
   ],
   imports: [
     BrowserModule,
@@ -153,6 +160,7 @@ export const MY_DATE_FORMATS = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   //  DateValueAccessorModule,
     MomentDateModule,
+    HighchartsChartModule
   ],
   providers: [
     DatePipe,

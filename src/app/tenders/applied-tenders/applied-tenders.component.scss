@@ -1,4 +1,4 @@
-.tenders {
+.all-applied-tenders {
     padding: 24px;
     color: #841618;
 }
@@ -35,20 +35,20 @@
 
 
 //matcard styles
-.tenders-page mat-card {
+.applied-tenders-page mat-card {
     min-height: 120px;
     border-radius: 0px !important;
     padding: 24px !important;
 }
 
-.tenders-page mat-card h3 {
+.applied-tenders-page mat-card h3 {
     color: #841618;
     font-weight: 500;
     margin-bottom: 0px !important;
     padding-bottom: 0px !important;
 }
 
-.tenders-page .mat-stroked-button {
+.applied-tenders-page .mat-stroked-button {
     font-size: 12px;
     font-weight: 500;
     color: #841618;
@@ -74,7 +74,7 @@
     border-top-color: #841618;
 }
 
-.tenders-page mat-card h5 {
+.applied-tenders-page mat-card h5 {
     font-weight: 500;
     margin-bottom: 0px !important;
     padding-bottom: 0px !important;
@@ -145,11 +145,23 @@
 
 
 //all and applied tenders
-.all-tenders {
+.applied-tenders {
     margin-bottom: 16px;
 }
 
-::ng-deep .all-tenders .toggle-first {
+::ng-deep .applied-toggle .toggle-last {
     color: white !important;
     background: #841618 !important;
 }
+
+::ng-deep .applied-toggle .toggle-first {
+    color: #841618 !important;
+}
+
+::ng-deep .applied-toggle .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 32px !important;
+}
+
+// ::ng-deep .applied-toggle mat-button-toggle-group {
+//     outline: #841618 1px solid !important;
+// }
