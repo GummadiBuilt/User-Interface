@@ -37,6 +37,10 @@
                         *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='SAVE'">
                         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
                             <mat-option value={{pqID}}>PQ-Form</mat-option>
+                            <mat-option *ngIf="userRole?.includes('admin')"
+                                [routerLink]="['/tenders', tenderId, 'view-applicants']">
+                                View Applicants
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>

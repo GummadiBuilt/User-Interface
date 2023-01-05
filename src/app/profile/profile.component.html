@@ -36,6 +36,10 @@
                   <div class="font-grey">Email Address</div>
                   <div>{{userData?.contactEmailAddress}}</div>
                 </div>
+                <div fxLayout="column" fxLayoutGap="4px">
+                  <div class="font-grey">Designation</div>
+                  <div>{{userData?.contactDesignation}}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -139,8 +143,8 @@
                       <mat-form-field class="example-chip-list" appearance="outline">
                         <mat-chip-list #chipList aria-label="Type of Establishment selection"
                           formControlName="typeOfEstablishment">
-                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true
-                            [removable]=true (removed)="remove(typeOfEst)">
+                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true [removable]=true
+                            (removed)="remove(typeOfEst)">
                             {{typeOfEst}}
                             <button matChipRemove>
                               <i class="fa-solid fa-xmark"></i>
@@ -149,10 +153,11 @@
                           <input placeholder="Select type..." #typeOfEstablishmentInput matChipInput
                             [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
                             [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                            [matChipInputAddOnBlur]=true >
+                            [matChipInputAddOnBlur]=true>
                         </mat-chip-list>
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async" [value]="typeOfEstab">
+                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
+                            [value]="typeOfEstab">
                             {{typeOfEstab}}
                           </mat-option>
                         </mat-autocomplete>
@@ -197,16 +202,6 @@
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
                       fxLayout="column">
-                      <mat-label>Designation</mat-label>
-                      <mat-form-field appearance="outline">
-                        <input matInput placeholder="Designation" formControlName="contactDesignation">
-                        <mat-error *ngIf="editUserForm.controls['contactDesignation'].errors?.['required']">
-                          Designation is required
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
-                      fxLayout="column">
                       <mat-label>Mobile</mat-label>
                       <mat-form-field appearance="outline">
                         <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
@@ -222,6 +217,9 @@
                           Mobile number should be 10 digits
                         </mat-error>
                       </mat-form-field>
+                    </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
+                      fxLayout="column">
                     </div>
                   </div>
                 </div>

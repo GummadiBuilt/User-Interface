@@ -2,3 +2,42 @@
     color: #841618;
     padding: 24px;
 }
+
+.breadcrumbs {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 6px !important;
+    font-size: 16px !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 6px !important;
+    font-size: 16px !important;
+}
+
+//ag-grid cell text wrap in words
+::ng-deep .ag-cell-wrap-text {
+    word-break: break-word !important;
+}
+
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
+
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}

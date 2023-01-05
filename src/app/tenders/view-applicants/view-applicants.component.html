@@ -1,10 +1,23 @@
 <div class="view-applicants">
-    <h2>View Applicants</h2>
+    <!-- <h2>View Applicants</h2> -->
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
+        <div fxLayoutAlign="center center">
+            <xng-breadcrumb [separator]="separatorTemplate">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
+                    <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
+    </div>
     <div>
         <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [domLayout]="domLayout" [columnDefs]="columnDefs"
             [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragManaged]="true"
             [suppressMoveWhenRowDragging]="true" (gridReady)="onGridReady($event)"
-            (rowDragLeave)="onRowDragLeave($event)">
+            (rowDragLeave)="onRowDragLeave($event)" (dragChanged)="dragChanged($event)">
         </ag-grid-angular>
     </div>
 </div>

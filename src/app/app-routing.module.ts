@@ -62,7 +62,7 @@ const routes: Routes = [
               { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
             ]
           },
-          { path: 'view-applicants', component: ViewApplicantsComponent, },
+          { path: 'view-applicants', component: ViewApplicantsComponent, data: { breadcrumb: { info: 'fa-solid fa-eye' } } },
         ]
       },
       { path: '**', redirectTo: '', pathMatch: 'full' },

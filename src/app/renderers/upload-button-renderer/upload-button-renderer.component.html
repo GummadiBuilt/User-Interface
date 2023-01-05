@@ -1,9 +1,10 @@
-<div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px" >
-    
+<div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+
     <!-- <label for="file" class="file-input">
        
     </label> -->
-    <input id="files" type="file" class="form-control" (change)="onFileChange($event)" matTooltip=" " [disabled]=fileUploadbtn>
+    <input id="files" type="file" class="form-control" (change)="onFileChange($event)" matTooltip=" "
+        [disabled]=fileUploadbtn>
     <!-- <label class="icon-button" for="files" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
         <i class="fa-icons fa-icons fa-solid fa-file-arrow-up"></i>
     </label> -->
@@ -18,8 +19,8 @@
                 matTooltipPosition="right" (click)="removeSelectedFile(file || fileName)" disabled={{fileUploadbtn}}>
                 <i class="fa-icons fa-regular fa-circle-xmark"></i>
             </button>
-            <button *ngIf="fileName" type="button" mat-icon-button matTooltip="Download Document"
-                matTooltipPosition="right" disabled={{fileUploadbtn}}>
+            <button *ngIf="file?.name || fileName" type="button" mat-icon-button matTooltip="Download Document"
+                matTooltipPosition="right" disabled={{fileUploadbtn}} (click)="downloadApplicantPQFormFile()">
                 <i class="fa-icons icon-download fa-solid fa-file-arrow-down"></i>
             </button>
         </div>

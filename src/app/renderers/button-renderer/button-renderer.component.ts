@@ -15,7 +15,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   public label!: string;
   public rowData: any;
   public buttonLabel!: string;
-  public applyBtnLabel!:string;
+  public applyBtnLabel!: string;
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
@@ -72,6 +72,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   viewPQForm() {
     if (this.rowData.pq_id != null) {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
+    }
+  }
+  viewTenderApplicants() {
+    if (this.rowData.tender_id != null) {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);
     }
   }
   applyPQForm() {
