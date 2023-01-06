@@ -1114,7 +1114,7 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Submit your application for this tender?', msg: 'Submit action disables further editing of your application' }
+        data: { title: this.constantVariable.submitTenderApplicationTitle, msg: this.constantVariable.submitTenderApplicationMsg }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {

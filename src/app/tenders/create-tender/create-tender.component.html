@@ -255,21 +255,21 @@
                         (click)="onSave()" [disabled]="btnstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-save fa-solid fa-floppy-disk"></i>
-                            <div>Save</div>
+                            <div>{{constantVariable.saveBtn}}</div>
                         </div>
                     </button>
                     <button *ngIf="userRole?.includes('client') && this.tenderId" mat-button (click)="onSubmit()"
                         style="background-color: green ;" [disabled]="btnstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-submit fa-solid fa-paper-plane"></i>
-                            <div>Submit</div>
+                            <div>{{constantVariable.submitBtn}}</div>
                         </div>
                     </button>
                     <button *ngIf="userRole?.includes('admin') && this.tenderId" mat-button (click)="onUpdate()"
                         style="background-color: green ;" [disabled]="btnstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-save fa-solid fa-floppy-disk"></i>
-                            <div>Update</div>
+                            <div>{{constantVariable.updateBtn}}</div>
                         </div>
                     </button>
                 </div>

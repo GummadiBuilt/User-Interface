@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
+import { PageConstants } from 'src/app/shared/application.constants';
 
 @Component({
   selector: 'app-pq-form',
@@ -25,8 +26,10 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public pqDocumentIssueDate!: any;
   public btnState: boolean = false;
   public warningMessage!: string;
-  public applyBtnLabel: string = 'Apply';
+  public constVariable = PageConstants;
+  public applyBtnLabel: string = this.constVariable.applyBtn;
   public applicationFormId: any;
+
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -102,7 +105,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   applyPqForm() {
     if (this.applyBtnLabel == 'Apply') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to apply for this tender?', msg: '' }
+        data: { title: this.constVariable.applyTenderMsg, msg: '' }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -165,7 +168,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   onSubmit() {
     if (this.pqFormId && this.adminPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the PQ-Form?', msg: 'Submitting will publish the tender and will be visible to contractors' }
+        data: { title: this.constVariable.submitPQFormTitle, msg: this.constVariable.submitPQFormMsg }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -214,7 +217,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       this.pqDocumentIssueDate)) {
       this.adminPqForm.disable();
       this.btnState = true;
-      this.warningMessage = 'Cannot edit the values because PQ-Form Published ';
+      this.warningMessage = this.constVariable.disabledWarningPQFormMsg;
     }
   }
 }

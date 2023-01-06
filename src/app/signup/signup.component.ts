@@ -16,6 +16,7 @@ import { StatementVisitor } from '@angular/compiler';
 import { ToastrService } from 'ngx-toastr';
 
 import { ActivatedRoute, Router } from '@angular/router';
+import { PageConstants } from '../shared/application.constants';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -35,6 +36,7 @@ export class SignupComponent implements OnInit {
   applicationRoles = new Array<applicationRoles>();
   states = new Array<registrationStatesData>();
   cities = new Array<registrationCitiesData>();
+  public constantVariable = PageConstants;
 
   //matchips
   separatorKeysCodes: number[] = [ENTER, COMMA];

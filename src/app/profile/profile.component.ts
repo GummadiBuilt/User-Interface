@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { finalize, map, of, startWith, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiServicesService } from '../shared/api-services.service';
+import { PageConstants } from '../shared/application.constants';
 import { countries, registrationCitiesData, registrationMasterData, registrationStatesData, typeOfEstablishment } from '../shared/responses';
 import { userProfileResopnse } from './userProfileResponse';
 
@@ -23,7 +24,7 @@ export class ProfileComponent implements OnInit {
   photoUrl!: string;
   public initials!: string;
   name: any;
-
+  public constantVariables = PageConstants;
   updatePwdUrl: string = environment.updatePwdUrl;
   //update user profile
   public editUserForm!: FormGroup;
@@ -69,7 +70,7 @@ export class ProfileComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      typeOfEstablishment: [],
+      typeOfEstablishment: [''],
       yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
       address: ['', Validators.required],
@@ -82,7 +83,7 @@ export class ProfileComponent implements OnInit {
     this.getMasterdata();
     this.enableForm(false);
     this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
-      startWith(' '),
+      startWith(''),
       map((te: string | null) => te ? this._filter(te) : this.allTypeOfEstablishments.slice()));
   }
   _filter(value: any): any[] {
