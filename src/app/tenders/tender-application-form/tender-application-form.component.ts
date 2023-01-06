@@ -268,7 +268,10 @@ export class TenderApplicationFormComponent implements OnInit {
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
     { headerName: 'Year', field: 'year' },
-    { headerName: 'Rs in Crores', field: 'revenue' },
+    {
+      headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.revenue, ''),
+    },
     { headerName: 'row', field: 'row', hide: true },
     {
       headerName: 'Remarks (Financial Statement for Reference)', field: 'fileName', editable: false,
@@ -323,7 +326,10 @@ export class TenderApplicationFormComponent implements OnInit {
     { headerName: 'SI No', field: 'sno', editable: true, flex: 1 },
     { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
     { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
-    { headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4 },
+    {
+      headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.contract_value, ''),
+    },
     { headerName: 'Year of Execution', field: 'year_of_execution', editable: true, flex: 1 },
     { headerName: 'Scope of Contract', field: 'scope_of_contract', editable: true, flex: 4 },
     { headerName: 'Builtup Area (in Sqft)', field: 'builtup_area', editable: true, flex: 3 },
@@ -345,7 +351,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -590,7 +596,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -685,7 +691,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -778,11 +784,26 @@ export class TenderApplicationFormComponent implements OnInit {
   //Section D of PQ-Form: Financial Information
   public financialColumnDefs: ColDef[] = [
     { headerName: 'Financial Year', field: 'f_year', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, flex: 2, minWidth: 250 },
+    {
+      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.gross_turnover, ''),
+    },
+    {
+      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.net_profit, ''),
+    },
+    {
+      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.profit_after_tax, ''),
+    },
+    {
+      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.current_assets, ''),
+    },
+    {
+      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.current_liabilities, ''),
+    },
     {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
@@ -797,7 +818,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -887,7 +908,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -977,7 +998,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -1168,4 +1189,14 @@ export class TenderApplicationFormComponent implements OnInit {
       })
     }
   }
+}
+//indian currency formatter
+function currencyFormatter(currency: number, sign: string) {
+  var x = currency.toString();
+  var lastThree = x.substring(x.length - 3);
+  var otherNumbers = x.substring(0, x.length - 3);
+  if (otherNumbers != '')
+    lastThree = ',' + lastThree;
+  var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+  return sign + `${res}`;
 }

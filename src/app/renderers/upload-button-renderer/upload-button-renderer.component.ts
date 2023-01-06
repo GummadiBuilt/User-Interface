@@ -25,18 +25,18 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
-    if(this.params.data.fileName){
+    if (this.params.data.fileName) {
       this.fileName = this.params.data.fileName;
     }
     //console.log(this.params.context.applicantPqForm.value.actionTaken)
-    if(this.params.context.applicantPqForm.value.actionTaken == 'SUBMIT'){
+    if (this.params.context.applicantPqForm.value.actionTaken == 'SUBMIT') {
       this.fileUploadbtn = true;
     }
   }
 
   //upload functionality in Vendor's General Company Information in PQ-Form
   onFileChange(event: any) {
-   // console.log(this.rowData)
+    // console.log(this.rowData)
     this.fileName = '';
     this.isFileUploaded = true;
     const pqFormTenderId = this.params.context.pqFormTenderId;
@@ -83,6 +83,17 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
       this.fileName = '';
       console.log(this.params.data.fileName)
     }
+  }
+
+  downloadApplicantPQFormFile() {
+    const pqFormTenderId = this.params.context.pqFormTenderId;
+    const applicantPqFormId = this.params.context.applicantPqFormId;
+    const yearRow = this.params.data.row;
+    // console.log(yearRow);
+    this.ApiServicesService.downloadApplicantPQFormFile(pqFormTenderId, applicantPqFormId, yearRow).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   // btnDownloadDocument(data: any) {

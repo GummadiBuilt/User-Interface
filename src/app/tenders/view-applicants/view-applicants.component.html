@@ -1,10 +1,31 @@
 <div class="view-applicants">
-    <h2>View Applicants</h2>
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
+        <div fxLayoutAlign="center center">
+            <xng-breadcrumb [separator]="separatorTemplate">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
+                    <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
+        <div>
+            <button mat-raised-button [routerLink]="['/tenders', tenderId, 'compare-applicants']">
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                    <div><i class="icon-20p fa-solid fa-code-compare"></i></div>
+                    <div><span>Compare Applicants</span></div>
+                </div>
+            </button>
+        </div>
+    </div>
     <div>
         <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [domLayout]="domLayout" [columnDefs]="columnDefs"
             [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragManaged]="true"
             [suppressMoveWhenRowDragging]="true" (gridReady)="onGridReady($event)"
-            (rowDragLeave)="onRowDragLeave($event)">
+            (rowDragLeave)="onRowDragLeave($event)" (dragChanged)="dragChanged($event)"
+            (rowDragMove)="onRowDragMove($event)">
         </ag-grid-angular>
     </div>
 </div>

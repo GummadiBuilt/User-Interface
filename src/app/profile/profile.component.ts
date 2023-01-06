@@ -13,11 +13,37 @@ import { ApiServicesService } from '../shared/api-services.service';
 import { PageConstants } from '../shared/application.constants';
 import { countries, registrationCitiesData, registrationMasterData, registrationStatesData, typeOfEstablishment } from '../shared/responses';
 import { userProfileResopnse } from './userProfileResponse';
+import { DatePipe } from '@angular/common';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatDatepicker } from '@angular/material/datepicker';
+import * as _moment from 'moment';
+import { default as _rollupMoment, Moment } from 'moment';
 
+const moment1 = _rollupMoment || _moment;
+export const MY_FORMATS1 = {
+  parse: {
+    dateInput: 'YYYY'
+  },
+  display: {
+    dateInput: 'YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS1 },
+  ],
 })
 export class ProfileComponent implements OnInit {
   userRole: any;
@@ -53,7 +79,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private toastr: ToastrService, private readonly keycloak: KeycloakService,
     private ApiServicesService: ApiServicesService, private router: Router,
-    private _formBuilder: FormBuilder, private route: ActivatedRoute,) { }
+    private _formBuilder: FormBuilder, private route: ActivatedRoute, private datePipe: DatePipe,) { }
 
   ngOnInit() {
     try {
@@ -71,8 +97,7 @@ export class ProfileComponent implements OnInit {
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       typeOfEstablishment: [''],
-      yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
-      Validators.minLength(4), Validators.maxLength(4)]],
+      yearOfEstablishment: new FormControl(moment1(), [Validators.required]),
       address: ['', Validators.required],
       countryIsoCode: ['', Validators.required],
       stateIsoCode: ['', [Validators.required]],
@@ -90,6 +115,15 @@ export class ProfileComponent implements OnInit {
     const string = this.allTypeOfEstablishments.filter(te => te.toLowerCase().includes(value.toLowerCase()));
     return string;
   }
+
+  chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.editUserForm.controls['yearOfEstablishment'].value;
+    console.log(ctrlValue);
+    ctrlValue?.year(normalizedYear.year());
+    console.log(ctrlValue);
+    this.editUserForm.get('yearOfEstablishment')?.patchValue(ctrlValue);
+    datepicker.close();
+  }
   getUserProfileData() {
     this.ApiServicesService.getUserProfile().subscribe((data: any) => {
       this.userData = data;
@@ -101,7 +135,10 @@ export class ProfileComponent implements OnInit {
       this.editUserForm.get('companyName')?.patchValue(data.companyName);
       this.typeOfEstablishments = data.typeOfEstablishment;
       this.editUserForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
-      this.editUserForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
+      // console.log(data.yearOfEstablishment);
+      const myDate = moment1(data.yearOfEstablishment, 'YYYY').toDate();
+      this.editUserForm.get('yearOfEstablishment')?.patchValue(myDate);
+      // console.log(this.editUserForm.get('yearOfEstablishment')?.value);
       this.editUserForm.get('address')?.patchValue(data.address);
       this.editUserForm.get('countryIsoCode')?.patchValue(data.country.countryIsoCode);
       this.onCountrySelectEvent(data.country.countryIsoCode);
@@ -113,6 +150,7 @@ export class ProfileComponent implements OnInit {
       this.initials = shortName;
     });
   }
+
   //mat-chips
   selected(event: MatAutocompleteSelectedEvent): void {
     this.typeOfEstablishments.push(event.option.viewValue);
@@ -181,6 +219,10 @@ export class ProfileComponent implements OnInit {
   }
 
   update() {
+    if (this.editUserForm.value.yearOfEstablishment) {
+      const dateTran = this.datePipe.transform(this.editUserForm.value.yearOfEstablishment, 'YYYY');
+      this.editUserForm.get('yearOfEstablishment')?.setValue(dateTran);
+    }
     this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
     if (this.editUserForm.valid) {
       this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({

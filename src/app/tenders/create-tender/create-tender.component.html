@@ -37,6 +37,10 @@
                         *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='SAVE'">
                         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
                             <mat-option value={{pqID}}>PQ-Form</mat-option>
+                            <mat-option *ngIf="userRole?.includes('admin')"
+                                [routerLink]="['/tenders', tenderId, 'view-applicants']">
+                                View Applicants
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -158,7 +162,7 @@
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
                         <mat-label>Budget</mat-label>
-                        <mat-form-field appearance="outline">
+                        <mat-form-field appearance="outline" style="text-align: right">
                             <input matInput type="text" numbersOnly placeholder="Budget"
                                 formControlName="estimatedBudget" currencyFormatter>
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">

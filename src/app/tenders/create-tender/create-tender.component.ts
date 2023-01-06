@@ -180,8 +180,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
-    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 180, },
+    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 6, minWidth: 350, autoHeight: true, wrapText: true },
     {
       field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
       cellRenderer: UnitCellRendererComponent,

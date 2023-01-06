@@ -17,6 +17,7 @@ import { clientUsersResponse } from './clientUsersResponse';
 import { contractorUsersResponse } from './contractorUsersResponse';
 import { userProfileResopnse } from '../profile/userProfileResponse';
 import { appliedTenderResopnse } from '../tenders/applied-tenders/appliedTenderResponse';
+import { tenderApplicantRankingResopnse } from '../tenders/view-applicants/tenderApplicantRankingResopnse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -133,8 +134,12 @@ export class ApiServicesService {
     return this.httpClient.put<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/update', data);
   }
   //file upload in update tender application form
-  public updateApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any,file:any) {
-    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/'+fileYear,file);
+  public updateApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any, file: any) {
+    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/' + fileYear, file);
+  }
+  //file download in update tender application form
+  public downloadApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any) {
+    return this.httpClient.get(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/download/' + fileYear);
   }
   //client users getAPI
   public getClientUsers(): Observable<clientUsersResponse> {
@@ -154,6 +159,11 @@ export class ApiServicesService {
   //Update user profile putAPI
   public updateUserProfile(data: any): Observable<userProfileResopnse> {
     return this.httpClient.put<userProfileResopnse>(this.url + '/user-profile/update', data);
+  }
+
+  //APIs that get information about the tender applicants & their rankings
+  public getTenderApplicantRanking(tenderId: any): Observable<tenderApplicantRankingResopnse> {
+    return this.httpClient.get<tenderApplicantRankingResopnse>(this.url + '/tender-applicants/tender/' + tenderId);
   }
 
   //download files converstion

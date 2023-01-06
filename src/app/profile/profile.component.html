@@ -36,6 +36,10 @@
                   <div class="font-grey">Email Address</div>
                   <div>{{userData?.contactEmailAddress}}</div>
                 </div>
+                <div fxLayout="column" fxLayoutGap="4px">
+                  <div class="font-grey">Designation</div>
+                  <div>{{userData?.contactDesignation}}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -54,15 +58,12 @@
                         fxLayout="column">
                         <mat-label>Year of Establishment</mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput placeholder="Year of Establishment" formControlName="yearOfEstablishment"
-                            numbersOnly>
-                          <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['required']">
+                          <input matInput [matDatepicker]="dp" formControlName="yearOfEstablishment" readonly>
+                          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                          <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)">
+                          </mat-datepicker>
+                          <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.invalid">
                             Year of Establishment is required</mat-error>
-                          <mat-error *ngIf="editUserForm.get('yearOfEstablishment')?.errors?.['pattern']">
-                            Please enter valid year</mat-error>
-                          <mat-error
-                            *ngIf="(editUserForm.get('yearOfEstablishment')?.errors?.['minlength'] || editUserForm.get('yearOfEstablishment')?.errors?.['maxlength']) && !editUserForm.controls['yearOfEstablishment'].errors?.['pattern']">
-                            Year must be 4 digits</mat-error>
                         </mat-form-field>
                       </div>
                       <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="66%" fxFlex.xl="50%"
@@ -139,8 +140,8 @@
                       <mat-form-field class="example-chip-list" appearance="outline">
                         <mat-chip-list #chipList aria-label="Type of Establishment selection"
                           formControlName="typeOfEstablishment">
-                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true
-                            [removable]=true (removed)="remove(typeOfEst)">
+                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true [removable]=true
+                            (removed)="remove(typeOfEst)">
                             {{typeOfEst}}
                             <button matChipRemove>
                               <i class="fa-solid fa-xmark"></i>
@@ -149,10 +150,11 @@
                           <input placeholder="Select type..." #typeOfEstablishmentInput matChipInput
                             [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
                             [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                            [matChipInputAddOnBlur]=true >
+                            [matChipInputAddOnBlur]=true>
                         </mat-chip-list>
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async" [value]="typeOfEstab">
+                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
+                            [value]="typeOfEstab">
                             {{typeOfEstab}}
                           </mat-option>
                         </mat-autocomplete>
@@ -197,16 +199,6 @@
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
                       fxLayout="column">
-                      <mat-label>Designation</mat-label>
-                      <mat-form-field appearance="outline">
-                        <input matInput placeholder="Designation" formControlName="contactDesignation">
-                        <mat-error *ngIf="editUserForm.controls['contactDesignation'].errors?.['required']">
-                          Designation is required
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
-                      fxLayout="column">
                       <mat-label>Mobile</mat-label>
                       <mat-form-field appearance="outline">
                         <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
@@ -223,12 +215,17 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="33%" fxFlex.xl="24%"
+                      fxLayout="column">
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="action-btn" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="12px">
-                <button mat-raised-button color="primary" (click)="update()" *ngIf="isDisabled == false">{{constantVariables.updateBtn}}</button>
-                <button mat-raised-button *ngIf="isDisabled == false" (click)="reset()">{{constantVariables.cancelBtn}}</button>
+                <button mat-raised-button color="primary" (click)="update()"
+                  *ngIf="isDisabled == false">{{constantVariables.updateBtn}}</button>
+                <button mat-raised-button *ngIf="isDisabled == false"
+                  (click)="reset()">{{constantVariables.cancelBtn}}</button>
               </div>
             </form>
           </div>
