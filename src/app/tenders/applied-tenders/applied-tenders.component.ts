@@ -39,7 +39,7 @@ export class AppliedTendersComponent implements OnInit {
   getAppliedTendersData() {
     this.ApiServicesService.getAppliedTenders().subscribe((data: appliedTenderResopnse) => {
       this.rowData = data;
-     // console.log('Applied tenders', this.rowData);
+      // console.log('Applied tenders', this.rowData);
     });
   }
 
@@ -67,7 +67,7 @@ export class AppliedTendersComponent implements OnInit {
     { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Contract Duration', field: 'contract_duration', flex: 1, filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
     {
-      headerName: 'Estimated Budget', field: 'estimated_budget', flex: 1, filter: 'agTextColumnFilter',
+      headerName: 'Estimated Budget', field: 'estimated_budget', flex: 1, filter: 'agTextColumnFilter', cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.estimated_budget, '₹ '),
     },
     {

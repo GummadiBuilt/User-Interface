@@ -162,7 +162,7 @@
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
                         <mat-label>Budget</mat-label>
-                        <mat-form-field appearance="outline">
+                        <mat-form-field appearance="outline" style="text-align: right">
                             <input matInput type="text" numbersOnly placeholder="Budget"
                                 formControlName="estimatedBudget" currencyFormatter>
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">

@@ -1,6 +1,6 @@
-.view-applicants {
-    color: #841618;
+.compare-applicants {
     padding: 24px;
+    color: #841618;
 }
 
 .breadcrumbs {
@@ -44,4 +44,48 @@
 
 .breadcrumbs .mat-raised-button {
     color: #841618;
+}
+
+.container {
+    padding: 12px;
+    background: white;
+    max-height: calc(100vh - 184px);
+    overflow: auto;
+}
+
+.initials {
+    color: #FFFFFF;
+    line-height: 19px;
+    letter-spacing: 0.2625px;
+}
+
+::ng-deep .compare-applicants .mat-card-avatar {
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 40px !important;
+}
+
+.bg-grey {
+    background-color: rgb(150, 150, 150);
+}
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.label {
+    background: #eee;
+    font-weight: 500 !important;
+    width: 30%;
+}
+
+.header-label {
+    background: #eee;
+}
+
+td,
+th {
+    padding: 10px;
+    min-width: 200px;
+    width: 30%;
 }

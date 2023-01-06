@@ -88,7 +88,7 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
   downloadApplicantPQFormFile() {
     const pqFormTenderId = this.params.context.pqFormTenderId;
     const applicantPqFormId = this.params.context.applicantPqFormId;
-    let yearRow = this.params.data.row;
+    const yearRow = this.params.data.row;
     // console.log(yearRow);
     this.ApiServicesService.downloadApplicantPQFormFile(pqFormTenderId, applicantPqFormId, yearRow).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
