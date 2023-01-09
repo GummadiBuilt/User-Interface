@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
-import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, CsvExportParams, GridApi,
@@ -21,12 +20,13 @@ import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-ren
 import _ from 'lodash';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { PageConstants } from 'src/app/shared/application.constants';
+import moment from 'moment';
 
 @Component({
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
   styleUrls: ['./create-tender.component.scss'],
-  providers: [CurrencyPipe]
+  providers: []
 })
 export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderDetails!: FormGroup;
@@ -53,7 +53,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router,
+    private route: ActivatedRoute, public router: Router,
     private dialog: MatDialog) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('tenderId');
@@ -84,7 +84,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       typeOfContract: ['', [Validators.required]],
       contractDuration: ['', [Validators.required, Validators.maxLength(5)]],
       durationCounter: ['', [Validators.required]],
-      lastDateOfSubmission: ['', [Validators.required]],
+      lastDateOfSubmission: [moment, [Validators.required]],
       estimatedBudget: ['', Validators.maxLength(20)],
       tenderFinanceInfo: [''],
       workflowStep: ['']
@@ -120,10 +120,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);
       this.tenderDetails.get('contractDuration')?.patchValue(data.contractDuration);
       this.tenderDetails.get('durationCounter')?.patchValue(data.durationCounter);
-      const date = data.lastDateOfSubmission;
-      const [day, month, year] = date.split('/');
-      const convertedDate = new Date(+year, +month - 1, +day);
-      this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
+      this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data.lastDateOfSubmission);
       this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
       this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
       if (Object.keys(data.tenderFinanceInfo).length === 0) {
@@ -378,7 +375,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('SAVE');
     if (this.tenderDetails.value.lastDateOfSubmission) {
-      this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+      const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
+      this.tenderDetails.value.lastDateOfSubmission = dateTran;
     } else {
       this.toastr.error('Please Select Valid Last Date of Submission');
     }
@@ -430,7 +428,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
           this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
           if (this.tenderDetails.value.lastDateOfSubmission) {
-            this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+            const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
+            this.tenderDetails.value.lastDateOfSubmission = dateTran;
           } else {
             this.toastr.error('Please Select Valid Last Date of Submission');
           }
@@ -462,7 +461,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
       this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
       if (this.tenderDetails.value.lastDateOfSubmission) {
-        this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+        const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
+        this.tenderDetails.value.lastDateOfSubmission = dateTran;
       } else {
         this.toastr.error('Please Select Valid Last Date of Submission');
       }
@@ -489,8 +489,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
-    if ((this.userRole?.includes("client") && (workFlowStep == 'Yet to be published'
-      || workFlowStep == 'Published'))) {        
+    if ((this.userRole?.includes("client") && (workFlowStep != 'SAVE'))) {        
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
@@ -499,7 +498,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
       this.warningMessage = warningMessage;
-    } else if (this.userRole?.includes("admin") && (workFlowStep == 'Published')) {
+    } else if (this.userRole?.includes("admin") && (workFlowStep != 'Yet to be published')) {
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;

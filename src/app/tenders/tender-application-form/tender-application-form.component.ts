@@ -57,10 +57,11 @@ export class TenderApplicationFormComponent implements OnInit {
   applicantPqForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
-  currentYear: number = new Date().getFullYear();
+  currentYear = moment().year();
   years: any[] = [];
   public constantVariable = PageConstants;
   btnsDisable: boolean = false;
+  
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
@@ -69,12 +70,6 @@ export class TenderApplicationFormComponent implements OnInit {
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
-
-    //year range from past 20 years
-    for (let i = (this.currentYear - 20); i < (this.currentYear + 1); i++) {
-      this.years.push(i);
-    }
-
     this.route.paramMap.subscribe(params => {
       const tenderId = params.get('tenderId');
       const pqFormId = params.get('pqId');
@@ -96,6 +91,7 @@ export class TenderApplicationFormComponent implements OnInit {
     } catch (e) {
       console.log('Failed to load user details', e);
     }
+    
     //Vendor General Company info & etc (Contractor)
     this.applicantPqForm = this._formBuilder.group({
       companyName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -139,19 +135,23 @@ export class TenderApplicationFormComponent implements OnInit {
     });
   }
   chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-
     const ctrlValue = this.applicantPqForm.controls['yearOfEstablishment'].value;
-    ctrlValue?.year(normalizedYear.year());
-    // console.log(ctrlValue);
-    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(ctrlValue);
+    if (ctrlValue) {
+      const dateTran = moment(normalizedYear).format('YYYY');
+      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
+    }
     datepicker.close();
-    //  console.log(this.applicantPqForm.controls['yearOfEstablishment'].value);
-  }
-
+  }  
+  myDateFilter = (m: Moment | null): boolean => {
+    const year = (m || moment()).year();
+    return year <= this.currentYear;
+  } 
   getApplicantPQForms(data: any) {
     //console.log(data);
     this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
-    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
+    const dateString = data.yearOfEstablishment;
+    const momentVariable = moment(dateString, 'YYYY');  
+    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(momentVariable);
     this.applicantPqForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
     this.applicantPqForm.get('corpOfficeAddress')?.patchValue(data.corpOfficeAddress);
     this.applicantPqForm.get('localOfficeAddress')?.patchValue(data.localOfficeAddress);
@@ -246,10 +246,6 @@ export class TenderApplicationFormComponent implements OnInit {
       this.tenderApplicantFormDisable();
     }
   }
-
-  //dates range
-  minDate = new Date(1990, 0, 1);
-  maxDate = new Date(2023, 0, 1);
 
   step = 0;
   setStep(index: number) {
@@ -1075,10 +1071,6 @@ export class TenderApplicationFormComponent implements OnInit {
   public PQFormId: any;
   onSave() {
     this.applicantPqForm.controls['actionTaken'].setValue('SAVE');
-    if (this.applicantPqForm.value.yearOfEstablishment) {
-      const dateTran = this.datePipe.transform(this.applicantPqForm.value.yearOfEstablishment, 'YYYY');
-      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
-    }
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
@@ -1120,10 +1112,6 @@ export class TenderApplicationFormComponent implements OnInit {
 
   onSubmit() {
     this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
-    if (this.applicantPqForm.value.yearOfEstablishment) {
-      const dateTran = this.datePipe.transform(this.applicantPqForm.value.yearOfEstablishment, 'YYYY');
-      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
-    }
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));

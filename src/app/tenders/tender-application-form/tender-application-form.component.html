@@ -72,7 +72,7 @@
                                     <mat-label>Year of Establishment *</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput [matDatepicker]="dp" formControlName="yearOfEstablishment"
-                                            readonly>
+                                            readonly [matDatepickerFilter]="myDateFilter">
                                         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                                         <mat-datepicker #dp startView="multi-year"
                                             (yearSelected)="chosenYearHandler($event, dp)">

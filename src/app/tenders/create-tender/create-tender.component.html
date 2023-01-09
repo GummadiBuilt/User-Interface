@@ -37,7 +37,7 @@
                         *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='SAVE'">
                         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
                             <mat-option value={{pqID}}>PQ-Form</mat-option>
-                            <mat-option *ngIf="userRole?.includes('admin')"
+                            <mat-option *ngIf="userRole?.includes('admin') && this.tenderDetails.get('workflowStep')?.value =='Under Process'"
                                 [routerLink]="['/tenders', tenderId, 'view-applicants']">
                                 View Applicants
                             </mat-option>
@@ -151,7 +151,7 @@
                         <mat-label>Last Date of Tender Submission *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="picker" [min]="todayDate" placeholder="DD/MM/YYYY"
-                                [formControlName]="'lastDateOfSubmission'" (click)="picker.open()">
+                                [formControlName]="'lastDateOfSubmission'" (click)="picker.open()" appDate>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-error *ngIf="tenderDetails.get('lastDateOfSubmission')?.errors?.['required']">

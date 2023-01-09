@@ -19,6 +19,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
+import moment from 'moment';
 
 const moment1 = _rollupMoment || _moment;
 export const MY_FORMATS1 = {
@@ -118,10 +119,10 @@ export class ProfileComponent implements OnInit {
 
   chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
     const ctrlValue = this.editUserForm.controls['yearOfEstablishment'].value;
-    console.log(ctrlValue);
-    ctrlValue?.year(normalizedYear.year());
-    console.log(ctrlValue);
-    this.editUserForm.get('yearOfEstablishment')?.patchValue(ctrlValue);
+    if (ctrlValue) {
+      const dateTran = moment(normalizedYear).format('YYYY');
+      this.editUserForm.get('yearOfEstablishment')?.setValue(dateTran);
+    }
     datepicker.close();
   }
   getUserProfileData() {
@@ -135,9 +136,9 @@ export class ProfileComponent implements OnInit {
       this.editUserForm.get('companyName')?.patchValue(data.companyName);
       this.typeOfEstablishments = data.typeOfEstablishment;
       this.editUserForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
-      // console.log(data.yearOfEstablishment);
-      const myDate = moment1(data.yearOfEstablishment, 'YYYY').toDate();
-      this.editUserForm.get('yearOfEstablishment')?.patchValue(myDate);
+      const dateString = data.yearOfEstablishment;
+      const momentVariable = moment(dateString, 'YYYY'); 
+      this.editUserForm.get('yearOfEstablishment')?.patchValue(momentVariable);
       // console.log(this.editUserForm.get('yearOfEstablishment')?.value);
       this.editUserForm.get('address')?.patchValue(data.address);
       this.editUserForm.get('countryIsoCode')?.patchValue(data.country.countryIsoCode);
@@ -219,10 +220,6 @@ export class ProfileComponent implements OnInit {
   }
 
   update() {
-    if (this.editUserForm.value.yearOfEstablishment) {
-      const dateTran = this.datePipe.transform(this.editUserForm.value.yearOfEstablishment, 'YYYY');
-      this.editUserForm.get('yearOfEstablishment')?.setValue(dateTran);
-    }
     this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
     if (this.editUserForm.valid) {
       this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({
