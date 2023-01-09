@@ -25,16 +25,17 @@
             <thead>
                 <tr>
                     <th>&nbsp;</th>
-                    <th class="header-label">
+                    <th class="header-label" *ngFor="let item of rowData">
                         <div class="profile-info" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
                             <mat-card style="display: none"></mat-card>
                             <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
-                                <div class="initials">{{initials}}</div>
+                                <!-- <div class="initials">{{this.item?.companyName?.substring(0, 1) +
+                                    this.item?.companyName?.substring(1, 1)}}</div> -->
                             </div>
                             <div fxLayout="row" fxLayoutGap="48px">
                                 <div fxLayout="column" fxLayoutGap="20px">
-                                    <div class="bold-500 font-20p">{{userData.contactFirstName+"
-                                        "+userData.contactLastName}}</div>
+                                    <!-- <div class="bold-500 font-20p">{{userData.contactFirstName+"
+                                        "+userData.contactLastName}}</div> -->
                                 </div>
                             </div>
                         </div>
@@ -46,24 +47,40 @@
                     <td class="label">
                         <div fxLayoutAlign="start center">Company Name</div>
                     </td>
-                    <td>
-                        <div fxLayoutAlign="center center">{{userData.companyName}}</div>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.companyName}}</div>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">
                         <div fxLayoutAlign="start center">Contact Email</div>
                     </td>
-                    <td>
-                        <div fxLayoutAlign="center center">{{userData.contactEmailAddress}}</div>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.contactEmailAddress}}</div>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">
                         <div fxLayoutAlign="start center">Contact Phone Number</div>
                     </td>
-                    <td>
-                        <div fxLayoutAlign="center center">{{userData.contactPhoneNumber}}</div>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.contactPhoneNumber}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Type of Establishment</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.typeOfEstablishment}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Year of Establishment</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.yearOfEstablishment}}</div>
                     </td>
                 </tr>
             </tbody>

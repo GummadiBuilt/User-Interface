@@ -166,6 +166,11 @@ export class ApiServicesService {
     return this.httpClient.get<tenderApplicantRankingResopnse>(this.url + '/tender-applicants/tender/' + tenderId);
   }
 
+  //Update applicants rankings for a tender
+  public updateTenderApplicantRanking(tenderId: any, data: any): Observable<tenderApplicantRankingResopnse> {
+    return this.httpClient.put<tenderApplicantRankingResopnse>(this.url + '/tender-applicants/tender/' + tenderId + '/update', data);
+  }
+
   //download files converstion
   downloadFile(data: any) {
     const downlodFile = this.ConvertFile(data);

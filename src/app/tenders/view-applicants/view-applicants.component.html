@@ -12,7 +12,7 @@
             <i class="fa-solid fa-caret-right"></i>
         </ng-template>
         <div>
-            <button mat-raised-button [routerLink]="['/tenders', tenderId, 'compare-applicants']">
+            <button [disabled]="rowData?.length==0 || !selectedRowsLength" mat-raised-button (click)="onSelect()">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                     <div><i class="icon-20p fa-solid fa-code-compare"></i></div>
                     <div><span>Compare Applicants</span></div>
@@ -21,11 +21,29 @@
         </div>
     </div>
     <div>
-        <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [domLayout]="domLayout" [columnDefs]="columnDefs"
-            [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragManaged]="true"
-            [suppressMoveWhenRowDragging]="true" (gridReady)="onGridReady($event)"
-            (rowDragLeave)="onRowDragLeave($event)" (dragChanged)="dragChanged($event)"
-            (rowDragMove)="onRowDragMove($event)">
-        </ag-grid-angular>
+        <mat-card fxLayout="column" fxLayoutGap="12px">
+            <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [pagination]="true" [domLayout]="domLayout"
+                [columnDefs]="columnDefs" [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragManaged]="true"
+                [suppressMoveWhenRowDragging]="true" (gridReady)="onGridReady($event)"
+                (rowDragLeave)="onRowDragLeave($event)" (dragChanged)="dragChanged($event)"
+                (rowValueChanged)="onRowValueChanged($event)" (cellEditingStopped)="onCellEditingStopped($event)"
+                [rowSelection]="rowSelection" (selectionChanged)="onSelectionChanged($event)"
+                (rowSelected)="onRowSelected($event)">
+            </ag-grid-angular>
+            <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
+                <button mat-button style="background-color: grey;" (click)="onUpdate()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                        <i class="icon-save fa-solid fa-floppy-disk"></i>
+                        <div>{{constantVariable.saveBtn}}</div>
+                    </div>
+                </button>
+                <button mat-button style="background-color: green;" (click)="onSubmit()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                        <div>{{constantVariable.submitBtn}}</div>
+                    </div>
+                </button>
+            </div>
+        </mat-card>
     </div>
 </div>
