@@ -38,7 +38,7 @@
                             <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY"
-                                    (click)="picker2.open()" formControlName="pqLastDateOfSubmission">
+                                    (click)="picker2.open()" formControlName="pqLastDateOfSubmission" appDate [max]="tenderDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                 <mat-datepicker #picker2></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">
@@ -51,7 +51,7 @@
                             <mat-label>Tentative Date of Award of Works *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker3" placeholder="DD/MM/YYYY"
-                                    (click)="picker3.open()" formControlName="tentativeDateOfAward">
+                                    (click)="picker3.open()" formControlName="tentativeDateOfAward" appDate [min]="tenderDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                                 <mat-datepicker #picker3></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('tentativeDateOfAward')?.errors?.['required']">
@@ -64,7 +64,7 @@
                             <mat-label>Scheduled Completion *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker4" placeholder="DD/MM/YYYY"
-                                    (click)="picker4.open()" formControlName="scheduledCompletion">
+                                    (click)="picker4.open()" formControlName="scheduledCompletion" appDate [min]="tenderDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                                 <mat-datepicker #picker4></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('scheduledCompletion')?.errors?.['required']">

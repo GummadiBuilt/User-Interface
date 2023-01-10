@@ -5,12 +5,12 @@ import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ApiServicesService } from '../../shared/api-services.service';
 import { pqFormResponse } from './pqformresponse';
-import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDlgComponent } from 'src/app/shared/confirmation-dlg.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { PageConstants } from 'src/app/shared/application.constants';
+import moment, { Moment } from 'moment';
 
 @Component({
   selector: 'app-pq-form',
@@ -29,11 +29,11 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public constVariable = PageConstants;
   public applyBtnLabel: string = this.constVariable.applyBtn;
   public applicationFormId: any;
-
+  public tenderDate: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
-    private ApiServicesService: ApiServicesService, private datePipe: DatePipe,
+    private ApiServicesService: ApiServicesService,
     private route: ActivatedRoute, private router: Router, private dialog: MatDialog) {
     this.route.paramMap.subscribe(params => {
       const tenderId = params.get('tenderId');
@@ -41,14 +41,9 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       this.pqFormTenderId = tenderId;
       if (tenderId && pqId) {
         this.ApiServicesService.getPQForm(tenderId, pqId).subscribe((data: pqFormResponse) => {
+          this.tenderDate = moment(data.tenderSubmissionDate, 'DD/MM/YYYY');
           this.getPQForms(data);
           this.pqFormDisable();
-        });
-      } else {
-        this.ApiServicesService.getTendersDatabyId(tenderId).subscribe((data) => {
-          this.adminPqForm.get('workPackage')?.patchValue(data.workDescription);
-          this.adminPqForm.get('contractDuration')?.patchValue(data.contractDuration);
-          this.adminPqForm.get('durationCounter')?.patchValue(data.durationCounter);
         });
       }
     });
@@ -60,7 +55,6 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
     } catch (e) {
       console.log('Failed to load user details', e);
     }
-
     //Project Info (Admin)
     this.adminPqForm = this._formBuilder.group({
       pqLastDateOfSubmission: ['', [Validators.required]],
@@ -68,6 +62,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       scheduledCompletion: ['', Validators.required],
       workflowStep: ['']
     });
+
   }
 
   canDeactivate(): boolean {
@@ -75,9 +70,9 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
 
   getPQForms(data: any) {
-    this.adminPqForm.get('pqLastDateOfSubmission')?.patchValue(this.dateConverstion(data.pqLastDateOfSubmission));
-    this.adminPqForm.get('tentativeDateOfAward')?.patchValue(this.dateConverstion(data.tentativeDateOfAward));
-    this.adminPqForm.get('scheduledCompletion')?.patchValue(this.dateConverstion(data.scheduledCompletion));
+    this.adminPqForm.get('pqLastDateOfSubmission')?.patchValue(data.pqLastDateOfSubmission);
+    this.adminPqForm.get('tentativeDateOfAward')?.patchValue(data.tentativeDateOfAward);
+    this.adminPqForm.get('scheduledCompletion')?.patchValue(data.scheduledCompletion);
     // this.pqFormTenderId = data.tenderId;
     if (data.id != 0) {
       this.pqFormId = data.id
@@ -94,10 +89,8 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   }
   dateConverstion(input: any) {
     if (input) {
-      const date = input;
-      const [day, month, year] = date.split('/');
-      const convertedDate = new Date(+year, +month - 1, +day);
-      return convertedDate;
+      const date = moment(input).format('DD/MM/YYYY');
+      return date;
     }
     return;
   }
@@ -121,23 +114,25 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
     //console.log(this.adminPqForm.value.scheduledCompletion);
     this.adminPqForm.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
     if (this.adminPqForm.value.pqLastDateOfSubmission) {
-      //console.log('in save',this.adminPqForm.value.pqLastDateOfSubmission);
-      this.adminPqForm.value.pqLastDateOfSubmission = this.datePipe.transform(this.adminPqForm.value.pqLastDateOfSubmission, 'dd/MM/yyyy');
+      this.adminPqForm.value.pqLastDateOfSubmission = this.dateConverstion(this.adminPqForm.value.pqLastDateOfSubmission);
     } else {
       this.toastr.error('Please Select Valid PQ Last Date of Submission');
     }
     if (this.adminPqForm.value.tentativeDateOfAward) {
-      this.adminPqForm.value.tentativeDateOfAward = this.datePipe.transform(this.adminPqForm.value.tentativeDateOfAward, 'dd/MM/yyyy');
+      this.adminPqForm.value.tentativeDateOfAward = this.dateConverstion(this.adminPqForm.value.tentativeDateOfAward);
     } else {
       this.toastr.error('Please Select Valid Tentative Date of Award');
     }
     if (this.adminPqForm.value.scheduledCompletion) {
-      this.adminPqForm.value.scheduledCompletion = this.datePipe.transform(this.adminPqForm.value.scheduledCompletion, 'dd/MM/yyyy');
+      this.adminPqForm.value.scheduledCompletion = this.dateConverstion(this.adminPqForm.value.scheduledCompletion);
     } else {
       this.toastr.error('Please Select Valid Scheduled Completion');
     }
-    //console.log(this.adminPqForm.value, this.pqFormId);
-    if (this.pqFormId && this.adminPqForm.valid) {
+    const tenderLastDate = moment(this.tenderDate)
+    const now = moment();
+    if (now > tenderLastDate) {
+      this.toastr.error('Please change the tender submission date before creating the PQ-Form');
+    } else if (this.pqFormId && this.adminPqForm.valid) {
       //console.log('update form');
       this.ApiServicesService.updatePQForm(this.pqFormTenderId, this.pqFormId, this.adminPqForm.value).subscribe({
         next: ((response: pqFormResponse) => {
@@ -166,7 +161,11 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
     }
   }
   onSubmit() {
-    if (this.pqFormId && this.adminPqForm.valid) {
+    const tenderLastDate = moment(this.tenderDate)
+    const now = moment();
+    if (now > tenderLastDate) {
+      this.toastr.error('Please change the tender submission date before creating the PQ-Form');
+    }else if (this.pqFormId && this.adminPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constVariable.submitPQFormTitle, msg: this.constVariable.submitPQFormMsg }
       });
@@ -174,17 +173,17 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
         if (submit) {
           this.adminPqForm.controls['workflowStep'].setValue('PUBLISHED');
           if (this.adminPqForm.value.pqLastDateOfSubmission) {
-            this.adminPqForm.value.pqLastDateOfSubmission = this.datePipe.transform(this.adminPqForm.value.pqLastDateOfSubmission, 'dd/MM/yyyy');
+            this.adminPqForm.value.pqLastDateOfSubmission = this.dateConverstion(this.adminPqForm.value.pqLastDateOfSubmission);
           } else {
             this.toastr.error('Please Select Valid PQ Last Date of Submission');
           }
           if (this.adminPqForm.value.tentativeDateOfAward) {
-            this.adminPqForm.value.tentativeDateOfAward = this.datePipe.transform(this.adminPqForm.value.tentativeDateOfAward, 'dd/MM/yyyy');
+            this.adminPqForm.value.tentativeDateOfAward = this.dateConverstion(this.adminPqForm.value.tentativeDateOfAward);
           } else {
             this.toastr.error('Please Select Valid Tentative Date of Award');
           }
           if (this.adminPqForm.value.scheduledCompletion) {
-            this.adminPqForm.value.scheduledCompletion = this.datePipe.transform(this.adminPqForm.value.scheduledCompletion, 'dd/MM/yyyy');
+            this.adminPqForm.value.scheduledCompletion = this.dateConverstion(this.adminPqForm.value.scheduledCompletion);
           } else {
             this.toastr.error('Please Select Valid Scheduled Completion');
           }
@@ -220,4 +219,5 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       this.warningMessage = this.constVariable.disabledWarningPQFormMsg;
     }
   }
+
 }

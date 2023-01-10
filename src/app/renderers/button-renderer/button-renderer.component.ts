@@ -24,7 +24,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     this.label = this.rowData.tender_document_name || null;
     if (this.rowData.pq_id != null && this.rowData.workflow_step == 'YET_TO_BE_PUBLISHED') {
       this.buttonLabel = this.constantVariables.editPQFormBtn;
-    } else if (this.rowData.pq_id != null && this.rowData.workflow_step == 'PUBLISHED') {
+    } else if (this.rowData.pq_id != null && (this.rowData.workflow_step == 'PUBLISHED' || this.rowData.workflow_step == 'UNDER_PROCESS')) {
       this.buttonLabel = this.constantVariables.viewPQFormBtn;
     }
     else {
