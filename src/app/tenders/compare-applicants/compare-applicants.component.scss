@@ -89,3 +89,23 @@ th {
     min-width: 200px;
     width: 30%;
 }
+
+.heading {
+    background: #ccc;
+    width: 100%;
+    text-align: left;
+    position: relative;
+    font-weight: 500;
+}
+
+.heading span {
+    position: sticky;
+    top: 0;
+    left: 10px;
+}
+
+th {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+}
