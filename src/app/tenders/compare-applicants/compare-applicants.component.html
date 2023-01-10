@@ -29,13 +29,12 @@
                         <div class="profile-info" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
                             <mat-card style="display: none"></mat-card>
                             <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
-                                <!-- <div class="initials">{{this.item?.companyName?.substring(0, 1) +
-                                    this.item?.companyName?.substring(1, 1)}}</div> -->
+                                <div class="initials">{{this.item?.companyName[0]+ '' + this.item?.companyName?.split('
+                                    ')[1].slice(0, 1)}}</div>
                             </div>
                             <div fxLayout="row" fxLayoutGap="48px">
                                 <div fxLayout="column" fxLayoutGap="20px">
-                                    <!-- <div class="bold-500 font-20p">{{userData.contactFirstName+"
-                                        "+userData.contactLastName}}</div> -->
+                                    <div class="bold-500 font-20p">{{this.item?.companyName}}</div>
                                 </div>
                             </div>
                         </div>
@@ -44,27 +43,14 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="label">
-                        <div fxLayoutAlign="start center">Company Name</div>
-                    </td>
-                    <td *ngFor="let item of rowData">
-                        <div fxLayoutAlign="center center">{{item.companyName}}</div>
-                    </td>
+                    <td class="heading" colspan="5"><span>Vendor's General Company Information</span></td>
                 </tr>
                 <tr>
                     <td class="label">
-                        <div fxLayoutAlign="start center">Contact Email</div>
+                        <div fxLayoutAlign="start center">Year of Establishment</div>
                     </td>
                     <td *ngFor="let item of rowData">
-                        <div fxLayoutAlign="center center">{{item.contactEmailAddress}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayoutAlign="start center">Contact Phone Number</div>
-                    </td>
-                    <td *ngFor="let item of rowData">
-                        <div fxLayoutAlign="center center">{{item.contactPhoneNumber}}</div>
+                        <div fxLayoutAlign="center center">{{item.yearOfEstablishment}}</div>
                     </td>
                 </tr>
                 <tr>
@@ -77,10 +63,245 @@
                 </tr>
                 <tr>
                     <td class="label">
-                        <div fxLayoutAlign="start center">Year of Establishment</div>
+                        <div fxLayoutAlign="start center">Postal Address [Corporate Office]</div>
                     </td>
                     <td *ngFor="let item of rowData">
-                        <div fxLayoutAlign="center center">{{item.yearOfEstablishment}}</div>
+                        <div fxLayoutAlign="center center">{{item.corpOfficeAddress}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Postal Address [Local Office]</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.localOfficeAddress}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Telephone</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.telephoneNum}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Fax</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.faxNumber}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Contact Person Name</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.contactName}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Designation</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.contactDesignation}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Contact Phone Number</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.contactPhoneNum}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Contact Email ID</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.contactEmailId}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Name of Regional Head / Project Coordinator</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.regionalHeadName}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <div fxLayoutAlign="start center">Mobile No.</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayoutAlign="center center">{{item.regionalHeadPhoneNum}}</div>
+                    </td>
+                </tr>
+                <tr (click)="rowData.expandTurnover = !rowData.expandTurnover">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            Turnover Details
+                            <div *ngIf="!rowData.expandTurnover"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandTurnover"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandTurnover">
+                    <td class="label">
+                        <div>Year 1</div>
+                        <div>Revenue (Rs. in Cr)</div>
+                        <div>Year 2</div>
+                        <div>Revenue (Rs. in Cr)</div>
+                        <div>Year 3</div>
+                        <div>Revenue (Rs. in Cr)</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div *ngFor="let item of item.turnOverDetails" fxLayout="column" fxLayoutAlign="start center">
+                            <div>{{item.year}}</div>
+                            <div fxLayoutAlign="start center">{{item.revenue}}</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr (click)="rowData.expandPerformancePref = !rowData.expandPerformancePref">
+                    <td class="heading" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Performance Preferences</span>
+                            <div *ngIf="!rowData.expandPerformancePref"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandPerformancePref"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandPerformancePref" (click)="rowData.expandClientRef = !rowData.expandClientRef">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Client References of 3 Major Projects</span>
+                            <div *ngIf="!rowData.expandClientRef"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandClientRef"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandClientRef">
+                    <td class="label">
+                        <div *ngFor="let item of clientReferenceHeaders">{{item}}</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayout="column" fxLayoutAlign="center center">
+                            <div></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandPerformancePref"
+                    (click)="rowData.expandProjectSim = !rowData.expandProjectSim">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Projects of Similar Nature</span>
+                            <div *ngIf="!rowData.expandProjectSim"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandProjectSim"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandProjectSim">
+                    <td class="label">
+                        <div *ngFor="let item of clientReferenceHeaders">{{item}}</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayout="column" fxLayoutAlign="center center">
+                            <div></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandPerformancePref" (click)="rowData.expandStatComp = !rowData.expandStatComp">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Statutory Compliances</span>
+                            <div *ngIf="!rowData.expandStatComp"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandStatComp"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandPerformancePref"
+                    (click)="rowData.expandEmpStrength = !rowData.expandEmpStrength">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Employees Strength</span>
+                            <div *ngIf="!rowData.expandEmpStrength"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandEmpStrength"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandPerformancePref"
+                    (click)="rowData.expandCapitalEquip = !rowData.expandCapitalEquip">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Capital Equipments</span>
+                            <div *ngIf="!rowData.expandCapitalEquip"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandCapitalEquip"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandPerformancePref"
+                    (click)="rowData.expandSafteyPolicy = !rowData.expandSafteyPolicy">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Safety Policy and Systems</span>
+                            <div *ngIf="!rowData.expandSafteyPolicy"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandSafteyPolicy"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandSafteyPolicy && rowData.expandPerformancePref">
+                    <td class="label">
+                        <div *ngFor="let item of safteyPolicyHeaders">{{item}}</div>
+                    </td>
+                    <td *ngFor="let item of rowData">
+                        <div fxLayout="column" fxLayoutAlign="center center">
+                            <div>{{item.safetyPolicyManual}}</div>
+                            <div>{{item.ppeToStaff}}</div>
+                            <div>{{item.ppeToWorkMen}}</div>
+                            <div>{{item.safetyOfficeAvailability}}</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr (click)="rowData.expandFinancialInfo = !rowData.expandFinancialInfo">
+                    <td class="heading" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Financial Information</span>
+                            <div *ngIf="!rowData.expandFinancialInfo"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandFinancialInfo"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandFinancialInfo" (click)="rowData.expandFinInfo = !rowData.expandFinInfo">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Financial Information</span>
+                            <div *ngIf="!rowData.expandFinInfo"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandFinInfo"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandFinancialInfo"
+                    (click)="rowData.expandCompBankers = !rowData.expandCompBankers">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Company Bankers</span>
+                            <div *ngIf="!rowData.expandCompBankers"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandCompBankers"><i class="fa-solid fa-minus"></i></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="rowData.expandFinancialInfo"
+                    (click)="rowData.expandCompAuditors = !rowData.expandCompAuditors">
+                    <td class="label" colspan="5">
+                        <div fxLayoutAlign="space-between center">
+                            <span>Company Auditors</span>
+                            <div *ngIf="!rowData.expandCompAuditors"><i class="fa-solid fa-add"></i></div>
+                            <div *ngIf="rowData.expandCompAuditors"><i class="fa-solid fa-minus"></i></div>
+                        </div>
                     </td>
                 </tr>
             </tbody>

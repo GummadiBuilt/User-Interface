@@ -87,9 +87,9 @@ export class ViewApplicantsComponent implements OnInit {
     // console.log(this.gridApi);
     var selectionCounts = this.gridApi.getSelectedNodes();
     let selectedRowsCount = selectionCounts.length;
-    if (selectedRowsCount > 2) {
+    if (selectedRowsCount > 5) {
       this.gridApi.deselectIndex(0, true);
-      this.toastr.warning('Only 2 Applicants to be Compared');
+      this.toastr.warning('Only 5 Applicants to be Compared');
     }
   }
   onSelect() {
@@ -107,20 +107,31 @@ export class ViewApplicantsComponent implements OnInit {
     console.log('rowIndex', e.node.rowIndex);
   }
 
-  // onRowDragMove(event: any) {
-  //   var movingNode = event.node;
-  //   var overNode = event.overNode;
-  //   // console.log(overNode);
-  //   var changedRank = overNode.data.applicant_rank;
-  //   // console.log(changedRank);
-  //   var needToChangeRank = movingNode.applicant_rank !== changedRank;
-  //   if (needToChangeRank) {
-  //     var movingData = movingNode.data;
-  //     movingData.applicant_rank = changedRank;
-  //     this.gridApi.applyTransaction({ update: [movingData] });
-  //     this.gridApi.clearFocusedCell();
-  //   }
-  // }
+  onRowDragMove(event: any) {
+    var movingNode = event.node;
+    var overNode = event.overNode;
+    // console.log(overNode);
+    var changedRank = overNode.data.applicant_rank;
+    // var changedRank = overNode.data.applicantRank;
+    // console.log(changedRank);
+    var needToChangeRank = movingNode.applicant_rank !== changedRank;
+    if (needToChangeRank) {
+      var movingData = movingNode.data;
+      movingData.applicant_rank = changedRank;
+      this.gridApi.applyTransaction({ update: [movingData] });
+      this.gridApi.clearFocusedCell();
+    }
+
+    // var movingData = this.rowData;
+    // this.gridApi.forEachNode((rowNode: { data: { applicantRank: string; }; }, index: any) => {
+    //   var changedRank = event.node.rowIndex + 1;
+    //   var needToChangeRank = this.rowData.applicantRank !== changedRank;
+    //   if (needToChangeRank) {
+    //     this.gridApi.applyTransaction({ update: [movingData] });
+    //   }
+    // });
+    // console.log(movingData);
+  }
 
   onRowValueChanged(event: any) {
     var data = event.data;

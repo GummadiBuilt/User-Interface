@@ -41,16 +41,11 @@ export class CompareApplicantsComponent implements OnInit {
     this.getApplicantsData();
   }
 
-  // userData = {
-  //   companyName: "Abhi Constructions",
-  //   yearOfEstablishment: 1991,
-  //   typeOfEstablishment: null,
-  //   address: "Hyderabad",
-  //   contactFirstName: "Abhiram",
-  //   contactLastName: "KVH",
-  //   contactDesignation: "Lead Engineer",
-  //   contactPhoneNumber: "9999999999",
-  //   contactEmailAddress: "abhi@gmail.com",
-  // }
+  clientReferenceHeaders = ["Name & Location of Project", "Scope of Contract", "Built Up Area",
+    "Contract Duration", "Contract Value", "Current Status", "Employers Name & Address", "Referee’s Name",
+    "Referee’s Position", "Contact details", "Remarks if any"];
+
+  safteyPolicyHeaders = ["Safety Policy Manual", "PPE to Staff", "PPE to Work Men",
+    "Saftey Office Availability",]
 
 }
