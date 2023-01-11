@@ -23,13 +23,11 @@
     <div>
         <mat-card fxLayout="column" fxLayoutGap="12px">
             <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [domLayout]="domLayout"
-                [columnDefs]="columnDefs" [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragManaged]="true"
-                [suppressRowClickSelection]="true" [suppressMoveWhenRowDragging]="true"
-                (gridReady)="onGridReady($event)" (rowDragLeave)="onRowDragLeave($event)"
-                (dragChanged)="dragChanged($event)" (rowValueChanged)="onRowValueChanged($event)"
-                (cellEditingStopped)="onCellEditingStopped($event)" [rowSelection]="rowSelection"
-                (selectionChanged)="onSelectionChanged($event)" (rowSelected)="onRowSelected($event)"
-                (rowDragMove)="onRowDragMove($event)">
+                [columnDefs]="columnDefs" [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragEntireRow]="true"
+                [rowDragManaged]="true" (gridReady)="onGridReady($event)" (rowValueChanged)="onRowValueChanged($event)"
+                [rowSelection]="rowSelection" (selectionChanged)="onSelectionChanged($event)"
+                (rowSelected)="onRowSelected($event)" (rowDragEnd)="onRowDragEnd($event)"
+                (rowDragMove)="onRowDragMove($event)" [stopEditingWhenCellsLoseFocus]=true>
             </ag-grid-angular>
             <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                 <button mat-button style="background-color: grey;" (click)="onUpdate()">

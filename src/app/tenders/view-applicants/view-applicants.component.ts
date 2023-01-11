@@ -44,7 +44,7 @@ export class ViewApplicantsComponent implements OnInit {
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
-      console.log('tender applicants ranking', this.rowData);
+     // console.log('tender applicants ranking', this.rowData);
     });
   }
 
@@ -71,6 +71,7 @@ export class ViewApplicantsComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
+    this.gridApi.setSuppressRowDrag(true);
   }
 
   //to disable approve/reject buttons
@@ -106,31 +107,15 @@ export class ViewApplicantsComponent implements OnInit {
     console.log('onRowDragLeave', e);
     console.log('rowIndex', e.node.rowIndex);
   }
+  onRowDragEnd(e: any) {
+    this.gridApi.forEachNode((node: any,index:any) => {
+      const rank = index + 1;
+      node.setDataValue('applicantRank', rank);
+    });
+  }
 
   onRowDragMove(event: any) {
-    var movingNode = event.node;
-    var overNode = event.overNode;
-    // console.log(overNode);
-    var changedRank = overNode.data.applicant_rank;
-    // var changedRank = overNode.data.applicantRank;
-    // console.log(changedRank);
-    var needToChangeRank = movingNode.applicant_rank !== changedRank;
-    if (needToChangeRank) {
-      var movingData = movingNode.data;
-      movingData.applicant_rank = changedRank;
-      this.gridApi.applyTransaction({ update: [movingData] });
-      this.gridApi.clearFocusedCell();
-    }
-
-    // var movingData = this.rowData;
-    // this.gridApi.forEachNode((rowNode: { data: { applicantRank: string; }; }, index: any) => {
-    //   var changedRank = event.node.rowIndex + 1;
-    //   var needToChangeRank = this.rowData.applicantRank !== changedRank;
-    //   if (needToChangeRank) {
-    //     this.gridApi.applyTransaction({ update: [movingData] });
-    //   }
-    // });
-    // console.log(movingData);
+   // console.log('onRowDragMOVE', event);
   }
 
   onRowValueChanged(event: any) {

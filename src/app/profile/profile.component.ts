@@ -220,6 +220,12 @@ export class ProfileComponent implements OnInit {
   }
 
   update() {
+    if (this.editUserForm.value.yearOfEstablishment) {
+      const dateTran = moment(this.editUserForm.value.yearOfEstablishment).format('YYYY');
+      this.editUserForm.controls['yearOfEstablishment'].setValue(dateTran)
+    } else {
+      this.toastr.error('Please Select Valid Year of Establishment');
+    }
     this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
     if (this.editUserForm.valid) {
       this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({

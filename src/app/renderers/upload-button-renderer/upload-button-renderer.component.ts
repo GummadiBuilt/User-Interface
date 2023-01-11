@@ -56,7 +56,7 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
     if (pqFormTenderId && applicantPqFormId) {
       this.ApiServicesService.updateApplicantPQFormFile(pqFormTenderId, applicantPqFormId, yearRow, formData).subscribe({
         next: ((response) => {
-          this.toastr.success('Successfully Updated');
+          this.toastr.success('File Uploaded Successfully');
         }),
         error: (error => {
           console.log(error);

@@ -1080,6 +1080,12 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
     this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
     this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    if (this.applicantPqForm.value.yearOfEstablishment) {
+      const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
+      this.applicantPqForm.value.yearOfEstablishment = dateTran;
+    } else {
+      this.toastr.error('Please Select Valid Year of Establishment');
+    }
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       //console.log('update form');
       this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
@@ -1121,6 +1127,12 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
     this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
     this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    if (this.applicantPqForm.value.yearOfEstablishment) {
+      const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
+      this.applicantPqForm.value.yearOfEstablishment = dateTran;
+    } else {
+      this.toastr.error('Please Select Valid Year of Establishment');
+    }
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constantVariable.submitTenderApplicationTitle, msg: this.constantVariable.submitTenderApplicationMsg }
