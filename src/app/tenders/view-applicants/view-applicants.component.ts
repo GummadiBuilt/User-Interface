@@ -71,7 +71,7 @@ export class ViewApplicantsComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
-    this.gridApi.setSuppressRowDrag(true);
+    // this.gridApi.setSuppressRowDrag(true);
   }
 
   //to disable approve/reject buttons

@@ -22,22 +22,26 @@ export class CompareApplicantsComponent implements OnInit {
     });
   }
 
+  clientRefData: any;
   getApplicantsData() {
     const selectedApplicantData: any[] = [];
+    var clientReferencesData: any[] = [];
     this.applicationFormIds = this.applicationFormIds.split(',');
     for (const value of this.applicationFormIds) {
       this.ApiServicesService.getApplicantPQForm(this.tenderId, value).subscribe((data: applicantsPqFormResponse) => {
         selectedApplicantData.push(data);
+        console.log(selectedApplicantData);
+        console.log(data.clientReferences)
+        clientReferencesData.push(data.clientReferences);
+        console.log(clientReferencesData);
       });
     }
     this.rowData = selectedApplicantData;
-    console.log(this.rowData);
+    // console.log(this.rowData);
+    // console.log(clientReferencesData);
   }
 
   ngOnInit(): void {
-    // const shortName = this.userData?.contactFirstName.substring(0, 1) + this.userData?.contactLastName.substring(0, 1);
-    // this.initials = shortName;
-
     this.getApplicantsData();
   }
 
@@ -45,7 +49,19 @@ export class CompareApplicantsComponent implements OnInit {
     "Contract Duration", "Contract Value", "Current Status", "Employers Name & Address", "Referee’s Name",
     "Referee’s Position", "Contact details", "Remarks if any"];
 
-  safteyPolicyHeaders = ["Safety Policy Manual", "PPE to Staff", "PPE to Work Men",
-    "Saftey Office Availability",]
+  statutoryCompliancesHeaders = ["ESI Registration", "EPF Registration", "GST Registration", "PAN Number",];
+
+  employeeStrengthHeaders = ["Name", "Designation", "Qualification", "Total Years of Experience", "Years of Experience in the Present Position"];
+
+  capitalEquipmentsHeaders = ["Description of Equipment", "Quantity", "Own / Rented", "Capacity / Size", "Age / Condition"];
+
+  safteyPolicyHeaders = ["Safety Policy Manual", "PPE to Staff", "PPE to Work Men", "Saftey Office Availability",];
+
+  financialInformationHeaders = ["Financial Year", "Gross Turnover Rs.", "Net Profit before Tax Rs.",
+    "Profit after Tax Rs.", "Current Assets Rs.", "Current Liabilities RS."];
+
+  companyBankersHeaders = ["Name", "Address",];
+
+  companyAuditorsHeaders = ["Name", "Address",];
 
 }
