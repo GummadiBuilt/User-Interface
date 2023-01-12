@@ -40,7 +40,7 @@ export class ClientsComponent implements OnInit {
 
       this.chartOptions = {
         chart: {
-          type: 'bar'
+          type: 'sankey'
         },
         title: {
           text: 'Tenders Info Chart'
