@@ -167,8 +167,8 @@ export class ApiServicesService {
   }
 
   //Update applicants rankings for a tender
-  public updateTenderApplicantRanking(tenderId: any, data: any): Observable<tenderApplicantRankingResopnse> {
-    return this.httpClient.put<tenderApplicantRankingResopnse>(this.url + '/tender-applicants/tender/' + tenderId + '/update', data);
+  public updateTenderApplicantRanking(tenderId: any, data: any,action:any): Observable<tenderApplicantRankingResopnse> {
+    return this.httpClient.put<tenderApplicantRankingResopnse>(this.url + '/tender-applicants/tender/' + tenderId + '/update/' + action, data);
   }
 
   //getAPI for compare tender applicants 

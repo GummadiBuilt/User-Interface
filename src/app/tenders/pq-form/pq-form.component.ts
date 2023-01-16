@@ -30,6 +30,9 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public applyBtnLabel: string = this.constVariable.applyBtn;
   public applicationFormId: any;
   public tenderDate: any;
+  public applicationFormStatus: any;
+  public btnTenderApplnstate!: boolean;
+  public disableMsg!: string;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -81,11 +84,20 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       this.pqDocumentIssueDate = data.pqDocumentIssueDate;
     }
     this.applicationFormId = data.applicationFormId;
-    if (this.applicationFormId != 0) {
-      this.applyBtnLabel = 'View/Edit'
-    } else {
-      this.applyBtnLabel = 'Apply'
+    this.applicationFormStatus = data.applicationFormStatus;
+
+    if (this.applicationFormId != null && this.applicationFormStatus!='DRAFT') {
+      this.applyBtnLabel = this.constVariable.viewBtn;
+    } else if(this.applicationFormId != null && this.applicationFormStatus!='SUBMIT') {
+      this.applyBtnLabel = this.constVariable.editBtn;
+    } else{
+      this.applyBtnLabel = this.constVariable.applyBtn;
     }
+    if(this.applicationFormId == 0 && this.applicationFormStatus == null && data.workflowStep == "UNDER_PROCESS"){
+      this.btnTenderApplnstate = true;
+      this.disableMsg = this.constVariable.disabledMsgForTenderApplicant;
+      this.applyBtnLabel = this.constVariable.applyBtn;
+     }
   }
   dateConverstion(input: any) {
     if (input) {
@@ -106,7 +118,12 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
         }
       });
     } else {
-      this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'edit-tender-application-form', this.applicationFormId]);
+      if(this.applyBtnLabel == 'View'){
+        this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'view-tender-application-form', this.applicationFormId]);
+      }else{
+        this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'edit-tender-application-form', this.applicationFormId]);
+      }
+      
     }
   }
 

@@ -51,6 +51,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public warningMessage!: string;
   public todayDate!: Date;
   public pqID!: number;
+  public applicationFormId!: number;
+  public applicationFormStatus!: string;
+  public applicantLabel!:any;
+  public optionApplnState!: boolean;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -63,6 +67,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
           //console.log('Tender data by id', data);
           this.pqID = data.pqFormId;
+          this.applicationFormId = data.applicationFormId;
+          this.applicationFormStatus = data.applicationFormStatus;
           this.editData(data);
           this.tenderFormDisable();
         });
@@ -132,13 +138,53 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     } else {
       this.toastr.error('No data to display');
     }
+    if(this.userRole?.includes('contractor')){
+      if (this.applicationFormId != null && this.applicationFormStatus!='DRAFT') {
+        this.applicantLabel = this.constantVariable.viewBtn;
+      } else if(this.applicationFormId != null && this.applicationFormStatus!='SUBMIT') {
+        this.applicantLabel = this.constantVariable.editBtn;
+      } else{
+        this.applicantLabel = this.constantVariable.applyBtn;
+      }
+      if(this.applicationFormId == 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
+        this.optionApplnState = true;
+        this.applicantLabel = this.constantVariable.applyBtn;
+       }
+    }
   }
   onSelected(event: any) {
-    if (event != (null || 0)) {
-      this.router.navigate(['/tenders', this.tenderId, 'edit-pq-form', event]);
+    const value = event;
+    const tender = this.tenderId;
+    const pqForm = this.pqID;
+    const applnTender = this.applicationFormId;
+    if(value == 'PQForm'){
+      if (this.pqID != (null || 0)) {
+        this.router.navigate(['/tenders', tender, 'edit-pq-form', pqForm]);
+      }
+      else {
+        this.router.navigate(['/tenders', tender, 'create-pq-form']);
+      }
+      return;
     }
-    else {
-      this.router.navigate(['/tenders', this.tenderId, 'create-pq-form']);
+    if (value == 'Apply' && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: this.constantVariable.applyTenderMsg, msg: '' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.router.navigate(['/tenders', tender, 'tender-application-form']);
+        }
+      });
+
+    } else {
+      if(value == 'View'){
+        if(this.applicationFormId){
+          this.router.navigate(['/tenders', tender, 'view-tender-application-form', applnTender]);
+        }
+      }else{
+        this.router.navigate(['/tenders', tender, 'edit-tender-application-form', applnTender]);
+      }
+      return;
     }
   }
 

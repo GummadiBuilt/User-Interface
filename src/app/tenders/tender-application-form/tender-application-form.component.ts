@@ -241,7 +241,11 @@ export class TenderApplicationFormComponent implements OnInit {
     if (data.applicationId != 0) {
       this.applicantPqFormId = data.applicationId
     }
-    if (data.actionTaken == "SUBMIT") {
+    if (data.actionTaken == "SUBMIT" && this.userRole?.includes('contractor')) {
+      this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
+      this.tenderApplicantFormDisable();
+    }
+    if (data.actionTaken == "SUBMIT" && (this.userRole?.includes('admin') || this.userRole?.includes('client'))) {
       this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
       this.tenderApplicantFormDisable();
     }

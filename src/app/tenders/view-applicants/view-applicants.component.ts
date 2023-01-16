@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallbackParams, ColDef, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, RowDragEndEvent, RowDragLeaveEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
+import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallbackParams, ColDef, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, ICellRendererParams, RowDragEndEvent, RowDragLeaveEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -53,10 +53,17 @@ export class ViewApplicantsComponent implements OnInit {
     {
       headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true,
       checkboxSelection: checkboxSelection,
-      headerCheckboxSelection: headerCheckboxSelection,
-      // cellRenderer: function (params: any) {
-      //   return `<a href=/tenders/${this.tenderId}/view-pq-form/${this.pqFormId}/edit-tender-application-form/${params.data.id}>${params.value}</a>`;
-      // }
+      headerCheckboxSelection: headerCheckboxSelection
+    },
+    {
+      headerName: 'Applicant Form',  flex: 1, 
+      cellRenderer: (params: ICellRendererParams) => {
+        const id = `<a href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank">View Application</a>`;
+        return id
+       },
+      filter: false,
+      colId: "action",
+      minWidth: 350,
     },
     { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
     {
@@ -146,7 +153,7 @@ export class ViewApplicantsComponent implements OnInit {
   onUpdate() {
     // console.log(this.rowData);
     if (this.tenderId && this.userRole?.includes('admin')) {
-      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData).subscribe({
+      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'DRAFT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Updated');
         }),
@@ -162,7 +169,7 @@ export class ViewApplicantsComponent implements OnInit {
   }
   onSubmit() {
     if (this.tenderId && this.userRole?.includes('admin')) {
-      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData).subscribe({
+      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'SUBMIT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Submitted');
         }),

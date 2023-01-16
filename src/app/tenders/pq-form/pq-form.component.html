@@ -93,11 +93,11 @@
                     </div>
                     <div *ngIf="userRole?.includes('contractor')" class="action-btn" fxLayout="row"
                         fxLayoutAlign="end center" fxLayoutGap="24px">
-                        <button class="button-apply" mat-button type="button" (click)="applyPqForm()">
+                        <button class="button-apply" mat-button type="button" (click)="applyPqForm()" [disabled]="btnTenderApplnstate">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i *ngIf="applicationFormId == 0" class="icon-appy fa-solid fa-angles-right"></i>
                                 <i *ngIf="applicationFormId" class="fa-solid fa-pen-to-square"></i>
-                                <div>{{applyBtnLabel}}</div>
+                                <div matTooltip={{disableMsg}}>{{applyBtnLabel}}</div>
                             </div>
                         </button>
                     </div>
