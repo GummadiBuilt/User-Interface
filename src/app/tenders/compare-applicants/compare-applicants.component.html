@@ -188,7 +188,8 @@
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="applicantsData.expandPerformancePref" (click)="applicantsData.expandClientRef = !applicantsData.expandClientRef">
+                <tr *ngIf="applicantsData.expandPerformancePref"
+                    (click)="applicantsData.expandClientRef = !applicantsData.expandClientRef">
                     <td class="label">
                         <div fxLayoutAlign="space-between center">
                             <span>Client References of 3 Major Projects</span>
@@ -265,7 +266,8 @@
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="applicantsData.expandPerformancePref" (click)="applicantsData.expandStatComp = !applicantsData.expandStatComp">
+                <tr *ngIf="applicantsData.expandPerformancePref"
+                    (click)="applicantsData.expandStatComp = !applicantsData.expandStatComp">
                     <td class="label" colspan="5">
                         <div fxLayoutAlign="space-between center">
                             <span>Statutory Compliances</span>
@@ -302,12 +304,16 @@
                 <tr *ngIf="applicantsData.expandEmpStrength && applicantsData.expandPerformancePref">
                     <td class="label">
                         <div fxLayout="column" fxLayoutGap="8px">
-                            <div *ngFor="let item of applicantsData">{{item}}</div>
+                            <div *ngFor="let item of employeeStrengthHeader">{{item}}</div>
                         </div>
                     </td>
-                    <td *ngFor="let item of applicantsData">
+                    <td *ngFor="let item of applicantsData;let i=index">
                         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
-                            <div></div>
+                            <div *ngFor="let item of employeeStrengthData[i].name">{{item}}</div>
+                            <div *ngFor="let item of employeeStrengthData[i].designation">{{item}}</div>
+                            <div *ngFor="let item of employeeStrengthData[i].qualification">{{item}}</div>
+                            <div *ngFor="let item of employeeStrengthData[i].totalExp">{{item}}</div>
+                            <div *ngFor="let item of employeeStrengthData[i].totalExpPresent">{{item}}</div>
                         </div>
                     </td>
                 </tr>
@@ -367,7 +373,8 @@
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="applicantsData.expandFinancialInfo" (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
+                <tr *ngIf="applicantsData.expandFinancialInfo"
+                    (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
                     <td class="label" colspan="5">
                         <div fxLayoutAlign="space-between center">
                             <span>Financial Information</span>

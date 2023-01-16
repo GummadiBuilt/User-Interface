@@ -17,6 +17,8 @@ export class CompareApplicantsComponent implements OnInit {
   public applicantsData: any;
   public clientRefData: any;
   public projectSimilarData: any;
+  public employeeStrengthData: any;
+  public employeeStrengthHeader:any;
 
   constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService,) {
     this.route.paramMap.subscribe(params => {
@@ -50,10 +52,40 @@ export class CompareApplicantsComponent implements OnInit {
       },
         { details: [], project1: [], project2: [], project3: [] }
       );
-        array = resultArray;
+       // array = resultArray;
         return resultArray;
     });
     return array;
+  }
+  reduceEmployeeArray(value:any){
+    let empArray = value.map((eArray: any) => {
+      let resultEmpArray = eArray.reduce((acc: any, item: any) => {
+        const obj=Object.keys(item);
+        this.employeeStrengthHeader = obj;
+        const { name, designation, qualification, totalExp,totalExpPresent } = acc;
+        if (item.hasOwnProperty('name')) {
+          name.push(item.name);
+        }
+        if (item.hasOwnProperty('designation')) {
+          designation.push(item.designation);
+        }
+        if (item.hasOwnProperty('qualification')) {
+          qualification.push(item.qualification);
+        }
+        if (item.hasOwnProperty('totalExp')) {
+          totalExp.push(item.totalExp);
+        }
+        if (item.hasOwnProperty('totalExpPresent')) {
+          totalExpPresent.push(item.totalExpPresent);
+        }
+        return { name, designation, qualification, totalExp,totalExpPresent };
+      },
+        {name:[], designation:[], qualification:[], totalExp:[],totalExpPresent:[] }
+      );
+        return resultEmpArray;
+        
+    });
+    return empArray;
   }
 
   getApplicantsData(data: any) {
@@ -61,13 +93,16 @@ export class CompareApplicantsComponent implements OnInit {
     const clientRowData = this.applicantsData;
     let clientArr: any[] = [];
     let simArr: any[] = [];
+    let employeeStrengthArr:any[]=[];
     clientRowData.forEach((element: any) => {
-      //console.log(element)
+     // console.log(element)
       clientArr.push(JSON.parse(element.clientReferences));
-      simArr.push(JSON.parse(element.similarProjectNature))
+      simArr.push(JSON.parse(element.similarProjectNature));
+      employeeStrengthArr.push(JSON.parse(element.employeesStrength));
     });
     this.clientRefData = this.reduceArray(clientArr);
     this.projectSimilarData = this.reduceArray(simArr);
+    this.employeeStrengthData = this.reduceEmployeeArray(employeeStrengthArr)
 
   }
 
