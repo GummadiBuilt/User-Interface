@@ -60,6 +60,36 @@ export class CompareApplicantsComponent implements OnInit {
     });
     return array;
   }
+  reduceEmployeeArray(value:any){
+    let empArray = value.map((eArray: any) => {
+      let resultEmpArray = eArray.reduce((acc: any, item: any) => {
+        const obj=Object.keys(item);
+        this.employeeStrengthHeader = obj;
+        const { name, designation, qualification, totalExp,totalExpPresent } = acc;
+        if (item.hasOwnProperty('name')) {
+          name.push(item.name);
+        }
+        if (item.hasOwnProperty('designation')) {
+          designation.push(item.designation);
+        }
+        if (item.hasOwnProperty('qualification')) {
+          qualification.push(item.qualification);
+        }
+        if (item.hasOwnProperty('totalExp')) {
+          totalExp.push(item.totalExp);
+        }
+        if (item.hasOwnProperty('totalExpPresent')) {
+          totalExpPresent.push(item.totalExpPresent);
+        }
+        return { name, designation, qualification, totalExp,totalExpPresent };
+      },
+        {name:[], designation:[], qualification:[], totalExp:[],totalExpPresent:[] }
+      );
+        return resultEmpArray;
+        
+    });
+    return empArray;
+  }
 
   getApplicantsData(data: any) {
     this.applicantsData = data;
@@ -89,7 +119,6 @@ export class CompareApplicantsComponent implements OnInit {
     this.compBankersData = compBankersArr;
     this.compAuditorsData = compAuditorsArr;
     console.log(this.finInfoData);
-
   }
 
   ngOnInit(): void {

@@ -21,6 +21,7 @@ import _ from 'lodash';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { PageConstants } from 'src/app/shared/application.constants';
 import moment from 'moment';
+import { StatusValues } from 'src/app/shared/status-values';
 
 @Component({
   selector: 'app-create-tender',
@@ -373,7 +374,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onSave() {
     //console.log(this.tenderDetails.value.lastDateOfSubmission);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
-    this.tenderDetails.controls['workflowStep'].setValue('SAVE');
+    this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
       const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
       this.tenderDetails.value.lastDateOfSubmission = dateTran;
@@ -489,7 +490,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
-    if ((this.userRole?.includes("client") && (workFlowStep != 'SAVE'))) {        
+    if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {        
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
