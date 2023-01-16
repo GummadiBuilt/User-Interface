@@ -4,6 +4,7 @@ export class tenderApplicantRankingResopnse {
     tender_info_id: string;
     modified_date: string;
     applicant_form_id: number;
+    application_status: string;
     justification_note: string;
     company_name: string;
 
@@ -13,6 +14,7 @@ export class tenderApplicantRankingResopnse {
         this.tender_info_id = d.tender_info_id;
         this.modified_date = d.modified_date;
         this.applicant_form_id = d.applicant_form_id;
+        this.application_status = d.application_status;
         this.justification_note = d.justification_note;
         this.company_name = d.company_name;
     }

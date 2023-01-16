@@ -17,8 +17,11 @@ export class CompareApplicantsComponent implements OnInit {
   public applicantsData: any;
   public clientRefData: any;
   public projectSimilarData: any;
-  public employeeStrengthData: any;
-  public employeeStrengthHeader:any;
+  public empStrengthsData: any;
+  public capitalEquipData: any;
+  public finInfoData: any;
+  public compBankersData: any;
+  public compAuditorsData: any;
 
   constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService,) {
     this.route.paramMap.subscribe(params => {
@@ -31,10 +34,10 @@ export class CompareApplicantsComponent implements OnInit {
     });
   }
   reduceArray(value: any) {
-    let array = value.map((array: any,i:any) => {
-      
+    let array = value.map((array: any, i: any) => {
+
       let resultArray = array.reduce((acc: any, item: any) => {
-        
+
         const { details, project1, project2, project3 } = acc;
         if (item.hasOwnProperty('details')) {
           details.push(item.details);
@@ -52,8 +55,8 @@ export class CompareApplicantsComponent implements OnInit {
       },
         { details: [], project1: [], project2: [], project3: [] }
       );
-       // array = resultArray;
-        return resultArray;
+      array = resultArray;
+      return resultArray;
     });
     return array;
   }
@@ -93,17 +96,29 @@ export class CompareApplicantsComponent implements OnInit {
     const clientRowData = this.applicantsData;
     let clientArr: any[] = [];
     let simArr: any[] = [];
-    let employeeStrengthArr:any[]=[];
+    let empStrengthsArr: any[] = [];
+    let capitalEquipArr: any[] = [];
+    let finInfoArr: any[] = [];
+    let compBankersArr: any[] = [];
+    let compAuditorsArr: any[] = [];
     clientRowData.forEach((element: any) => {
-     // console.log(element)
+      console.log(element)
       clientArr.push(JSON.parse(element.clientReferences));
       simArr.push(JSON.parse(element.similarProjectNature));
-      employeeStrengthArr.push(JSON.parse(element.employeesStrength));
+      empStrengthsArr.push(JSON.parse(element.employeesStrength));
+      capitalEquipArr.push(JSON.parse(element.capitalEquipment));
+      finInfoArr.push(JSON.parse(element.financialInformation));
+      compBankersArr.push(JSON.parse(element.companyBankers));
+      compAuditorsArr.push(JSON.parse(element.companyAuditors));
     });
     this.clientRefData = this.reduceArray(clientArr);
     this.projectSimilarData = this.reduceArray(simArr);
-    this.employeeStrengthData = this.reduceEmployeeArray(employeeStrengthArr)
-
+    this.empStrengthsData = empStrengthsArr;
+    this.capitalEquipData = capitalEquipArr;
+    this.finInfoData = finInfoArr;
+    this.compBankersData = compBankersArr;
+    this.compAuditorsData = compAuditorsArr;
+    console.log(this.finInfoData);
   }
 
   ngOnInit(): void {
