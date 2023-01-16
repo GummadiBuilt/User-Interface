@@ -5,6 +5,7 @@ import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallba
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
 import { tenderApplicantRankingResopnse } from 'src/app/tenders/view-applicants/tenderApplicantRankingResopnse';
@@ -44,7 +45,7 @@ export class ViewApplicantsComponent implements OnInit {
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
-     // console.log('tender applicants ranking', this.rowData);
+      console.log('tender applicants ranking', this.rowData);
     });
   }
 
@@ -53,8 +54,19 @@ export class ViewApplicantsComponent implements OnInit {
       headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true,
       checkboxSelection: checkboxSelection,
       headerCheckboxSelection: headerCheckboxSelection,
+      // cellRenderer: function (params: any) {
+      //   return `<a href=/tenders/${this.tenderId}/view-pq-form/${this.pqFormId}/edit-tender-application-form/${params.data.id}>${params.value}</a>`;
+      // }
     },
     { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
+    {
+      headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
+      cellRenderer: UnitCellRendererComponent,
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: ['SHORTLISTED', 'NOT_SHORTLISTED'],
+      }
+    },
     { headerName: 'Note', field: 'justificationNote', filter: 'agTextColumnFilter', flex: 5, autoHeight: true, wrapText: true, editable: true },
   ];
   public defaultColDef: ColDef = {
@@ -85,7 +97,7 @@ export class ViewApplicantsComponent implements OnInit {
 
   onRowSelected(event: RowSelectedEvent) {
     // var curSelectedNode = event.node;
-    // console.log(this.gridApi);
+    // console.log(params.data);
     var selectionCounts = this.gridApi.getSelectedNodes();
     let selectedRowsCount = selectionCounts.length;
     if (selectedRowsCount > 5) {
@@ -108,14 +120,14 @@ export class ViewApplicantsComponent implements OnInit {
     console.log('rowIndex', e.node.rowIndex);
   }
   onRowDragEnd(e: any) {
-    this.gridApi.forEachNode((node: any,index:any) => {
+    this.gridApi.forEachNode((node: any, index: any) => {
       const rank = index + 1;
       node.setDataValue('applicantRank', rank);
     });
   }
 
   onRowDragMove(event: any) {
-   // console.log('onRowDragMOVE', event);
+    // console.log('onRowDragMOVE', event);
   }
 
   onRowValueChanged(event: any) {
