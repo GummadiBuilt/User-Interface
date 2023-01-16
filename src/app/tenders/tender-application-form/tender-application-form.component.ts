@@ -1070,7 +1070,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public applicantPqFormId: any;
   public PQFormId: any;
   onSave() {
-    this.applicantPqForm.controls['actionTaken'].setValue('SAVE');
+    this.applicantPqForm.controls['actionTaken'].setValue('DRAFT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));

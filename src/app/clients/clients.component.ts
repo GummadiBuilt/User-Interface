@@ -92,7 +92,7 @@ export class ClientsComponent implements OnInit {
     { headerName: 'Recommended', field: 'recommended_step', flex: 1 },
     { headerName: 'Yet to Publish', field: 'yet_to_publish_step', flex: 1 },
     { headerName: 'Publish', field: 'publish_step', flex: 1 },
-    { headerName: 'Save', field: 'save_step', flex: 1 },
+    { headerName: 'Draft', field: 'save_step', flex: 1 },
     { headerName: 'Suspended', field: 'suspended_step', flex: 1 },
   ];
   public DefaultColDef: ColDef = {
