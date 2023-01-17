@@ -34,10 +34,10 @@
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
                     <mat-form-field appearance="outline"
-                        *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='Draft' && pqID ">
+                        *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='Draft' ">
                         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
                             <mat-option value='PQForm'>PQ-Form</mat-option>
-                            <mat-option *ngIf="userRole?.includes('admin') && this.tenderDetails.get('workflowStep')?.value =='Under Process'"
+                            <mat-option *ngIf="!userRole?.includes('contractor') && this.tenderDetails.get('workflowStep')?.value =='Under Process'"
                                 [routerLink]="['/tenders', tenderId, 'view-applicants']">
                                 View Applicants
                             </mat-option>

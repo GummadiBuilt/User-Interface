@@ -22,6 +22,7 @@ export class ViewApplicantsComponent implements OnInit {
   tenderId: any;
   public constantVariable = PageConstants;
   public userRole: string[] | undefined;
+  public btnstate!: boolean;
 
   constructor(private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
     private toastr: ToastrService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder,
@@ -40,12 +41,16 @@ export class ViewApplicantsComponent implements OnInit {
       this.toastr.error('Failed to load user details' + e);
     }
     this.getTenderApplicantsRankingData();
+    
   }
 
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
      // console.log('tender applicants ranking', this.rowData);
+     if(this.userRole?.includes('client')){
+      this.disableViewApplicants();
+    }
     });
   }
 
@@ -191,6 +196,12 @@ export class ViewApplicantsComponent implements OnInit {
       console.log('error');
       this.toastr.error('Error in Submitting Applicant Details');
     }
+  }
+  disableViewApplicants(){
+    this.btnstate = true;
+    this.gridOptions.getColumns()?.forEach((colClientRef: any) => {
+      colClientRef.colDef.editable = false;
+    })
   }
 
 }

@@ -433,6 +433,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
         next: ((response: tenderResopnse) => {
+          this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -445,6 +446,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         next: ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
           this.tenderDetails.markAsPristine();
+          this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),
@@ -515,7 +517,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
         next: (response => {
           this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
-          this.toastr.success('Successfully Submitted');
+          this.toastr.success('Updated Successfully');
           this.tenderFormDisable();
         }),
         error: (error => {
