@@ -21,7 +21,6 @@ import _ from 'lodash';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { PageConstants } from 'src/app/shared/application.constants';
 import moment from 'moment';
-import { StatusValues } from 'src/app/shared/status-values';
 
 @Component({
   selector: 'app-create-tender',
@@ -206,7 +205,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     }
   }
   downloadSelectedFile(id: any) {
-    // console.log('download',id);
     this.ApiServicesService.downloadTechnicalTenderDocument(id).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
@@ -224,10 +222,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 180, },
-    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 6, minWidth: 350, autoHeight: true, wrapText: true },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120, },
+    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 8, minWidth: 550, autoHeight: true, wrapText: true },
     {
-      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
+      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 140,
       cellRenderer: UnitCellRendererComponent,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
@@ -235,12 +233,11 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       },
     },
     {
-      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
-      // uses a custom Cell Editor
+      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120,
       cellEditor: NumericCellRendererComponent
     },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", flex: 1, maxWidth: 120,
       cellRenderer: (params: any) => {
         const divElement = document.createElement("div");
         const editingCells = params.api.getEditingCells();
@@ -457,7 +454,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       })
     } else if (!this.tenderId && !this.file) {
       //error
-      console.log('File upload error');
       this.toastr.error('Please upload the Technical Tender Document');
     } else {
       //error
@@ -486,7 +482,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
           this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
             next: (response => {
-              // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
