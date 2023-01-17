@@ -44,11 +44,17 @@ export class CompareApplicantsComponent implements OnInit {
         }
         if (item.hasOwnProperty('Project 1')) {
           project1.push(item['Project 1']);
+        }else{
+          project1.push(item['Project 1']);
         }
         if (item.hasOwnProperty('Project 2')) {
           project2.push(item['Project 2']);
+        }else{
+          project2.push(item['Project 2']);
         }
         if (item.hasOwnProperty('Project 3')) {
+          project3.push(item['Project 3']);
+        }else{
           project3.push(item['Project 3']);
         }
         return { details, project1, project2, project3 };
@@ -72,7 +78,7 @@ export class CompareApplicantsComponent implements OnInit {
     let compBankersArr: any[] = [];
     let compAuditorsArr: any[] = [];
     clientRowData.forEach((element: any) => {
-      console.log(element)
+      //console.log(element)
       clientArr.push(JSON.parse(element.clientReferences));
       simArr.push(JSON.parse(element.similarProjectNature));
       empStrengthsArr.push(JSON.parse(element.employeesStrength));
@@ -88,7 +94,7 @@ export class CompareApplicantsComponent implements OnInit {
     this.finInfoData = finInfoArr;
     this.compBankersData = compBankersArr;
     this.compAuditorsData = compAuditorsArr;
-    console.log(this.finInfoData);
+    //console.log(this.finInfoData);
   }
 
   ngOnInit(): void {

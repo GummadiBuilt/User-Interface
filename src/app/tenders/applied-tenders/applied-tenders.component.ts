@@ -58,8 +58,8 @@ export class AppliedTendersComponent implements OnInit {
         return id;
       }
     },
-    { headerName: 'Application Form ID', field: 'application_form_id', flex: 1, filter: 'agTextColumnFilter', },
-    { headerName: 'PQ ID', field: 'pq_id', flex: 1, filter: 'agTextColumnFilter', },
+    // { headerName: 'Application Form ID', field: 'application_form_id', flex: 1, filter: 'agTextColumnFilter', },
+    // { headerName: 'PQ ID', field: 'pq_id', flex: 1, filter: 'agTextColumnFilter', },
     { headerName: 'Client Name', field: 'company_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Project Name', field: 'project_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Work Description', field: 'work_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
@@ -79,7 +79,7 @@ export class AppliedTendersComponent implements OnInit {
     },
     { headerName: 'Location', field: 'project_location', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
-    { headerName: 'Tender Document Size', field: 'tender_document_size', flex: 1, valueGetter: `data.tender_document_size  +' MB'` },
+    // { headerName: 'Tender Document Size', field: 'tender_document_size', flex: 1, valueGetter: `data.tender_document_size  +' MB'` },
     { headerName: 'Created by', field: 'created_by', flex: 1 },
     {
       headerName: 'Action', field: 'tender_document_name', flex: 1, cellRenderer: ButtonRendererComponent,

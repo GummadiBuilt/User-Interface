@@ -45,7 +45,7 @@ export class ViewApplicantsComponent implements OnInit {
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
-      console.log('tender applicants ranking', this.rowData);
+     // console.log('tender applicants ranking', this.rowData);
     });
   }
 
@@ -67,7 +67,17 @@ export class ViewApplicantsComponent implements OnInit {
     { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
     {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
-      cellRenderer: UnitCellRendererComponent,
+     // cellRenderer: UnitCellRendererComponent,
+      cellRenderer: (params: ICellRendererParams) => {
+        let val!: any;
+        if(params.data.applicationStatus == 'UNDER_PROCESS')
+        {
+          val = 'Select Status';
+        }else{
+          val= params.data.applicationStatus;
+        }
+        return val;
+      },
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
         values: ['SHORTLISTED', 'NOT_SHORTLISTED'],

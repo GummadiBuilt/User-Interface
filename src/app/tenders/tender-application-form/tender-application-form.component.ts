@@ -176,11 +176,11 @@ export class TenderApplicationFormComponent implements OnInit {
     if (data.turnOverDetails != null) {
       this.turnoverDetails = data.turnOverDetails;
     }
-    if (Object.keys(data.similarProjects).length === 0) {
-      this.similarProjectsDetails = [];
-    } else {
-      this.similarProjectsDetails = JSON.parse(data.similarProjects);
-    }
+    // if (Object.keys(data.similarProjects).length === 0) {
+    //   this.similarProjectsDetails = [];
+    // } else {
+    //   this.similarProjectsDetails = JSON.parse(data.similarProjects);
+    // }
     if (Object.keys(data.clientReferences).length === 0) {
       this.clientRefRowData = [];
     } else {
@@ -321,143 +321,143 @@ export class TenderApplicationFormComponent implements OnInit {
   // downloadRefDocument(data: any) {
   // }
 
-  //Section B of PQ-Form: Similar Projects
-  public similarProjectsColumnDefs: ColDef[] = [
-    { headerName: 'SI No', field: 'sno', editable: true, flex: 1 },
-    { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
-    { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
-    {
-      headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4, cellClass: 'ag-right-aligned-cell',
-      valueFormatter: params => currencyFormatter(params.data.contract_value, ''),
-    },
-    { headerName: 'Year of Execution', field: 'year_of_execution', editable: true, flex: 1 },
-    { headerName: 'Scope of Contract', field: 'scope_of_contract', editable: true, flex: 4 },
-    { headerName: 'Builtup Area (in Sqft)', field: 'builtup_area', editable: true, flex: 3 },
-    {
-      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
-      cellRenderer: (params: any) => {
-        let divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
-        if (this.btnsDisable) {
-          divElement.innerHTML = `
-          <button class="action-disable-button add" type="button" disabled>
-            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
-          </button>
-          <button class="action-disable-button delete" type="button" disabled>
-            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
-          </button>
-          `;
-        } else {
-          divElement.innerHTML = `
-          <button class="action-button add" data-action="add">
-            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
-          </button>
-          <button class="action-button delete" data-action="delete">
-            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
-          </button>
-          `;
-        }
-        return divElement;
-      },
-    }
-  ];
-  public similarProjectsDefaultColDef: ColDef = {
-    flex: 1,
-    editable: true,
-    minWidth: 150,
-    resizable: true,
-  };
-  public similarProjectsDetails: any[] = [
-    { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
-  ];
-  private gridApiSimilarProjects!: GridApi;
-  public gridOptionsSimilarProjects!: any;
-  onGridReadySimilarProjects(params: GridReadyEvent) {
-    this.gridApiSimilarProjects = params.api;
-    this.gridOptionsSimilarProjects = params.columnApi;
-  }
-  onCellClickedSimilarProjects(params: any) {
-    // Handle click event for action cells
-    if (params.column.colId === "action" && params.event.target.dataset.action) {
-      let action = params.event.target.dataset.action;
-      if (action === "add") {
-        // console.log('add', params.node.rowIndex);
-        const similarProjectsNewRow = { 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' };
-        const similarProjectsNewIndex = params.node.rowIndex + 1;
-        this.gridApiSimilarProjects.applyTransaction({
-          add: [similarProjectsNewRow],
-          addIndex: similarProjectsNewIndex
-        });
-        this.similarProjectsDetails.splice(similarProjectsNewIndex, 0, similarProjectsNewRow);
-        this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
-        this.gridApiSimilarProjects.startEditingCell({
-          rowIndex: params.node.rowIndex + 1,
-          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
-        });
-      }
-      if (action === "delete") {
-        //console.log('delete');
-        params.api.applyTransaction({
-          remove: [params.node.data]
-        });
-        this.similarProjectsDetails.splice(params.rowIndex, 1);
-      }
-    }
-  }
-  onBtStartEditingSimilarProjects() {
-    this.gridApiSimilarProjects.setFocusedCell(1, 'SI No');
-    this.gridApiSimilarProjects.startEditingCell({
-      rowIndex: 1,
-      colKey: 'SI No',
-    });
-  }
-  onCellValueChangedSimilarProjects(event: CellValueChangedEvent) {
-    const dataItem = [event.node.data];
-    this.gridApiSimilarProjects.applyTransaction({
-      update: dataItem,
-    });
-  }
-  onRowValueChangedSimilarProjects(event: any) {
-    var data = event.data;
-    if (event.rowIndex == 0) {
-      this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
-    } else {
-      const addDataItem = [event.node.data];
-      this.gridApiSimilarProjects.applyTransaction({ update: addDataItem });
-      // this.gridApiSimilarProjects.forEachNode( (node) => {
-      //   this.similarProjectsDetails.push(node.data);
-      // });
-    }
-    this.gridApiSimilarProjects.refreshCells();
-  }
-  onCellEditingStoppedSimilarProjects(event: CellEditingStoppedEvent) {
-    this.gridApiSimilarProjects.stopEditing();
-  }
-  onRowEditingStartedSimilarProjects(params: any) {
-    params.api.refreshCells({
-      columns: ["action"],
-      rowNodes: [params.node],
-      force: true
-    });
-  }
-  onRowEditingStoppedSimilarProjects(params: any) {
-    params.api.refreshCells({
-      columns: ["action"],
-      rowNodes: [params.node],
-      force: true
-    });
-    this.gridApiSimilarProjects.stopEditing();
-  }
+  // //Section B of PQ-Form: Similar Projects
+  // public similarProjectsColumnDefs: ColDef[] = [
+  //   { headerName: 'SI No', field: 'sno', editable: true, flex: 1 },
+  //   { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
+  //   { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
+  //   {
+  //     headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4, cellClass: 'ag-right-aligned-cell',
+  //     valueFormatter: params => currencyFormatter(params.data.contract_value, ''),
+  //   },
+  //   { headerName: 'Year of Execution', field: 'year_of_execution', editable: true, flex: 1 },
+  //   { headerName: 'Scope of Contract', field: 'scope_of_contract', editable: true, flex: 4 },
+  //   { headerName: 'Builtup Area (in Sqft)', field: 'builtup_area', editable: true, flex: 3 },
+  //   {
+  //     headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
+  //     cellRenderer: (params: any) => {
+  //       let divElement = document.createElement("div");
+  //       const editingCells = params.api.getEditingCells();
+  //       const isCurrentRowEditing = editingCells.some((cell: any) => {
+  //         return cell.rowIndex === params.node.rowIndex;
+  //       });
+  //       if (this.btnsDisable) {
+  //         divElement.innerHTML = `
+  //         <button class="action-disable-button add" type="button" disabled>
+  //           <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
+  //         </button>
+  //         <button class="action-disable-button delete" type="button" disabled>
+  //           <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
+  //         </button>
+  //         `;
+  //       } else {
+  //         divElement.innerHTML = `
+  //         <button class="action-button add" data-action="add">
+  //           <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
+  //         </button>
+  //         <button class="action-button delete" data-action="delete">
+  //           <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
+  //         </button>
+  //         `;
+  //       }
+  //       return divElement;
+  //     },
+  //   }
+  // ];
+  // public similarProjectsDefaultColDef: ColDef = {
+  //   flex: 1,
+  //   editable: true,
+  //   minWidth: 150,
+  //   resizable: true,
+  // };
+  // public similarProjectsDetails: any[] = [
+  //   { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
+  // ];
+  // private gridApiSimilarProjects!: GridApi;
+  // public gridOptionsSimilarProjects!: any;
+  // onGridReadySimilarProjects(params: GridReadyEvent) {
+  //   this.gridApiSimilarProjects = params.api;
+  //   this.gridOptionsSimilarProjects = params.columnApi;
+  // }
+  // onCellClickedSimilarProjects(params: any) {
+  //   // Handle click event for action cells
+  //   if (params.column.colId === "action" && params.event.target.dataset.action) {
+  //     let action = params.event.target.dataset.action;
+  //     if (action === "add") {
+  //       // console.log('add', params.node.rowIndex);
+  //       const similarProjectsNewRow = { 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' };
+  //       const similarProjectsNewIndex = params.node.rowIndex + 1;
+  //       this.gridApiSimilarProjects.applyTransaction({
+  //         add: [similarProjectsNewRow],
+  //         addIndex: similarProjectsNewIndex
+  //       });
+  //       this.similarProjectsDetails.splice(similarProjectsNewIndex, 0, similarProjectsNewRow);
+  //       this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
+  //       this.gridApiSimilarProjects.startEditingCell({
+  //         rowIndex: params.node.rowIndex + 1,
+  //         colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
+  //       });
+  //     }
+  //     if (action === "delete") {
+  //       //console.log('delete');
+  //       params.api.applyTransaction({
+  //         remove: [params.node.data]
+  //       });
+  //       this.similarProjectsDetails.splice(params.rowIndex, 1);
+  //     }
+  //   }
+  // }
+  // onBtStartEditingSimilarProjects() {
+  //   this.gridApiSimilarProjects.setFocusedCell(1, 'SI No');
+  //   this.gridApiSimilarProjects.startEditingCell({
+  //     rowIndex: 1,
+  //     colKey: 'SI No',
+  //   });
+  // }
+  // onCellValueChangedSimilarProjects(event: CellValueChangedEvent) {
+  //   const dataItem = [event.node.data];
+  //   this.gridApiSimilarProjects.applyTransaction({
+  //     update: dataItem,
+  //   });
+  // }
+  // onRowValueChangedSimilarProjects(event: any) {
+  //   var data = event.data;
+  //   if (event.rowIndex == 0) {
+  //     this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
+  //   } else {
+  //     const addDataItem = [event.node.data];
+  //     this.gridApiSimilarProjects.applyTransaction({ update: addDataItem });
+  //     // this.gridApiSimilarProjects.forEachNode( (node) => {
+  //     //   this.similarProjectsDetails.push(node.data);
+  //     // });
+  //   }
+  //   this.gridApiSimilarProjects.refreshCells();
+  // }
+  // onCellEditingStoppedSimilarProjects(event: CellEditingStoppedEvent) {
+  //   this.gridApiSimilarProjects.stopEditing();
+  // }
+  // onRowEditingStartedSimilarProjects(params: any) {
+  //   params.api.refreshCells({
+  //     columns: ["action"],
+  //     rowNodes: [params.node],
+  //     force: true
+  //   });
+  // }
+  // onRowEditingStoppedSimilarProjects(params: any) {
+  //   params.api.refreshCells({
+  //     columns: ["action"],
+  //     rowNodes: [params.node],
+  //     force: true
+  //   });
+  //   this.gridApiSimilarProjects.stopEditing();
+  // }
 
   //Section C of PQ-Form: Client References of 3 Major Projects
   public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
   ]
-  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details', editable: false },
+  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details',editable: false, },
   this.projectInfoColumnDef[0]];
 
 
@@ -496,9 +496,9 @@ export class TenderApplicationFormComponent implements OnInit {
   }
   public clientRefDefaultColDef: ColDef = {
     flex: 1,
-    editable: true,
     minWidth: 200,
     resizable: true,
+    editable: true,
   };
   public clientRefRowData = [
     { details: 'Name & Location of Project:', 'Project 1': '' },
@@ -513,18 +513,6 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
-
-  // onCellValueChanged(event: CellValueChangedEvent) {
-  //   event.data.modified = true;
-  //  // console.log(event.data);
-  //   const gridData = this.getAllData();
-  //   console.log(gridData);
-  // }
-
-  // getAllData() {
-  //   //this.gridApiClientRef.forEachNode(node => (node.data)?this.clientRefRowData.push(node.data):'');
-  //   return this.clientRefRowData;
-  // }
 
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
@@ -1076,7 +1064,7 @@ export class TenderApplicationFormComponent implements OnInit {
   onSave() {
     this.applicantPqForm.controls['actionTaken'].setValue('DRAFT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
-    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+   // this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
     this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
     this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
@@ -1094,8 +1082,8 @@ export class TenderApplicationFormComponent implements OnInit {
       //console.log('update form');
       this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
-          // console.log('update', response);
-          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.PQFormId, 'edit-tender-application-form', this.applicantPqFormId]);
+          //console.log(this.pqFormTenderId,this.applicantPqFormId);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -1106,8 +1094,8 @@ export class TenderApplicationFormComponent implements OnInit {
       this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
           this.applicantPqFormId = response.applicationId;
-          // console.log(response);
-          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.PQFormId, 'edit-tender-application-form', this.applicantPqFormId]);
+          // console.log(this.pqFormTenderId,this.applicantPqFormId);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Created');
         }),
         error: (error => {
@@ -1123,7 +1111,7 @@ export class TenderApplicationFormComponent implements OnInit {
   onSubmit() {
     this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
-    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+    //this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
     this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
     this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
@@ -1166,9 +1154,6 @@ export class TenderApplicationFormComponent implements OnInit {
       this.applicantPqForm.disable();
       this.gridOptionsTurnover.getColumns().forEach((colTurnover: any) => {
         colTurnover.colDef.editable = false;
-      })
-      this.gridOptionsSimilarProjects.getColumns().forEach((colSimilarProjects: any) => {
-        colSimilarProjects.colDef.editable = false;
       })
       this.columnApiClientRef.getColumns()?.forEach((colClientRef: any) => {
         colClientRef.colDef.editable = false;
