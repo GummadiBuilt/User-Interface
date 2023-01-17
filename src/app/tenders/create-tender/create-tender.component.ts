@@ -138,14 +138,14 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.toastr.error('No data to display');
     }
     if(this.userRole?.includes('contractor')){
-      if (this.applicationFormId != null && this.applicationFormStatus!='DRAFT') {
-        this.applicantLabel = this.constantVariable.viewBtn;
-      } else if(this.applicationFormId != null && this.applicationFormStatus!='SUBMIT') {
+      if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
         this.applicantLabel = this.constantVariable.editBtn;
+      } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
+        this.applicantLabel = this.constantVariable.viewBtn;
       } else{
         this.applicantLabel = this.constantVariable.applyBtn;
       }
-      if(this.applicationFormId == 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
+      if(this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
         this.optionApplnState = true;
         this.applicantLabel = this.constantVariable.applyBtn;
        }

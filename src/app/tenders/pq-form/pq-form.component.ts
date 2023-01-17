@@ -28,7 +28,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public warningMessage!: string;
   public constVariable = PageConstants;
   public applyBtnLabel: string = this.constVariable.applyBtn;
-  public applicationFormId: any;
+  public applicationFormId!: number;
   public tenderDate: any;
   public applicationFormStatus: any;
   public btnTenderApplnstate!: boolean;
@@ -86,14 +86,14 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
     this.applicationFormId = data.applicationFormId;
     this.applicationFormStatus = data.applicationFormStatus;
 
-    if (this.applicationFormId != null && this.applicationFormStatus!='DRAFT') {
-      this.applyBtnLabel = this.constVariable.viewBtn;
-    } else if(this.applicationFormId != null && this.applicationFormStatus!='SUBMIT') {
+    if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
       this.applyBtnLabel = this.constVariable.editBtn;
+    } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
+      this.applyBtnLabel = this.constVariable.viewBtn;
     } else{
       this.applyBtnLabel = this.constVariable.applyBtn;
     }
-    if(this.applicationFormId == 0 && this.applicationFormStatus == null && data.workflowStep == "UNDER_PROCESS"){
+    if(this.applicationFormId === 0 && this.applicationFormStatus == null && data.workflowStep == "UNDER_PROCESS"){
       this.btnTenderApplnstate = true;
       this.disableMsg = this.constVariable.disabledMsgForTenderApplicant;
       this.applyBtnLabel = this.constVariable.applyBtn;
