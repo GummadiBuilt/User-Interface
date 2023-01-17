@@ -20,6 +20,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { DatePipe } from '@angular/common';
 import { CdkPortal } from '@angular/cdk/portal';
+import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -267,9 +268,10 @@ export class TenderApplicationFormComponent implements OnInit {
   public blob = new Blob();
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
-    { headerName: 'Year', field: 'year', flex: 1, },
+    { headerName: 'Year', field: 'year', cellEditor: NumericCellRendererComponent, maxWidth: 100,},
     {
-      headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell', flex: 1,
+      headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell',
+      cellEditor: NumericCellRendererComponent, maxWidth: 150,
       valueFormatter: params => currencyFormatter(params.data.revenue, ''),
     },
     { headerName: 'row', field: 'row', hide: true },
@@ -317,141 +319,7 @@ export class TenderApplicationFormComponent implements OnInit {
     }
     this.gridApiTurnover.refreshCells();
   }
-  //download Financial Reference Document
-  // downloadRefDocument(data: any) {
-  // }
-
-  // //Section B of PQ-Form: Similar Projects
-  // public similarProjectsColumnDefs: ColDef[] = [
-  //   { headerName: 'SI No', field: 'sno', editable: true, flex: 1 },
-  //   { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
-  //   { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
-  //   {
-  //     headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4, cellClass: 'ag-right-aligned-cell',
-  //     valueFormatter: params => currencyFormatter(params.data.contract_value, ''),
-  //   },
-  //   { headerName: 'Year of Execution', field: 'year_of_execution', editable: true, flex: 1 },
-  //   { headerName: 'Scope of Contract', field: 'scope_of_contract', editable: true, flex: 4 },
-  //   { headerName: 'Builtup Area (in Sqft)', field: 'builtup_area', editable: true, flex: 3 },
-  //   {
-  //     headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
-  //     cellRenderer: (params: any) => {
-  //       let divElement = document.createElement("div");
-  //       const editingCells = params.api.getEditingCells();
-  //       const isCurrentRowEditing = editingCells.some((cell: any) => {
-  //         return cell.rowIndex === params.node.rowIndex;
-  //       });
-  //       if (this.btnsDisable) {
-  //         divElement.innerHTML = `
-  //         <button class="action-disable-button add" type="button" disabled>
-  //           <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
-  //         </button>
-  //         <button class="action-disable-button delete" type="button" disabled>
-  //           <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
-  //         </button>
-  //         `;
-  //       } else {
-  //         divElement.innerHTML = `
-  //         <button class="action-button add" data-action="add">
-  //           <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
-  //         </button>
-  //         <button class="action-button delete" data-action="delete">
-  //           <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
-  //         </button>
-  //         `;
-  //       }
-  //       return divElement;
-  //     },
-  //   }
-  // ];
-  // public similarProjectsDefaultColDef: ColDef = {
-  //   flex: 1,
-  //   editable: true,
-  //   minWidth: 150,
-  //   resizable: true,
-  // };
-  // public similarProjectsDetails: any[] = [
-  //   { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
-  // ];
-  // private gridApiSimilarProjects!: GridApi;
-  // public gridOptionsSimilarProjects!: any;
-  // onGridReadySimilarProjects(params: GridReadyEvent) {
-  //   this.gridApiSimilarProjects = params.api;
-  //   this.gridOptionsSimilarProjects = params.columnApi;
-  // }
-  // onCellClickedSimilarProjects(params: any) {
-  //   // Handle click event for action cells
-  //   if (params.column.colId === "action" && params.event.target.dataset.action) {
-  //     let action = params.event.target.dataset.action;
-  //     if (action === "add") {
-  //       // console.log('add', params.node.rowIndex);
-  //       const similarProjectsNewRow = { 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' };
-  //       const similarProjectsNewIndex = params.node.rowIndex + 1;
-  //       this.gridApiSimilarProjects.applyTransaction({
-  //         add: [similarProjectsNewRow],
-  //         addIndex: similarProjectsNewIndex
-  //       });
-  //       this.similarProjectsDetails.splice(similarProjectsNewIndex, 0, similarProjectsNewRow);
-  //       this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
-  //       this.gridApiSimilarProjects.startEditingCell({
-  //         rowIndex: params.node.rowIndex + 1,
-  //         colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
-  //       });
-  //     }
-  //     if (action === "delete") {
-  //       //console.log('delete');
-  //       params.api.applyTransaction({
-  //         remove: [params.node.data]
-  //       });
-  //       this.similarProjectsDetails.splice(params.rowIndex, 1);
-  //     }
-  //   }
-  // }
-  // onBtStartEditingSimilarProjects() {
-  //   this.gridApiSimilarProjects.setFocusedCell(1, 'SI No');
-  //   this.gridApiSimilarProjects.startEditingCell({
-  //     rowIndex: 1,
-  //     colKey: 'SI No',
-  //   });
-  // }
-  // onCellValueChangedSimilarProjects(event: CellValueChangedEvent) {
-  //   const dataItem = [event.node.data];
-  //   this.gridApiSimilarProjects.applyTransaction({
-  //     update: dataItem,
-  //   });
-  // }
-  // onRowValueChangedSimilarProjects(event: any) {
-  //   var data = event.data;
-  //   if (event.rowIndex == 0) {
-  //     this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
-  //   } else {
-  //     const addDataItem = [event.node.data];
-  //     this.gridApiSimilarProjects.applyTransaction({ update: addDataItem });
-  //     // this.gridApiSimilarProjects.forEachNode( (node) => {
-  //     //   this.similarProjectsDetails.push(node.data);
-  //     // });
-  //   }
-  //   this.gridApiSimilarProjects.refreshCells();
-  // }
-  // onCellEditingStoppedSimilarProjects(event: CellEditingStoppedEvent) {
-  //   this.gridApiSimilarProjects.stopEditing();
-  // }
-  // onRowEditingStartedSimilarProjects(params: any) {
-  //   params.api.refreshCells({
-  //     columns: ["action"],
-  //     rowNodes: [params.node],
-  //     force: true
-  //   });
-  // }
-  // onRowEditingStoppedSimilarProjects(params: any) {
-  //   params.api.refreshCells({
-  //     columns: ["action"],
-  //     rowNodes: [params.node],
-  //     force: true
-  //   });
-  //   this.gridApiSimilarProjects.stopEditing();
-  // }
-
+ 
   //Section C of PQ-Form: Client References of 3 Major Projects
   public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
   public projectInfoColumnDef: ColDef[] = [
@@ -568,8 +436,8 @@ export class TenderApplicationFormComponent implements OnInit {
     { headerName: 'Name', field: 'name', editable: true, flex: 2 },
     { headerName: 'Designation', field: 'designation', editable: true, flex: 2 },
     { headerName: 'Qualification', field: 'qualification', editable: true, flex: 2 },
-    { headerName: 'Total Years of Experience', field: 'totalExp', editable: true, flex: 2 },
-    { headerName: 'Years of Experience in the Present Position', field: 'totalExpPresent', editable: true, flex: 2 },
+    { headerName: 'Total Years of Experience', field: 'totalExp', cellEditor: NumericCellRendererComponent, editable: true, flex: 2 },
+    { headerName: 'Years of Experience in the Present Position', field: 'totalExpPresent', cellEditor: NumericCellRendererComponent, editable: true, flex: 2 },
     {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
@@ -661,7 +529,7 @@ export class TenderApplicationFormComponent implements OnInit {
   //Section C of PQ-Form: Capital Equipments
   public capitalEquipmentsColumnDefs: ColDef[] = [
     { headerName: 'Description of Equipment', field: 'description', editable: true, flex: 2 },
-    { headerName: 'Quantity', field: 'quantity', editable: true, flex: 2 },
+    { headerName: 'Quantity', field: 'quantity', editable: true, cellEditor: NumericCellRendererComponent, flex: 2 },
     { headerName: 'Own / Rented', field: 'own_rented', editable: true, flex: 2 },
     { headerName: 'Capacity / Size', field: 'capacity_size', editable: true, flex: 2 },
     { headerName: 'Age / Condition', field: 'age_condition', editable: true, flex: 2 },
@@ -771,25 +639,25 @@ export class TenderApplicationFormComponent implements OnInit {
 
   //Section D of PQ-Form: Financial Information
   public financialColumnDefs: ColDef[] = [
-    { headerName: 'Financial Year', field: 'f_year', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Year', field: 'f_year', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 100 },
     {
-      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.gross_turnover, ''),
     },
     {
-      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.net_profit, ''),
     },
     {
-      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.profit_after_tax, ''),
     },
     {
-      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.current_assets, ''),
     },
     {
-      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, flex: 2, minWidth: 250, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.current_liabilities, ''),
     },
     {
