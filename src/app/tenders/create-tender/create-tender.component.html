@@ -51,34 +51,34 @@
                 <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Project Name *</mat-label>
+                        <mat-label>{{constantVariable.projectName}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Project Name" formControlName="projectName">
                             <mat-error *ngIf="tenderDetails.get('projectName')?.errors?.['required']">
-                                Enter Project Name
+                                {{constantVariable.enterKeyWord}}{{constantVariable.projectName}}
                             </mat-error>
                             <mat-error *ngIf="tenderDetails.get('projectName')?.errors?.['maxlength']">
-                                Enter only 50 characters
+                                {{constantVariable.maxLengthFifty}}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Name of Work Package *</mat-label>
+                        <mat-label>{{constantVariable.nameOfWorkPackage}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <textarea matInput placeholder="Description of Work"
                                 formControlName="workDescription"></textarea>
                             <mat-error *ngIf="tenderDetails.get('workDescription')?.errors?.['required']">
-                                Name of Work Package
+                                {{constantVariable.enterKeyWord}}{{constantVariable.nameOfWorkPackage}}
                             </mat-error>
                             <mat-error *ngIf="tenderDetails.get('workDescription')?.errors?.['maxlength']">
-                                Enter only 50 characters
+                                {{constantVariable.maxLengthFifty}}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Type of Work *</mat-label>
+                        <mat-label>{{constantVariable.typeOfWork}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <mat-select placeholder="Select Type of Work" formControlName="typeOfWork">
                                 <mat-select-filter [placeholder]="'Search'" [displayMember]="'establishmentDescription'"

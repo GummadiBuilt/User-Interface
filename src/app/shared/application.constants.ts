@@ -1,4 +1,9 @@
 export const PageConstants = {
+    enterKeyWord : `Enter `,
+    maxLengthFifty: `Maximum of 50 characters`,
+    projectName: `Project name`,
+    nameOfWorkPackage: `Name of work package`,
+    typeOfWork: `Type of Work`,
     preQualification:`The pre-qualification document shall be submitted in a sealed cover clearly indicating
         the Name of the project on top of the cover. Though soft copy form shall be accepted to
         expedite the process, the hard copy duly signed by contractor shall form the basis of
