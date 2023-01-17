@@ -203,10 +203,13 @@
                                         (click)="removeSelectedFile(file)">
                                         <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
                                     </button>
-                                    <button *ngIf="fileName" type="button" mat-icon-button class="icon-approve"
-                                        matTooltip="Download Document" matTooltipPosition="right"
+                                    <button *ngIf="fileName" type="button" mat-button class="icon-approve"
+                                        matTooltip="Download file" matTooltipPosition="right"
                                         (click)="downloadSelectedFile(tenderId)">
-                                        <i class="icon-download fa-solid fa-file-arrow-down"></i>
+                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                            <i class="fa-solid fa-file-arrow-down"></i>
+                                            <div>Download</div>
+                                        </div>                                        
                                     </button>
                                 </div>
                             </div>
@@ -233,10 +236,13 @@
                                 </label>
                             </div>
                             <div fxLayout="row" fxLayoutGap="25%">
-                                <button type="button" mat-icon-button class="icon-approve"
-                                    matTooltip="Download Document" matTooltipPosition="right"
+                                <button type="button" mat-button class="icon-approve"
+                                    matTooltip="Download file" matTooltipPosition="right"
                                     (click)="exportExcelFile()">
-                                    <i class="icon-download fa-solid fa-file-arrow-down"></i>
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="fa-solid fa-file-arrow-down"></i>
+                                        <div>Download</div>
+                                    </div> 
                                 </button>
                             </div>
                         </div>
