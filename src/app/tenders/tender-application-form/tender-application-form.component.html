@@ -12,8 +12,7 @@
     </ng-template>
     <div class="pq-form-body">
         <div class="contractor-stepper">
-            <mat-stepper #stepper [orientation]="(stepperOrientation | async)!"
-                >
+            <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
                 <ng-template matStepperIcon="edit">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </ng-template>
@@ -66,7 +65,7 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                                
+
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
                                     <mat-label>Year of Establishment *</mat-label>
@@ -236,7 +235,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
+                                <!-- <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                     fxLayoutGap="8px">
                                     <button mat-stroked-button type="button"
                                         (click)="accordionTurnover.openAll()">{{constantVariable.expandAllBtn}}
@@ -244,7 +243,7 @@
                                     <button mat-stroked-button type="button"
                                         (click)="accordionTurnover.closeAll()">{{constantVariable.collapseAllBtn}}
                                     </button>
-                                </div>
+                                </div> -->
                                 <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
@@ -267,7 +266,7 @@
                                             </ag-grid-angular>
                                         </div>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel>
+                                    <!-- <mat-expansion-panel>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
@@ -291,7 +290,7 @@
                                                 [stopEditingWhenCellsLoseFocus]=true>
                                             </ag-grid-angular>
                                         </div>
-                                    </mat-expansion-panel>
+                                    </mat-expansion-panel> -->
                                 </mat-accordion>
                             </div>
                         </div>
@@ -302,7 +301,8 @@
                                     <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}}
+                                (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -327,8 +327,10 @@
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                 fxLayoutGap="8px">
-                                <button mat-stroked-button (click)="accordion.openAll()">{{constantVariable.expandAllBtn}} </button>
-                                <button mat-stroked-button (click)="accordion.closeAll()">{{constantVariable.collapseAllBtn}} </button>
+                                <button mat-stroked-button
+                                    (click)="accordion.openAll()">{{constantVariable.expandAllBtn}} </button>
+                                <button mat-stroked-button
+                                    (click)="accordion.closeAll()">{{constantVariable.collapseAllBtn}} </button>
                             </div>
                             <mat-accordion class="example-headers-align" #accordion="matAccordion" multi>
                                 <mat-expansion-panel>
@@ -358,9 +360,8 @@
                                         </div>
 
                                         <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                            [columnDefs]="clientRefColumnDefs"
-                                            [defaultColDef]="clientRefDefaultColDef" 
-                                            [rowData]="clientRefRowData" [domLayout]="domLayout" 
+                                            [columnDefs]="clientRefColumnDefs" [defaultColDef]="clientRefDefaultColDef"
+                                            [rowData]="clientRefRowData" [domLayout]="domLayout"
                                             (gridReady)="onGridReadyClientRef($event)"
                                             [stopEditingWhenCellsLoseFocus]=true>
                                         </ag-grid-angular>
@@ -590,7 +591,8 @@
                                     <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}}
+                                (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -627,8 +629,10 @@
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
                                 fxLayoutGap="8px">
-                                <button mat-stroked-button (click)="accordionFin.openAll()">{{constantVariable.expandAllBtn}}</button>
-                                <button mat-stroked-button (click)="accordionFin.closeAll()">{{constantVariable.collapseAllBtn}}</button>
+                                <button mat-stroked-button
+                                    (click)="accordionFin.openAll()">{{constantVariable.expandAllBtn}}</button>
+                                <button mat-stroked-button
+                                    (click)="accordionFin.closeAll()">{{constantVariable.collapseAllBtn}}</button>
                             </div>
                             <mat-accordion class="example-headers-align" #accordionFin="matAccordion" multi>
                                 <mat-expansion-panel>
@@ -713,7 +717,8 @@
                                     <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}}
+                                (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
@@ -749,7 +754,8 @@
                                     <div><span>{{constantVariable.previousBtn}}</span></div>
                                 </div>
                             </button>
-                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}} (click)="onSave()">
+                            <button mat-button style="background-color: grey;" disabled={{btnsDisable}}
+                                (click)="onSave()">
                                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>

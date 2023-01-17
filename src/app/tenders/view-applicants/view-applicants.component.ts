@@ -63,7 +63,6 @@ export class ViewApplicantsComponent implements OnInit {
        },
       filter: false,
       colId: "action",
-      minWidth: 350,
     },
     { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
     {

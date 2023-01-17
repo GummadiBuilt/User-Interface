@@ -61,7 +61,7 @@ export class TenderApplicationFormComponent implements OnInit {
   years: any[] = [];
   public constantVariable = PageConstants;
   btnsDisable: boolean = false;
-  
+
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
@@ -91,7 +91,7 @@ export class TenderApplicationFormComponent implements OnInit {
     } catch (e) {
       console.log('Failed to load user details', e);
     }
-    
+
     //Vendor General Company info & etc (Contractor)
     this.applicantPqForm = this._formBuilder.group({
       companyName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -141,16 +141,16 @@ export class TenderApplicationFormComponent implements OnInit {
       this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
     }
     datepicker.close();
-  }  
+  }
   myDateFilter = (m: Moment | null): boolean => {
     const year = (m || moment()).year();
     return year <= this.currentYear;
-  } 
+  }
   getApplicantPQForms(data: any) {
     //console.log(data);
     this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
     const dateString = data.yearOfEstablishment;
-    const momentVariable = moment(dateString, 'YYYY');  
+    const momentVariable = moment(dateString, 'YYYY');
     this.applicantPqForm.get('yearOfEstablishment')?.patchValue(momentVariable);
     this.applicantPqForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
     this.applicantPqForm.get('corpOfficeAddress')?.patchValue(data.corpOfficeAddress);
@@ -267,14 +267,14 @@ export class TenderApplicationFormComponent implements OnInit {
   public blob = new Blob();
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
-    { headerName: 'Year', field: 'year' },
+    { headerName: 'Year', field: 'year', flex: 1, },
     {
-      headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell',
+      headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell', flex: 1,
       valueFormatter: params => currencyFormatter(params.data.revenue, ''),
     },
     { headerName: 'row', field: 'row', hide: true },
     {
-      headerName: 'Remarks (Financial Statement for Reference)', field: 'fileName', editable: false,
+      headerName: 'Remarks (Financial Statement for Reference)', field: 'fileName', editable: false, flex: 4,
       cellRenderer: UploadButtonRendererComponent,
       cellRendererParams: {
         context: this,
@@ -284,7 +284,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public turnoverDefaultColDef: ColDef = {
     flex: 4,
     //editable: true,
-    minWidth: 200,
+    minWidth: 150,
     resizable: true,
     editable: true
   };

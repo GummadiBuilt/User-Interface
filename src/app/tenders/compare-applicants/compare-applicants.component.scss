@@ -76,7 +76,7 @@
 .label {
     background: #eee;
     font-weight: 500 !important;
-    width: 30%;
+    width: 320px;
 }
 
 .header-label {
@@ -108,4 +108,19 @@ th {
     position: sticky;
     z-index: 1;
     top: 0;
+}
+
+.alternate-color:nth-child(odd) {
+    background: rgb(220, 220, 220);
+}
+
+.word-wrap {
+    word-wrap: break-word;
+    text-align: center;
+    max-width: 200px;
+}
+
+.wrap {
+    word-wrap: break-word;
+    text-align: center;
 }
