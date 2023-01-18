@@ -1,13 +1,19 @@
 <div class="pq-form">
-    <div class="breadcrumbs">
-        <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
-            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <i *ngIf="info" class="icon-breadcrumb {{info}}"></i>
-                <ng-container>{{ breadcrumb | uppercase }}</ng-container>
-            </ng-container>
-        </xng-breadcrumb>
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
         <div fxLayoutAlign="center center">
-            <div class="warn" *ngIf="warningMessage && userRole?.includes('contractor')" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <i *ngIf="info" class="icon-breadcrumb {{info}}"></i>
+                    <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
+        <div fxLayoutAlign="center center">
+            <div class="warn" *ngIf="warningMessage && userRole?.includes('contractor')" fxLayout="row"
+                fxLayoutAlign="center center" fxLayoutGap="8px">
                 <div>
                     <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
                 </div>
@@ -16,10 +22,8 @@
                 </div>
             </div>
         </div>
+        <div></div>
     </div>
-    <ng-template #separatorTemplate>
-        <i class="fa-solid fa-caret-right"></i>
-    </ng-template>
     <div class="pq-form-body">
         <div class="contractor-stepper">
             <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">

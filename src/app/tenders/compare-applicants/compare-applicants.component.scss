@@ -49,6 +49,10 @@
 .container {
     padding: 12px;
     background: white;
+}
+
+.inner-container {
+    background: white;
     max-height: calc(100vh - 184px);
     overflow: auto;
 }
@@ -81,6 +85,10 @@
 
 .header-label {
     background: #eee;
+}
+
+.header-label-empty {
+    background: white;
 }
 
 td,
