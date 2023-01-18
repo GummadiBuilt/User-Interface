@@ -10,6 +10,7 @@ export class pqFormResponse  {
     public tentativeDateOfAward: string;
     public scheduledCompletion: string;
     public workflowStep:string;
+    public tenderSubmissionDate:string
 
      constructor(d: any) {
         this.id = d.id;
@@ -23,5 +24,6 @@ export class pqFormResponse  {
         this.tentativeDateOfAward = d.tentativeDateOfAward;
         this.scheduledCompletion = d.scheduledCompletion;
         this.workflowStep = d.workflowStep;
+        this.tenderSubmissionDate = d.tenderSubmissionDate;
        }
  }

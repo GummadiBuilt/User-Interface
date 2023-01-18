@@ -7,6 +7,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
+import { PageConstants } from 'src/app/shared/application.constants';
 import { StatusValues } from 'src/app/shared/status-values';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ButtonRendererComponent } from '../../renderers/button-renderer/button-renderer.component';
@@ -27,6 +28,7 @@ export class TendersComponent implements OnInit {
   fileName = '';
   public domLayout: any;
   StatusValues = StatusValues as unknown as keyof typeof StatusValues;
+  public constVariable = PageConstants;
   public buttonLabel: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -54,9 +56,9 @@ export class TendersComponent implements OnInit {
       //console.log('All tenders', this.rowData);
       this.rowData.map((val: any) => {
         if (val.pq_id != null) {
-          this.buttonLabel.push('Edit PQ-Form');
+          this.buttonLabel.push(this.constVariable.editPQFormBtn);
         } else {
-          this.buttonLabel.push('Create PQ-Form');
+          this.buttonLabel.push(this.constVariable.createPQFormBtn);
         }
       })
 
@@ -105,11 +107,7 @@ export class TendersComponent implements OnInit {
         return id;
       }
     },
-    { headerName: 'Client Name', field: 'company_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Project Name', field: 'project_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Work Description', field: 'work_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
-    { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
-    { headerName: 'Type of Work', field: 'establishment_description', flex: 2, minWidth: 300, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
     {
       headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter',
       cellRenderer: function (data: any) {
@@ -117,8 +115,12 @@ export class TendersComponent implements OnInit {
           ? StatusValues[data.value as keyof typeof StatusValues] : 'not found';
       }
     },
+    { headerName: 'Client Name', field: 'company_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Project Name', field: 'project_name', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Work Description', field: 'work_description', flex: 1, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
+    { headerName: 'Type of Contract', field: 'type_of_contract', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Type of Work', field: 'establishment_description', flex: 2, minWidth: 300, filter: 'agTextColumnFilter', autoHeight: true, wrapText: true },
     { headerName: 'Location', field: 'project_location', flex: 1, filter: 'agTextColumnFilter' },
-    { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
     { headerName: 'Contract Duration', field: 'contract_duration', flex: 1, filter: 'agTextColumnFilter', valueGetter: `data.contract_duration  +' '+  data.duration_counter` },
     {
       headerName: 'Action', field: 'tender_document_name', flex: 1, cellRenderer: ButtonRendererComponent,

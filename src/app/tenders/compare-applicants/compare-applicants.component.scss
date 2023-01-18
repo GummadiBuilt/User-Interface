@@ -1,0 +1,126 @@
+.compare-applicants {
+    padding: 24px;
+    color: #841618;
+}
+
+.breadcrumbs {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+::ng-deep .xng-breadcrumb-root {
+    padding: 8px 16px !important;
+    display: inline-block !important;
+    background-color: #ffffff !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+    color: #841618 !important;
+    font-weight: 500 !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 6px !important;
+    font-size: 16px !important;
+}
+
+::ng-deep .icon-breadcrumb {
+    margin-right: 6px !important;
+    font-size: 16px !important;
+}
+
+//ag-grid cell text wrap in words
+::ng-deep .ag-cell-wrap-text {
+    word-break: break-word !important;
+}
+
+::ng-deep .ag-theme-alpine {
+    --ag-odd-row-background-color: #f0f0f0 !important;
+}
+
+::ng-deep.ag-theme-alpine .ag-row-odd {
+    background-color: var(--ag-odd-row-background-color) !important;
+}
+
+.breadcrumbs .mat-raised-button {
+    color: #841618;
+}
+
+.container {
+    padding: 12px;
+    background: white;
+    max-height: calc(100vh - 184px);
+    overflow: auto;
+}
+
+.initials {
+    color: #FFFFFF;
+    line-height: 19px;
+    letter-spacing: 0.2625px;
+}
+
+::ng-deep .compare-applicants .mat-card-avatar {
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 40px !important;
+}
+
+.bg-grey {
+    background-color: rgb(150, 150, 150);
+}
+
+.bold-500 {
+    font-weight: 500;
+}
+
+.label {
+    background: #eee;
+    font-weight: 500 !important;
+    width: 320px;
+}
+
+.header-label {
+    background: #eee;
+}
+
+td,
+th {
+    padding: 10px;
+    min-width: 200px;
+    width: 30%;
+}
+
+.heading {
+    background: #ccc;
+    width: 100%;
+    text-align: left;
+    position: relative;
+    font-weight: 500;
+}
+
+.heading span {
+    position: sticky;
+    top: 0;
+    left: 10px;
+}
+
+th {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+}
+
+.alternate-color:nth-child(odd) {
+    background: rgb(220, 220, 220);
+}
+
+.word-wrap {
+    word-wrap: break-word;
+    text-align: center;
+    max-width: 200px;
+}
+
+.wrap {
+    word-wrap: break-word;
+    text-align: center;
+}

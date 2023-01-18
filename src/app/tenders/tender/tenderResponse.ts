@@ -17,7 +17,8 @@ export class tenderResopnse  {
     public changeTracking:object;
     public pqFormId:number;
     public projectName: string;
-    public applicationFormId:string;
+    public applicationFormId:number;
+    public applicationFormStatus:string;
 
      constructor(d: any) {
         this.contractDuration = d.contractDuration;
@@ -37,5 +38,6 @@ export class tenderResopnse  {
         this.pqFormId = d.pqFormId;
         this.projectName = d.projectName;
         this.applicationFormId = d.applicationFormId;
+        this.applicationFormStatus = d.applicationFormStatus;
        }
  }

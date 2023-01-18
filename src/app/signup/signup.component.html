@@ -153,7 +153,7 @@
                     <div class="action-btn" fxLayoutAlign="end">
                         <button mat-button matStepperNext>
                             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-                                <div>Next</div>
+                                <div>{{constantVariable.nextBtn}}</div>
                                 <div><i class="fa-solid fa-angle-right"></i></div>
                             </div>
                         </button>
@@ -250,12 +250,12 @@
                         <button mat-button matStepperPrevious>
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                                 <div><i class="fa-solid fa-angle-left"></i></div>
-                                <div>Previous</div>
+                                <div>{{constantVariable.previousBtn}}</div>
                             </div>
                         </button>
                         <button mat-raised-button color="primary"
                             [disabled]="!companyDetails.valid && !personalDetails.valid"
-                            (click)="onSubmit()">Submit</button>
+                            (click)="onSubmit()">{{constantVariable.submitBtn}}</button>
                     </div>
                 </form>
             </mat-step>

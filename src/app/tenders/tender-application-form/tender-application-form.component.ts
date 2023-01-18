@@ -20,6 +20,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { DatePipe } from '@angular/common';
 import { CdkPortal } from '@angular/cdk/portal';
+import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -57,10 +58,12 @@ export class TenderApplicationFormComponent implements OnInit {
   applicantPqForm!: FormGroup;
   public userRole: string[] | undefined;
   public domLayout: any;
-  currentYear: number = new Date().getFullYear();
+  currentYear = moment().year();
   years: any[] = [];
   public constantVariable = PageConstants;
   btnsDisable: boolean = false;
+  public warningMessage!: string;
+
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
@@ -69,12 +72,6 @@ export class TenderApplicationFormComponent implements OnInit {
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
-
-    //year range from past 20 years
-    for (let i = (this.currentYear - 20); i < (this.currentYear + 1); i++) {
-      this.years.push(i);
-    }
-
     this.route.paramMap.subscribe(params => {
       const tenderId = params.get('tenderId');
       const pqFormId = params.get('pqId');
@@ -96,6 +93,7 @@ export class TenderApplicationFormComponent implements OnInit {
     } catch (e) {
       console.log('Failed to load user details', e);
     }
+
     //Vendor General Company info & etc (Contractor)
     this.applicantPqForm = this._formBuilder.group({
       companyName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -104,7 +102,7 @@ export class TenderApplicationFormComponent implements OnInit {
       corpOfficeAddress: ['', Validators.maxLength(250)],
       localOfficeAddress: ['', Validators.maxLength(250)],
       telephoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-      faxNumber: [''],
+      faxNumber: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
       contactName: ['', Validators.maxLength(50)],
       contactDesignation: ['', Validators.maxLength(50)],
       contactPhoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
@@ -139,19 +137,23 @@ export class TenderApplicationFormComponent implements OnInit {
     });
   }
   chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-
     const ctrlValue = this.applicantPqForm.controls['yearOfEstablishment'].value;
-    ctrlValue?.year(normalizedYear.year());
-    // console.log(ctrlValue);
-    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(ctrlValue);
+    if (ctrlValue) {
+      const dateTran = moment(normalizedYear).format('YYYY');
+      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
+    }
     datepicker.close();
-    //  console.log(this.applicantPqForm.controls['yearOfEstablishment'].value);
   }
-
+  myDateFilter = (m: Moment | null): boolean => {
+    const year = (m || moment()).year();
+    return year <= this.currentYear;
+  }
   getApplicantPQForms(data: any) {
     //console.log(data);
     this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
-    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(data.yearOfEstablishment);
+    const dateString = data.yearOfEstablishment;
+    const momentVariable = moment(dateString, 'YYYY');
+    this.applicantPqForm.get('yearOfEstablishment')?.patchValue(momentVariable);
     this.applicantPqForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
     this.applicantPqForm.get('corpOfficeAddress')?.patchValue(data.corpOfficeAddress);
     this.applicantPqForm.get('localOfficeAddress')?.patchValue(data.localOfficeAddress);
@@ -176,11 +178,11 @@ export class TenderApplicationFormComponent implements OnInit {
     if (data.turnOverDetails != null) {
       this.turnoverDetails = data.turnOverDetails;
     }
-    if (Object.keys(data.similarProjects).length === 0) {
-      this.similarProjectsDetails = [];
-    } else {
-      this.similarProjectsDetails = JSON.parse(data.similarProjects);
-    }
+    // if (Object.keys(data.similarProjects).length === 0) {
+    //   this.similarProjectsDetails = [];
+    // } else {
+    //   this.similarProjectsDetails = JSON.parse(data.similarProjects);
+    // }
     if (Object.keys(data.clientReferences).length === 0) {
       this.clientRefRowData = [];
     } else {
@@ -241,15 +243,15 @@ export class TenderApplicationFormComponent implements OnInit {
     if (data.applicationId != 0) {
       this.applicantPqFormId = data.applicationId
     }
-    if (data.actionTaken == "SUBMIT") {
+    if (data.actionTaken == "SUBMIT" && this.userRole?.includes('contractor')) {
+      this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
+      this.tenderApplicantFormDisable();
+    }
+    if (data.actionTaken == "SUBMIT" && (this.userRole?.includes('admin') || this.userRole?.includes('client'))) {
       this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
       this.tenderApplicantFormDisable();
     }
   }
-
-  //dates range
-  minDate = new Date(1990, 0, 1);
-  maxDate = new Date(2023, 0, 1);
 
   step = 0;
   setStep(index: number) {
@@ -267,11 +269,15 @@ export class TenderApplicationFormComponent implements OnInit {
   public blob = new Blob();
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
-    { headerName: 'Year', field: 'year' },
-    { headerName: 'Rs in Crores', field: 'revenue' },
+    { headerName: 'Year', field: 'year', cellEditor: NumericCellRendererComponent, maxWidth: 100,},
+    {
+      headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell',
+      cellEditor: NumericCellRendererComponent, maxWidth: 150,
+      valueFormatter: params => currencyFormatter(params.data.revenue, ''),
+    },
     { headerName: 'row', field: 'row', hide: true },
     {
-      headerName: 'Remarks (Financial Statement for Reference)', field: 'fileName', editable: false,
+      headerName: 'Remarks (Financial Statement for Reference)', field: 'fileName', editable: false, flex: 4,
       cellRenderer: UploadButtonRendererComponent,
       cellRendererParams: {
         context: this,
@@ -281,7 +287,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public turnoverDefaultColDef: ColDef = {
     flex: 4,
     //editable: true,
-    minWidth: 200,
+    minWidth: 150,
     resizable: true,
     editable: true
   };
@@ -314,144 +320,13 @@ export class TenderApplicationFormComponent implements OnInit {
     }
     this.gridApiTurnover.refreshCells();
   }
-  //download Financial Reference Document
-  // downloadRefDocument(data: any) {
-  // }
-
-  //Section B of PQ-Form: Similar Projects
-  public similarProjectsColumnDefs: ColDef[] = [
-    { headerName: 'SI No', field: 'sno', editable: true, flex: 1 },
-    { headerName: 'Project Name', field: 'project_name', editable: true, flex: 4 },
-    { headerName: 'Client Name', field: 'client_name', editable: true, flex: 4 },
-    { headerName: 'Contract Value (Rs. in Crores)', field: 'contract_value', editable: true, flex: 4 },
-    { headerName: 'Year of Execution', field: 'year_of_execution', editable: true, flex: 1 },
-    { headerName: 'Scope of Contract', field: 'scope_of_contract', editable: true, flex: 4 },
-    { headerName: 'Builtup Area (in Sqft)', field: 'builtup_area', editable: true, flex: 3 },
-    {
-      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
-      cellRenderer: (params: any) => {
-        let divElement = document.createElement("div");
-        const editingCells = params.api.getEditingCells();
-        const isCurrentRowEditing = editingCells.some((cell: any) => {
-          return cell.rowIndex === params.node.rowIndex;
-        });
-        if (this.btnsDisable) {
-          divElement.innerHTML = `
-          <button class="action-disable-button add" type="button" disabled>
-            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-plus"></i>
-          </button>
-          <button class="action-disable-button delete" type="button" disabled>
-            <i style="font-size: 14px; padding-bottom: 4px;" class="fa-solid fa-trash-can"></i>
-          </button>
-          `;
-        } else {
-        divElement.innerHTML = `
-          <button class="action-button add" data-action="add">
-            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
-          </button>
-          <button class="action-button delete" data-action="delete">
-            <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-trash-can" data-action="delete"></i>
-          </button>
-          `;
-        }
-        return divElement;
-      },
-    }
-  ];
-  public similarProjectsDefaultColDef: ColDef = {
-    flex: 1,
-    editable: true,
-    minWidth: 150,
-    resizable: true,
-  };
-  public similarProjectsDetails: any[] = [
-    { sno: '', project_name: '', client_name: '', contract_value: '', year_of_execution: '', scope_of_contract: '', builtup_area: '' },
-  ];
-  private gridApiSimilarProjects!: GridApi;
-  public gridOptionsSimilarProjects!: any;
-  onGridReadySimilarProjects(params: GridReadyEvent) {
-    this.gridApiSimilarProjects = params.api;
-    this.gridOptionsSimilarProjects = params.columnApi;
-  }
-  onCellClickedSimilarProjects(params: any) {
-    // Handle click event for action cells
-    if (params.column.colId === "action" && params.event.target.dataset.action) {
-      let action = params.event.target.dataset.action;
-      if (action === "add") {
-        // console.log('add', params.node.rowIndex);
-        const similarProjectsNewRow = { 'sno': '', 'project_name': '', 'client_name': '', 'contract_value': '', 'year_of_execution': '', 'scope_of_contract': '', 'builtup_area': '' };
-        const similarProjectsNewIndex = params.node.rowIndex + 1;
-        this.gridApiSimilarProjects.applyTransaction({
-          add: [similarProjectsNewRow],
-          addIndex: similarProjectsNewIndex
-        });
-        this.similarProjectsDetails.splice(similarProjectsNewIndex, 0, similarProjectsNewRow);
-        this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
-        this.gridApiSimilarProjects.startEditingCell({
-          rowIndex: params.node.rowIndex + 1,
-          colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
-        });
-      }
-      if (action === "delete") {
-        //console.log('delete');
-        params.api.applyTransaction({
-          remove: [params.node.data]
-        });
-        this.similarProjectsDetails.splice(params.rowIndex, 1);
-      }
-    }
-  }
-  onBtStartEditingSimilarProjects() {
-    this.gridApiSimilarProjects.setFocusedCell(1, 'SI No');
-    this.gridApiSimilarProjects.startEditingCell({
-      rowIndex: 1,
-      colKey: 'SI No',
-    });
-  }
-  onCellValueChangedSimilarProjects(event: CellValueChangedEvent) {
-    const dataItem = [event.node.data];
-    this.gridApiSimilarProjects.applyTransaction({
-      update: dataItem,
-    });
-  }
-  onRowValueChangedSimilarProjects(event: any) {
-    var data = event.data;
-    if (event.rowIndex == 0) {
-      this.gridApiSimilarProjects.setRowData(this.similarProjectsDetails);
-    } else {
-      const addDataItem = [event.node.data];
-      this.gridApiSimilarProjects.applyTransaction({ update: addDataItem });
-      // this.gridApiSimilarProjects.forEachNode( (node) => {
-      //   this.similarProjectsDetails.push(node.data);
-      // });
-    }
-    this.gridApiSimilarProjects.refreshCells();
-  }
-  onCellEditingStoppedSimilarProjects(event: CellEditingStoppedEvent) {
-    this.gridApiSimilarProjects.stopEditing();
-  }
-  onRowEditingStartedSimilarProjects(params: any) {
-    params.api.refreshCells({
-      columns: ["action"],
-      rowNodes: [params.node],
-      force: true
-    });
-  }
-  onRowEditingStoppedSimilarProjects(params: any) {
-    params.api.refreshCells({
-      columns: ["action"],
-      rowNodes: [params.node],
-      force: true
-    });
-    this.gridApiSimilarProjects.stopEditing();
-  }
-
+ 
   //Section C of PQ-Form: Client References of 3 Major Projects
   public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
   ]
-  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details', editable: false },
+  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details',editable: false, },
   this.projectInfoColumnDef[0]];
 
 
@@ -490,9 +365,9 @@ export class TenderApplicationFormComponent implements OnInit {
   }
   public clientRefDefaultColDef: ColDef = {
     flex: 1,
-    editable: true,
     minWidth: 200,
     resizable: true,
+    editable: true,
   };
   public clientRefRowData = [
     { details: 'Name & Location of Project:', 'Project 1': '' },
@@ -507,18 +382,6 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
-
-  // onCellValueChanged(event: CellValueChangedEvent) {
-  //   event.data.modified = true;
-  //  // console.log(event.data);
-  //   const gridData = this.getAllData();
-  //   console.log(gridData);
-  // }
-
-  // getAllData() {
-  //   //this.gridApiClientRef.forEachNode(node => (node.data)?this.clientRefRowData.push(node.data):'');
-  //   return this.clientRefRowData;
-  // }
 
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
@@ -574,8 +437,8 @@ export class TenderApplicationFormComponent implements OnInit {
     { headerName: 'Name', field: 'name', editable: true, flex: 2 },
     { headerName: 'Designation', field: 'designation', editable: true, flex: 2 },
     { headerName: 'Qualification', field: 'qualification', editable: true, flex: 2 },
-    { headerName: 'Total Years of Experience', field: 'totalExp', editable: true, flex: 2 },
-    { headerName: 'Years of Experience in the Present Position', field: 'totalExpPresent', editable: true, flex: 2 },
+    { headerName: 'Total Years of Experience', field: 'totalExp', cellEditor: NumericCellRendererComponent, editable: true, flex: 2 },
+    { headerName: 'Years of Experience in the Present Position', field: 'totalExpPresent', cellEditor: NumericCellRendererComponent, editable: true, flex: 2 },
     {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
@@ -590,7 +453,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -667,7 +530,7 @@ export class TenderApplicationFormComponent implements OnInit {
   //Section C of PQ-Form: Capital Equipments
   public capitalEquipmentsColumnDefs: ColDef[] = [
     { headerName: 'Description of Equipment', field: 'description', editable: true, flex: 2 },
-    { headerName: 'Quantity', field: 'quantity', editable: true, flex: 2 },
+    { headerName: 'Quantity', field: 'quantity', editable: true, cellEditor: NumericCellRendererComponent, flex: 2 },
     { headerName: 'Own / Rented', field: 'own_rented', editable: true, flex: 2 },
     { headerName: 'Capacity / Size', field: 'capacity_size', editable: true, flex: 2 },
     { headerName: 'Age / Condition', field: 'age_condition', editable: true, flex: 2 },
@@ -685,7 +548,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -777,12 +640,27 @@ export class TenderApplicationFormComponent implements OnInit {
 
   //Section D of PQ-Form: Financial Information
   public financialColumnDefs: ColDef[] = [
-    { headerName: 'Financial Year', field: 'f_year', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, flex: 2, minWidth: 250 },
-    { headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, flex: 2, minWidth: 250 },
+    { headerName: 'Year', field: 'f_year', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 100 },
+    {
+      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.gross_turnover, ''),
+    },
+    {
+      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.net_profit, ''),
+    },
+    {
+      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.profit_after_tax, ''),
+    },
+    {
+      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.current_assets, ''),
+    },
+    {
+      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      valueFormatter: params => currencyFormatter(params.data.current_liabilities, ''),
+    },
     {
       headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
@@ -797,7 +675,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -887,7 +765,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -977,7 +855,7 @@ export class TenderApplicationFormComponent implements OnInit {
           </button>
           `;
         } else {
-        divElement.innerHTML = `
+          divElement.innerHTML = `
           <button class="action-button add" data-action="add">
             <i style="font-size: 14px; padding-bottom: 4px; padding-top: 4px;" class="fa-solid fa-plus" data-action="add"></i>
           </button>
@@ -1053,13 +931,9 @@ export class TenderApplicationFormComponent implements OnInit {
   public applicantPqFormId: any;
   public PQFormId: any;
   onSave() {
-    this.applicantPqForm.controls['actionTaken'].setValue('SAVE');
-    if (this.applicantPqForm.value.yearOfEstablishment) {
-      const dateTran = this.datePipe.transform(this.applicantPqForm.value.yearOfEstablishment, 'YYYY');
-      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
-    }
+    this.applicantPqForm.controls['actionTaken'].setValue('DRAFT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
-    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+   // this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
     this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
     this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
@@ -1067,12 +941,18 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
     this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
     this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    if (this.applicantPqForm.value.yearOfEstablishment) {
+      const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
+      this.applicantPqForm.value.yearOfEstablishment = dateTran;
+    } else {
+      this.toastr.error('Please Select Valid Year of Establishment');
+    }
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       //console.log('update form');
       this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
-          // console.log('update', response);
-          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.PQFormId, 'edit-tender-application-form', this.applicantPqFormId]);
+          //console.log(this.pqFormTenderId,this.applicantPqFormId);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -1083,8 +963,8 @@ export class TenderApplicationFormComponent implements OnInit {
       this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
           this.applicantPqFormId = response.applicationId;
-          // console.log(response);
-          this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.PQFormId, 'edit-tender-application-form', this.applicantPqFormId]);
+          // console.log(this.pqFormTenderId,this.applicantPqFormId);
+          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Created');
         }),
         error: (error => {
@@ -1099,12 +979,8 @@ export class TenderApplicationFormComponent implements OnInit {
 
   onSubmit() {
     this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
-    if (this.applicantPqForm.value.yearOfEstablishment) {
-      const dateTran = this.datePipe.transform(this.applicantPqForm.value.yearOfEstablishment, 'YYYY');
-      this.applicantPqForm.get('yearOfEstablishment')?.setValue(dateTran);
-    }
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
-    this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+    //this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
     this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
     this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
@@ -1112,9 +988,15 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
     this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
     this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    if (this.applicantPqForm.value.yearOfEstablishment) {
+      const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
+      this.applicantPqForm.value.yearOfEstablishment = dateTran;
+    } else {
+      this.toastr.error('Please Select Valid Year of Establishment');
+    }
     if (this.applicantPqFormId && this.applicantPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Submit your application for this tender?', msg: 'Submit action disables further editing of your application' }
+        data: { title: this.constantVariable.submitTenderApplicationTitle, msg: this.constantVariable.submitTenderApplicationMsg }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
@@ -1136,14 +1018,12 @@ export class TenderApplicationFormComponent implements OnInit {
   }
   tenderApplicantFormDisable() {
     if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT') {
+      this.warningMessage = this.constantVariable.disabledWarningTenderApplicantMsg;
       this.btnstate = true;
       this.btnsDisable = true;
       this.applicantPqForm.disable();
       this.gridOptionsTurnover.getColumns().forEach((colTurnover: any) => {
         colTurnover.colDef.editable = false;
-      })
-      this.gridOptionsSimilarProjects.getColumns().forEach((colSimilarProjects: any) => {
-        colSimilarProjects.colDef.editable = false;
       })
       this.columnApiClientRef.getColumns()?.forEach((colClientRef: any) => {
         colClientRef.colDef.editable = false;
@@ -1168,4 +1048,14 @@ export class TenderApplicationFormComponent implements OnInit {
       })
     }
   }
+}
+//indian currency formatter
+function currencyFormatter(currency: number, sign: string) {
+  var x = currency.toString();
+  var lastThree = x.substring(x.length - 3);
+  var otherNumbers = x.substring(0, x.length - 3);
+  if (otherNumbers != '')
+    lastThree = ',' + lastThree;
+  var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+  return sign + `${res}`;
 }

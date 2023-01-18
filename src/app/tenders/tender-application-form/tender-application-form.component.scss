@@ -181,3 +181,20 @@ button.mat-button-disabled {
 input[type="file" i]:disabled {
     cursor: not-allowed;
 }
+
+.warn {
+    color: #756e15;
+    background: #fffbd1;
+    border: 1px solid #87803e;
+    padding: 6px 16px 6px 16px !important;
+}
+
+.status {
+    color: #841618;
+    background: white;
+    padding: 8px 16px 8px 16px !important;
+}
+.icon-warning {
+    color: #841618;
+    font-size: 18px;
+}

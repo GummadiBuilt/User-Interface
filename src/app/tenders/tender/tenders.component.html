@@ -85,9 +85,9 @@
                                     (click)="navigateToPQForm(tender.tender_id,tender.pq_id)">
                                     {{buttonLabel[indexOfelement]}}
                                 </button>
-                                <button *ngIf="!userRole?.includes('admin') && tender.workflow_step != 'SAVE'"
-                                    mat-stroked-button (click)="viewPQForm(tender.tender_id,tender.pq_id)">View
-                                    PQ-Form</button>
+                                <button *ngIf="!userRole?.includes('admin') && tender.workflow_step != 'DRAFT'  && tender.pq_id "
+                                    mat-stroked-button (click)="viewPQForm(tender.tender_id,tender.pq_id)">
+                                    {{constVariable.viewPQFormBtn}}</button>
                             </div>
                         </div>
                         <div fxLayout="row" fxLayoutAlign="space-between center">

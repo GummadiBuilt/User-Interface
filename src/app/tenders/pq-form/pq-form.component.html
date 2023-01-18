@@ -38,7 +38,7 @@
                             <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY"
-                                    (click)="picker2.open()" formControlName="pqLastDateOfSubmission">
+                                    (click)="picker2.open()" formControlName="pqLastDateOfSubmission" appDate [max]="tenderDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                 <mat-datepicker #picker2></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">
@@ -51,7 +51,7 @@
                             <mat-label>Tentative Date of Award of Works *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker3" placeholder="DD/MM/YYYY"
-                                    (click)="picker3.open()" formControlName="tentativeDateOfAward">
+                                    (click)="picker3.open()" formControlName="tentativeDateOfAward" appDate [min]="tenderDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                                 <mat-datepicker #picker3></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('tentativeDateOfAward')?.errors?.['required']">
@@ -64,7 +64,7 @@
                             <mat-label>Scheduled Completion *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput [matDatepicker]="picker4" placeholder="DD/MM/YYYY"
-                                    (click)="picker4.open()" formControlName="scheduledCompletion">
+                                    (click)="picker4.open()" formControlName="scheduledCompletion" appDate [min]="tenderDate">
                                 <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                                 <mat-datepicker #picker4></mat-datepicker>
                                 <mat-error *ngIf="adminPqForm.get('scheduledCompletion')?.errors?.['required']">
@@ -80,24 +80,24 @@
                         <button mat-button (click)="onSave()" style="background-color: grey ;" [disabled]="btnState">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                <div>Save</div>
+                                <div>{{constVariable.saveBtn}}</div>
                             </div>
                         </button>
                         <button *ngIf="pqFormId" mat-button (click)="onSubmit()" style="background-color: green ;"
                             [disabled]="btnState">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i class="icon-submit fa-solid fa-paper-plane"></i>
-                                <div>Submit</div>
+                                <div>{{constVariable.submitBtn}}</div>
                             </div>
                         </button>
                     </div>
                     <div *ngIf="userRole?.includes('contractor')" class="action-btn" fxLayout="row"
                         fxLayoutAlign="end center" fxLayoutGap="24px">
-                        <button class="button-apply" mat-button type="button" (click)="applyPqForm()">
+                        <button class="button-apply" mat-button type="button" (click)="applyPqForm()" [disabled]="btnTenderApplnstate">
                             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                 <i *ngIf="applicationFormId == 0" class="icon-appy fa-solid fa-angles-right"></i>
                                 <i *ngIf="applicationFormId" class="fa-solid fa-pen-to-square"></i>
-                                <div>{{applyBtnLabel}}</div>
+                                <div matTooltip={{disableMsg}}>{{applyBtnLabel}}</div>
                             </div>
                         </button>
                     </div>

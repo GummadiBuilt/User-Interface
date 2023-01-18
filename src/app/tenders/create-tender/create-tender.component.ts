@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
-import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, CsvExportParams, GridApi,
@@ -20,16 +19,19 @@ import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import _ from 'lodash';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
+import { PageConstants } from 'src/app/shared/application.constants';
+import moment from 'moment';
 
 @Component({
   selector: 'app-create-tender',
   templateUrl: './create-tender.component.html',
   styleUrls: ['./create-tender.component.scss'],
-  providers: [CurrencyPipe]
+  providers: []
 })
 export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderDetails!: FormGroup;
   ftdTableRows!: FormGroup;
+  public constantVariable = PageConstants;
   public userRole: string[] | undefined;
   public typeOfWorksList = new Array<typeOfEstablishment>();
   public typeOfContractsList = new Array<typeOfContracts>();
@@ -48,10 +50,14 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public warningMessage!: string;
   public todayDate!: Date;
   public pqID!: number;
+  public applicationFormId!: number;
+  public applicationFormStatus!: string;
+  public applicantLabel!:any;
+  public optionApplnState!: boolean;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
-    private datePipe: DatePipe, private route: ActivatedRoute, public router: Router,
+    private route: ActivatedRoute, public router: Router,
     private dialog: MatDialog) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('tenderId');
@@ -60,6 +66,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
           //console.log('Tender data by id', data);
           this.pqID = data.pqFormId;
+          this.applicationFormId = data.applicationFormId;
+          this.applicationFormStatus = data.applicationFormStatus;
           this.editData(data);
           this.tenderFormDisable();
         });
@@ -82,7 +90,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       typeOfContract: ['', [Validators.required]],
       contractDuration: ['', [Validators.required, Validators.maxLength(5)]],
       durationCounter: ['', [Validators.required]],
-      lastDateOfSubmission: ['', [Validators.required]],
+      lastDateOfSubmission: [moment, [Validators.required]],
       estimatedBudget: ['', Validators.maxLength(20)],
       tenderFinanceInfo: [''],
       workflowStep: ['']
@@ -118,10 +126,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.get('typeOfContract')?.patchValue(data.typeOfContract.id);
       this.tenderDetails.get('contractDuration')?.patchValue(data.contractDuration);
       this.tenderDetails.get('durationCounter')?.patchValue(data.durationCounter);
-      const date = data.lastDateOfSubmission;
-      const [day, month, year] = date.split('/');
-      const convertedDate = new Date(+year, +month - 1, +day);
-      this.tenderDetails.get('lastDateOfSubmission')?.patchValue(convertedDate);
+      this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data.lastDateOfSubmission);
       this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
       this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
       if (Object.keys(data.tenderFinanceInfo).length === 0) {
@@ -132,13 +137,53 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     } else {
       this.toastr.error('No data to display');
     }
+    if(this.userRole?.includes('contractor')){
+      if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
+        this.applicantLabel = this.constantVariable.editBtn;
+      } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
+        this.applicantLabel = this.constantVariable.viewBtn;
+      } else{
+        this.applicantLabel = this.constantVariable.applyBtn;
+      }
+      if(this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
+        this.optionApplnState = true;
+        this.applicantLabel = this.constantVariable.applyBtn;
+       }
+    }
   }
   onSelected(event: any) {
-    if (event != (null || 0)) {
-      this.router.navigate(['/tenders', this.tenderId, 'edit-pq-form', event]);
+    const value = event;
+    const tender = this.tenderId;
+    const pqForm = this.pqID;
+    const applnTender = this.applicationFormId;
+    if(value == 'PQForm'){
+      if (this.pqID != (null || 0)) {
+        this.router.navigate(['/tenders', tender, 'edit-pq-form', pqForm]);
+      }
+      else {
+        this.router.navigate(['/tenders', tender, 'create-pq-form']);
+      }
+      return;
     }
-    else {
-      this.router.navigate(['/tenders', this.tenderId, 'create-pq-form']);
+    if (value == 'Apply' && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: this.constantVariable.applyTenderMsg, msg: '' }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          this.router.navigate(['/tenders', tender, 'tender-application-form']);
+        }
+      });
+
+    } else {
+      if(value == 'View'){
+        if(this.applicationFormId){
+          this.router.navigate(['/tenders', tender, 'view-tender-application-form', applnTender]);
+        }
+      }else{
+        this.router.navigate(['/tenders', tender, 'edit-tender-application-form', applnTender]);
+      }
+      return;
     }
   }
 
@@ -160,7 +205,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     }
   }
   downloadSelectedFile(id: any) {
-    // console.log('download',id);
     this.ApiServicesService.downloadTechnicalTenderDocument(id).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
@@ -178,10 +222,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200, },
-    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 5, minWidth: 350, autoHeight: true, wrapText: true },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120, },
+    { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 8, minWidth: 550, autoHeight: true, wrapText: true },
     {
-      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
+      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 140,
       cellRenderer: UnitCellRendererComponent,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
@@ -189,12 +233,11 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       },
     },
     {
-      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 2, minWidth: 200,
-      // uses a custom Cell Editor
+      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120,
       cellEditor: NumericCellRendererComponent
     },
     {
-      headerName: "Action", flex: 1, minWidth: 150,
+      headerName: "Action", flex: 1, maxWidth: 120,
       cellRenderer: (params: any) => {
         const divElement = document.createElement("div");
         const editingCells = params.api.getEditingCells();
@@ -374,9 +417,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onSave() {
     //console.log(this.tenderDetails.value.lastDateOfSubmission);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
-    this.tenderDetails.controls['workflowStep'].setValue('SAVE');
+    this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
-      this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+      const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
+      this.tenderDetails.value.lastDateOfSubmission = dateTran;
     } else {
       this.toastr.error('Please Select Valid Last Date of Submission');
     }
@@ -389,6 +433,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
         next: ((response: tenderResopnse) => {
+          this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.toastr.success('Successfully Updated');
         }),
         error: (error => {
@@ -401,6 +446,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         next: ((response: tenderResopnse) => {
           this.tenderId = response.tenderId;
           this.tenderDetails.markAsPristine();
+          this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.router.navigate(['tenders/edit-tender/' + response.tenderId]);
           this.toastr.success('Successfully Created');
         }),
@@ -410,7 +456,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       })
     } else if (!this.tenderId && !this.file) {
       //error
-      console.log('File upload error');
       this.toastr.error('Please upload the Technical Tender Document');
     } else {
       //error
@@ -421,14 +466,15 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onSubmit() {
     if (this.tenderId && this.tenderDetails.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: 'Are you sure you want to submit the tender?', msg: 'Submitting this tender will disable further editing and will be sent to Admins for review' }
+        data: { title: this.constantVariable.submitTenderTitle, msg: this.constantVariable.submitTenderMsg }
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
           this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
           this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
           if (this.tenderDetails.value.lastDateOfSubmission) {
-            this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+            const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
+            this.tenderDetails.value.lastDateOfSubmission = dateTran;
           } else {
             this.toastr.error('Please Select Valid Last Date of Submission');
           }
@@ -438,7 +484,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
           this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
             next: (response => {
-              // console.log('response', response.workflowStep);
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
@@ -460,7 +505,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
       this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
       if (this.tenderDetails.value.lastDateOfSubmission) {
-        this.tenderDetails.value.lastDateOfSubmission = this.datePipe.transform(this.tenderDetails.value.lastDateOfSubmission, 'dd/MM/yyyy');
+        const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
+        this.tenderDetails.value.lastDateOfSubmission = dateTran;
       } else {
         this.toastr.error('Please Select Valid Last Date of Submission');
       }
@@ -471,7 +517,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
         next: (response => {
           this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
-          this.toastr.success('Successfully Submitted');
+          this.toastr.success('Updated Successfully');
           this.tenderFormDisable();
         }),
         error: (error => {
@@ -486,9 +532,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
-    const warningMessage = `You cannot edit a tender when its in ${workFlowStep} step`;
-    if ((this.userRole?.includes("client") && (workFlowStep == 'Yet to be published'
-      || workFlowStep == 'Published'))) {        
+    const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
+    if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {        
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
@@ -497,7 +542,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
       this.warningMessage = warningMessage;
-    } else if (this.userRole?.includes("admin") && (workFlowStep == 'Published')) {
+    } else if (this.userRole?.includes("admin") && (workFlowStep != 'Yet to be published')) {
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;

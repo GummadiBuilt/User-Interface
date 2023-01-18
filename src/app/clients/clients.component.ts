@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import Highcharts from 'highcharts';
 import { ApiServicesService } from '../shared/api-services.service';
 import { clientUsersResponse } from '../shared/clientUsersResponse';
@@ -22,14 +22,64 @@ export class ClientsComponent implements OnInit {
   }
 
   //get list of data
+  total_tenders: any[] = [];
+  under_process: any[] = [];
+  //highcharts bar chart
+  highcharts = Highcharts;
+  chartOptions!: Highcharts.Options;
+
   getClientUsers() {
     this.ApiServicesService.getClientUsers().subscribe((data: clientUsersResponse) => {
       this.allClientUsers = data;
       console.log(this.allClientUsers);
+
+      this.total_tenders = this.allClientUsers.map((tenders: any) => tenders.under_process_step);
+      console.log(this.total_tenders);
+      this.under_process = this.allClientUsers.map((tenders: any) => tenders.under_process_step);
+      console.log(this.under_process);
+
+      this.chartOptions = {
+        chart: {
+          type: 'sankey'
+        },
+        title: {
+          text: 'Tenders Info Chart'
+        },
+        xAxis: {
+          categories: ['Types']
+        },
+        yAxis: {
+          title: {
+            text: 'Count',
+          }
+        },
+        series: [
+          {
+            name: 'Total Tenders',
+            type: 'bar',
+            data: this.total_tenders,
+          }, {
+            name: 'Under Process',
+            type: 'bar',
+            data: this.under_process,
+          },
+          {
+            name: 'Published',
+            type: 'bar',
+            data: [],
+          }, {
+            name: 'Suspended',
+            type: 'bar',
+            data: [],
+          }
+        ],
+
+      };
     });
   }
 
   //Ag-Grid
+  public gridApi!: GridApi;
   public ColumnDefs: ColDef[] = [
     // { headerName: 'ID', field: 'id', flex: 2 },
     { headerName: 'Contact Email Address', field: 'contact_email_address', flex: 2, minWidth: 250, },
@@ -43,7 +93,7 @@ export class ClientsComponent implements OnInit {
     { headerName: 'Recommended', field: 'recommended_step', flex: 1 },
     { headerName: 'Yet to Publish', field: 'yet_to_publish_step', flex: 1 },
     { headerName: 'Publish', field: 'publish_step', flex: 1 },
-    { headerName: 'Save', field: 'save_step', flex: 1 },
+    { headerName: 'Draft', field: 'save_step', flex: 1 },
     { headerName: 'Suspended', field: 'suspended_step', flex: 1 },
   ];
   public DefaultColDef: ColDef = {
@@ -56,6 +106,12 @@ export class ClientsComponent implements OnInit {
     filter: true,
     floatingFilter: true,
   };
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+  }
+  exportClientsFile() {
+    this.gridApi.exportDataAsCsv();
+  }
   public paginationPageSize = 30;
 
   public toggle: boolean = true;
@@ -63,31 +119,4 @@ export class ClientsComponent implements OnInit {
     this.toggle = change.value;
   }
 
-  //highcharts bar chart
-  highcharts = Highcharts;
-  chartOptions: Highcharts.Options = {
-    chart: {
-      type: 'bar'
-    },
-    title: {
-      text: 'Tenders Info Chart'
-    },
-    xAxis: {
-      categories:['Types']
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: 'Count',
-      }
-    },
-    plotOptions: {
-      bar: {
-        dataLabels: {
-          enabled: true
-        }
-      }
-    },
-    
-  };
 }

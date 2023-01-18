@@ -24,6 +24,7 @@ import { ViewApplicantsComponent } from './tenders/view-applicants/view-applican
 import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
 import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
+import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -60,9 +61,14 @@ const routes: Routes = [
               { path: '', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
               { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
               { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+              { path: 'view-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
             ]
           },
-          { path: 'view-applicants', component: ViewApplicantsComponent, },
+          { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'view-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'view-applicants', component: ViewApplicantsComponent, data: { breadcrumb: { info: 'fa-solid fa-eye' } } },
+          { path: 'compare-applicants', component: CompareApplicantsComponent, data: { breadcrumb: { info: 'fa-solid fa-code-compare' } } },
         ]
       },
       { path: '**', redirectTo: '', pathMatch: 'full' },
