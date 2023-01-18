@@ -2,26 +2,32 @@
     <div class="text-maroon" fxLayout="row" fxLayoutAlign="start center">
         <h2>Clients</h2>
     </div>
-    <div class="toggle-group">
-        <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
-            <mat-button-toggle [value]="true">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <div><i class="fa-solid fa-list"></i></div>
-                    <div>List</div>
-                </div>
-            </mat-button-toggle>
-            <mat-button-toggle [value]="false">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                    <div><i class="fa-solid fa-grip-vertical"></i></div>
-                    <div>Grid</div>
-                </div>
-            </mat-button-toggle>
-        </mat-button-toggle-group>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+        <div class="toggle-group">
+            <mat-button-toggle-group [value]="toggle" (change)="toggleView($event)">
+                <mat-button-toggle [value]="true">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                        <div><i class="fa-solid fa-list"></i></div>
+                        <div>List</div>
+                    </div>
+                </mat-button-toggle>
+                <mat-button-toggle [value]="false">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                        <div><i class="fa-solid fa-grip-vertical"></i></div>
+                        <div>Grid</div>
+                    </div>
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <button type="button" mat-icon-button matTooltip="Download Client List" matTooltipPosition="left"
+            (click)="exportClientsFile()">
+            <i class="icon-size fa-solid fa-file-csv"></i>
+        </button>
     </div>
     <div *ngIf="toggle">
         <ag-grid-angular class="ag-theme-alpine" [columnDefs]="ColumnDefs" [defaultColDef]="DefaultColDef"
             [rowData]="allClientUsers" [domLayout]="domLayout" [pagination]="true"
-            [paginationPageSize]="paginationPageSize">
+            [paginationPageSize]="paginationPageSize" (gridReady)="onGridReady($event)">
         </ag-grid-angular>
     </div>
     <div *ngIf="!toggle" class="clients-page" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="20px grid">

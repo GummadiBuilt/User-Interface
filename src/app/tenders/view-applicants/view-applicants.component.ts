@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
+import { StatusValues } from 'src/app/shared/status-values';
 import { tenderApplicantRankingResopnse } from 'src/app/tenders/view-applicants/tenderApplicantRankingResopnse';
 import { applicantsPqFormResponse } from '../tender-application-form/applicantpqformresponse';
 
@@ -22,7 +23,7 @@ export class ViewApplicantsComponent implements OnInit {
   tenderId: any;
   public constantVariable = PageConstants;
   public userRole: string[] | undefined;
-  public btnstate!: boolean;
+  public btnstate: boolean = false;
 
   constructor(private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
     private toastr: ToastrService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder,
@@ -53,7 +54,7 @@ export class ViewApplicantsComponent implements OnInit {
     }
     });
   }
-
+  status = ['SHORTLISTED', 'NOT_SHORTLISTED']
   public columnDefs: ColDef[] = [
     {
       headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true,
@@ -72,20 +73,19 @@ export class ViewApplicantsComponent implements OnInit {
     { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
     {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
-     // cellRenderer: UnitCellRendererComponent,
-      cellRenderer: (params: ICellRendererParams) => {
+      valueFormatter: (params: any) => {
         let val!: any;
-        if(params.data.applicationStatus == 'UNDER_PROCESS')
+        if(params.value == 'UNDER_PROCESS')
         {
           val = 'Select Status';
         }else{
-          val= params.data.applicationStatus;
+          val= StatusValues[params.value as keyof typeof StatusValues];
         }
         return val;
       },
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: ['SHORTLISTED', 'NOT_SHORTLISTED'],
+        values: this.status
       }
     },
     { headerName: 'Note', field: 'justificationNote', filter: 'agTextColumnFilter', flex: 5, autoHeight: true, wrapText: true, editable: true },
@@ -165,7 +165,6 @@ export class ViewApplicantsComponent implements OnInit {
   }
 
   onUpdate() {
-    // console.log(this.rowData);
     if (this.tenderId && this.userRole?.includes('admin')) {
       this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'DRAFT').subscribe({
         next: (response => {

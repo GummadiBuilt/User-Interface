@@ -62,6 +62,7 @@ export class TenderApplicationFormComponent implements OnInit {
   years: any[] = [];
   public constantVariable = PageConstants;
   btnsDisable: boolean = false;
+  public warningMessage!: string;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -1017,6 +1018,7 @@ export class TenderApplicationFormComponent implements OnInit {
   }
   tenderApplicantFormDisable() {
     if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT') {
+      this.warningMessage = this.constantVariable.disabledWarningTenderApplicantMsg;
       this.btnstate = true;
       this.btnsDisable = true;
       this.applicantPqForm.disable();

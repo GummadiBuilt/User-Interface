@@ -19,11 +19,15 @@
                 </mat-button-toggle>
             </mat-button-toggle-group>
         </div>
+        <button type="button" mat-icon-button matTooltip="Download Contractors List" matTooltipPosition="left"
+            (click)="exportContractorFile()">
+            <i class="icon-size fa-solid fa-file-csv"></i>
+        </button>
     </div>
     <div *ngIf="toggle">
         <ag-grid-angular class="ag-theme-alpine" [columnDefs]="ColumnDefs" [defaultColDef]="DefaultColDef"
             [rowData]="allContractorUsers" [domLayout]="domLayout" [pagination]="true"
-            [paginationPageSize]="paginationPageSize">
+            [paginationPageSize]="paginationPageSize" (gridReady)="onGridReady($event)">
         </ag-grid-angular>
     </div>
     <div *ngIf="!toggle" class="contractors-page" fxLayout="row wrap" fxLayoutAlign="start center"

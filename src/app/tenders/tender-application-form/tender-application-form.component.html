@@ -6,6 +6,16 @@
                 <ng-container>{{ breadcrumb | uppercase }}</ng-container>
             </ng-container>
         </xng-breadcrumb>
+        <div fxLayoutAlign="center center">
+            <div class="warn" *ngIf="warningMessage && userRole?.includes('contractor')" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div>
+                    <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <span>{{warningMessage}}</span>
+                </div>
+            </div>
+        </div>
     </div>
     <ng-template #separatorTemplate>
         <i class="fa-solid fa-caret-right"></i>

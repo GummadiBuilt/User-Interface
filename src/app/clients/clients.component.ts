@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import Highcharts from 'highcharts';
 import { ApiServicesService } from '../shared/api-services.service';
 import { clientUsersResponse } from '../shared/clientUsersResponse';
@@ -79,6 +79,7 @@ export class ClientsComponent implements OnInit {
   }
 
   //Ag-Grid
+  public gridApi!: GridApi;
   public ColumnDefs: ColDef[] = [
     // { headerName: 'ID', field: 'id', flex: 2 },
     { headerName: 'Contact Email Address', field: 'contact_email_address', flex: 2, minWidth: 250, },
@@ -105,6 +106,12 @@ export class ClientsComponent implements OnInit {
     filter: true,
     floatingFilter: true,
   };
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+  }
+  exportClientsFile() {
+    this.gridApi.exportDataAsCsv();
+  }
   public paginationPageSize = 30;
 
   public toggle: boolean = true;
