@@ -178,7 +178,7 @@
                         fxLayout="column" *ngIf="downloadBtnState">
 
                     </div>
-                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                    <div class="mb-24" fxFlex.xs="100%" 
                         fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
                         <mat-label>Technical Bid *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -187,7 +187,7 @@
                                 <i class="fa-icons fa-solid fa-file-arrow-up"></i>
                                 <span class="textLink">Upload File</span>
                             </label>
-                            <label for="file">
+                            <label for="file" hidden>
                                 <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden
                                     [disabled]="btnstate">
                             </label>

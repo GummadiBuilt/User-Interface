@@ -42,16 +42,16 @@ export class ViewApplicantsComponent implements OnInit {
       this.toastr.error('Failed to load user details' + e);
     }
     this.getTenderApplicantsRankingData();
-    
+
   }
 
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
-     // console.log('tender applicants ranking', this.rowData);
-     if(this.userRole?.includes('client')){
-      this.disableViewApplicants();
-    }
+      // console.log('tender applicants ranking', this.rowData);
+      if (this.userRole?.includes('client')) {
+        this.disableViewApplicants();
+      }
     });
   }
   status = ['SHORTLISTED', 'NOT_SHORTLISTED']
@@ -62,11 +62,11 @@ export class ViewApplicantsComponent implements OnInit {
       headerCheckboxSelection: headerCheckboxSelection
     },
     {
-      headerName: 'Applicant Form',  flex: 1, 
+      headerName: 'Applicant Form', flex: 1,
       cellRenderer: (params: ICellRendererParams) => {
         const id = `<a href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank">View Application</a>`;
         return id
-       },
+      },
       filter: false,
       colId: "action",
     },
@@ -75,11 +75,10 @@ export class ViewApplicantsComponent implements OnInit {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
       valueFormatter: (params: any) => {
         let val!: any;
-        if(params.value == 'UNDER_PROCESS')
-        {
+        if (params.value == 'UNDER_PROCESS') {
           val = 'Select Status';
-        }else{
-          val= StatusValues[params.value as keyof typeof StatusValues];
+        } else {
+          val = StatusValues[params.value as keyof typeof StatusValues];
         }
         return val;
       },
@@ -129,7 +128,7 @@ export class ViewApplicantsComponent implements OnInit {
   onSelect() {
     const selectedData = this.gridApi.getSelectedRows();
     let applicationFormIds = selectedData.map((i: { applicationFormId: any; }) => i.applicationFormId);
-    this.router.navigate(['/tenders', this.tenderId, 'compare-applicants', { applicationFormIds: applicationFormIds }]);
+    this.router.navigate(['/tenders', this.tenderId, 'view-applicants', 'compare-applicants', { applicationFormIds: applicationFormIds }]);
   }
 
   dragChanged(params: any) {
@@ -166,7 +165,7 @@ export class ViewApplicantsComponent implements OnInit {
 
   onUpdate() {
     if (this.tenderId && this.userRole?.includes('admin')) {
-      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'DRAFT').subscribe({
+      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData, 'DRAFT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Updated');
         }),
@@ -182,7 +181,7 @@ export class ViewApplicantsComponent implements OnInit {
   }
   onSubmit() {
     if (this.tenderId && this.userRole?.includes('admin')) {
-      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'SUBMIT').subscribe({
+      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData, 'SUBMIT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Submitted');
         }),
@@ -196,7 +195,7 @@ export class ViewApplicantsComponent implements OnInit {
       this.toastr.error('Error in Submitting Applicant Details');
     }
   }
-  disableViewApplicants(){
+  disableViewApplicants() {
     this.btnstate = true;
     this.gridOptions.getColumns()?.forEach((colClientRef: any) => {
       colClientRef.colDef.editable = false;

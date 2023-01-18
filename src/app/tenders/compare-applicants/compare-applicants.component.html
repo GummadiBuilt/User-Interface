@@ -11,1111 +11,1110 @@
         <ng-template #separatorTemplate>
             <i class="fa-solid fa-caret-right"></i>
         </ng-template>
-        <div>
-            <button mat-raised-button [routerLink]="['/tenders', tenderId, 'view-applicants']">
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                    <div><i class="icon-20p fa-solid fa-eye"></i></div>
-                    <div><span>View Applicants</span></div>
-                </div>
-            </button>
-        </div>
     </div>
     <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th class="header-label" *ngFor="let item of applicantsData">
-                        <div class="profile-info" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
-                            <mat-card style="display: none"></mat-card>
-                            <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
-                                <div class="initials">{{this.item?.companyName[0]+ '' + this.item?.companyName?.split('
-                                    ')[1].slice(0, 1)}}</div>
-                            </div>
-                            <div fxLayout="row" fxLayoutGap="48px">
-                                <div fxLayout="column" fxLayoutGap="20px">
-                                    <div class="bold-500 font-20p">{{item?.companyName}}</div>
+        <div class="inner-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="header-label-empty">&nbsp;</th>
+                        <th class="header-label" *ngFor="let item of applicantsData">
+                            <div class="profile-info" fxLayout="column" fxLayoutAlign="center center"
+                                fxLayoutGap="12px">
+                                <mat-card style="display: none"></mat-card>
+                                <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
+                                    <div class="initials">{{this.item?.companyName[0]+ '' +
+                                        this.item?.companyName?.split('
+                                        ')[1].slice(0, 1)}}</div>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="48px">
+                                    <div fxLayout="column" fxLayoutGap="20px">
+                                        <div class="bold-500 font-20p">{{item?.companyName}}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="heading" colspan="5">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <span>Vendor's General Company Information</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Year of Establishment</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.yearOfEstablishment}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Type of Establishment</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.typeOfEstablishment}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Postal Address [Corporate Office]</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.corpOfficeAddress}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Postal Address [Local Office]</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.localOfficeAddress}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Telephone</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.telephoneNum}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Fax</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.faxNumber}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Contact Person Name</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.contactName}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Designation</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.contactDesignation}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Contact Phone Number</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.contactPhoneNum}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Contact Email ID</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.contactEmailId}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Name of Regional Head / Project Coordinator</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.regionalHeadName}}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div fxLayoutAlign="start center">Mobile No.</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="center center">{{item.regionalHeadPhoneNum}}</div>
-                    </td>
-                </tr>
-                <tr (click)="applicantsData.expandTurnover = !applicantsData.expandTurnover">
-                    <td class="label">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandTurnover"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandTurnover"><i class="fa-solid fa-minus"></i></div>
-                            <div>
-                                Turnover Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="heading" colspan="5">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <span>Vendor's General Company Information</span>
                             </div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="label">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 1</div>
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 2</div>
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 3</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandTurnover">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Year</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item.turnOverDetails">{{item.year}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandTurnover">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Revenue (Rs. in Cr)</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center">
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item.turnOverDetails">{{item.revenue}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr (click)="applicantsData.expandPerformancePref = !applicantsData.expandPerformancePref">
-                    <td class="heading" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandPerformancePref"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandPerformancePref"><i class="fa-solid fa-minus"></i></div>
-                            <span>Performance Preferences</span>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Year of Establishment</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.yearOfEstablishment}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Type of Establishment</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.typeOfEstablishment}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Postal Address [Corporate Office]</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.corpOfficeAddress}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Postal Address [Local Office]</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.localOfficeAddress}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Telephone</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.telephoneNum}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Fax</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.faxNumber}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Contact Person Name</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.contactName}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Designation</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.contactDesignation}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Contact Phone Number</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.contactPhoneNum}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Contact Email ID</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.contactEmailId}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Name of Regional Head / Project Coordinator</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.regionalHeadName}}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div fxLayoutAlign="start center">Mobile No.</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="center center">{{item.regionalHeadPhoneNum}}</div>
+                        </td>
+                    </tr>
+                    <tr (click)="applicantsData.expandTurnover = !applicantsData.expandTurnover">
+                        <td class="label">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandTurnover"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandTurnover"><i class="fa-solid fa-minus"></i></div>
+                                <div>
+                                    Turnover Details
+                                </div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="label">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 1</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 2</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 3</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandTurnover">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Year</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item.turnOverDetails">{{item.year}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandTurnover">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Revenue (Rs. in Cr)</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item.turnOverDetails">{{item.revenue}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr (click)="applicantsData.expandPerformancePref = !applicantsData.expandPerformancePref">
+                        <td class="heading" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandPerformancePref"><i class="fa-solid fa-add"></i>
+                                </div>
+                                <div *ngIf="applicantsData?.expandPerformancePref"><i class="fa-solid fa-minus"></i>
+                                </div>
+                                <span>Performance Preferences</span>
+                            </div>
+                        </td>
+                    </tr>
 
-                <tr *ngIf="applicantsData?.expandPerformancePref"
-                    (click)="applicantsData.expandClientRef = !applicantsData.expandClientRef">
-                    <td class="label">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandClientRef"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandClientRef"><i class="fa-solid fa-minus"></i></div>
-                            <span>Client References of 3 Major Projects</span>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="label">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 1</div>
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 2</div>
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 3</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[0]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[0]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[0]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[0]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[1]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[1]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[1]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[1]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[2]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[2]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[2]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[2]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[3]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[3]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[3]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[3]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[4]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[4]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[4]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[4]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[5]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[5]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[5]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[5]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[6]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[6]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[6]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[6]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[7]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[7]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[7]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[7]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[8]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[8]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[8]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[8]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[9]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[9]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[9]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[9]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{clientRefData[0].details[10]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project1[10]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project2[10]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{clientRefData[i].project3[10]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandPerformancePref"
-                    (click)="applicantsData.expandProjectSim = !applicantsData.expandProjectSim">
-                    <td class="label">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandProjectSim"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandProjectSim"><i class="fa-solid fa-minus"></i></div>
-                            <span>Projects of Similar Nature</span>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="label">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 1</div>
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 2</div>
-                            <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 3</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[0]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[0]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[0]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[0]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[1]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[1]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[1]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[1]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[2]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[2]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[2]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[2]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[3]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[3]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[3]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[3]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[4]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[4]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[4]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[4]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[5]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[5]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[5]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[5]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[6]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[6]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[6]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[6]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[7]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[7]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[7]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[7]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[8]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[8]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[8]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[8]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[9]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[9]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[9]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[9]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{projectSimilarData[0].details[10]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
-                        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project1[10]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project2[10]}}</div>
-                            <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
-                                {{projectSimilarData[i].project3[10]}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandPerformancePref"
-                    (click)="applicantsData.expandStatComp = !applicantsData.expandStatComp">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandStatComp"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandStatComp"><i class="fa-solid fa-minus"></i></div>
-                            <span>Statutory Compliances</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{statutoryCompliancesHeaders[0]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.esiRegistration}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div class="wrap">{{statutoryCompliancesHeaders[1]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.epfRegistration}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{statutoryCompliancesHeaders[2]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.gstRegistration}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{statutoryCompliancesHeaders[3]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.panNumber}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandPerformancePref"
-                    (click)="applicantsData.expandEmpStrength = !applicantsData.expandEmpStrength">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandEmpStrength"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandEmpStrength"><i class="fa-solid fa-minus"></i></div>
-                            <span>Employees Strength</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Name</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.name}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Designation</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.designation}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Qualification</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.qualification}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Total Experience</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.totalExp}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Total Experience Present</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.totalExpPresent}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandPerformancePref"
-                    (click)="applicantsData.expandCapitalEquip = !applicantsData.expandCapitalEquip">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandCapitalEquip"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandCapitalEquip"><i class="fa-solid fa-minus"></i></div>
-                            <span>Capital Equipments</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Description of Equipment</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.description}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Quantity</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.quantity}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Own / Rented</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.own_rented}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Capacity / Size</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.capacity_size}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Age / Condition</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.age_condition}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandPerformancePref"
-                    (click)="applicantsData.expandSafteyPolicy = !applicantsData.expandSafteyPolicy">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandSafteyPolicy"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandSafteyPolicy"><i class="fa-solid fa-minus"></i></div>
-                            <span>Safety Policy and Systems</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{safteyPolicyHeaders[0]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.safetyPolicyManual}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{safteyPolicyHeaders[1]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.ppeToStaff}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{safteyPolicyHeaders[2]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.ppeToWorkMen}}</div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>{{safteyPolicyHeaders[3]}}</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                        <div class="wrap">{{item.safetyOfficeAvailability}}</div>
-                    </td>
-                </tr>
-                <tr (click)="applicantsData.expandFinancialInfo = !applicantsData.expandFinancialInfo">
-                    <td class="heading" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandFinancialInfo"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandFinancialInfo"><i class="fa-solid fa-minus"></i></div>
-                            <span>Financial Information</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinancialInfo"
-                    (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandFinInfo"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandFinInfo"><i class="fa-solid fa-minus"></i></div>
-                            <span>Financial Information</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Financial Year</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.f_year}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Gross Turnover in Rs.</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.gross_turnover}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Net Profit before Tax in Rs.</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.net_profit}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Profit after Tax in Rs.</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.profit_after_tax}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Current Assets in Rs.</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.current_assets}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Current Liabilities in Rs.</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.current_liabilities}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinancialInfo"
-                    (click)="applicantsData.expandCompBankers = !applicantsData.expandCompBankers">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandCompBankers"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandCompBankers"><i class="fa-solid fa-minus"></i></div>
-                            <span>Company Bankers</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Name</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of compBankersData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.name}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Address</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of compBankersData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.address}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandFinancialInfo"
-                    (click)="applicantsData.expandCompAuditors = !applicantsData.expandCompAuditors">
-                    <td class="label" colspan="5">
-                        <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                            <div *ngIf="!applicantsData?.expandCompAuditors"><i class="fa-solid fa-add"></i></div>
-                            <div *ngIf="applicantsData?.expandCompAuditors"><i class="fa-solid fa-minus"></i></div>
-                            <span>Company Auditors</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Name</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of compAuditorsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.name}}</div>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo">
-                    <td class="label">
-                        <div fxLayout="row" fxLayoutGap="16px">
-                            <div>&nbsp;</div>
-                            <div>Address</div>
-                        </div>
-                    </td>
-                    <td *ngFor="let item of compAuditorsData" class="alternate-color word-wrap">
-                        <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                            <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                *ngFor="let item of item">{{item.address}}</div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                        (click)="applicantsData.expandClientRef = !applicantsData.expandClientRef">
+                        <td class="label">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandClientRef"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandClientRef"><i class="fa-solid fa-minus"></i></div>
+                                <span>Client References of 3 Major Projects</span>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="label">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 1</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 2</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 3</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[0]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[0]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[0]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[0]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[1]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[1]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[1]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[1]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[2]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[2]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[2]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[2]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[3]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[3]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[3]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[3]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[4]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[4]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[4]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[4]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[5]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[5]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[5]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[5]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[6]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[6]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[6]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[6]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[7]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[7]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[7]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[7]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[8]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[8]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[8]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[8]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[9]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[9]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[9]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[9]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{clientRefData[0].details[10]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project1[10]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project2[10]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{clientRefData[i].project3[10]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                        (click)="applicantsData.expandProjectSim = !applicantsData.expandProjectSim">
+                        <td class="label">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandProjectSim"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandProjectSim"><i class="fa-solid fa-minus"></i></div>
+                                <span>Projects of Similar Nature</span>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="label">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 1</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 2</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Project 3</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[0]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[0]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[0]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[0]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[1]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[1]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[1]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[1]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[2]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[2]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[2]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[2]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[3]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[3]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[3]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[3]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[4]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[4]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[4]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[4]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[5]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[5]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[5]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[5]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[6]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[6]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[6]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[6]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[7]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[7]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[7]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[7]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[8]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[8]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[8]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[8]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[9]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[9]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[9]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[9]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{projectSimilarData[0].details[10]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData;let i=index" class="alternate-color">
+                            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project1[10]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project2[10]}}</div>
+                                <div style="width: 33%;" class="wrap" fxLayoutAlign="space-evenly center">
+                                    {{projectSimilarData[i].project3[10]}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                        (click)="applicantsData.expandStatComp = !applicantsData.expandStatComp">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandStatComp"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandStatComp"><i class="fa-solid fa-minus"></i></div>
+                                <span>Statutory Compliances</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{statutoryCompliancesHeaders[0]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.esiRegistration}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div class="wrap">{{statutoryCompliancesHeaders[1]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.epfRegistration}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{statutoryCompliancesHeaders[2]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.gstRegistration}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{statutoryCompliancesHeaders[3]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.panNumber}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                        (click)="applicantsData.expandEmpStrength = !applicantsData.expandEmpStrength">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandEmpStrength"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandEmpStrength"><i class="fa-solid fa-minus"></i></div>
+                                <span>Employees Strength</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Name</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.name}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Designation</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.designation}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Qualification</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.qualification}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Total Experience</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.totalExp}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Total Experience Present</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of empStrengthsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.totalExpPresent}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                        (click)="applicantsData.expandCapitalEquip = !applicantsData.expandCapitalEquip">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandCapitalEquip"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandCapitalEquip"><i class="fa-solid fa-minus"></i></div>
+                                <span>Capital Equipments</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Description of Equipment</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.description}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Quantity</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.quantity}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Own / Rented</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.own_rented}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Capacity / Size</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.capacity_size}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Age / Condition</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of capitalEquipData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.age_condition}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                        (click)="applicantsData.expandSafteyPolicy = !applicantsData.expandSafteyPolicy">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandSafteyPolicy"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandSafteyPolicy"><i class="fa-solid fa-minus"></i></div>
+                                <span>Safety Policy and Systems</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{safteyPolicyHeaders[0]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.safetyPolicyManual}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{safteyPolicyHeaders[1]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.ppeToStaff}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{safteyPolicyHeaders[2]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.ppeToWorkMen}}</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>{{safteyPolicyHeaders[3]}}</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div class="wrap">{{item.safetyOfficeAvailability}}</div>
+                        </td>
+                    </tr>
+                    <tr (click)="applicantsData.expandFinancialInfo = !applicantsData.expandFinancialInfo">
+                        <td class="heading" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandFinancialInfo"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinancialInfo"><i class="fa-solid fa-minus"></i></div>
+                                <span>Financial Information</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinancialInfo"
+                        (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandFinInfo"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinInfo"><i class="fa-solid fa-minus"></i></div>
+                                <span>Financial Information</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Financial Year</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.f_year}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Gross Turnover in Rs.</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.gross_turnover}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Net Profit before Tax in Rs.</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.net_profit}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Profit after Tax in Rs.</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.profit_after_tax}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Current Assets in Rs.</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.current_assets}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Current Liabilities in Rs.</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of finInfoData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.current_liabilities}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinancialInfo"
+                        (click)="applicantsData.expandCompBankers = !applicantsData.expandCompBankers">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandCompBankers"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandCompBankers"><i class="fa-solid fa-minus"></i></div>
+                                <span>Company Bankers</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Name</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of compBankersData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.name}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Address</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of compBankersData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.address}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinancialInfo"
+                        (click)="applicantsData.expandCompAuditors = !applicantsData.expandCompAuditors">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!applicantsData?.expandCompAuditors"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandCompAuditors"><i class="fa-solid fa-minus"></i></div>
+                                <span>Company Auditors</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Name</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of compAuditorsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.name}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Address</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of compAuditorsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
+                                    *ngFor="let item of item">{{item.address}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
