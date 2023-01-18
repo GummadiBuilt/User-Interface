@@ -1,3 +1,39 @@
+# [1.7.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.6.0...v1.7.0) (2023-01-18)
+
+
+### Bug Fixes
+
+* **all components:** fixed the view or edit applicants in all components ([11cc688](https://github.com/GummadiBuilt/User-Interface/commit/11cc68847aad48bea6c9d0d5bd28bf8c3201b96a))
+* **app-constants:** modify display message ([cf2a562](https://github.com/GummadiBuilt/User-Interface/commit/cf2a562ffd3a108be91993b5daeec3517fcde90b))
+* **bump.yml:** update node version ([b13abee](https://github.com/GummadiBuilt/User-Interface/commit/b13abee96807cdd0b5da0f31a24a88dc3881fe2e))
+* **compare applicants:** ag grid tables to list view in compare applicants ([aaba357](https://github.com/GummadiBuilt/User-Interface/commit/aaba357e9af7a875c43e5ef33a8d6104bd5e7abc))
+* **components:** changed all api value of save to draft ([04d0e50](https://github.com/GummadiBuilt/User-Interface/commit/04d0e50293b78338f5a76f301fecedd7f0a77112))
+* **components:** csv export and bug fixes ([6c9d5c3](https://github.com/GummadiBuilt/User-Interface/commit/6c9d5c3233aed591e82148e71753e67cd531ddbf))
+* **constant:** tender application msg change ([cdd28d8](https://github.com/GummadiBuilt/User-Interface/commit/cdd28d878c15efbab47820469f822e141aa19740))
+* **create tender:** changed icon to button for downloads in create tender ([663a2f0](https://github.com/GummadiBuilt/User-Interface/commit/663a2f0fa3a1cbe39fb31e5f02ead12aed220f27))
+* **create-tender:** constants ([660ce16](https://github.com/GummadiBuilt/User-Interface/commit/660ce16d6929ff2b34d70d8e07866c8ba0230488))
+* **create-tender:** max width ([f918a6c](https://github.com/GummadiBuilt/User-Interface/commit/f918a6c6e9ee509eb59b36ab7905d3d33ccf7be3))
+* **date and rank issues:** date issues fixed and Ranking in view applicants fixed ([d9a3f9f](https://github.com/GummadiBuilt/User-Interface/commit/d9a3f9f7681d7186a86963ee75d7b13531f67159))
+* **date fixes:** date fixes in all components ([a189181](https://github.com/GummadiBuilt/User-Interface/commit/a189181fbfbba4c399e708b13602957818fef103))
+* **pq-form:** condition change for app-form id ([98376f4](https://github.com/GummadiBuilt/User-Interface/commit/98376f4ee18205e3b7211e42999c55440fb7fdd5))
+* **tender applicants:** fixed ag grid issues ([d92b197](https://github.com/GummadiBuilt/User-Interface/commit/d92b1976e191d0ffb24ba9aa30ed7d1e5aa78265))
+* **tender-application-form:** number validation ([4a30c9c](https://github.com/GummadiBuilt/User-Interface/commit/4a30c9cc6bc1cc4fdabb08698f540eba8a0fe3b2))
+* **view applicants, create tender:** enable view applicants based on roles in create tender ([4c04ccb](https://github.com/GummadiBuilt/User-Interface/commit/4c04ccb6e5f18dd2689a32c72cb376719ce943ce))
+
+
+### Features
+
+* **api integration in view applicants:** draft and submit in view applicants ([a42c1cd](https://github.com/GummadiBuilt/User-Interface/commit/a42c1cdd3e93497b74f8d15fc156fc4447dd2ae6))
+* **application constants:** added all text to constant file ([7cdb6ec](https://github.com/GummadiBuilt/User-Interface/commit/7cdb6ec9dd2f7fed3ae79ed0e80531349d5af97b))
+* **compare applicant:** ag grid data display in table for compare applicants ([9e4639b](https://github.com/GummadiBuilt/User-Interface/commit/9e4639be43496590129269535177025a885fc155))
+* **compare-applicants.ts:** added alternate colors, text wrap and design changes ([8f968ce](https://github.com/GummadiBuilt/User-Interface/commit/8f968ced23ed16d9e3c7e656c239bfef07484fb3))
+* **compare-applicants.ts:** added compare applicants page ([dd7da66](https://github.com/GummadiBuilt/User-Interface/commit/dd7da660b8ba135a33e6f324a3296a82b6904980))
+* **compare-applicants.ts:** design changes and highcharts ([3a29d07](https://github.com/GummadiBuilt/User-Interface/commit/3a29d073a86cbc9e54022bfdef2e4c38d35f9468))
+* **compare-applicants.ts:** design compare page and data binding ([0b24756](https://github.com/GummadiBuilt/User-Interface/commit/0b247567231361775bd3c2e92abaa43c62aef274))
+* merge branch 'feature/applied_tenders' ([e421b8e](https://github.com/GummadiBuilt/User-Interface/commit/e421b8e339769373ff5729776760b5d77d195db2))
+* **view-applicants.ts:** added drpdown in view applicants ([168a346](https://github.com/GummadiBuilt/User-Interface/commit/168a346b4358a2731c4a9df151dfb7efe9153691))
+* **view-applicants.ts:** download file functionality in turnover details ([0183ef5](https://github.com/GummadiBuilt/User-Interface/commit/0183ef502e87648662251c509b57271db4cb8e68))
+
 # [1.6.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.5.0...v1.6.0) (2023-01-05)
 
 
