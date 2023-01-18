@@ -30,7 +30,7 @@ export const PageConstants = {
     editBtn:`Edit`,
     viewBtn:`View`,
     disabledMsgForTenderApplicant:'Cannot apply for this tender as tender submission date is over',
-    disabledWarningTenderApplicantMsg:'Tender Applicantion is Submitted',
+    disabledWarningTenderApplicantMsg:'Tender Application is Submitted',
     viewPQFormBtn:`View PQ-Form`,
     editPQFormBtn:`Edit PQ-Form`,
     createPQFormBtn:`Create PQ-Form`,
