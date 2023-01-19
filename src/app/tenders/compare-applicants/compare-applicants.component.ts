@@ -5,6 +5,7 @@ import { forkJoin, map, mergeMap, reduce } from 'rxjs';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { ExcelService } from 'src/app/shared/excel.service';
 import { applicantsPqFormResponse } from '../tender-application-form/applicantpqformresponse';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-compare-applicants',
@@ -37,28 +38,27 @@ export class CompareApplicantsComponent implements OnInit {
       });
     });
   }
+
   reduceArray(value: any) {
     let array = value.map((array: any, i: any) => {
-
       let resultArray = array.reduce((acc: any, item: any) => {
-
         const { details, project1, project2, project3 } = acc;
         if (item.hasOwnProperty('details')) {
           details.push(item.details);
         }
         if (item.hasOwnProperty('Project 1')) {
           project1.push(item['Project 1']);
-        }else{
+        } else {
           project1.push(item['Project 1']);
         }
         if (item.hasOwnProperty('Project 2')) {
           project2.push(item['Project 2']);
-        }else{
+        } else {
           project2.push(item['Project 2']);
         }
         if (item.hasOwnProperty('Project 3')) {
           project3.push(item['Project 3']);
-        }else{
+        } else {
           project3.push(item['Project 3']);
         }
         return { details, project1, project2, project3 };
@@ -73,6 +73,7 @@ export class CompareApplicantsComponent implements OnInit {
 
   getApplicantsData(data: any) {
     this.applicantsData = data;
+    // console.log(this.applicantsData);
     const clientRowData = this.applicantsData;
     let clientArr: any[] = [];
     let simArr: any[] = [];
@@ -82,7 +83,6 @@ export class CompareApplicantsComponent implements OnInit {
     let compBankersArr: any[] = [];
     let compAuditorsArr: any[] = [];
     clientRowData.forEach((element: any) => {
-      //console.log(element.turnOverDetails)
       clientArr.push(JSON.parse(element.clientReferences));
       simArr.push(JSON.parse(element.similarProjectNature));
       empStrengthsArr.push(JSON.parse(element.employeesStrength));
@@ -103,28 +103,13 @@ export class CompareApplicantsComponent implements OnInit {
   ngOnInit(): void {
     // this.getApplicantsData();
   }
-  exportToExcel(event:any) {
-    this.excelService.exportAsExcelFile(this.userTable, 'compare.xlsx');
+
+  exportToExcel(event: any) {
+    setTimeout(() => {
+      this.excelService.exportAsExcelFile(this.userTable, 'compare.xlsx');
+    }, 500)
   }
 
-
-  // clientReferenceHeaders = ["Name & Location of Project", "Scope of Contract", "Built Up Area",
-  //   "Contract Duration", "Contract Value", "Current Status", "Employers Name & Address", "Referee’s Name",
-  //   "Referee’s Position", "Contact details", "Remarks if any"];
-
   statutoryCompliancesHeaders = ["ESI Registration", "EPF Registration", "GST Registration", "PAN Number",];
-
-  // employeeStrengthHeaders = ["Name", "Designation", "Qualification", "Total Years of Experience", "Years of Experience in the Present Position"];
-
-  // capitalEquipmentsHeaders = ["Description of Equipment", "Quantity", "Own / Rented", "Capacity / Size", "Age / Condition"];
-
   safteyPolicyHeaders = ["Safety Policy Manual", "PPE to Staff", "PPE to Work Men", "Saftey Office Availability",];
-
-  // financialInformationHeaders = ["Financial Year", "Gross Turnover Rs.", "Net Profit before Tax Rs.",
-  //   "Profit after Tax Rs.", "Current Assets Rs.", "Current Liabilities RS."];
-
-  // companyBankersHeaders = ["Name", "Address",];
-
-  // companyAuditorsHeaders = ["Name", "Address",];
-
 }
