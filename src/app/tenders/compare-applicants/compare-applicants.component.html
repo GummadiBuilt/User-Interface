@@ -11,10 +11,11 @@
         <ng-template #separatorTemplate>
             <i class="fa-solid fa-caret-right"></i>
         </ng-template>
+        <button (click)="exportToExcel($event)" class="btn btn-primary">Export to excel</button>
     </div>
     <div class="container">
         <div class="inner-container">
-            <table>
+            <table #userTable>
                 <thead>
                     <tr>
                         <th class="header-label-empty">&nbsp;</th>

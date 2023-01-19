@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { forkJoin, map, mergeMap, reduce } from 'rxjs';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
+import { ExcelService } from 'src/app/shared/excel.service';
 import { applicantsPqFormResponse } from '../tender-application-form/applicantpqformresponse';
 
 @Component({
@@ -22,8 +23,11 @@ export class CompareApplicantsComponent implements OnInit {
   public finInfoData: any;
   public compBankersData: any;
   public compAuditorsData: any;
+  /* the table reference */
+  @ViewChild('userTable') userTable!: ElementRef;
 
-  constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService,) {
+  constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService,
+    private excelService: ExcelService) {
     this.route.paramMap.subscribe(params => {
       this.tenderId = params.get('tenderId');
       this.applicationFormIds = params.get('applicationFormIds');
@@ -78,7 +82,7 @@ export class CompareApplicantsComponent implements OnInit {
     let compBankersArr: any[] = [];
     let compAuditorsArr: any[] = [];
     clientRowData.forEach((element: any) => {
-      //console.log(element)
+      //console.log(element.turnOverDetails)
       clientArr.push(JSON.parse(element.clientReferences));
       simArr.push(JSON.parse(element.similarProjectNature));
       empStrengthsArr.push(JSON.parse(element.employeesStrength));
@@ -94,11 +98,13 @@ export class CompareApplicantsComponent implements OnInit {
     this.finInfoData = finInfoArr;
     this.compBankersData = compBankersArr;
     this.compAuditorsData = compAuditorsArr;
-    //console.log(this.finInfoData);
   }
 
   ngOnInit(): void {
     // this.getApplicantsData();
+  }
+  exportToExcel(event:any) {
+    this.excelService.exportAsExcelFile(this.userTable, 'compare.xlsx');
   }
 
 

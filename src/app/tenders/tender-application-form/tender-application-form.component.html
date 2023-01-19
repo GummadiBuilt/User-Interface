@@ -249,15 +249,6 @@
                                 </div>
                             </div>
                             <div>
-                                <!-- <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
-                                    fxLayoutGap="8px">
-                                    <button mat-stroked-button type="button"
-                                        (click)="accordionTurnover.openAll()">{{constantVariable.expandAllBtn}}
-                                    </button>
-                                    <button mat-stroked-button type="button"
-                                        (click)="accordionTurnover.closeAll()">{{constantVariable.collapseAllBtn}}
-                                    </button>
-                                </div> -->
                                 <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
@@ -280,31 +271,6 @@
                                             </ag-grid-angular>
                                         </div>
                                     </mat-expansion-panel>
-                                    <!-- <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-title>
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                    <i class="icon-20p fa-solid fa-layer-group"></i>
-                                                    <span>Similar Projects</span>
-                                                </div>
-                                            </mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        <div class="example-wrapper">
-                                            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                                [columnDefs]="similarProjectsColumnDefs"
-                                                [defaultColDef]="similarProjectsDefaultColDef"
-                                                [rowData]="similarProjectsDetails" [domLayout]="domLayout"
-                                                [editType]="editType" (gridReady)="onGridReadySimilarProjects($event)"
-                                                (cellClicked)="onCellClickedSimilarProjects($event)"
-                                                (cellValueChanged)="onCellValueChangedSimilarProjects($event)"
-                                                (rowValueChanged)="onRowValueChangedSimilarProjects($event)"
-                                                (cellEditingStopped)="onCellEditingStoppedSimilarProjects($event)"
-                                                (rowEditingStarted)="onRowEditingStartedSimilarProjects($event)"
-                                                (rowEditingStopped)="onRowEditingStoppedSimilarProjects($event)"
-                                                [stopEditingWhenCellsLoseFocus]=true>
-                                            </ag-grid-angular>
-                                        </div>
-                                    </mat-expansion-panel> -->
                                 </mat-accordion>
                             </div>
                         </div>
