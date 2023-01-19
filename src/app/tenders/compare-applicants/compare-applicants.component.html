@@ -11,7 +11,14 @@
         <ng-template #separatorTemplate>
             <i class="fa-solid fa-caret-right"></i>
         </ng-template>
-        <button (click)="exportToExcel($event)" class="btn btn-primary">Export to excel</button>
+        <div fxLayoutAlign="center center">
+            <button mat-raised-button (click)="applicantsData.all = !applicantsData.all; exportToExcel($event)">
+                <div fxLayout="row" fxLayoutGap="6px">
+                    <div><i class="fa-solid fa-file-export"></i></div>
+                    <div>Export to Excel</div>
+                </div>
+            </button>
+        </div>
     </div>
     <div class="container">
         <div class="inner-container">
@@ -181,8 +188,10 @@
                     <tr (click)="applicantsData.expandTurnover = !applicantsData.expandTurnover">
                         <td class="label">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandTurnover"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandTurnover"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandTurnover || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandTurnover || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <div>
                                     Turnover Details
                                 </div>
@@ -196,7 +205,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandTurnover">
+                    <tr *ngIf="applicantsData?.expandTurnover || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -210,7 +219,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandTurnover">
+                    <tr *ngIf="applicantsData?.expandTurnover  || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -227,21 +236,25 @@
                     <tr (click)="applicantsData.expandPerformancePref = !applicantsData.expandPerformancePref">
                         <td class="heading" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandPerformancePref"><i class="fa-solid fa-add"></i>
+                                <div *ngIf="!(applicantsData?.expandPerformancePref || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i>
                                 </div>
-                                <div *ngIf="applicantsData?.expandPerformancePref"><i class="fa-solid fa-minus"></i>
+                                <div *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i>
                                 </div>
                                 <span>Performance Preferences</span>
                             </div>
                         </td>
                     </tr>
 
-                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                    <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
                         (click)="applicantsData.expandClientRef = !applicantsData.expandClientRef">
                         <td class="label">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandClientRef"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandClientRef"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandClientRef|| applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandClientRef|| applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Client References of 3 Major Projects</span>
                             </div>
                         </td>
@@ -253,7 +266,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -271,7 +285,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -289,7 +304,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -307,7 +323,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -325,7 +342,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -343,7 +361,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -361,7 +380,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -379,7 +399,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -397,7 +418,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -415,7 +437,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -433,7 +456,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandClientRef && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -451,12 +475,14 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                    <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
                         (click)="applicantsData.expandProjectSim = !applicantsData.expandProjectSim">
                         <td class="label">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandProjectSim"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandProjectSim"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandProjectSim || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandProjectSim || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Projects of Similar Nature</span>
                             </div>
                         </td>
@@ -468,7 +494,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -486,7 +513,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -504,7 +532,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -522,7 +551,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -540,7 +570,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -558,7 +589,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -576,7 +608,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -594,7 +627,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -612,7 +646,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -630,7 +665,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -648,7 +684,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandProjectSim && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -666,17 +703,20 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                    <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
                         (click)="applicantsData.expandStatComp = !applicantsData.expandStatComp">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandStatComp"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandStatComp"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandStatComp || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandStatComp || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Statutory Compliances</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -687,7 +727,8 @@
                             <div class="wrap">{{item.esiRegistration}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -698,7 +739,8 @@
                             <div class="wrap">{{item.epfRegistration}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -709,7 +751,8 @@
                             <div class="wrap">{{item.gstRegistration}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandStatComp && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -720,17 +763,20 @@
                             <div class="wrap">{{item.panNumber}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                    <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
                         (click)="applicantsData.expandEmpStrength = !applicantsData.expandEmpStrength">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandEmpStrength"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandEmpStrength"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandEmpStrength || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandEmpStrength || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Employees Strength</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -744,7 +790,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -758,7 +805,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -772,7 +820,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -786,7 +835,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandEmpStrength && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -800,17 +850,20 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                    <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
                         (click)="applicantsData.expandCapitalEquip = !applicantsData.expandCapitalEquip">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandCapitalEquip"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandCapitalEquip"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandCapitalEquip || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandCapitalEquip || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Capital Equipments</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -824,7 +877,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -838,7 +892,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -852,7 +907,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -866,7 +922,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandCapitalEquip && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -880,17 +937,20 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandPerformancePref"
+                    <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
                         (click)="applicantsData.expandSafteyPolicy = !applicantsData.expandSafteyPolicy">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandSafteyPolicy"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandSafteyPolicy"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandSafteyPolicy || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandSafteyPolicy || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Safety Policy and Systems</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -901,7 +961,8 @@
                             <div class="wrap">{{item.safetyPolicyManual}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -912,7 +973,8 @@
                             <div class="wrap">{{item.ppeToStaff}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -923,7 +985,8 @@
                             <div class="wrap">{{item.ppeToWorkMen}}</div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref">
+                    <tr
+                        *ngIf="applicantsData?.expandSafteyPolicy && applicantsData?.expandPerformancePref || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -937,23 +1000,26 @@
                     <tr (click)="applicantsData.expandFinancialInfo = !applicantsData.expandFinancialInfo">
                         <td class="heading" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandFinancialInfo"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandFinancialInfo"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandFinancialInfo || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinancialInfo || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Financial Information</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinancialInfo"
+                    <tr *ngIf="applicantsData?.expandFinancialInfo || applicantsData?.all"
                         (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandFinInfo"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandFinInfo"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandFinInfo || applicantsData?.all)"><i class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinInfo || applicantsData?.all"><i class="fa-solid fa-minus"></i></div>
                                 <span>Financial Information</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -967,7 +1033,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -981,7 +1048,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -995,7 +1063,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -1009,7 +1078,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -1023,7 +1093,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandFinInfo && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -1037,17 +1108,20 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinancialInfo"
+                    <tr *ngIf="applicantsData?.expandFinancialInfo || applicantsData?.all"
                         (click)="applicantsData.expandCompBankers = !applicantsData.expandCompBankers">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandCompBankers"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandCompBankers"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandCompBankers || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandCompBankers || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Company Bankers</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -1061,7 +1135,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandCompBankers && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -1075,17 +1150,20 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandFinancialInfo"
+                    <tr *ngIf="applicantsData?.expandFinancialInfo || applicantsData?.all"
                         (click)="applicantsData.expandCompAuditors = !applicantsData.expandCompAuditors">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!applicantsData?.expandCompAuditors"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandCompAuditors"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandCompAuditors || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandCompAuditors || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Company Auditors</span>
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
@@ -1099,7 +1177,8 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo">
+                    <tr
+                        *ngIf="applicantsData?.expandCompAuditors && applicantsData?.expandFinancialInfo || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
