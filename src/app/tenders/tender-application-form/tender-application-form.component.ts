@@ -661,27 +661,27 @@ export class TenderApplicationFormComponent implements OnInit {
   public financialColumnDefs: ColDef[] = [
     { headerName: 'Year', field: 'f_year', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 100 },
     {
-      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.gross_turnover, ''),
     },
     {
-      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.net_profit, ''),
     },
     {
-      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.profit_after_tax, ''),
     },
     {
-      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.current_assets, ''),
     },
     {
-      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.current_liabilities, ''),
     },
     {
-      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
+      headerName: "Action", colId: "action", flex: 1, maxWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
         if (this.btnsDisable) {

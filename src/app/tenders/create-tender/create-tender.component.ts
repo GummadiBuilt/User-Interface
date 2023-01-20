@@ -49,10 +49,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public downloadBtnState: boolean = false;
   public warningMessage!: string;
   public todayDate!: Date;
-  public pqID!: number;
-  public applicationFormId!: number;
-  public applicationFormStatus!: string;
-  public applicantLabel!:any;
+  // public pqID!: number;
+  // public applicationFormId!: number;
+  // public applicationFormStatus!: string;
+  public applicantLabel!: any;
   public optionApplnState!: boolean;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
@@ -65,9 +65,9 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       if (id) {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
           //console.log('Tender data by id', data);
-          this.pqID = data.pqFormId;
-          this.applicationFormId = data.applicationFormId;
-          this.applicationFormStatus = data.applicationFormStatus;
+          // this.pqID = data.pqFormId;
+          // this.applicationFormId = data.applicationFormId;
+          // this.applicationFormStatus = data.applicationFormStatus;
           this.editData(data);
           this.tenderFormDisable();
         });
@@ -137,55 +137,55 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     } else {
       this.toastr.error('No data to display');
     }
-    if(this.userRole?.includes('contractor')){
-      if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
-        this.applicantLabel = this.constantVariable.editBtn;
-      } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
-        this.applicantLabel = this.constantVariable.viewBtn;
-      } else{
-        this.applicantLabel = this.constantVariable.applyBtn;
-      }
-      if(this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
-        this.optionApplnState = true;
-        this.applicantLabel = this.constantVariable.applyBtn;
-       }
-    }
+    // if(this.userRole?.includes('contractor')){
+    //   if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
+    //     this.applicantLabel = this.constantVariable.editBtn;
+    //   } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
+    //     this.applicantLabel = this.constantVariable.viewBtn;
+    //   } else{
+    //     this.applicantLabel = this.constantVariable.applyBtn;
+    //   }
+    //   if(this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
+    //     this.optionApplnState = true;
+    //     this.applicantLabel = this.constantVariable.applyBtn;
+    //    }
+    // }
   }
-  onSelected(event: any) {
-    const value = event;
-    const tender = this.tenderId;
-    const pqForm = this.pqID;
-    const applnTender = this.applicationFormId;
-    if(value == 'PQForm'){
-      if (this.pqID != (null || 0)) {
-        this.router.navigate(['/tenders', tender, 'edit-pq-form', pqForm]);
-      }
-      else {
-        this.router.navigate(['/tenders', tender, 'create-pq-form']);
-      }
-      return;
-    }
-    if (value == this.constantVariable.applyBtn && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
-      const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: this.constantVariable.applyTenderMsg, msg: '' }
-      });
-      dlg.afterClosed().subscribe((submit: boolean) => {
-        if (submit) {
-          this.router.navigate(['/tenders', tender, 'tender-application-form']);
-        }
-      });
+  // onSelected(event: any) {
+  //   const value = event;
+  //   const tender = this.tenderId;
+  //   const pqForm = this.pqID;
+  //   const applnTender = this.applicationFormId;
+  //   if(value == 'PQForm'){
+  //     if (this.pqID != (null || 0)) {
+  //       this.router.navigate(['/tenders', tender, 'edit-pq-form', pqForm]);
+  //     }
+  //     else {
+  //       this.router.navigate(['/tenders', tender, 'create-pq-form']);
+  //     }
+  //     return;
+  //   }
+  //   if (value == this.constantVariable.applyBtn && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
+  //     const dlg = this.dialog.open(ConfirmationDlgComponent, {
+  //       data: { title: this.constantVariable.applyTenderMsg, msg: '' }
+  //     });
+  //     dlg.afterClosed().subscribe((submit: boolean) => {
+  //       if (submit) {
+  //         this.router.navigate(['/tenders', tender, 'tender-application-form']);
+  //       }
+  //     });
 
-    } else {
-      if(value == this.constantVariable.viewBtn){
-        if(this.applicationFormId){
-          this.router.navigate(['/tenders', tender, 'view-tender-application-form', applnTender]);
-        }
-      }else{
-        this.router.navigate(['/tenders', tender, 'edit-tender-application-form', applnTender]);
-      }
-      return;
-    }
-  }
+  //   } else {
+  //     if(value == this.constantVariable.viewBtn){
+  //       if(this.applicationFormId){
+  //         this.router.navigate(['/tenders', tender, 'view-tender-application-form', applnTender]);
+  //       }
+  //     }else{
+  //       this.router.navigate(['/tenders', tender, 'edit-tender-application-form', applnTender]);
+  //     }
+  //     return;
+  //   }
+  // }
 
   onFileChange(event: any) {
     this.fileName = '';
@@ -533,7 +533,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
-    if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {        
+    if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;

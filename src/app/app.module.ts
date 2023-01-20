@@ -61,6 +61,7 @@ import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tende
 import { INRCurrencyPipe } from './shared/inrcurrency.pipe';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
+import { ActionDropdownComponent } from './shared/action-dropdown/action-dropdown.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -140,6 +141,7 @@ export const MY_DATE_FORMATS = {
     AppliedTendersComponent,
     INRCurrencyPipe,
     CompareApplicantsComponent,
+    ActionDropdownComponent,
   ],
   imports: [
     BrowserModule,
