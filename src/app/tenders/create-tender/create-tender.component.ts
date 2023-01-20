@@ -165,7 +165,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       }
       return;
     }
-    if (value == 'Apply' && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
+    if (value == this.constantVariable.applyBtn && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constantVariable.applyTenderMsg, msg: '' }
       });
@@ -176,7 +176,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       });
 
     } else {
-      if(value == 'View'){
+      if(value == this.constantVariable.viewBtn){
         if(this.applicationFormId){
           this.router.navigate(['/tenders', tender, 'view-tender-application-form', applnTender]);
         }

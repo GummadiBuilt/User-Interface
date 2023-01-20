@@ -395,7 +395,11 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
-
+  onCellEditingStartedClientRef($event:any){
+    if($event.colDef.field === 'details'){
+        this.gridApiClientRef.stopEditing();
+    }
+  }
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
@@ -425,6 +429,11 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
+  onCellEditingStartedSimilarNature($event:any){
+    if($event.colDef.field === 'details'){
+      this.gridApiSimilarNature.stopEditing();
+  }
+  }
 
   //Section C of PQ-Form: Statutory Compliances
   public statutoryCompliancesColumnDefs: ColDef[] = [

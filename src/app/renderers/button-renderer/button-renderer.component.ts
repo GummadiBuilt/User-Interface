@@ -28,7 +28,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     this.label = this.rowData.tender_document_name || null;
     if (this.rowData.pq_id != null && this.rowData.workflow_step == 'YET_TO_BE_PUBLISHED') {
       this.buttonLabel = this.constantVariables.editPQFormBtn;
-    } else if (this.rowData.pq_id != null && (this.rowData.workflow_step == 'PUBLISHED' || this.rowData.workflow_step == 'UNDER_PROCESS')) {
+    } else if (this.rowData.pq_id != null) {
       this.buttonLabel = this.constantVariables.viewPQFormBtn;
     }
     else {
@@ -41,7 +41,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     } else{
       this.applyBtnLabel = this.constantVariables.applyBtn;
     }
-    if(this.applyBtnLabel == 'Apply' && this.rowData.workflow_step == 'UNDER_PROCESS'){
+    if(this.applyBtnLabel == this.constantVariables.applyBtn && this.rowData.workflow_step == 'UNDER_PROCESS'){
       this.btnTenderApplnstate = true;
       this.disableMsg = this.constantVariables.disabledMsgForTenderApplicant;
     }
@@ -74,9 +74,9 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
 
   navigateToPQForm() {
-    if (this.buttonLabel == 'Edit PQ-Form') {
+    if (this.buttonLabel == this.constantVariables.editPQFormBtn) {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form', this.rowData.pq_id]);
-    } else if (this.buttonLabel == 'View PQ-Form') {
+    } else if (this.buttonLabel == this.constantVariables.viewPQFormBtn) {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
     } else {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
@@ -94,7 +94,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
   applyTenderApplicantForm() {
     //console.log(this.rowData)
-    if (this.applyBtnLabel == 'Apply' && this.rowData.workflow_step != 'UNDER_PROCESS') {
+    if (this.applyBtnLabel == this.constantVariables.applyBtn && this.rowData.workflow_step != 'UNDER_PROCESS') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constantVariables.applyTenderMsg, msg: '' }
       });
@@ -104,7 +104,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         }
       });
     } else {
-      if(this.applyBtnLabel == 'View'){
+      if(this.applyBtnLabel == this.constantVariables.viewBtn){
         if(this.rowData.application_form_id){
           this.router.navigate(['/tenders', this.rowData.tender_id, 'view-tender-application-form', this.rowData.application_form_id]);
         }

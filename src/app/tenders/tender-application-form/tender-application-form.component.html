@@ -343,7 +343,8 @@
                                             [columnDefs]="clientRefColumnDefs" [defaultColDef]="clientRefDefaultColDef"
                                             [rowData]="clientRefRowData" [domLayout]="domLayout"
                                             (gridReady)="onGridReadyClientRef($event)"
-                                            [stopEditingWhenCellsLoseFocus]=true>
+                                            [stopEditingWhenCellsLoseFocus]=true
+                                            (cellEditingStarted)="onCellEditingStartedClientRef($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -369,7 +370,8 @@
                                             [defaultColDef]="similarNatureDefaultColDef"
                                             [rowData]="similarNatureRowData" [domLayout]="domLayout"
                                             (gridReady)="onGridReadySimilarNature($event)"
-                                            [stopEditingWhenCellsLoseFocus]=true>
+                                            [stopEditingWhenCellsLoseFocus]=true
+                                            (cellEditingStarted)="onCellEditingStartedSimilarNature($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>

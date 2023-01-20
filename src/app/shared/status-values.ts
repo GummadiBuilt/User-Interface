@@ -3,7 +3,7 @@ export enum StatusValues {
      "DRAFT" = "Draft",
      "PUBLISHED" = "Published" ,
      "UNDER_PROCESS" = "Under Process",
-     "SHORTLISTED" = "Shortlisted", 
-     "NOT_SHORTLISTED" = "Not Shortlisted"
+     "QUALIFIED" = "Qualified", 
+     "NOT_QUALIFIED" = "Not Qualified"
      
 }

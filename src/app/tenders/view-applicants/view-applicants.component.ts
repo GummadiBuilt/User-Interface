@@ -48,13 +48,12 @@ export class ViewApplicantsComponent implements OnInit {
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
-      // console.log('tender applicants ranking', this.rowData);
-      if (this.userRole?.includes('client')) {
+      if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
         this.disableViewApplicants();
       }
     });
   }
-  status = ['SHORTLISTED', 'NOT_SHORTLISTED']
+  status = ['QUALIFIED', 'NOT_QUALIFIED']
   public columnDefs: ColDef[] = [
     {
       headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true,
@@ -184,6 +183,7 @@ export class ViewApplicantsComponent implements OnInit {
       this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData, 'SUBMIT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Submitted');
+          this.disableViewApplicants();
         }),
         error: (error => {
           console.log(error);
