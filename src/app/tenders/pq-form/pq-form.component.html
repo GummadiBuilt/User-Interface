@@ -29,80 +29,83 @@
         </div>
     </div>
     <div class="pq-form-body">
-        <div class="admin-stepper">
-            <mat-card>
-                <form [formGroup]="adminPqForm" autocomplete="off">
-                    <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
-                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column">
-                            <mat-label>Last Date for Submission of filled PQ Document *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY"
-                                    (click)="picker2.open()" formControlName="pqLastDateOfSubmission" appDate [max]="tenderDate">
-                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                                <mat-datepicker #picker2></mat-datepicker>
-                                <mat-error *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">
-                                    Choose last date of submission of filled pq document
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column">
-                            <mat-label>Tentative Date of Award of Works *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker3" placeholder="DD/MM/YYYY"
-                                    (click)="picker3.open()" formControlName="tentativeDateOfAward" appDate [min]="tenderDate">
-                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                                <mat-datepicker #picker3></mat-datepicker>
-                                <mat-error *ngIf="adminPqForm.get('tentativeDateOfAward')?.errors?.['required']">
-                                    Choose tentative date of award of works
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column">
-                            <mat-label>Scheduled Completion *</mat-label>
-                            <mat-form-field appearance="outline">
-                                <input matInput [matDatepicker]="picker4" placeholder="DD/MM/YYYY"
-                                    (click)="picker4.open()" formControlName="scheduledCompletion" appDate [min]="tenderDate">
-                                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-                                <mat-datepicker #picker4></mat-datepicker>
-                                <mat-error *ngIf="adminPqForm.get('scheduledCompletion')?.errors?.['required']">
-                                    Choose scheduled completion
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                            fxLayout="column"></div>
+        <mat-card>
+            <form [formGroup]="adminPqForm" autocomplete="off">
+                <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
+                    <h3>PQ Details</h3>
+                    <app-action-dropdown></app-action-dropdown>
+                </div>
+                <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
+                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column">
+                        <mat-label>{{constVariable.lastDateforSubmissionOfFilledPqDocument}} *</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY" (click)="picker2.open()"
+                                formControlName="pqLastDateOfSubmission" appDate [max]="tenderDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                            <mat-error *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">
+                                Choose last date of submission of filled pq document
+                            </mat-error>
+                        </mat-form-field>
                     </div>
-                    <div class="action-btn" *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
-                        fxLayoutAlign="end center" fxLayoutGap="24px">
-                        <button mat-button (click)="onSave()" style="background-color: grey ;" [disabled]="btnState">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                <i class="icon-save fa-solid fa-floppy-disk"></i>
-                                <div>{{constVariable.saveBtn}}</div>
-                            </div>
-                        </button>
-                        <button *ngIf="pqFormId" mat-button (click)="onSubmit()" style="background-color: green ;"
-                            [disabled]="btnState">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                <i class="icon-submit fa-solid fa-paper-plane"></i>
-                                <div>{{constVariable.submitBtn}}</div>
-                            </div>
-                        </button>
+                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column">
+                        <mat-label>{{constVariable.tentativeDateOfAwardOfWorks}} *</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput [matDatepicker]="picker3" placeholder="DD/MM/YYYY" (click)="picker3.open()"
+                                formControlName="tentativeDateOfAward" appDate [min]="tenderDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                            <mat-datepicker #picker3></mat-datepicker>
+                            <mat-error *ngIf="adminPqForm.get('tentativeDateOfAward')?.errors?.['required']">
+                                Choose tentative date of award of works
+                            </mat-error>
+                        </mat-form-field>
                     </div>
-                    <div *ngIf="userRole?.includes('contractor')" class="action-btn" fxLayout="row"
-                        fxLayoutAlign="end center" fxLayoutGap="24px">
-                        <button class="button-apply" mat-button type="button" (click)="applyPqForm()" [disabled]="btnTenderApplnstate">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                <i *ngIf="applicationFormId == 0" class="icon-appy fa-solid fa-angles-right"></i>
-                                <i *ngIf="applicationFormId" class="fa-solid fa-pen-to-square"></i>
-                                <div matTooltip={{disableMsg}}>{{applyBtnLabel}}</div>
-                            </div>
-                        </button>
+                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column">
+                        <mat-label>{{constVariable.scheduledCompletion}} *</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput [matDatepicker]="picker4" placeholder="DD/MM/YYYY" (click)="picker4.open()"
+                                formControlName="scheduledCompletion" appDate [min]="tenderDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                            <mat-datepicker #picker4></mat-datepicker>
+                            <mat-error *ngIf="adminPqForm.get('scheduledCompletion')?.errors?.['required']">
+                                Choose scheduled completion
+                            </mat-error>
+                        </mat-form-field>
                     </div>
-                </form>
-            </mat-card>
-        </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column"></div>
+                </div>
+                <div class="action-btn" *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
+                    fxLayoutAlign="end center" fxLayoutGap="24px">
+                    <button mat-button (click)="onSave()" style="background-color: grey ;" [disabled]="btnState">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-save fa-solid fa-floppy-disk"></i>
+                            <div>{{constVariable.saveBtn}}</div>
+                        </div>
+                    </button>
+                    <button *ngIf="pqFormId" mat-button (click)="onSubmit()" style="background-color: green ;"
+                        [disabled]="btnState">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-submit fa-solid fa-paper-plane"></i>
+                            <div>{{constVariable.submitBtn}}</div>
+                        </div>
+                    </button>
+                </div>
+                <div *ngIf="userRole?.includes('contractor')" class="action-btn" fxLayout="row"
+                    fxLayoutAlign="end center" fxLayoutGap="24px">
+                    <button class="button-apply" mat-button type="button" (click)="applyPqForm()"
+                        [disabled]="btnTenderApplnstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i *ngIf="applicationFormId == 0" class="icon-appy fa-solid fa-angles-right"></i>
+                            <i *ngIf="applicationFormId" class="fa-solid fa-pen-to-square"></i>
+                            <div matTooltip={{disableMsg}}>{{applyBtnLabel}}</div>
+                        </div>
+                    </button>
+                </div>
+            </form>
+        </mat-card>
     </div>
 </div>

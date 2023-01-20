@@ -6,6 +6,6 @@
    <button mat-stroked-button *ngIf="userRole?.includes('admin')"
       (click)="navigateToPQForm()">{{buttonLabel}}</button>
    <button *ngIf="!userRole?.includes('admin') && rowData.workflow_step != 'DRAFT' && rowData.pq_id " mat-stroked-button (click)="viewPQForm()">{{constantVariables.viewPQFormBtn}}</button>
-   <button *ngIf="userRole?.includes('admin') && (rowData.workflow_step != 'YET_TO_BE_PUBLISHED') && (rowData.workflow_step != 'PUBLISHED')" mat-stroked-button (click)="viewTenderApplicants()">{{constantVariables.viewApplicantsBtn}}</button>
+   <button *ngIf="userRole?.includes('admin') && (rowData.workflow_step != 'YET_TO_BE_PUBLISHED')" mat-stroked-button (click)="viewTenderApplicants()">{{constantVariables.viewApplicantsBtn}}</button>
    <button *ngIf="userRole?.includes('contractor')" mat-stroked-button (click)="applyTenderApplicantForm()"  [disabled]="btnTenderApplnstate" matTooltip="{{disableMsg}}">{{applyBtnLabel}}</button>
 </div>
