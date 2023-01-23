@@ -1,0 +1,75 @@
+<div fxLayout="row wrap">
+    <div class="mb-24" fxFlex.xs="100%" fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
+        <mat-label>{{constantVariable.technicalBid}} *</mat-label>
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                <i class="fa-icons fa-solid fa-file-arrow-up"></i>
+                <span class="textLink">Upload File</span>
+            </label>
+            <label for="file" hidden>
+                <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden
+                    [disabled]="btnstate">
+            </label>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                <div>
+                    <span *ngIf="!file?.name && !fileName">No file Choosen</span>
+                    <span *ngIf="fileName">{{fileName}}</span>
+                    <span>{{file?.name}}</span>
+                </div>
+                <div>
+                    <button *ngIf="file?.name" type="button" mat-icon-button class="icon-approve"
+                        matTooltip="Remove Document" matTooltipPosition="right" (click)="removeSelectedFile(file)">
+                        <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
+                    </button>
+                    <button *ngIf="fileName" type="button" mat-button class="icon-approve" matTooltip="Download file"
+                        matTooltipPosition="right" (click)="downloadSelectedFile(tenderId)">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="fa-solid fa-file-arrow-down"></i>
+                            <div>Download</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div
+            *ngIf="isFileUploaded && tenderDetails?.get('file')?.invalid && (tenderDetails?.get('file')?.dirty || tenderDetails.get('file')?.touched)">
+            <div *ngIf="tenderDetails?.get('file')?.errors?.['required']">
+                File Required
+            </div>
+        </div>
+    </div>
+    <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px" *ngIf="!downloadBtnState">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <mat-label>{{constantVariable.financialBid}} *</mat-label>
+            <div fxLayout="row" fxLayoutGap="25%">
+                <label class="button-upload" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                    <i class="fa-icons fa-solid fa-file-import"></i>
+                    <span class="textLink">Import File</span>
+
+                    <input id="fileTender" type="file" (change)="importExcel($event)" accept=".xlsx,.csv" hidden
+                        [disabled]="btnstate">
+                </label>
+            </div>
+            <div fxLayout="row" fxLayoutGap="25%">
+                <button type="button" mat-button class="icon-approve" matTooltip="Download file"
+                    matTooltipPosition="right" (click)="exportExcelFile()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <div>Download</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="example-wrapper">
+            <ag-grid-angular style="width: 100%;" class="ag-theme-alpine" [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
+                (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"
+                (rowEditingStarted)="onRowEditingStarted($event)" (rowEditingStopped)="onRowEditingStopped($event)"
+                (cellValueChanged)="onCellValueChanged($event)" (rowValueChanged)="onRowValueChanged($event)"
+                (gridReady)="onGridReady($event)" (cellEditingStopped)="onCellEditingStopped($event)"
+                [domLayout]="domLayout" [overlayLoadingTemplate]="overlayLoadingTemplate"
+                [stopEditingWhenCellsLoseFocus]=true>
+            </ag-grid-angular>
+        </div>
+    </div>
+</div>

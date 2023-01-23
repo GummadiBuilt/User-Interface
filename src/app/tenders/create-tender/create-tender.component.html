@@ -33,20 +33,6 @@
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
-                    <!-- <mat-form-field appearance="outline"
-                        *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='Draft' ">
-                        <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
-                            <mat-option value='PQForm'>PQ-Form</mat-option>
-                            <mat-option *ngIf="!userRole?.includes('contractor') && this.tenderDetails.get('workflowStep')?.value =='Under Process'"
-                                [routerLink]="['/tenders', tenderId, 'view-applicants']">
-                                View Applicants
-                            </mat-option>
-                            <mat-option *ngIf="userRole?.includes('contractor')"
-                                value={{applicantLabel}} [disabled]="optionApplnState">
-                                {{applicantLabel}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
                     <app-action-dropdown></app-action-dropdown>
                 </div>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
@@ -179,7 +165,7 @@
                         fxLayout="column" *ngIf="downloadBtnState">
 
                     </div>
-                    <div class="mb-24" fxFlex.xs="100%" fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
+                    <!-- <div class="mb-24" fxFlex.xs="100%" fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
                         <mat-label>{{constantVariable.technicalBid}} *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
@@ -257,8 +243,9 @@
                                 [overlayLoadingTemplate]="overlayLoadingTemplate" [stopEditingWhenCellsLoseFocus]=true>
                             </ag-grid-angular>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
+                <app-technical-financial-bid [tenderData]="selectedTender$ | async"></app-technical-financial-bid>
                 <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                     <button *ngIf="userRole?.includes('client')" mat-button style="background-color: grey ;"
                         (click)="onSave()" [disabled]="btnstate">
