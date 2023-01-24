@@ -33,7 +33,8 @@
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
-                    <app-action-dropdown></app-action-dropdown>
+                    <app-action-dropdown *ngIf="tenderDataLoaded" [tenderData]="selectedTender$ | async"
+                        [tenderDetails]="tenderDetails"></app-action-dropdown>
                 </div>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
@@ -165,7 +166,7 @@
                         fxLayout="column" *ngIf="downloadBtnState">
 
                     </div>
-                    <!-- <div class="mb-24" fxFlex.xs="100%" fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
+                    <div class="mb-24" fxFlex.xs="100%" fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
                         <mat-label>{{constantVariable.technicalBid}} *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
@@ -238,14 +239,13 @@
                                 (rowEditingStarted)="onRowEditingStarted($event)"
                                 (rowEditingStopped)="onRowEditingStopped($event)"
                                 (cellValueChanged)="onCellValueChanged($event)"
-                                (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
+                                (rowValueChanged)="onRowValueChanged($event)"
                                 (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
                                 [overlayLoadingTemplate]="overlayLoadingTemplate" [stopEditingWhenCellsLoseFocus]=true>
                             </ag-grid-angular>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
-                <app-technical-financial-bid [tenderData]="selectedTender$ | async"></app-technical-financial-bid>
                 <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                     <button *ngIf="userRole?.includes('client')" mat-button style="background-color: grey ;"
                         (click)="onSave()" [disabled]="btnstate">

@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { tenderResopnse } from 'src/app/tenders/tender/tenderResponse';
-import { ApiServicesService } from '../api-services.service';
 import { PageConstants } from '../application.constants';
 import { ConfirmationDlgComponent } from '../confirmation-dlg.component';
 
@@ -19,29 +18,39 @@ export class ActionDropdownComponent implements OnInit {
   public userRole: string[] | undefined;
   public applicantLabel!: any;
   public optionApplnState!: boolean;
-  tenderDetails!: FormGroup;
   public tenderId: string | null | undefined;
   public pqID!: number;
   public applicationFormId!: number;
   public applicationFormStatus!: string;
+  @Input() tenderDetails!: FormGroup;
+  @Input() adminPqForm!: FormGroup;
+  private _tenderData: any;
+  private _pqData: any;
 
-  constructor(private _formBuilder: FormBuilder, protected keycloak: KeycloakService, private toastr: ToastrService,
-    public router: Router, private dialog: MatDialog, private route: ActivatedRoute, private ApiServicesService: ApiServicesService,) {
+  @Input() set tenderData(value: any) {
+    this._tenderData = value;
+  }
+  get tenderData() {
+    return this._tenderData;
+  }
+
+  @Input() set pqData(value: any) {
+    this._pqData = value;
+  }
+  get pqData() {
+    return this._pqData;
+  }
+
+  constructor(protected keycloak: KeycloakService, private toastr: ToastrService,
+    public router: Router, private dialog: MatDialog, private route: ActivatedRoute,) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('tenderId');
       this.tenderId = id;
-      if (id) {
-        this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
-          //console.log('Tender data by id', data);
-          this.pqID = data.pqFormId;
-          this.applicationFormId = data.applicationFormId;
-          this.applicationFormStatus = data.applicationFormStatus;
-          this.dropDownOptions();
-        });
-      }
     });
   }
 
+  parentTenderData!: tenderResopnse;
+  parentPqData!: any;
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
@@ -49,9 +58,32 @@ export class ActionDropdownComponent implements OnInit {
     } catch (e) {
       this.toastr.error('Failed to load user details' + e);
     }
-    this.tenderDetails = this._formBuilder.group({
-      workflowStep: ['']
-    });
+
+    this.parentTenderData = this.getTenderData(this.tenderData);
+    if (this.parentTenderData) {
+      this.pqID = this.parentTenderData.pqFormId;
+      this.applicationFormId = this.parentTenderData.applicationFormId;
+      this.applicationFormStatus = this.parentTenderData.applicationFormStatus;
+    }
+
+    this.parentPqData = this.getPqData(this.pqData);
+    if (this.parentPqData) {
+      this.pqID = this.parentPqData.id;
+      this.applicationFormId = this.parentPqData.applicationFormId;
+      this.applicationFormStatus = this.parentPqData.applicationFormStatus;
+    }
+
+    this.dropDownOptions();
+  }
+
+  getTenderData(data: any) {
+    let tData = data;
+    return tData;
+  }
+
+  getPqData(data: any) {
+    let pqData = data;
+    return pqData;
   }
 
   dropDownOptions() {
@@ -63,7 +95,7 @@ export class ActionDropdownComponent implements OnInit {
       } else {
         this.applicantLabel = this.constantVariable.applyBtn;
       }
-      if (this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process") {
+      if (this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails?.get('workflowStep')?.value == "Under Process") {
         this.optionApplnState = true;
         this.applicantLabel = this.constantVariable.applyBtn;
       }

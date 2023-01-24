@@ -62,7 +62,6 @@ import { INRCurrencyPipe } from './shared/inrcurrency.pipe';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
 import { ActionDropdownComponent } from './shared/action-dropdown/action-dropdown.component';
-import { TechnicalFinancialBidComponent } from './tenders/technical-financial-bid/technical-financial-bid.component';
 import { MatInputRequiredDirective } from './directives/mat-input-required.directive';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
@@ -144,7 +143,6 @@ export const MY_DATE_FORMATS = {
     INRCurrencyPipe,
     CompareApplicantsComponent,
     ActionDropdownComponent,
-    TechnicalFinancialBidComponent,
     MatInputRequiredDirective,
   ],
   imports: [
