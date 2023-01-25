@@ -268,6 +268,9 @@ export class TenderApplicationFormComponent implements OnInit {
       this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
       this.tenderApplicantFormDisable();
     }
+    if(this.userRole?.includes('admin') || this.userRole?.includes('client')){
+      this.tenderApplicantFormDisable();
+    }
   }
 
   step = 0;
@@ -1033,7 +1036,7 @@ export class TenderApplicationFormComponent implements OnInit {
     }
   }
   tenderApplicantFormDisable() {
-    if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT') {
+    if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT' || this.userRole?.includes('admin') || this.userRole?.includes('client')) {
       this.warningMessage = this.constantVariable.disabledWarningTenderApplicantMsg;
       this.btnstate = true;
       this.btnsDisable = true;

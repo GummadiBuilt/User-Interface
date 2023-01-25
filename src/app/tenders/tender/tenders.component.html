@@ -104,7 +104,15 @@
                         </div>
 
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-                            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
+                            <div *ngIf="!userRole?.includes('contractor')" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
+                                <div>
+                                    <h5 class="text-maroon bold-500">Tender Document</h5>
+                                </div>
+                                <span matTooltip="{{tender.tender_document_name}}"
+                                    (click)="downloadDocument(tender.tender_id)"><i
+                                        class="icon-download fa-solid fa-file-arrow-down"></i></span>
+                            </div>
+                            <div *ngIf="userRole?.includes('contractor') && tender.workflow_step == 'QUALIFIED'" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
                                 <div>
                                     <h5 class="text-maroon bold-500">Tender Document</h5>
                                 </div>

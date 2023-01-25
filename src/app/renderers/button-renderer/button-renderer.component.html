@@ -2,7 +2,9 @@
    <span *ngIf="!userRole?.includes('contractor')" matTooltip="{{label}}" (click)="btnClickedHandler(rowData)">
       <i class="icon-download fa-solid fa-file-arrow-down"></i>
    </span>
-
+   <span *ngIf="userRole?.includes('contractor') && rowData.workflow_step == 'QUALIFIED'" matTooltip="{{label}}" (click)="btnClickedHandler(rowData)">
+      <i class="icon-download fa-solid fa-file-arrow-down"></i>
+   </span>
    <button mat-stroked-button *ngIf="userRole?.includes('admin')"
       (click)="navigateToPQForm()">{{buttonLabel}}</button>
    <button *ngIf="!userRole?.includes('admin') && rowData.workflow_step != 'DRAFT' && rowData.pq_id " mat-stroked-button (click)="viewPQForm()">{{constantVariables.viewPQFormBtn}}</button>
