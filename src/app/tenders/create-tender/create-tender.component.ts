@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, CsvExportParams, GridApi,
   GridOptions,
-  GridReadyEvent, RowValueChangedEvent,
+  GridReadyEvent, RowNode, RowValueChangedEvent,
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { ApiServicesService, toastPayload } from '../../shared/api-services.service';
@@ -22,6 +22,7 @@ import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate
 import { PageConstants } from 'src/app/shared/application.constants';
 import moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tenderApplicantRankingResopnse } from '../view-applicants/tenderApplicantRankingResopnse';
 
 @Component({
   selector: 'app-create-tender',
@@ -168,22 +169,23 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.toastr.success('File Downloaded successfully');
     });
   }
+
   //AG GRID COMPONENTS
-  public appHeaders = ["Item No", "Item Description", "Unit", "Quantity"]
+  public appHeaders = ["Item No", "Item Description", "Unit", "Quantity", "Price"]
   public gridApi!: GridApi;
   public gridOptions!: any;
   public editType: 'fullRow' = 'fullRow';
-  public rowData: any[] = [{ "Item No": 0, "Item Description": "", "Unit": "", "Quantity": 0 }];
+  public rowData: any[] = [{ "Item No": 0, "Item Description": "", "Unit": "", "Quantity": 0, "Price": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
   units = ['Ton', 'Square meter', 'Running meter'];
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120, },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120, },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 8, minWidth: 550, autoHeight: true, wrapText: true },
     {
-      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 140,
+      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 140, maxWidth: 140,
       cellRenderer: UnitCellRendererComponent,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
@@ -191,11 +193,18 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       },
     },
     {
-      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120,
+      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120,
       cellEditor: NumericCellRendererComponent
     },
     {
-      headerName: "Action", flex: 1, maxWidth: 120,
+      field: this.appHeaders[4], sortable: true, flex: 1, minWidth: 200, autoHeight: true, wrapText: true,
+      editable: true,
+      filter: 'agTextColumnFilter',
+      valueFormatter: params => params.data.Price ? currencyFormatter(params.data.Price, '') : '',
+      cellClass: 'ag-right-aligned-cell',
+    },
+    {
+      headerName: "Action", flex: 1, minWidth: 120, maxWidth: 120,
       cellRenderer: (params: any) => {
         const divElement = document.createElement("div");
         const editingCells = params.api.getEditingCells();
@@ -264,7 +273,46 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
+
+    if (this.userRole?.includes('contractor')) {
+      setTimeout(() => {
+        let pinnedBottomData = this.generatePinnedBottomData();
+        this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
+      }, 500);
+    }
+
+    if (!this.userRole?.includes('contractor')) {
+      this.gridOptions?.setColumnsVisible(['Price'], false);
+    }
   }
+
+  //Price Total pinned on ag-grid footer
+  generatePinnedBottomData() {
+    // generate a row-data with null values
+    let result: any = {};
+    this.gridOptions?.getAllGridColumns()?.forEach((item: any) => {
+      // console.log(item);
+      result[item.colId] = null;
+    });
+    return this.calculatePinnedBottomData(result);
+  }
+  calculatePinnedBottomData(target: any) {
+    let columnsWithAggregation = ['Price'];
+    columnsWithAggregation?.forEach(element => {
+      this.gridApi?.forEachNodeAfterFilter((rowNode: RowNode) => {
+        if (rowNode.data[element]) {
+          target[element] += Number(rowNode.data[element]);
+        }
+      });
+      if (target[element]) {
+        target[element] = `Total: ${target[element]}`;
+      } else {
+        target[element] = ``;
+      }
+    });
+    return target;
+  }
+
   onCellClicked(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
@@ -490,7 +538,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
-    console.log(workFlowStep);
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
     if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
@@ -513,7 +560,22 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     } else if (this.userRole?.includes("contractor")) {
       this.tenderDetails.disable();
       this.btnstate = true;
-      this.downloadBtnState = true;
+      this.gridOptions.getColumn('Item No').getColDef().editable = false;
+      this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+      this.gridOptions.getColumn('Unit').getColDef().editable = false;
+      this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+      this.gridApi.refreshCells();
     }
   }
+}
+//indian currency formatter
+function currencyFormatter(currency: number, sign: string) {
+  var x = currency?.toString();
+  var lastThree = x?.substring(x.length - 3);
+  var otherNumbers = x?.substring(0, x.length - 3);
+  if (otherNumbers != '') {
+    lastThree = ',' + lastThree;
+  }
+  var res = otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+  return sign + `${res}`;
 }

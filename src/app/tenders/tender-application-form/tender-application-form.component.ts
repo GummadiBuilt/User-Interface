@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, Input, OnInit, } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
@@ -19,7 +19,6 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/materia
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { DatePipe } from '@angular/common';
-import { CdkPortal } from '@angular/cdk/portal';
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 
 const moment = _rollupMoment || _moment;
@@ -268,7 +267,7 @@ export class TenderApplicationFormComponent implements OnInit {
       this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
       this.tenderApplicantFormDisable();
     }
-    if(this.userRole?.includes('admin') || this.userRole?.includes('client')){
+    if (this.userRole?.includes('admin') || this.userRole?.includes('client')) {
       this.tenderApplicantFormDisable();
     }
   }
@@ -398,9 +397,9 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
-  onCellEditingStartedClientRef($event:any){
-    if($event.colDef.field === 'details'){
-        this.gridApiClientRef.stopEditing();
+  onCellEditingStartedClientRef($event: any) {
+    if ($event.colDef.field === 'details') {
+      this.gridApiClientRef.stopEditing();
     }
   }
   //Section C of PQ-Form: Projects of similar Nature
@@ -432,10 +431,10 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
-  onCellEditingStartedSimilarNature($event:any){
-    if($event.colDef.field === 'details'){
+  onCellEditingStartedSimilarNature($event: any) {
+    if ($event.colDef.field === 'details') {
       this.gridApiSimilarNature.stopEditing();
-  }
+    }
   }
 
   //Section C of PQ-Form: Statutory Compliances
