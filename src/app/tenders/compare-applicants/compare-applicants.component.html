@@ -35,10 +35,19 @@
                                         this.item?.companyName?.split('
                                         ')[1].slice(0, 1)}}</div>
                                 </div>
-                                <div fxLayout="row" fxLayoutGap="48px">
-                                    <div fxLayout="column" fxLayoutGap="20px">
-                                        <div class="bold-500 font-20p">{{item?.companyName}}</div>
-                                    </div>
+                                <div fxLayout="column" fxLayoutGap="8px">
+                                    <form [formGroup]="applicantRankForm">
+                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                                            <mat-label>Rank:</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput formControlName="applicantRank" numbersOnly
+                                                    placeholder="Rank">
+                                            </mat-form-field>
+                                            <i class="icon-update fa-solid fa-check" matTooltip="Update Rank"
+                                                (click)="onUpdate()"></i>
+                                        </div>
+                                    </form>
+                                    <div class="bold-500 font-20p">{{item?.companyName}}</div>
                                 </div>
                             </div>
                         </th>
@@ -199,8 +208,10 @@
                         </td>
                         <td *ngFor="let item of applicantsData" class="label">
                             <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 1<span hidden>:</span></div>
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 2<span hidden>:</span></div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 1<span hidden>:</span>
+                                </div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 2<span hidden>:</span>
+                                </div>
                                 <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 3</div>
                             </div>
                         </td>
@@ -1012,8 +1023,10 @@
                         (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!(applicantsData?.expandFinInfo || applicantsData?.all)"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandFinInfo || applicantsData?.all"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandFinInfo || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinInfo || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Financial Information</span>
                             </div>
                         </td>

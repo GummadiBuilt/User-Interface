@@ -6,6 +6,10 @@ import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { ExcelService } from 'src/app/shared/excel.service';
 import { applicantsPqFormResponse } from '../tender-application-form/applicantpqformresponse';
 import * as XLSX from 'xlsx';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { KeycloakService } from 'keycloak-angular';
+import { tenderApplicantRankingResopnse } from '../view-applicants/tenderApplicantRankingResopnse';
 
 @Component({
   selector: 'app-compare-applicants',
@@ -28,7 +32,8 @@ export class CompareApplicantsComponent implements OnInit {
   @ViewChild('userTable') userTable!: ElementRef;
 
   constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService,
-    private excelService: ExcelService) {
+    private excelService: ExcelService, private _formBuilder: FormBuilder, private toastr: ToastrService,
+    protected keycloak: KeycloakService,) {
     this.route.paramMap.subscribe(params => {
       this.tenderId = params.get('tenderId');
       this.applicationFormIds = params.get('applicationFormIds');
@@ -100,8 +105,45 @@ export class CompareApplicantsComponent implements OnInit {
     this.compAuditorsData = compAuditorsArr;
   }
 
+  applicantRankForm!: FormGroup;
+  public userRole: string[] | undefined;
+
   ngOnInit(): void {
-    // this.getApplicantsData();
+    try {
+      this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
+      //console.log('user role', this.userRole);
+    } catch (e) {
+      this.toastr.error('Failed to load user details' + e);
+    }
+
+    this.applicantRankForm = this._formBuilder.group({
+      applicantRank: [''],
+    });
+
+    this.getTenderApplicantsRankingData();
+  }
+
+  applicantRankingData: any;
+  getTenderApplicantsRankingData() {
+    this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
+      this.applicantRankingData = data;
+      console.log(this.applicantRankingData);
+      this.editData(this.applicantRankingData);
+      // this.applicantRankingData.forEach((item:any)=>{
+      //   this.editData(item);
+      // });
+    });
+  }
+  editData(data: any) {
+    console.log(data);
+    if (data) {
+      data.forEach((item: any) => {
+        this.applicantRankForm?.get('applicantRank')?.patchValue(item.applicantRank);
+      });
+      // this.applicantRankForm?.get('applicantRank')?.patchValue(data.applicantRank);
+    } else {
+      this.toastr.error('No data to display');
+    }
   }
 
   exportToExcel(event: any) {
@@ -112,4 +154,22 @@ export class CompareApplicantsComponent implements OnInit {
 
   statutoryCompliancesHeaders = ["ESI Registration", "EPF Registration", "GST Registration", "PAN Number",];
   safteyPolicyHeaders = ["Safety Policy Manual", "PPE to Staff", "PPE to Work Men", "Saftey Office Availability",];
+
+  onUpdate() {
+    console.log(this.applicantRankForm.value);
+    // if (this.tenderId && this.applicantRankForm.valid && this.userRole?.includes('admin')) {
+    //   this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.applicantRankForm.value, 'DRAFT').subscribe({
+    //     next: (response => {
+    //       this.toastr.success('Rank Updated Successfully');
+    //     }),
+    //     error: (error => {
+    //       console.log(error);
+    //     })
+    //   });
+    // } else {
+    //   //error
+    //   console.log('error');
+    //   this.toastr.error('Error in Updating Applicant Rank');
+    // }
+  }
 }
