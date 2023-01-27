@@ -175,6 +175,15 @@ export class ApiServicesService {
   public getTenderApplicantCompare(tenderId: any, applicantIds: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.get<applicantsPqFormResponse>(this.url + '/tender-applicants/tender/' + tenderId + '/compare/' + applicantIds);
   }
+  // Post API that allow qualified contractors to save/submit Financial & Technical bid info
+  public tenderBidInfo(tenderId: any, data: any): Observable<tenderResopnse>{
+    return this.httpClient.post<tenderResopnse>(this.url +'/'+ tenderId + '/tender-bid-info', data);
+  }
+
+  // Post API allow qualified contractors to update Financial & Technical bid info
+  public tenderBidInfoUpdate(tenderId: any,bidId:any, data: any): Observable<tenderResopnse>{
+    return this.httpClient.put<tenderResopnse>(this.url +'/'+ tenderId + '/tender-bid-info/update/'+bidId, data);
+  }
 
   //download files converstion
   downloadFile(data: any) {

@@ -17,6 +17,7 @@ export const PageConstants = {
     budget: `Budget`,
     technicalBid: `Technical Bid`,
     financialBid: `Financial Bid`,
+    technicalBidContractor: 'Upload your Technical Bid',
     lastDateforSubmissionOfFilledPqDocument: `Last Date for Submission of filled PQ Document`,
     scheduledCompletion: `Scheduled Completion`,
     tentativeDateOfAwardOfWorks: `Tentative Date of Award of Works`,
@@ -79,4 +80,6 @@ export const PageConstants = {
     submitTenderApplicationMsg: `Submit action disables further editing of your application`,
     disabledWarningPQFormMsg: `Cannot edit the values because PQ-Form Published`,
     disabledWarningTenderMsg: `You cannot edit a tender when its in `,
+    submitContractorBidTitle:'Are you sure you want to submit the bid?',
+    submitContractorBidMsg:'Submitting this tender bid will disable further editing and will be sent to Admins for review'
 }

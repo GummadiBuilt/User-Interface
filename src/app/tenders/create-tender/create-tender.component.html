@@ -170,7 +170,7 @@
                         <mat-label>{{constantVariable.technicalBid}} *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
-                                fxLayoutGap="8px">
+                                fxLayoutGap="8px" *ngIf="!userRole?.includes('contractor')">
                                 <i class="fa-icons fa-solid fa-file-arrow-up"></i>
                                 <span class="textLink">Upload File</span>
                             </label>
@@ -208,13 +208,54 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mb-24" fxFlex.xs="100%" fxLayout="column" fxLayoutGap="4px" *ngIf="userRole?.includes('contractor') && (this.tenderDetails.get('workflowStep')?.value == 'Qualified')">
+                        <mat-label>{{constantVariable.technicalBidContractor}} *</mat-label>
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                            <label  class="button-upload" for="contractorDocument" fxLayout="row" fxLayoutAlign="start center"
+                                fxLayoutGap="8px">
+                                <i class="fa-icons fa-solid fa-file-arrow-up"></i>
+                                <span class="textLink">Upload File</span>
+                            </label>
+                            <label for="contractorDocument" hidden >
+                                <input id="contractorDocument"  [disabled]="btnConstate" type="file" class="form-control" (change)="onFileChangeContractor($event)" hidden>
+                            </label>
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div>
+                                    <span *ngIf="!contractorDocument?.name && !contractorFileName">No file Choosen</span>
+                                    <span *ngIf="contractorFileName">{{contractorFileName}}</span>
+                                    <span>{{contractorDocument?.name}}</span>
+                                </div>
+                                <div>
+                                    <button *ngIf="contractorDocument?.name" type="button" mat-icon-button class="icon-approve"
+                                        matTooltip="Remove Document" matTooltipPosition="right"
+                                        (click)="removeSelectedFileContractor(contractorDocument)">
+                                        <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
+                                    </button>
+                                    <button *ngIf="contractorFileName" type="button" mat-button class="icon-approve"
+                                        matTooltip="Download file" matTooltipPosition="right"
+                                        (click)="downloadSelectedFile(tenderId)">
+                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                            <i class="fa-solid fa-file-arrow-down"></i>
+                                            <div>Download</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div
+                            *ngIf="isFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
+                            <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
+                                File Required
+                            </div>
+                        </div> -->
+                    </div>
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px"
                         *ngIf="!downloadBtnState">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <mat-label>{{constantVariable.financialBid}} *</mat-label>
                             <div fxLayout="row" fxLayoutGap="25%">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
-                                    fxLayoutGap="8px">
+                                    fxLayoutGap="8px" *ngIf="!userRole?.includes('contractor')">
                                     <i class="fa-icons fa-solid fa-file-import"></i>
                                     <span class="textLink">Import File</span>
 
@@ -266,6 +307,20 @@
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-save fa-solid fa-floppy-disk"></i>
                             <div>{{constantVariable.updateBtn}}</div>
+                        </div>
+                    </button>
+                    <button *ngIf="userRole?.includes('contractor')" mat-button style="background-color: grey ;"
+                        (click)="onSaveContractor()"  [disabled]="btnConstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-save fa-solid fa-floppy-disk"></i>
+                            <div>{{constantVariable.saveBtn}}</div>
+                        </div>
+                    </button>
+                    <button *ngIf="userRole?.includes('contractor') && this.contractorBidId" mat-button (click)="onSubmitContractor()"
+                        style="background-color: green ;"  [disabled]="btnConstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-submit fa-solid fa-paper-plane"></i>
+                            <div>{{constantVariable.submitBtn}}</div>
                         </div>
                     </button>
                 </div>
