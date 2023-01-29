@@ -63,6 +63,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
 import { ActionDropdownComponent } from './shared/action-dropdown/action-dropdown.component';
 import { MatInputRequiredDirective } from './directives/mat-input-required.directive';
+import { DownloadButtonRendererComponent } from './renderers/download-button-renderer/download-button-renderer.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -144,6 +145,7 @@ export const MY_DATE_FORMATS = {
     CompareApplicantsComponent,
     ActionDropdownComponent,
     MatInputRequiredDirective,
+    DownloadButtonRendererComponent,
   ],
   imports: [
     BrowserModule,

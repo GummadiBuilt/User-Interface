@@ -4,6 +4,7 @@ export enum StatusValues {
      "PUBLISHED" = "Published" ,
      "UNDER_PROCESS" = "Under Process",
      "QUALIFIED" = "Qualified", 
-     "NOT_QUALIFIED" = "Not Qualified"
+     "NOT_QUALIFIED" = "Not Qualified",
+     "IN_REVIEW" = "In Review"
      
 }

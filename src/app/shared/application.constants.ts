@@ -71,6 +71,7 @@ export const PageConstants = {
     expandAllBtn: `Expand All`,
     collapseAllBtn: `Collapse All`,
     cancelBtn: `Cancel`,
+    recommendBtn:'Recommend',
     applyTenderMsg: `Are you sure you want to apply for this tender?`,
     submitTenderTitle: `Are you sure you want to submit the tender?`,
     submitTenderMsg: `Submitting this tender will disable further editing and will be sent to Admins for review`,

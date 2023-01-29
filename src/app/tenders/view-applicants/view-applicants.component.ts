@@ -5,6 +5,8 @@ import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallba
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { DownloadButtonRendererComponent } from 'src/app/renderers/download-button-renderer/download-button-renderer.component';
+import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
@@ -50,10 +52,14 @@ export class ViewApplicantsComponent implements OnInit {
       this.rowData = data;
       if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
         this.disableViewApplicants();
+        if(this.rowData[0].tenderStatus === 'IN_REVIEW'){
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'radio'], true);
+        }
       }
     });
   }
   status = ['QUALIFIED', 'NOT_QUALIFIED']
+  //this.rowData[0].tenderStatus == "IN_REVIEW"
   public columnDefs: ColDef[] = [
     {
       headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true,
@@ -87,6 +93,24 @@ export class ViewApplicantsComponent implements OnInit {
       }
     },
     { headerName: 'Note', field: 'justificationNote', filter: 'agTextColumnFilter', flex: 5, autoHeight: true, wrapText: true, editable: true },
+    {
+      headerName: 'Download', field: 'download', flex: 1, cellRenderer: DownloadButtonRendererComponent,hide:true,
+      cellRendererParams: {
+        context: this
+      },
+      filter: false,
+      colId: "download",
+      minWidth: 350,
+    },
+    {
+      headerName: 'Recommended', field: 'radio',  flex: 1,filter:false, autoHeight: true, wrapText: true,maxWidth:150,hide:true,
+      cellRenderer: function cellTitle(params:any) {
+        if(params.data.applicationStatus != "NOT_QUALIFIED"){
+         let cellValue = '<div class="ngSelectionCell"><input id='+ params.data.applicationFormId +' name="selected" type="radio"></div>';
+         return cellValue;
+        }else return;
+      },
+    }
   ];
   public defaultColDef: ColDef = {
     minWidth: 200,
@@ -148,6 +172,9 @@ export class ViewApplicantsComponent implements OnInit {
   onRowDragMove(event: any) {
     // console.log('onRowDragMOVE', event);
   }
+  onCellValueChanged(event: CellValueChangedEvent) {
+    
+  }
 
   onRowValueChanged(event: any) {
     var data = event.data;
@@ -194,6 +221,9 @@ export class ViewApplicantsComponent implements OnInit {
       console.log('error');
       this.toastr.error('Error in Submitting Applicant Details');
     }
+  }
+  onRecommend(){
+    console.log(this.rowData);
   }
   disableViewApplicants() {
     this.btnstate = true;

@@ -27,7 +27,8 @@
                 [rowDragManaged]="true" (gridReady)="onGridReady($event)" (rowValueChanged)="onRowValueChanged($event)"
                 [rowSelection]="rowSelection" (selectionChanged)="onSelectionChanged($event)"
                 (rowSelected)="onRowSelected($event)" (rowDragEnd)="onRowDragEnd($event)"
-                (rowDragMove)="onRowDragMove($event)" [stopEditingWhenCellsLoseFocus]=true>
+                (rowDragMove)="onRowDragMove($event)" [stopEditingWhenCellsLoseFocus]=true
+                (cellValueChanged)="onCellValueChanged($event)">
             </ag-grid-angular>
             <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
                 <button mat-button style="background-color: grey;" (click)="onUpdate()" disabled={{btnstate}}>
@@ -40,6 +41,12 @@
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                         <i class="icon-submit fa-solid fa-paper-plane"></i>
                         <div>{{constantVariable.submitBtn}}</div>
+                    </div>
+                </button>
+                <button mat-button style="background-color: green;" (click)="onRecommend()">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                        <div>{{constantVariable.recommendBtn}}</div>
                     </div>
                 </button>
             </div>
