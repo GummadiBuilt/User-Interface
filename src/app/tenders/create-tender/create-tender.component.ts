@@ -94,7 +94,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
-      //console.log('user role', this.userRole);
+      // console.log('user role', this.userRole);
     } catch (e) {
       this.toastr.error('Failed to load user details' + e);
     }
@@ -217,6 +217,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   downloadSelectedFile(id: any) {
     this.ApiServicesService.downloadTechnicalTenderDocument(id).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
+  }
+
+  downloadContractorFile(tenderId: any, userId: any) {
+    this.ApiServicesService.downloadTenderBidInfoDocument(tenderId, userId).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });
@@ -601,7 +608,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     } else {
       this.ApiServicesService.tenderBidInfo(this.tenderId, formData).subscribe({
         next: (response => {
-         // console.log(response.contractorBidId);
           this.contractorBidId = response.contractorBidId;
           this.toastr.success('Updated Successfully');
         }),

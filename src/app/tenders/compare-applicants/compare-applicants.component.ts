@@ -1,15 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { forkJoin, map, mergeMap, reduce } from 'rxjs';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { ExcelService } from 'src/app/shared/excel.service';
 import { applicantsPqFormResponse } from '../tender-application-form/applicantpqformresponse';
-import * as XLSX from 'xlsx';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { KeycloakService } from 'keycloak-angular';
-import { tenderApplicantRankingResopnse } from '../view-applicants/tenderApplicantRankingResopnse';
 
 @Component({
   selector: 'app-compare-applicants',
@@ -39,7 +35,9 @@ export class CompareApplicantsComponent implements OnInit {
       this.applicationFormIds = params.get('applicationFormIds');
       const appIDArray = this.applicationFormIds.split(',');
       this.ApiServicesService.getTenderApplicantCompare(this.tenderId, appIDArray).subscribe((data: applicantsPqFormResponse) => {
+        // console.log(data);
         this.getApplicantsData(data);
+        this.editData(data);
       });
     });
   }
@@ -78,7 +76,7 @@ export class CompareApplicantsComponent implements OnInit {
 
   getApplicantsData(data: any) {
     this.applicantsData = data;
-    // console.log(this.applicantsData);
+    console.log(this.applicantsData);
     const clientRowData = this.applicantsData;
     let clientArr: any[] = [];
     let simArr: any[] = [];
@@ -88,13 +86,13 @@ export class CompareApplicantsComponent implements OnInit {
     let compBankersArr: any[] = [];
     let compAuditorsArr: any[] = [];
     clientRowData.forEach((element: any) => {
-      clientArr.push(JSON.parse(element.clientReferences));
-      simArr.push(JSON.parse(element.similarProjectNature));
-      empStrengthsArr.push(JSON.parse(element.employeesStrength));
-      capitalEquipArr.push(JSON.parse(element.capitalEquipment));
-      finInfoArr.push(JSON.parse(element.financialInformation));
-      compBankersArr.push(JSON.parse(element.companyBankers));
-      compAuditorsArr.push(JSON.parse(element.companyAuditors));
+      clientArr.push(JSON.parse(element.applicationFormDto?.clientReferences));
+      simArr.push(JSON.parse(element.applicationFormDto?.similarProjectNature));
+      empStrengthsArr.push(JSON.parse(element.applicationFormDto?.employeesStrength));
+      capitalEquipArr.push(JSON.parse(element.applicationFormDto?.capitalEquipment));
+      finInfoArr.push(JSON.parse(element.applicationFormDto?.financialInformation));
+      compBankersArr.push(JSON.parse(element.applicationFormDto?.companyBankers));
+      compAuditorsArr.push(JSON.parse(element.applicationFormDto?.companyAuditors));
     });
     this.clientRefData = this.reduceArray(clientArr);
     this.projectSimilarData = this.reduceArray(simArr);
@@ -115,35 +113,30 @@ export class CompareApplicantsComponent implements OnInit {
     } catch (e) {
       this.toastr.error('Failed to load user details' + e);
     }
-
     this.applicantRankForm = this._formBuilder.group({
       applicantRank: [''],
     });
-
-    this.getTenderApplicantsRankingData();
   }
 
-  applicantRankingData: any;
-  getTenderApplicantsRankingData() {
-    this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
-      this.applicantRankingData = data;
-      console.log(this.applicantRankingData);
-      this.editData(this.applicantRankingData);
-      // this.applicantRankingData.forEach((item:any)=>{
-      //   this.editData(item);
-      // });
-    });
-  }
   editData(data: any) {
-    console.log(data);
+    // console.log(data);
+    // let ranks = data.map((i: any) => i.tenderApplicantsDto.applicantRank);
+    // console.log(ranks);
+    // for (let i = 1; i <= ranks.length; i++) {
+    //   this.applicantRankForm?.get('applicantRank')?.patchValue(i);
+    // }
     if (data) {
       data.forEach((item: any) => {
-        this.applicantRankForm?.get('applicantRank')?.patchValue(item.applicantRank);
+        this.applicantRankForm?.get('applicantRank')?.patchValue(item.tenderApplicantsDto?.applicantRank);
       });
-      // this.applicantRankForm?.get('applicantRank')?.patchValue(data.applicantRank);
     } else {
       this.toastr.error('No data to display');
     }
+    // this.applicantRankForm.patchValue({
+    //   applicantRank: data.forEach((item: any) => {
+    //     return item.tenderApplicantsDto?.applicantRank;
+    //   }),
+    // })
   }
 
   exportToExcel(event: any) {
