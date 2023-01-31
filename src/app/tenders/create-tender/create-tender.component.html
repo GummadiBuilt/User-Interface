@@ -206,7 +206,8 @@
                         </div>
                     </div>
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                        fxLayout="column" fxLayoutGap="4px">
+                        fxLayout="column" fxLayoutGap="4px"
+                        *ngIf="userRole?.includes('contractor') && (this.tenderDetails.get('workflowStep')?.value == 'Qualified')">
                         <mat-label>{{constantVariable.technicalBidContractor}} *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="contractorDocument" fxLayout="row"

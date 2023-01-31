@@ -25,20 +25,22 @@
             <table #userTable>
                 <thead>
                     <tr>
-                        <th class="header-label-empty">&nbsp;</th>
+                        <th class="header-label bold-500">Applicant Information</th>
                         <th class="header-label" *ngFor="let item of applicantsData">
                             <div class="profile-info" fxLayout="column" fxLayoutAlign="center center"
                                 fxLayoutGap="12px">
-                                <mat-card style="display: none"></mat-card>
+                                <!-- <mat-card style="display: none"></mat-card>
                                 <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
                                     <div class="initials">{{this.item?.applicationFormDto?.companyName[0]+ '' +
                                         this.item?.applicationFormDto?.companyName?.split('
                                         ')[1].slice(0, 1)}}</div>
-                                </div>
+                                </div> -->
                                 <div fxLayout="column" fxLayoutGap="8px">
+                                    <div class="bold-400">Company Name: <span
+                                            class="bold-500">{{item?.tenderApplicantsDto?.companyName}}</span></div>
                                     <form [formGroup]="applicantRankForm">
                                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-                                            <mat-label>Rank:</mat-label>
+                                            <mat-label class="bold-400">Rank:</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput formControlName="applicantRank" numbersOnly
                                                     placeholder="Rank">
@@ -47,7 +49,12 @@
                                                 (click)="onUpdate()"></i>
                                         </div>
                                     </form>
-                                    <div class="bold-500 font-20p">{{item?.applicationFormDto?.companyName}}</div>
+                                    <div class="bold-400">Status: <span
+                                            class="bold-500">{{item?.tenderApplicantsDto?.applicationStatus}}</span>
+                                    </div>
+                                    <div class="bold-400">Justification Note:
+                                        <span class="bold-500">{{item?.tenderApplicantsDto?.justificationNote}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </th>
@@ -1202,6 +1209,49 @@
                             <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
                                 <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
                                     *ngFor="let item of item">{{item.address}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!(applicantsData?.expandTenderDetails || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandTenderDetails || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
+                                <span>Tender Details</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandTenderDetails || applicantsData?.all">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Technical Document</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <!-- <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{item.tenderDetailsDto?.contractorDocumentName}}</div>
+                            </div> -->
+                            <button mat-button (click)="tenderTechnicalDownload(item.tenderApplicantsDto?.applicationUserId)">
+                                {{item.tenderDetailsDto?.contractorDocumentName}} <i
+                                    class="icon-download fa-solid fa-file-arrow-down"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandTenderDetails || applicantsData?.all">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Financial Bid</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{item.tenderDetailsDto?.tenderDocumentName}}</div>
                             </div>
                         </td>
                     </tr>

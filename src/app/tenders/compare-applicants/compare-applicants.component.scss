@@ -73,6 +73,10 @@
     background-color: rgb(150, 150, 150);
 }
 
+.bold-400 {
+    font-weight: 400;
+}
+
 .bold-500 {
     font-weight: 500;
 }
@@ -152,10 +156,17 @@ mat-label {
     font-weight: 500;
 }
 
-.icon-update{
+.icon-update {
     cursor: pointer;
 }
 
 ::ng-deep .mat-tooltip {
     background-color: #841618 !important;
+}
+
+.icon-download {
+    cursor: pointer;
+    color: #841618;
+    padding-left: 4px;
+    font-size: 16px;
 }

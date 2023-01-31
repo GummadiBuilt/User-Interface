@@ -148,6 +148,14 @@ export class CompareApplicantsComponent implements OnInit {
   statutoryCompliancesHeaders = ["ESI Registration", "EPF Registration", "GST Registration", "PAN Number",];
   safteyPolicyHeaders = ["Safety Policy Manual", "PPE to Staff", "PPE to Work Men", "Saftey Office Availability",];
 
+  tenderTechnicalDownload(applicationUserId: any) {
+    // console.log(applicationUserId);
+    this.ApiServicesService.downloadTenderBidInfoDocumentById(this.tenderId, applicationUserId).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
+  }
+
   onUpdate() {
     console.log(this.applicantRankForm.value);
     // if (this.tenderId && this.applicantRankForm.valid && this.userRole?.includes('admin')) {

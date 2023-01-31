@@ -195,6 +195,11 @@ export class ApiServicesService {
     return this.httpClient.get(this.url + '/' + tenderId + '/tender-bid-info/download/' + tenderId + '/tender-response/' + userId);
   }
 
+  //Recommend a Contractor for Tender
+  public recommendContractorForTender(tenderId: any, applicationFormId: any, data: any) {
+    return this.httpClient.put(this.url + '/tender-applicants/tender/' + tenderId + '/recommend/' + applicationFormId, data);
+  }
+
   //download files converstion
   downloadFile(data: any) {
     const downlodFile = this.ConvertFile(data);

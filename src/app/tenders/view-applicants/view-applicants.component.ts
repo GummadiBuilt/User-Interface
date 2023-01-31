@@ -52,7 +52,7 @@ export class ViewApplicantsComponent implements OnInit {
       this.rowData = data;
       if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
         this.disableViewApplicants();
-        if(this.rowData[0].tenderStatus === 'IN_REVIEW'){
+        if (this.rowData[0].tenderStatus === 'IN_REVIEW') {
           this.gridOptions?.columnModel.setColumnsVisible(['download', 'radio'], true);
         }
       }
@@ -94,7 +94,7 @@ export class ViewApplicantsComponent implements OnInit {
     },
     { headerName: 'Note', field: 'justificationNote', filter: 'agTextColumnFilter', flex: 5, autoHeight: true, wrapText: true, editable: true },
     {
-      headerName: 'Download', field: 'download', flex: 1, cellRenderer: DownloadButtonRendererComponent,hide:true,
+      headerName: 'Download', field: 'download', flex: 1, cellRenderer: DownloadButtonRendererComponent, hide: true,
       cellRendererParams: {
         context: this
       },
@@ -103,12 +103,12 @@ export class ViewApplicantsComponent implements OnInit {
       minWidth: 350,
     },
     {
-      headerName: 'Recommended', field: 'radio',  flex: 1,filter:false, autoHeight: true, wrapText: true,maxWidth:150,hide:true,
-      cellRenderer: function cellTitle(params:any) {
-        if(params.data.applicationStatus != "NOT_QUALIFIED"){
-         let cellValue = '<div class="ngSelectionCell"><input id='+ params.data.applicationFormId +' name="selected" type="radio"></div>';
-         return cellValue;
-        }else return;
+      headerName: 'Recommended', field: 'radio', flex: 1, filter: false, autoHeight: true, wrapText: true, maxWidth: 150, hide: true,
+      cellRenderer: function cellTitle(params: any) {
+        if (params.data.applicationStatus != "NOT_QUALIFIED") {
+          let cellValue = '<div class="ngSelectionCell"><input id=' + params.data.applicationFormId + ' name="selected" type="radio"></div>';
+          return cellValue;
+        } else return;
       },
     }
   ];
@@ -173,7 +173,7 @@ export class ViewApplicantsComponent implements OnInit {
     // console.log('onRowDragMOVE', event);
   }
   onCellValueChanged(event: CellValueChangedEvent) {
-    
+
   }
 
   onRowValueChanged(event: any) {
@@ -222,8 +222,24 @@ export class ViewApplicantsComponent implements OnInit {
       this.toastr.error('Error in Submitting Applicant Details');
     }
   }
-  onRecommend(){
-    console.log(this.rowData);
+  onRecommend() {
+    const selectedData = this.gridApi.getSelectedRows();
+    let applicationFormId = parseInt(selectedData.map((i: any) => i.applicationFormId));
+    // console.log(applicationFormId);
+    if (this.tenderId && applicationFormId && this.userRole?.includes('admin')) {
+      this.ApiServicesService.recommendContractorForTender(this.tenderId, applicationFormId, selectedData).subscribe({
+        next: (response => {
+          this.toastr.success('Successfully Recommended');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      });
+    } else {
+      //error
+      console.log('error');
+      this.toastr.error('Error in Recommending Applicant');
+    }
   }
   disableViewApplicants() {
     this.btnstate = true;

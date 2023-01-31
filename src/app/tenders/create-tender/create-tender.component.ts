@@ -672,7 +672,9 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Item Description').getColDef().editable = false;
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
-      this.gridOptions.getColumn('Price').getColDef().editable = false;
+      if (this.gridOptions.getColumn('Price')) {
+        this.gridOptions.getColumn('Price').getColDef().editable = false;
+      }
       this.gridApi.refreshCells();
     } else if (this.userRole?.includes("contractor")) {
       this.tenderDetails.disable();
