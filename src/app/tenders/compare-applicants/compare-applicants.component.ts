@@ -25,6 +25,7 @@ export class CompareApplicantsComponent implements OnInit {
   public compBankersData: any;
   public compAuditorsData: any;
   public tenderFinanceData: any;
+  public tenderFinancePricesData: any;
   /* the table reference */
   @ViewChild('userTable') userTable!: ElementRef;
 
@@ -86,6 +87,7 @@ export class CompareApplicantsComponent implements OnInit {
     let compBankersArr: any[] = [];
     let compAuditorsArr: any[] = [];
     let tenderFinanceArr: any[] = [];
+    let tenderFinancePricesArr: any[] = [];
     clientRowData.forEach((element: any) => {
       clientArr.push(JSON.parse(element.applicationFormDto?.clientReferences));
       simArr.push(JSON.parse(element.applicationFormDto?.similarProjectNature));
@@ -94,7 +96,8 @@ export class CompareApplicantsComponent implements OnInit {
       finInfoArr.push(JSON.parse(element.applicationFormDto?.financialInformation));
       compBankersArr.push(JSON.parse(element.applicationFormDto?.companyBankers));
       compAuditorsArr.push(JSON.parse(element.applicationFormDto?.companyAuditors));
-      tenderFinanceArr.push(JSON.parse(element.tenderDetailsDto?.tenderFinanceInfo));
+      tenderFinanceArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
+      tenderFinancePricesArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
     });
     this.clientRefData = this.reduceArray(clientArr);
     this.projectSimilarData = this.reduceArray(simArr);
@@ -103,7 +106,9 @@ export class CompareApplicantsComponent implements OnInit {
     this.finInfoData = finInfoArr;
     this.compBankersData = compBankersArr;
     this.compAuditorsData = compAuditorsArr;
-    this.tenderFinanceData = this.reduceArray(tenderFinanceArr);
+    this.tenderFinanceData = tenderFinanceArr[0];
+    this.tenderFinancePricesData = tenderFinancePricesArr;
+    //console.log(this.applicantsData);
   }
 
   applicantRankForm!: FormGroup;

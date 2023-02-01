@@ -148,17 +148,9 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         editable: false,
         filter: 'agTextColumnFilter',
         cellEditor: NumericCellRendererComponent,
-        valueGetter: (params:any) => {
-          let totalValue = 0;
-          totalValue = (params.data['Quantity']) * (params.data['Unit Price'])
-          params.data['Total Price'] = totalValue;
-        return totalValue;
-        },
         cellClass: 'ag-right-aligned-cell'
       });
-      this.gridOptions.columnModel.setColumnDefs(columnDefs);
       this.gridApi.setColumnDefs(columnDefs);
-      this.gridApi.refreshCells();
       this.gridOptions?.columnModel.setColumnsVisible(['action'], false);
       const pinnedBottomData = this.generatePinnedBottomData();
       this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
@@ -312,13 +304,17 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onCellValueChanged(event: CellValueChangedEvent) {
     const dataItem = [event.node.data];
     if (this.userRole?.includes('contractor')) {
+      if(event.colDef.field == "Unit Price"){
+        let totalValue = 0;
+        totalValue = (event.data['Quantity']) * (event.data['Unit Price'])
+        event.data['Total Price'] = totalValue;
+      } 
       const pinnedBottomData = this.generatePinnedBottomData();
       this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
     }
     this.gridApi.applyTransaction({
       update: dataItem,
     });
-    //console.log(dataItem)
   }
   onRowValueChanged(event: any) {
     var data = event.data;
@@ -344,7 +340,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
     setTimeout(() => {
-      if (this.userRole?.includes('contractor') && (this.tenderDetails.get('workflowStep')?.value == 'Qualified')) {
+      if (this.userRole?.includes('contractor') && ((this.tenderDetails.get('workflowStep')?.value == 'Qualified') ||
+      (this.tenderDetails.get('workflowStep')?.value == 'In Review') || (this.tenderDetails.get('workflowStep')?.value == 'Recommended'))) {
         const pinnedBottomData = this.generatePinnedBottomData();
         this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
       }
