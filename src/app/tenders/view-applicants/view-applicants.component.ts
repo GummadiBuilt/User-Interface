@@ -26,6 +26,8 @@ export class ViewApplicantsComponent implements OnInit {
   public constantVariable = PageConstants;
   public userRole: string[] | undefined;
   public btnstate: boolean = false;
+  tenderStatus: any;
+  btnRecommendState: boolean = false;
 
   constructor(private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
     private toastr: ToastrService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder,
@@ -50,10 +52,15 @@ export class ViewApplicantsComponent implements OnInit {
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
+      this.tenderStatus = this.rowData[0].tenderStatus;
       if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
         this.disableViewApplicants();
         if (this.rowData[0].tenderStatus === 'IN_REVIEW') {
-          this.gridOptions?.columnModel.setColumnsVisible(['download', 'radio'], true);
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+        }
+        if (this.rowData[0].tenderStatus === 'RECOMMENDED') {
+          this.btnRecommendState = true;
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
         }
       }
     });
@@ -103,10 +110,10 @@ export class ViewApplicantsComponent implements OnInit {
       minWidth: 350,
     },
     {
-      headerName: 'Recommended', field: 'radio', flex: 1, filter: false, autoHeight: true, wrapText: true, maxWidth: 150, hide: true,
+      headerName: 'Recommended', field: 'recommended', flex: 1, filter: false, autoHeight: true, wrapText: true, maxWidth: 150, hide: true,
       cellRenderer: function cellTitle(params: any) {
         if (params.data.applicationStatus != "NOT_QUALIFIED") {
-          let cellValue = '<div class="ngSelectionCell"><input id=' + params.data.applicationFormId + ' name="selected" type="radio"></div>';
+          let cellValue = '<div class="ngSelectionCell"><input  id=' + params.data.applicationFormId + ' name="selected" type="radio"></div>';
           return cellValue;
         } else return;
       },
@@ -230,6 +237,8 @@ export class ViewApplicantsComponent implements OnInit {
       this.ApiServicesService.recommendContractorForTender(this.tenderId, applicationFormId, selectedData).subscribe({
         next: (response => {
           this.toastr.success('Successfully Recommended');
+          this.disableViewApplicants();
+          this.btnRecommendState = true;
         }),
         error: (error => {
           console.log(error);

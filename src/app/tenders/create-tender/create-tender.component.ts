@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, CsvExportParams, GridApi,
   GridOptions,
-  GridReadyEvent, RowNode, RowValueChangedEvent,
+  GridReadyEvent, RowNode, RowValueChangedEvent, ValueGetterParams,
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { ApiServicesService, toastPayload } from '../../shared/api-services.service';
@@ -134,23 +134,36 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     });
   }
   editData(data: any) {
-    if (this.userRole?.includes('contractor') && data.workflowStep != "Qualified") {
-      this.downloadBtnState = true;
-    } else if (this.userRole?.includes('contractor') && data.workflowStep == "Qualified") {
+     if (this.userRole?.includes('contractor') && (data.workflowStep == "Qualified" || data.workflowStep == 'In Review' || data.workflowStep == 'Recommended')) {
       const columnDefs = this.gridOptions.columnModel.getColumnDefs();
       //console.log(columnDefs)
       columnDefs.push({
-        field: 'Price', sortable: true, flex: 1, minWidth: 200, autoHeight: true, wrapText: true,
+        field: 'Unit Price', sortable: true, flex: 1, maxWidth: 200, autoHeight: true, wrapText: true,
         editable: true,
         filter: 'agTextColumnFilter',
         cellEditor: NumericCellRendererComponent,
-        valueFormatter: (params: any) => params.data.Price ? currencyFormatter(params.data.Price, '') : '',
+        cellClass: 'ag-right-aligned-cell'
+      },{
+        field: 'Total Price', sortable: true, flex: 1, maxWidth: 200, autoHeight: true, wrapText: true,
+        editable: false,
+        filter: 'agTextColumnFilter',
+        cellEditor: NumericCellRendererComponent,
+        valueGetter: (params:any) => {
+          let totalValue = 0;
+          totalValue = (params.data['Quantity']) * (params.data['Unit Price'])
+          params.data['Total Price'] = totalValue;
+        return totalValue;
+        },
         cellClass: 'ag-right-aligned-cell'
       });
+      this.gridOptions.columnModel.setColumnDefs(columnDefs);
       this.gridApi.setColumnDefs(columnDefs);
+      this.gridApi.refreshCells();
       this.gridOptions?.columnModel.setColumnsVisible(['action'], false);
       const pinnedBottomData = this.generatePinnedBottomData();
       this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
+    }else if (this.userRole?.includes('contractor')) {
+      this.downloadBtnState = true;
     }
     if (data.tenderId) {
       this.tenderDetails.get('typeOfWork')?.patchValue(data.typeOfWork.establishmentDescription);
@@ -343,13 +356,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     // generate a row-data with null values
     let result: any = {};
     this.gridOptions?.getAllGridColumns()?.forEach((item: any) => {
-      // console.log(item);
+      //console.log(item);
       result[item.colId] = null;
     });
     return this.calculatePinnedBottomData(result);
   }
   calculatePinnedBottomData(target: any) {
-    let columnsWithAggregation = ['Price'];
+    let columnsWithAggregation = ['Total Price'];
     columnsWithAggregation?.forEach(element => {
       this.gridApi?.forEachNodeAfterFilter((rowNode: RowNode) => {
         if (rowNode.data[element]) {
@@ -672,8 +685,9 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Item Description').getColDef().editable = false;
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
-      if (this.gridOptions.getColumn('Price')) {
-        this.gridOptions.getColumn('Price').getColDef().editable = false;
+      if (this.gridOptions.getColumn('Unit Price')) {
+        this.gridOptions.getColumn('Unit Price').getColDef().editable = false;
+        this.gridOptions.getColumn('Total Price').getColDef().editable = false;
       }
       this.gridApi.refreshCells();
     } else if (this.userRole?.includes("contractor")) {

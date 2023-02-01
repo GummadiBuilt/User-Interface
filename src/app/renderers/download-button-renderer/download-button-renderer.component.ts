@@ -65,8 +65,10 @@ export class DownloadButtonRendererComponent implements ICellRendererAngularComp
     const unitHeaders = uniqKeys.filter(k => k !== unitKey).concat(unitKey);
     const quantityKey = "Quantity";
     const quantityHeaders = unitHeaders.filter(k => k !== quantityKey).concat(quantityKey);
-    const finalKey = "Price";
-    const finalHeaders = quantityHeaders.filter(k => k !== finalKey).concat(finalKey);
+    const unitPriceKey = "Unit Price";
+    const unitPriceHeaders = quantityHeaders.filter(k => k !== unitPriceKey).concat(unitPriceKey);
+    const finalKey = "Total Price";
+    const finalHeaders = unitPriceHeaders.filter(k => k !== finalKey).concat(finalKey);
     const modifiedJSON = obj.map((o: any) => {
       return finalHeaders.reduce((a: any, c: any) => { a[c] = o[c]; return a }, {});
     });

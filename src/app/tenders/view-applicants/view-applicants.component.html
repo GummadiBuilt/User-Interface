@@ -43,7 +43,7 @@
                         <div>{{constantVariable.submitBtn}}</div>
                     </div>
                 </button>
-                <button mat-button style="background-color: green;" (click)="onRecommend()">
+                <button *ngIf="userRole?.includes('admin') && (tenderStatus == 'IN_REVIEW' || tenderStatus == 'RECOMMENDED')" mat-button style="background-color: green;" disabled={{btnRecommendState}} (click)="onRecommend()">
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                         <i class="icon-submit fa-solid fa-paper-plane"></i>
                         <div>{{constantVariable.recommendBtn}}</div>

@@ -1,8 +1,8 @@
 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-    <button mat-button *ngIf="userRole?.includes('admin') && rowData.tenderStatus == 'IN_REVIEW' && rowData.tenderDocument" matTooltip="{{label}}" (click)="tenderTechnicalDownload()">
+    <button mat-button *ngIf="userRole?.includes('admin')  && rowData.tenderDocument" matTooltip="{{label}}" (click)="tenderTechnicalDownload()">
       Technical Bid <i class="icon-download fa-solid fa-file-arrow-down"></i>
     </button>
-    <button mat-button *ngIf="userRole?.includes('admin') && rowData.tenderStatus == 'IN_REVIEW' && rowData.tenderFinanceInfo" matTooltip="{{financeLabel}}" (click)="tenderFinanceDownload(rowData)">
+    <button mat-button *ngIf="userRole?.includes('admin')  && rowData.tenderFinanceInfo" matTooltip="{{financeLabel}}" (click)="tenderFinanceDownload(rowData)">
        Financial Bid <i class="icon-download fa-solid fa-file-arrow-down"></i>
     </button>
  </div>

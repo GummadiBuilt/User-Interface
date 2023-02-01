@@ -207,7 +207,7 @@
                     </div>
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px"
-                        *ngIf="userRole?.includes('contractor') && (this.tenderDetails.get('workflowStep')?.value == 'Qualified')">
+                        *ngIf="userRole?.includes('contractor') && !downloadBtnState">
                         <mat-label>{{constantVariable.technicalBidContractor}} *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="contractorDocument" fxLayout="row"
@@ -311,14 +311,14 @@
                             <div>{{constantVariable.updateBtn}}</div>
                         </div>
                     </button>
-                    <button *ngIf="userRole?.includes('contractor')" mat-button style="background-color: grey ;"
+                    <button *ngIf="userRole?.includes('contractor') && !downloadBtnState" mat-button style="background-color: grey ;"
                         (click)="onSaveContractor()" [disabled]="btnConstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-save fa-solid fa-floppy-disk"></i>
                             <div>{{constantVariable.saveBtn}}</div>
                         </div>
                     </button>
-                    <button *ngIf="userRole?.includes('contractor') && this.contractorBidId" mat-button
+                    <button *ngIf="userRole?.includes('contractor') && this.contractorBidId && !downloadBtnState" mat-button
                         (click)="onSubmitContractor()" style="background-color: green ;" [disabled]="btnConstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-submit fa-solid fa-paper-plane"></i>
