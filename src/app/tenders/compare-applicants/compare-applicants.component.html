@@ -1235,23 +1235,52 @@
                                 <div style="width: 33%;" fxLayoutAlign="space-evenly center">
                                     {{item.tenderDetailsDto?.contractorDocumentName}}</div>
                             </div> -->
-                            <button mat-button (click)="tenderTechnicalDownload(item.tenderApplicantsDto?.applicationUserId)">
+                            <button mat-button
+                                (click)="tenderTechnicalDownload(item.tenderApplicantsDto?.applicationUserId)">
                                 {{item.tenderDetailsDto?.contractorDocumentName}} <i
                                     class="icon-download fa-solid fa-file-arrow-down"></i>
                             </button>
                         </td>
                     </tr>
-                    <tr *ngIf="applicantsData?.expandTenderDetails || applicantsData?.all">
+                    <tr (click)="applicantsData.expandFinanceDetails = !applicantsData.expandFinanceDetails">
+                        <td class="label">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!(applicantsData?.expandFinanceDetails || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinanceDetails || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
+                                <span>Financial Bid</span>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="label">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Prices</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinanceDetails || applicantsData?.all">
                         <td class="label">
                             <div fxLayout="row" fxLayoutGap="16px">
                                 <div>&nbsp;</div>
-                                <div>Financial Bid</div>
+                                <div>Item No</div>
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
                             <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
-                                    {{item.tenderDetailsDto?.tenderDocumentName}}</div>
+                               
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandFinanceDetails || applicantsData?.all">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Item Description</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                
                             </div>
                         </td>
                     </tr>

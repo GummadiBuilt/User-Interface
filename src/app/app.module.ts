@@ -64,6 +64,7 @@ import { CompareApplicantsComponent } from './tenders/compare-applicants/compare
 import { ActionDropdownComponent } from './shared/action-dropdown/action-dropdown.component';
 import { MatInputRequiredDirective } from './directives/mat-input-required.directive';
 import { DownloadButtonRendererComponent } from './renderers/download-button-renderer/download-button-renderer.component';
+import { RadioButtonRendererComponent } from './renderers/radio-button-renderer/radio-button-renderer.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -146,6 +147,7 @@ export const MY_DATE_FORMATS = {
     ActionDropdownComponent,
     MatInputRequiredDirective,
     DownloadButtonRendererComponent,
+    RadioButtonRendererComponent,
   ],
   imports: [
     BrowserModule,
