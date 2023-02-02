@@ -40,27 +40,11 @@
                                 {{client.contact_last_name}}</span></h3>
                         <h3>Company Name: <span class="bold-500">{{client.company_name}}</span></h3>
                     </div>
-                    <div class="count-tenders">
-                        <!-- <div fxLayout="row" fxLayoutAlign="space-evenly">
-                            <div class="count" fxLayout="column" fxLayoutAlign="center center">
-                                <h3><span class="bold-500">{{client.total_tenders}}</span></h3>
-                                <h4>Total Tenders</h4>
-                            </div>
-                            <mat-divider vertical></mat-divider>
-                            <div class="count" fxLayout="column" fxLayoutAlign="center center">
-                                <h3><span class="bold-500">{{client.under_process_step}}</span></h3>
-                                <h4>Under Process</h4>
-                            </div>
-                            <mat-divider vertical></mat-divider>
-                            <div class="count" fxLayout="column" fxLayoutAlign="center center">
-                                <h3><span class="bold-500">{{client.publish_step}}</span></h3>
-                                <h4>Published</h4>
-                            </div>
-                        </div> -->
-                    </div>
-                    <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions"
-                        style="width: 100%; height: 200px; display: block;">
-                    </highcharts-chart>
+                    <app-highcharts [total_tenders]="['Total Tenders']" [recommended]="['Recommended']"
+                        [under_process]="['Under Process']" [published]="['Published']"
+                        [totalTendersData]="[client.total_tenders]" [recommendedData]="[client.recommended_step]"
+                        [underProcessData]="[client.under_process_step]" [publishedData]="[client.publish_step]">
+                    </app-highcharts>
                 </div>
             </mat-card>
         </div>

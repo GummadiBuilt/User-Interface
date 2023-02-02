@@ -12,6 +12,7 @@ import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate
 import { PageConstants } from 'src/app/shared/application.constants';
 import moment, { Moment } from 'moment';
 import { tenderResopnse } from '../tender/tenderResponse';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-pq-form',
@@ -35,6 +36,11 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public btnTenderApplnstate!: boolean;
   public disableMsg!: string;
 
+  //pass PQ data to tech-fin-bid component
+  private pq$ = new BehaviorSubject<any>({});
+  selectedPq$ = this.pq$.asObservable();
+  pqDataLoaded = false;
+
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService,
@@ -54,9 +60,15 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
           this.tenderDate = moment(data.tenderSubmissionDate, 'DD/MM/YYYY').toDate();
           this.getPQForms(data);
           this.pqFormDisable();
+          this.setPq(data);
         });
       }
     });
+  }
+
+  setPq(pq: any) {
+    this.pq$.next(pq);
+    this.pqDataLoaded = true;
   }
 
   ngOnInit(): void {
@@ -72,7 +84,6 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       scheduledCompletion: ['', Validators.required],
       workflowStep: ['']
     });
-
   }
 
   canDeactivate(): boolean {

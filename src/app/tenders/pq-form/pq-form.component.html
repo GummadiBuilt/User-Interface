@@ -33,7 +33,7 @@
             <form [formGroup]="adminPqForm" autocomplete="off">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>PQ Details</h3>
-                    <app-action-dropdown></app-action-dropdown>
+                    <app-action-dropdown *ngIf="pqDataLoaded" [pqData]="selectedPq$ | async" [adminPqForm]="adminPqForm"></app-action-dropdown>
                 </div>
                 <div class="project-info" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"

@@ -11,33 +11,49 @@
         <ng-template #separatorTemplate>
             <i class="fa-solid fa-caret-right"></i>
         </ng-template>
-        <div fxLayoutAlign="center center">
+        <!-- <div fxLayoutAlign="center center">
             <button mat-raised-button (click)="applicantsData.all = !applicantsData.all; exportToExcel($event)">
                 <div fxLayout="row" fxLayoutGap="6px">
                     <div><i class="fa-solid fa-file-export"></i></div>
                     <div>Export to Excel</div>
                 </div>
             </button>
-        </div>
+        </div> -->
     </div>
     <div class="container">
         <div class="inner-container">
             <table #userTable>
                 <thead>
                     <tr>
-                        <th class="header-label-empty">&nbsp;</th>
+                        <th class="header-label bold-500">Applicant Information</th>
                         <th class="header-label" *ngFor="let item of applicantsData">
                             <div class="profile-info" fxLayout="column" fxLayoutAlign="center center"
                                 fxLayoutGap="12px">
-                                <mat-card style="display: none"></mat-card>
+                                <!-- <mat-card style="display: none"></mat-card>
                                 <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
-                                    <div class="initials">{{this.item?.companyName[0]+ '' +
-                                        this.item?.companyName?.split('
+                                    <div class="initials">{{this.item?.applicationFormDto?.companyName[0]+ '' +
+                                        this.item?.applicationFormDto?.companyName?.split('
                                         ')[1].slice(0, 1)}}</div>
-                                </div>
-                                <div fxLayout="row" fxLayoutGap="48px">
-                                    <div fxLayout="column" fxLayoutGap="20px">
-                                        <div class="bold-500 font-20p">{{item?.companyName}}</div>
+                                </div> -->
+                                <div fxLayout="column" fxLayoutGap="8px">
+                                    <div class="bold-400">Company Name: <span
+                                            class="bold-500">{{item?.tenderApplicantsDto?.companyName}}</span></div>
+                                    <form [formGroup]="applicantRankForm">
+                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+                                            <mat-label class="bold-400">Rank:</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input matInput formControlName="applicantRank" numbersOnly
+                                                    placeholder="Rank">
+                                            </mat-form-field>
+                                            <i class="icon-update fa-solid fa-check" matTooltip="Update Rank"
+                                                (click)="onUpdate()"></i>
+                                        </div>
+                                    </form>
+                                    <div class="bold-400">Status: <span
+                                            class="bold-500">{{item?.tenderApplicantsDto?.applicationStatus}}</span>
+                                    </div>
+                                    <div class="bold-400">Justification Note:
+                                        <span class="bold-500">{{item?.tenderApplicantsDto?.justificationNote}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +77,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.yearOfEstablishment}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.yearOfEstablishment}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -72,7 +88,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.typeOfEstablishment}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.typeOfEstablishment}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -83,7 +99,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.corpOfficeAddress}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.corpOfficeAddress}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -94,7 +110,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.localOfficeAddress}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.localOfficeAddress}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -105,7 +121,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.telephoneNum}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.telephoneNum}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -116,7 +132,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.faxNumber}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.faxNumber}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -127,7 +143,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.contactName}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.contactName}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -138,7 +154,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.contactDesignation}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.contactDesignation}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -149,7 +165,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.contactPhoneNum}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.contactPhoneNum}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -160,7 +176,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.contactEmailId}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.contactEmailId}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -171,7 +187,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.regionalHeadName}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.regionalHeadName}}</div>
                         </td>
                     </tr>
                     <tr>
@@ -182,7 +198,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="center center">{{item.regionalHeadPhoneNum}}</div>
+                            <div fxLayoutAlign="center center">{{item.applicationFormDto?.regionalHeadPhoneNum}}</div>
                         </td>
                     </tr>
                     <tr (click)="applicantsData.expandTurnover = !applicantsData.expandTurnover">
@@ -199,8 +215,10 @@
                         </td>
                         <td *ngFor="let item of applicantsData" class="label">
                             <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 1<span hidden>:</span></div>
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 2<span hidden>:</span></div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 1<span hidden>:</span>
+                                </div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 2<span hidden>:</span>
+                                </div>
                                 <div style="width: 33%;" fxLayoutAlign="space-evenly center">Year 3</div>
                             </div>
                         </td>
@@ -215,7 +233,7 @@
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
                             <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
                                 <div style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                    *ngFor="let item of item.turnOverDetails">{{item.year}}</div>
+                                    *ngFor="let item of item.applicationFormDto?.turnOverDetails">{{item.year}}</div>
                             </div>
                         </td>
                     </tr>
@@ -229,7 +247,7 @@
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
                             <div fxLayoutAlign="space-evenly center">
                                 <div style="width: 33%;" fxLayoutAlign="space-evenly center"
-                                    *ngFor="let item of item.turnOverDetails">{{item.revenue}}</div>
+                                    *ngFor="let item of item.applicationFormDto?.turnOverDetails">{{item.revenue}}</div>
                             </div>
                         </td>
                     </tr>
@@ -724,7 +742,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.esiRegistration}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.esiRegistration}}</div>
                         </td>
                     </tr>
                     <tr
@@ -736,7 +754,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.epfRegistration}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.epfRegistration}}</div>
                         </td>
                     </tr>
                     <tr
@@ -748,7 +766,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.gstRegistration}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.gstRegistration}}</div>
                         </td>
                     </tr>
                     <tr
@@ -760,7 +778,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.panNumber}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.panNumber}}</div>
                         </td>
                     </tr>
                     <tr *ngIf="applicantsData?.expandPerformancePref || applicantsData?.all"
@@ -958,7 +976,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.safetyPolicyManual}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.safetyPolicyManual}}</div>
                         </td>
                     </tr>
                     <tr
@@ -970,7 +988,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.ppeToStaff}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.ppeToStaff}}</div>
                         </td>
                     </tr>
                     <tr
@@ -982,7 +1000,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.ppeToWorkMen}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.ppeToWorkMen}}</div>
                         </td>
                     </tr>
                     <tr
@@ -994,7 +1012,7 @@
                             </div>
                         </td>
                         <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                            <div class="wrap">{{item.safetyOfficeAvailability}}</div>
+                            <div class="wrap">{{item.applicationFormDto?.safetyOfficeAvailability}}</div>
                         </td>
                     </tr>
                     <tr (click)="applicantsData.expandFinancialInfo = !applicantsData.expandFinancialInfo">
@@ -1012,8 +1030,10 @@
                         (click)="applicantsData.expandFinInfo = !applicantsData.expandFinInfo">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                                <div *ngIf="!(applicantsData?.expandFinInfo || applicantsData?.all)"><i class="fa-solid fa-add"></i></div>
-                                <div *ngIf="applicantsData?.expandFinInfo || applicantsData?.all"><i class="fa-solid fa-minus"></i></div>
+                                <div *ngIf="!(applicantsData?.expandFinInfo || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinInfo || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
                                 <span>Financial Information</span>
                             </div>
                         </td>
@@ -1189,6 +1209,87 @@
                             <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
                                 <div class="wrap" style="width: 33%;" fxLayoutAlign="space-evenly center"
                                     *ngFor="let item of item">{{item.address}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
+                        <td class="label" colspan="5">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!(applicantsData?.expandTenderDetails || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandTenderDetails || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
+                                <span>Tender Details</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="applicantsData?.expandTenderDetails || applicantsData?.all">
+                        <td class="label">
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <div>&nbsp;</div>
+                                <div>Technical Document</div>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
+                            <!-- <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{item.tenderDetailsDto?.contractorDocumentName}}</div>
+                            </div> -->
+                            <button mat-button
+                                (click)="tenderTechnicalDownload(item.tenderApplicantsDto?.applicationUserId)">
+                                {{item.tenderDetailsDto?.contractorDocumentName}} <i
+                                    class="icon-download fa-solid fa-file-arrow-down"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr (click)="applicantsData.expandFinanceDetails = !applicantsData.expandFinanceDetails">
+                        <td class="label">
+                            <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div *ngIf="!(applicantsData?.expandFinanceDetails || applicantsData?.all)"><i
+                                        class="fa-solid fa-add"></i></div>
+                                <div *ngIf="applicantsData?.expandFinanceDetails || applicantsData?.all"><i
+                                        class="fa-solid fa-minus"></i></div>
+                                <span>Financial Bid</span>
+                            </div>
+                        </td>
+                        <td *ngFor="let item of applicantsData" class="label">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Unit Price</div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">Total Price</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let finance of tenderFinanceData;let i=index">
+                        <td class="label">
+                            <div fxLayout="column">
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                    <div>&nbsp;</div>
+                                    <div>Item No <span class="bold-400"> {{finance['Item No']}}</span></div>
+                                    <div>Quantity <span class="bold-400"> {{finance['Quantity']}}</span></div>
+                                    <div>Unit <span class="bold-400"> {{finance['Unit']}}</span></div>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                    <div>&nbsp;</div>
+                                    <div>
+                                        <span class="bold-500">Item Description</span>&nbsp;
+                                        <span class="bold-400" [ngClass]="{'limitTextHeight': isReadMore[i]}">
+                                            {{finance['Item Description']}}
+                                        </span>
+                                        <button *ngIf="finance['Item Description'].length > 20" type="button" (click)="showText(i)">
+                                            {{ isReadMore[i] ? 'Read More': 'Read Less' }}
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td *ngFor="let prices of tenderFinancePricesData" class="alternate-color word-wrap">
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{prices[i]['Unit Price']}}
+                                </div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{prices[i]['Total Price']}}
+                                </div>
                             </div>
                         </td>
                     </tr>
