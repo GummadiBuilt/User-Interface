@@ -1259,37 +1259,35 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- <tr *ngIf="applicantsData?.expandFinanceDetails || applicantsData?.all">
-                        <td class="label">
-                            <div fxLayout="row" fxLayoutGap="16px">
-                                <div>&nbsp;</div>
-                                
-                                
-                                
-                                
-                            </div>
-                        </td>
-                        <td *ngFor="let item of applicantsData" class="alternate-color word-wrap">
-                           
-                        </td>
-                    </tr> -->
                     <tr *ngFor="let finance of tenderFinanceData;let i=index">
                         <td class="label">
-                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px"  >
-                                <div>Item No</div>
-                                    {{finance['Item No']}}
-                                    
-                                <div>Quantity</div>
-                                {{finance['Quantity']}}
-                                <div>Unit</div>
-                                {{finance['Unit']}}
-                                <div>Item Description</div>
-                                {{finance['Item Description']}}
+                            <div fxLayout="column">
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                    <div>&nbsp;</div>
+                                    <div>Item No <span class="bold-400"> {{finance['Item No']}}</span></div>
+                                    <div>Quantity <span class="bold-400"> {{finance['Quantity']}}</span></div>
+                                    <div>Unit <span class="bold-400"> {{finance['Unit']}}</span></div>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                    <div>&nbsp;</div>
+                                    <div>
+                                        <span class="bold-500">Item Description</span>&nbsp;
+                                        <span class="bold-400">
+                                            {{finance['Item Description']}}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td *ngFor="let prices of tenderFinancePricesData" class="alternate-color word-wrap">
-                            {{prices[i]['Unit Price']}}
-                            {{prices[i]['Total Price']}}                                
+                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{prices[i]['Unit Price']}}
+                                </div>
+                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                    {{prices[i]['Total Price']}}
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import Highcharts from 'highcharts';
 import { ApiServicesService } from '../shared/api-services.service';
 import { clientUsersResponse } from '../shared/clientUsersResponse';
 
@@ -21,60 +20,10 @@ export class ClientsComponent implements OnInit {
     this.getClientUsers();
   }
 
-  //get list of data
-  total_tenders: any[] = [];
-  under_process: any[] = [];
-  //highcharts bar chart
-  highcharts = Highcharts;
-  chartOptions!: Highcharts.Options;
-
   getClientUsers() {
     this.ApiServicesService.getClientUsers().subscribe((data: clientUsersResponse) => {
       this.allClientUsers = data;
-      console.log(this.allClientUsers);
-
-      this.total_tenders = this.allClientUsers.map((tenders: any) => tenders.under_process_step);
-      console.log(this.total_tenders);
-      this.under_process = this.allClientUsers.map((tenders: any) => tenders.under_process_step);
-      console.log(this.under_process);
-
-      this.chartOptions = {
-        chart: {
-          type: 'sankey'
-        },
-        title: {
-          text: 'Tenders Info Chart'
-        },
-        xAxis: {
-          categories: ['Types']
-        },
-        yAxis: {
-          title: {
-            text: 'Count',
-          }
-        },
-        series: [
-          {
-            name: 'Total Tenders',
-            type: 'bar',
-            data: this.total_tenders,
-          }, {
-            name: 'Under Process',
-            type: 'bar',
-            data: this.under_process,
-          },
-          {
-            name: 'Published',
-            type: 'bar',
-            data: [],
-          }, {
-            name: 'Suspended',
-            type: 'bar',
-            data: [],
-          }
-        ],
-
-      };
+      // console.log(this.allClientUsers);
     });
   }
 
