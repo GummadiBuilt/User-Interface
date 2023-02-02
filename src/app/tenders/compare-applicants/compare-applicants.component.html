@@ -1272,9 +1272,12 @@
                                     <div>&nbsp;</div>
                                     <div>
                                         <span class="bold-500">Item Description</span>&nbsp;
-                                        <span class="bold-400">
+                                        <span class="bold-400" [ngClass]="{'limitTextHeight': isReadMore[i]}">
                                             {{finance['Item Description']}}
                                         </span>
+                                        <button *ngIf="finance['Item Description'].length > 20" type="button" (click)="showText(i)">
+                                            {{ isReadMore[i] ? 'Read More': 'Read Less' }}
+                                          </button>
                                     </div>
                                 </div>
                             </div>

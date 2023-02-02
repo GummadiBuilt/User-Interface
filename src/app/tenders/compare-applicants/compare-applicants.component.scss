@@ -180,3 +180,9 @@ mat-label {
     line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+.bold-400.limitTextHeight {
+    height: 20px!important;
+    overflow: hidden!important;
+    display: flex!important;
+}

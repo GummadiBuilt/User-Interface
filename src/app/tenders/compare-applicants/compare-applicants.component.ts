@@ -28,6 +28,12 @@ export class CompareApplicantsComponent implements OnInit {
   public tenderFinancePricesData: any;
   /* the table reference */
   @ViewChild('userTable') userTable!: ElementRef;
+  isReadMore: boolean[]=[];
+
+
+  showText(index:any) {
+    this.isReadMore[index] = !this.isReadMore[index]
+  }
 
   constructor(private route: ActivatedRoute, private ApiServicesService: ApiServicesService,
     private excelService: ExcelService, private _formBuilder: FormBuilder, private toastr: ToastrService,
@@ -108,6 +114,11 @@ export class CompareApplicantsComponent implements OnInit {
     this.compAuditorsData = compAuditorsArr;
     this.tenderFinanceData = tenderFinanceArr[0];
     this.tenderFinancePricesData = tenderFinancePricesArr;
+    if(this.tenderFinanceData){
+      this.tenderFinanceData.forEach((i:any)=>{
+        this.isReadMore.push(true);
+      })      
+    }
     //console.log(this.applicantsData);
   }
 
