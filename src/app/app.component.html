@@ -62,10 +62,10 @@
 				</a>
 			</div>
 			<div *ngIf="isLoggedIn" fxHide.lt-md fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px">
-				<div class="notifications" [matMenuTriggerFor]="notificationMenu" fxLayoutAlign="center center">
+				<!-- <div class="notifications" [matMenuTriggerFor]="notificationMenu" fxLayoutAlign="center center">
 					<i [matBadge]="badgeContent" matBadgeSize="small" [matBadgeHidden]="isBadgeHidden"
 						(click)="isBadgeHidden = !isBadgeHidden" class="icon-24p fa-regular fa-bell"></i>
-				</div>
+				</div> -->
 				<mat-card style="display: none"></mat-card>
 				<div class="profile-icon bg-grey" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center" mat-card-avatar>
 					<!-- <img src="{{photoUrl}}"> -->
