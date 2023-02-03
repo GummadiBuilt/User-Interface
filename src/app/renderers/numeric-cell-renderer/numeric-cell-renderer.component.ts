@@ -63,9 +63,9 @@ export class NumericCellRendererComponent implements ICellEditorAngularComp, Aft
 
   // will reject the number if it greater than 1,000,000
   // not very practical, but demonstrates the method.
-  isCancelAfterEnd(): boolean {
-    return this.value > 1000000;
-  }
+  // isCancelAfterEnd(): boolean {
+  //   return this.value > 1000000;
+  // }
 
   onKeyDown(event: any): void {
     if (event.key === 'Escape') {

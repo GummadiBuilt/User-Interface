@@ -33,20 +33,8 @@
             <div fxLayout="column">
                 <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
-                    <mat-form-field appearance="outline"
-                        *ngIf="tenderId && this.tenderDetails.get('workflowStep')?.value !='Draft' ">
-                        <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
-                            <mat-option value='PQForm'>PQ-Form</mat-option>
-                            <mat-option *ngIf="!userRole?.includes('contractor') && this.tenderDetails.get('workflowStep')?.value =='Under Process'"
-                                [routerLink]="['/tenders', tenderId, 'view-applicants']">
-                                View Applicants
-                            </mat-option>
-                            <mat-option *ngIf="userRole?.includes('contractor')"
-                                value={{applicantLabel}} [disabled]="optionApplnState">
-                                {{applicantLabel}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <app-action-dropdown *ngIf="tenderDataLoaded" [tenderData]="selectedTender$ | async"
+                        [tenderDetails]="tenderDetails"></app-action-dropdown>
                 </div>
                 <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
@@ -90,13 +78,13 @@
                                 </mat-option>
                             </mat-select>
                             <mat-error *ngIf="tenderDetails.get('typeOfWork')?.errors?.['required']">
-                                Type of Work is required
+                                {{constantVariable.selectKeyWord}}{{constantVariable.typeOfWork}}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Type of Contract *</mat-label>
+                        <mat-label>{{constantVariable.typeOfContract}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <mat-select placeholder="Select Type of Contract" formControlName="typeOfContract">
                                 <mat-select-filter [placeholder]="'Search'" [displayMember]="'typeOfContract'"
@@ -107,35 +95,35 @@
                                 </mat-option>
                             </mat-select>
                             <mat-error *ngIf="tenderDetails.get('typeOfContract')?.errors?.['required']">
-                                Type of Work is required
+                                {{constantVariable.selectKeyWord}}{{constantVariable.typeOfContract}}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Project Location *</mat-label>
+                        <mat-label>{{constantVariable.projectLocation}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Project Location" formControlName="projectLocation">
                             <mat-error *ngIf="tenderDetails.get('projectLocation')?.errors?.['required']">
-                                Enter Project Location
+                                {{constantVariable.enterKeyWord}}{{constantVariable.projectLocation}}
                             </mat-error>
                             <mat-error *ngIf="tenderDetails.get('projectLocation')?.errors?.['maxlength']">
-                                Enter only 50 characters
+                                {{constantVariable.maxLengthFifty}}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Contract Duration (Months or Days) *</mat-label>
+                        <mat-label>{{constantVariable.contractDurationMonthsOrDays}} *</mat-label>
                         <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
                             <mat-form-field fxFlex="47%" appearance="outline">
                                 <input matInput numbersOnly placeholder="Contract Duration"
                                     formControlName="contractDuration">
                                 <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['required']">
-                                    Contract Duration
+                                    {{constantVariable.enterKeyWord}}{{constantVariable.contractDuration}}
                                 </mat-error>
                                 <mat-error *ngIf="tenderDetails.get('contractDuration')?.errors?.['maxlength']">
-                                    Enter only 5 digits
+                                    {{constantVariable.maxDigitsFive}}
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field fxFlex="47%" appearance="outline">
@@ -145,49 +133,45 @@
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="tenderDetails.get('durationCounter')?.errors?.['required']">
-                                    Choose Duration
+                                    {{constantVariable.chooseKeyWord}}{{constantVariable.duration}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Last Date of Tender Submission *</mat-label>
+                        <mat-label>{{constantVariable.lastDateOfTenderSubmission}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="picker" [min]="todayDate" placeholder="DD/MM/YYYY"
                                 [formControlName]="'lastDateOfSubmission'" (click)="picker.open()" appDate>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-error *ngIf="tenderDetails.get('lastDateOfSubmission')?.errors?.['required']">
-                                Choose last date of submission
+                                {{constantVariable.chooseKeyWord}}{{constantVariable.lastDateOfTenderSubmission}}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column">
-                        <mat-label>Budget</mat-label>
+                        <mat-label>{{constantVariable.budget}}</mat-label>
                         <mat-form-field appearance="outline" style="text-align: right">
                             <input matInput type="text" numbersOnly placeholder="Budget"
                                 formControlName="estimatedBudget" currencyFormatter>
                             <mat-error *ngIf="tenderDetails.get('estimatedBudget')?.errors?.['maxlength']">
-                                Enter only 20 digits
+                                {{constantVariable.maxDigitsTwenty}}
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                        fxLayout="column" *ngIf="downloadBtnState">
-
-                    </div>
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
-                        <mat-label>Technical Bid *</mat-label>
+                        <mat-label>{{constantVariable.technicalBid}} *</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
                             <label class="button-upload" for="file" fxLayout="row" fxLayoutAlign="start center"
-                                fxLayoutGap="8px">
+                                fxLayoutGap="8px" *ngIf="!userRole?.includes('contractor')">
                                 <i class="fa-icons fa-solid fa-file-arrow-up"></i>
                                 <span class="textLink">Upload File</span>
                             </label>
-                            <label for="file">
+                            <label for="file" hidden>
                                 <input id="file" type="file" class="form-control" (change)="onFileChange($event)" hidden
                                     [disabled]="btnstate">
                             </label>
@@ -209,7 +193,7 @@
                                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                             <i class="fa-solid fa-file-arrow-down"></i>
                                             <div>Download</div>
-                                        </div>                                        
+                                        </div>
                                     </button>
                                 </div>
                             </div>
@@ -221,13 +205,59 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column" fxLayoutGap="4px"
+                        *ngIf="userRole?.includes('contractor') && !downloadBtnState">
+                        <mat-label>{{constantVariable.technicalBidContractor}} *</mat-label>
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                            <label class="button-upload" for="contractorDocument" fxLayout="row"
+                                fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <i class="fa-icons fa-solid fa-file-arrow-up"></i>
+                                <span class="textLink">Upload File</span>
+                            </label>
+                            <label for="contractorDocument" hidden>
+                                <input id="contractorDocument" [disabled]="btnConstate" type="file" class="form-control"
+                                    (change)="onFileChangeContractor($event)" hidden>
+                            </label>
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                <div>
+                                    <span *ngIf="!contractorDocument?.name && !contractorFileName">No file
+                                        Choosen</span>
+                                    <span *ngIf="contractorFileName">{{contractorFileName}}</span>
+                                    <span>{{contractorDocument?.name}}</span>
+                                </div>
+                                <div>
+                                    <button *ngIf="contractorDocument?.name" type="button" mat-icon-button
+                                        class="icon-approve" matTooltip="Remove Document" matTooltipPosition="right"
+                                        (click)="removeSelectedFileContractor(contractorDocument)">
+                                        <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
+                                    </button>
+                                    <button type="button" mat-button class="icon-approve" matTooltip="Download file"
+                                        matTooltipPosition="right" (click)="downloadContractorFile(tenderId, 0)">
+                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                            <i class="fa-solid fa-file-arrow-down"></i>
+                                            <div>Download</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column" fxLayoutGap="4px">
+
+                    </div>
+                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column" fxLayoutGap="4px">
+
+                    </div>
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px"
                         *ngIf="!downloadBtnState">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <mat-label>Financial Bid *</mat-label>
+                            <mat-label>{{constantVariable.financialBid}} *</mat-label>
                             <div fxLayout="row" fxLayoutGap="25%">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
-                                    fxLayoutGap="8px">
+                                    fxLayoutGap="8px" *ngIf="!userRole?.includes('contractor')">
                                     <i class="fa-icons fa-solid fa-file-import"></i>
                                     <span class="textLink">Import File</span>
 
@@ -236,13 +266,12 @@
                                 </label>
                             </div>
                             <div fxLayout="row" fxLayoutGap="25%">
-                                <button type="button" mat-button class="icon-approve"
-                                    matTooltip="Download file" matTooltipPosition="right"
-                                    (click)="exportExcelFile()">
+                                <button type="button" mat-button class="icon-approve" matTooltip="Download file"
+                                    matTooltipPosition="right" (click)="exportExcelFile()">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="fa-solid fa-file-arrow-down"></i>
                                         <div>Download</div>
-                                    </div> 
+                                    </div>
                                 </button>
                             </div>
                         </div>
@@ -253,7 +282,7 @@
                                 (rowEditingStarted)="onRowEditingStarted($event)"
                                 (rowEditingStopped)="onRowEditingStopped($event)"
                                 (cellValueChanged)="onCellValueChanged($event)"
-                                (rowValueChanged)="onRowValueChanged($event)" (gridReady)="onGridReady($event)"
+                                (rowValueChanged)="onRowValueChanged($event)"
                                 (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
                                 [overlayLoadingTemplate]="overlayLoadingTemplate" [stopEditingWhenCellsLoseFocus]=true>
                             </ag-grid-angular>
@@ -280,6 +309,20 @@
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-save fa-solid fa-floppy-disk"></i>
                             <div>{{constantVariable.updateBtn}}</div>
+                        </div>
+                    </button>
+                    <button *ngIf="userRole?.includes('contractor') && !downloadBtnState" mat-button style="background-color: grey ;"
+                        (click)="onSaveContractor()" [disabled]="btnConstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-save fa-solid fa-floppy-disk"></i>
+                            <div>{{constantVariable.saveBtn}}</div>
+                        </div>
+                    </button>
+                    <button *ngIf="userRole?.includes('contractor') && this.contractorBidId && !downloadBtnState" mat-button
+                        (click)="onSubmitContractor()" style="background-color: green ;" [disabled]="btnConstate">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-submit fa-solid fa-paper-plane"></i>
+                            <div>{{constantVariable.submitBtn}}</div>
                         </div>
                     </button>
                 </div>

@@ -167,13 +167,37 @@ export class ApiServicesService {
   }
 
   //Update applicants rankings for a tender
-  public updateTenderApplicantRanking(tenderId: any, data: any,action:any): Observable<tenderApplicantRankingResopnse> {
+  public updateTenderApplicantRanking(tenderId: any, data: any, action: any): Observable<tenderApplicantRankingResopnse> {
     return this.httpClient.put<tenderApplicantRankingResopnse>(this.url + '/tender-applicants/tender/' + tenderId + '/update/' + action, data);
   }
 
   //getAPI for compare tender applicants 
   public getTenderApplicantCompare(tenderId: any, applicantIds: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.get<applicantsPqFormResponse>(this.url + '/tender-applicants/tender/' + tenderId + '/compare/' + applicantIds);
+  }
+  // Post API that allow qualified contractors to save/submit Financial & Technical bid info
+  public tenderBidInfo(tenderId: any, data: any): Observable<tenderResopnse> {
+    return this.httpClient.post<tenderResopnse>(this.url + '/' + tenderId + '/tender-bid-info', data);
+  }
+
+  // Post API allow qualified contractors to update Financial & Technical bid info
+  public tenderBidInfoUpdate(tenderId: any, bidId: any, data: any): Observable<tenderResopnse> {
+    return this.httpClient.put<tenderResopnse>(this.url + '/' + tenderId + '/tender-bid-info/update/' + bidId, data);
+  }
+
+  //Download Contractor Technical tender response document
+  public downloadTenderBidInfoDocumentById(tenderId: any, userId: any) {
+    return this.httpClient.get(this.url + '/' + tenderId + '/tender-bid-info/download/' + tenderId + '/tender-response/' + userId);
+  }
+
+  //Download Contractor Technical tender response document
+  public downloadTenderBidInfoDocument(tenderId: any, userId: any) {
+    return this.httpClient.get(this.url + '/' + tenderId + '/tender-bid-info/download/' + tenderId + '/tender-response/' + userId);
+  }
+
+  //Recommend a Contractor for Tender
+  public recommendContractorForTender(tenderId: any, applicationFormId: any, data: any) {
+    return this.httpClient.put(this.url + '/tender-applicants/tender/' + tenderId + '/recommend/' + applicationFormId, data);
   }
 
   //download files converstion

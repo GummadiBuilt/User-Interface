@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, CsvExportParams, GridApi,
   GridOptions,
-  GridReadyEvent, RowValueChangedEvent,
+  GridReadyEvent, RowNode, RowValueChangedEvent, ValueGetterParams,
 } from 'ag-grid-community';
 import { commonOptionsData } from '../../shared/commonOptions';
 import { ApiServicesService, toastPayload } from '../../shared/api-services.service';
@@ -21,6 +21,8 @@ import _ from 'lodash';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { PageConstants } from 'src/app/shared/application.constants';
 import moment from 'moment';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tenderApplicantRankingResopnse } from '../view-applicants/tenderApplicantRankingResopnse';
 
 @Component({
   selector: 'app-create-tender',
@@ -49,11 +51,22 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public downloadBtnState: boolean = false;
   public warningMessage!: string;
   public todayDate!: Date;
-  public pqID!: number;
-  public applicationFormId!: number;
-  public applicationFormStatus!: string;
-  public applicantLabel!:any;
+  public applicantLabel!: any;
   public optionApplnState!: boolean;
+  public contractorDocument: any;
+  public isContractorFileUploaded: boolean = false;
+  public contractorFileName!: string;
+  public contractorBidId!: number;
+  public actionTaken!: string;
+  public btnConstate: boolean = false;
+
+  //pass tender data to tech-fin-bid component
+  private tender$ = new BehaviorSubject<any>({});
+  selectedTender$ = this.tender$.asObservable();
+  tenderDataLoaded = false;
+
+
+
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -64,21 +77,24 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderId = id;
       if (id) {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
-          //console.log('Tender data by id', data);
-          this.pqID = data.pqFormId;
-          this.applicationFormId = data.applicationFormId;
-          this.applicationFormStatus = data.applicationFormStatus;
+          // console.log('Tender data by id', data);
           this.editData(data);
           this.tenderFormDisable();
+          this.setTender(data);
         });
       }
     });
     this.domLayout = "autoHeight";
   }
+  setTender(tender: any) {
+    this.tender$.next(tender);
+    this.tenderDataLoaded = true;
+    // console.log(this.selectedTender$);
+  }
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
-      //console.log('user role', this.userRole);
+      // console.log('user role', this.userRole);
     } catch (e) {
       this.toastr.error('Failed to load user details' + e);
     }
@@ -118,6 +134,29 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     });
   }
   editData(data: any) {
+     if (this.userRole?.includes('contractor') && (data.workflowStep == "Qualified" || data.workflowStep == 'In Review' || data.workflowStep == 'Recommended')) {
+      const columnDefs = this.gridOptions.columnModel.getColumnDefs();
+      //console.log(columnDefs)
+      columnDefs.push({
+        field: 'Unit Price', sortable: true, flex: 1, maxWidth: 200, autoHeight: true, wrapText: true,
+        editable: true,
+        filter: 'agTextColumnFilter',
+        cellEditor: NumericCellRendererComponent,
+        cellClass: 'ag-right-aligned-cell'
+      },{
+        field: 'Total Price', sortable: true, flex: 1, maxWidth: 200, autoHeight: true, wrapText: true,
+        editable: false,
+        filter: 'agTextColumnFilter',
+        cellEditor: NumericCellRendererComponent,
+        cellClass: 'ag-right-aligned-cell'
+      });
+      this.gridApi.setColumnDefs(columnDefs);
+      this.gridOptions?.columnModel.setColumnsVisible(['action'], false);
+      const pinnedBottomData = this.generatePinnedBottomData();
+      this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
+    }else if (this.userRole?.includes('contractor')) {
+      this.downloadBtnState = true;
+    }
     if (data.tenderId) {
       this.tenderDetails.get('typeOfWork')?.patchValue(data.typeOfWork.establishmentDescription);
       this.tenderDetails.get('projectName')?.patchValue(data.projectName);
@@ -131,59 +170,20 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
       if (Object.keys(data.tenderFinanceInfo).length === 0) {
         this.rowData = [];
-      } else { this.rowData = JSON.parse(data.tenderFinanceInfo); }
+      } else {
+        this.rowData = (typeof data.tenderFinanceInfo === 'string' ? JSON.parse(data.tenderFinanceInfo) : data.tenderFinanceInfo);
+      }
       this.tenderId = data.tenderId;
       this.fileName = data.tenderDocumentName;
+      if (data.contractorDocumentName) {
+        this.contractorFileName = data.contractorDocumentName;
+      }
+      if (data.contractorBidId) {
+        this.contractorBidId = data.contractorBidId;
+        this.actionTaken = data.contractorActionTaken;
+      }
     } else {
       this.toastr.error('No data to display');
-    }
-    if(this.userRole?.includes('contractor')){
-      if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
-        this.applicantLabel = this.constantVariable.editBtn;
-      } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
-        this.applicantLabel = this.constantVariable.viewBtn;
-      } else{
-        this.applicantLabel = this.constantVariable.applyBtn;
-      }
-      if(this.applicationFormId === 0 && this.applicationFormStatus == null && this.tenderDetails.get('workflowStep')?.value == "Under Process"){
-        this.optionApplnState = true;
-        this.applicantLabel = this.constantVariable.applyBtn;
-       }
-    }
-  }
-  onSelected(event: any) {
-    const value = event;
-    const tender = this.tenderId;
-    const pqForm = this.pqID;
-    const applnTender = this.applicationFormId;
-    if(value == 'PQForm'){
-      if (this.pqID != (null || 0)) {
-        this.router.navigate(['/tenders', tender, 'edit-pq-form', pqForm]);
-      }
-      else {
-        this.router.navigate(['/tenders', tender, 'create-pq-form']);
-      }
-      return;
-    }
-    if (value == 'Apply' && this.tenderDetails.get('workflowStep')?.value != 'UNDER_PROCESS') {
-      const dlg = this.dialog.open(ConfirmationDlgComponent, {
-        data: { title: this.constantVariable.applyTenderMsg, msg: '' }
-      });
-      dlg.afterClosed().subscribe((submit: boolean) => {
-        if (submit) {
-          this.router.navigate(['/tenders', tender, 'tender-application-form']);
-        }
-      });
-
-    } else {
-      if(value == 'View'){
-        if(this.applicationFormId){
-          this.router.navigate(['/tenders', tender, 'view-tender-application-form', applnTender]);
-        }
-      }else{
-        this.router.navigate(['/tenders', tender, 'edit-tender-application-form', applnTender]);
-      }
-      return;
     }
   }
 
@@ -198,10 +198,26 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.file = null;
     }
   }
+  onFileChangeContractor(event: any) {
+    this.contractorFileName = '';
+    this.isContractorFileUploaded = true;
+    if (event.target.files.length > 0) {
+      this.contractorDocument = event.target.files[0];
+      this.tenderDetails.markAsDirty();
+    }
+    else {
+      this.contractorDocument = null;
+    }
+  }
 
   removeSelectedFile(f: any) {
     if (f) {
       this.file = null;
+    }
+  }
+  removeSelectedFileContractor(f: any) {
+    if (f) {
+      this.contractorDocument = null;
     }
   }
   downloadSelectedFile(id: any) {
@@ -210,6 +226,14 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.toastr.success('File Downloaded successfully');
     });
   }
+
+  downloadContractorFile(tenderId: any, userId: any) {
+    this.ApiServicesService.downloadTenderBidInfoDocument(tenderId, userId).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
+  }
+
   //AG GRID COMPONENTS
   public appHeaders = ["Item No", "Item Description", "Unit", "Quantity"]
   public gridApi!: GridApi;
@@ -222,10 +246,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [
-    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120, },
+    { field: this.appHeaders[0], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120, },
     { field: this.appHeaders[1], sortable: true, filter: 'agTextColumnFilter', flex: 8, minWidth: 550, autoHeight: true, wrapText: true },
     {
-      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 140,
+      field: this.appHeaders[2], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 140, maxWidth: 140,
       cellRenderer: UnitCellRendererComponent,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
@@ -233,11 +257,11 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       },
     },
     {
-      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, maxWidth: 120,
+      field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120,
       cellEditor: NumericCellRendererComponent
     },
     {
-      headerName: "Action", flex: 1, maxWidth: 120,
+      headerName: "Action", flex: 1, minWidth: 120, maxWidth: 120,
       cellRenderer: (params: any) => {
         const divElement = document.createElement("div");
         const editingCells = params.api.getEditingCells();
@@ -279,6 +303,15 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   };
   onCellValueChanged(event: CellValueChangedEvent) {
     const dataItem = [event.node.data];
+    if (this.userRole?.includes('contractor')) {
+      if(event.colDef.field == "Unit Price"){
+        let totalValue = 0;
+        totalValue = (event.data['Quantity']) * (event.data['Unit Price'])
+        event.data['Total Price'] = totalValue;
+      } 
+      const pinnedBottomData = this.generatePinnedBottomData();
+      this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
+    }
     this.gridApi.applyTransaction({
       update: dataItem,
     });
@@ -306,7 +339,42 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
+    setTimeout(() => {
+      if (this.userRole?.includes('contractor') && ((this.tenderDetails.get('workflowStep')?.value == 'Qualified') ||
+      (this.tenderDetails.get('workflowStep')?.value == 'In Review') || (this.tenderDetails.get('workflowStep')?.value == 'Recommended'))) {
+        const pinnedBottomData = this.generatePinnedBottomData();
+        this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
+      }
+    }, 500);
   }
+
+  //Price Total pinned on ag-grid footer
+  generatePinnedBottomData() {
+    // generate a row-data with null values
+    let result: any = {};
+    this.gridOptions?.getAllGridColumns()?.forEach((item: any) => {
+      //console.log(item);
+      result[item.colId] = null;
+    });
+    return this.calculatePinnedBottomData(result);
+  }
+  calculatePinnedBottomData(target: any) {
+    let columnsWithAggregation = ['Total Price'];
+    columnsWithAggregation?.forEach(element => {
+      this.gridApi?.forEachNodeAfterFilter((rowNode: RowNode) => {
+        if (rowNode.data[element]) {
+          target[element] += Number(rowNode.data[element]);
+        }
+      });
+      if (target[element]) {
+        target[element] = `Total: ${target[element]}`;
+      } else {
+        target[element] = ``;
+      }
+    });
+    return target;
+  }
+
   onCellClicked(params: any) {
     // Handle click event for action cells
     if (params.column.colId === "action" && params.event.target.dataset.action) {
@@ -415,7 +483,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
   onSave() {
-    //console.log(this.tenderDetails.value.lastDateOfSubmission);
+    console.log(this.tenderDetails.value.lastDateOfSubmission);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
     this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
@@ -530,10 +598,66 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.toastr.error('Error in Submitting Tender Form');
     }
   }
+  onSaveContractor() {
+    let formData = new FormData();
+    const blob = new Blob();
+    formData.append('contractorDocument', this.contractorDocument || blob);
+    formData.append('financialBid', JSON.stringify(this.rowData));
+    formData.append('actionTaken', 'DRAFT');
+    if (this.contractorBidId) {
+      this.ApiServicesService.tenderBidInfoUpdate(this.tenderId, this.contractorBidId, formData).subscribe({
+        next: (response => {
+          this.contractorBidId = response.contractorBidId;
+          this.actionTaken = response.contractorActionTaken;
+          this.toastr.success('Updated Successfully');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      });
+    } else {
+      this.ApiServicesService.tenderBidInfo(this.tenderId, formData).subscribe({
+        next: (response => {
+          this.contractorBidId = response.contractorBidId;
+          this.toastr.success('Updated Successfully');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      });
+    }
+  }
+  onSubmitContractor() {
+    if (this.contractorBidId) {
+      const dlg = this.dialog.open(ConfirmationDlgComponent, {
+        data: { title: this.constantVariable.submitContractorBidTitle, msg: this.constantVariable.submitContractorBidMsg }
+      });
+      dlg.afterClosed().subscribe((submit: boolean) => {
+        if (submit) {
+          let formData = new FormData();
+          const blob = new Blob();
+          formData.append('contractorDocument', this.contractorDocument || blob);
+          formData.append('financialBid', JSON.stringify(this.rowData));
+          formData.append('actionTaken', 'SUBMIT');
+          this.ApiServicesService.tenderBidInfoUpdate(this.tenderId, this.contractorBidId, formData).subscribe({
+            next: (response => {
+              //console.log(response.contractorBidId);
+              this.contractorBidId = response.contractorBidId;
+              this.tenderFormDisable();
+              this.toastr.success('Submitted Successfully');
+            }),
+            error: (error => {
+              console.log(error);
+            })
+          });
+        }
+      });
+    }
+  }
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
-    if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {        
+    if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
       this.btnstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
@@ -551,10 +675,37 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
       this.warningMessage = warningMessage;
+    } else if (this.userRole?.includes("contractor") && this.actionTaken == 'SUBMIT') {
+      this.tenderDetails.disable();
+      this.btnConstate = true;
+      this.gridOptions.getColumn('Item No').getColDef().editable = false;
+      this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+      this.gridOptions.getColumn('Unit').getColDef().editable = false;
+      this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+      if (this.gridOptions.getColumn('Unit Price')) {
+        this.gridOptions.getColumn('Unit Price').getColDef().editable = false;
+        this.gridOptions.getColumn('Total Price').getColDef().editable = false;
+      }
+      this.gridApi.refreshCells();
     } else if (this.userRole?.includes("contractor")) {
       this.tenderDetails.disable();
       this.btnstate = true;
-      this.downloadBtnState = true;
+      this.gridOptions.getColumn('Item No').getColDef().editable = false;
+      this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+      this.gridOptions.getColumn('Unit').getColDef().editable = false;
+      this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+      this.gridApi.refreshCells();
     }
   }
+}
+//indian currency formatter
+function currencyFormatter(currency: number, sign: string) {
+  var x = currency?.toString();
+  var lastThree = x?.substring(x.length - 3);
+  var otherNumbers = x?.substring(0, x.length - 3);
+  if (otherNumbers != '') {
+    lastThree = ',' + lastThree;
+  }
+  var res = otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+  return sign + `${res}`;
 }

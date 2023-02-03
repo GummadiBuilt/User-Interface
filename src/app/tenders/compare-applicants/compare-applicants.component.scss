@@ -49,6 +49,10 @@
 .container {
     padding: 12px;
     background: white;
+}
+
+.inner-container {
+    background: white;
     max-height: calc(100vh - 184px);
     overflow: auto;
 }
@@ -69,6 +73,10 @@
     background-color: rgb(150, 150, 150);
 }
 
+.bold-400 {
+    font-weight: 400;
+}
+
 .bold-500 {
     font-weight: 500;
 }
@@ -81,6 +89,10 @@
 
 .header-label {
     background: #eee;
+}
+
+.header-label-empty {
+    background: white;
 }
 
 td,
@@ -123,4 +135,54 @@ th {
 .wrap {
     word-wrap: break-word;
     text-align: center;
+}
+
+::ng-deep .compare-applicants .mat-form-field-flex>.mat-form-field-infix {
+    padding: 0.4em 0px 0.8em 0px !important;
+    font-size: 12px !important;
+}
+
+::ng-deep .compare-applicants .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+    width: 100px !important;
+}
+
+.font-20p {
+    font-size: 20px;
+}
+
+mat-label {
+    color: #841618;
+    font-weight: 500;
+}
+
+.icon-update {
+    cursor: pointer;
+}
+
+::ng-deep .mat-tooltip {
+    background-color: #841618 !important;
+}
+
+.icon-download {
+    cursor: pointer;
+    color: #841618;
+    padding-left: 4px;
+    font-size: 16px;
+}
+
+.text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.bold-400.limitTextHeight {
+    height: 20px!important;
+    overflow: hidden!important;
+    display: flex!important;
 }

@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 @Directive({
   selector: '[currencyFormatter]'
 })
-export class CurrencyFormatterDirective implements OnInit, OnDestroy {
+export class CurrencyFormatterDirective implements OnInit,AfterViewInit, OnDestroy {
 
   private formatter: Intl.NumberFormat;
   private destroy$ = new Subject();
@@ -27,8 +27,18 @@ export class CurrencyFormatterDirective implements OnInit, OnDestroy {
           .subscribe(this.updateValue.bind(this));
       }
       
-    }, 1000);
+    },1000);
 
+  }
+  ngAfterViewInit(){
+    if (this.ngControl.control?.value) {
+      this.setValue(this.formatPrice(this.ngControl.control?.value))
+      this.ngControl
+        .control?.
+        valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(this.updateValue.bind(this));
+    }
   }
 
   updateValue(value: any) {

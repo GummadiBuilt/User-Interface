@@ -19,6 +19,8 @@ export class tenderResopnse  {
     public projectName: string;
     public applicationFormId:number;
     public applicationFormStatus:string;
+    public contractorBidId:number;
+    public contractorActionTaken:string;
 
      constructor(d: any) {
         this.contractDuration = d.contractDuration;
@@ -39,5 +41,7 @@ export class tenderResopnse  {
         this.projectName = d.projectName;
         this.applicationFormId = d.applicationFormId;
         this.applicationFormStatus = d.applicationFormStatus;
+        this.contractorBidId = d.contractorBidId;
+        this.contractorActionTaken = d.contractorActionTaken;
        }
  }

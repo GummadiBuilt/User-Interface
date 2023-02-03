@@ -20,6 +20,7 @@ export class AppliedTendersComponent implements OnInit {
   public rowData: any;
   public domLayout: any;
   public frameworkComponents: any;
+  StatusValues = StatusValues as unknown as keyof typeof StatusValues;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
   constructor(protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService, private toastr: ToastrService,) {

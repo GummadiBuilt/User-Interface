@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { PageConstants } from 'src/app/shared/application.constants';
 import moment, { Moment } from 'moment';
+import { tenderResopnse } from '../tender/tenderResponse';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-pq-form',
@@ -34,6 +36,11 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
   public btnTenderApplnstate!: boolean;
   public disableMsg!: string;
 
+  //pass PQ data to tech-fin-bid component
+  private pq$ = new BehaviorSubject<any>({});
+  selectedPq$ = this.pq$.asObservable();
+  pqDataLoaded = false;
+
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService,
@@ -42,14 +49,26 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       const tenderId = params.get('tenderId');
       const pqId = params.get('pqId');
       this.pqFormTenderId = tenderId;
+      if (tenderId && !pqId) {
+        this.ApiServicesService.getTendersDatabyId(tenderId).subscribe((data: tenderResopnse) => {
+          this.tenderDate = moment(data.lastDateOfSubmission, 'DD/MM/YYYY').toDate();
+          // console.log(this.tenderDate);
+        });
+      }
       if (tenderId && pqId) {
         this.ApiServicesService.getPQForm(tenderId, pqId).subscribe((data: pqFormResponse) => {
-          this.tenderDate = moment(data.tenderSubmissionDate, 'DD/MM/YYYY');
+          this.tenderDate = moment(data.tenderSubmissionDate, 'DD/MM/YYYY').toDate();
           this.getPQForms(data);
           this.pqFormDisable();
+          this.setPq(data);
         });
       }
     });
+  }
+
+  setPq(pq: any) {
+    this.pq$.next(pq);
+    this.pqDataLoaded = true;
   }
 
   ngOnInit(): void {
@@ -65,7 +84,6 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
       scheduledCompletion: ['', Validators.required],
       workflowStep: ['']
     });
-
   }
 
   canDeactivate(): boolean {
@@ -88,16 +106,16 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
 
     if (this.applicationFormId != 0 && this.applicationFormStatus === 'DRAFT') {
       this.applyBtnLabel = this.constVariable.editBtn;
-    } else if(this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
+    } else if (this.applicationFormId != 0 && this.applicationFormStatus === 'SUBMIT') {
       this.applyBtnLabel = this.constVariable.viewBtn;
-    } else{
+    } else {
       this.applyBtnLabel = this.constVariable.applyBtn;
     }
-    if(this.applicationFormId === 0 && this.applicationFormStatus == null && data.workflowStep == "UNDER_PROCESS"){
+    if (this.applicationFormId === 0 && this.applicationFormStatus == null && data.workflowStep == "UNDER_PROCESS") {
       this.btnTenderApplnstate = true;
       this.disableMsg = this.constVariable.disabledMsgForTenderApplicant;
       this.applyBtnLabel = this.constVariable.applyBtn;
-     }
+    }
   }
   dateConverstion(input: any) {
     if (input) {
@@ -118,12 +136,12 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
         }
       });
     } else {
-      if(this.applyBtnLabel == 'View'){
+      if (this.applyBtnLabel == 'View') {
         this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'view-tender-application-form', this.applicationFormId]);
-      }else{
+      } else {
         this.router.navigate(['/tenders', this.pqFormTenderId, 'view-pq-form', this.pqFormId, 'edit-tender-application-form', this.applicationFormId]);
       }
-      
+
     }
   }
 
@@ -182,7 +200,7 @@ export class PQFormComponent implements OnInit, ComponentCanDeactivate {
     const now = moment();
     if (now > tenderLastDate) {
       this.toastr.error('Please change the tender submission date before creating the PQ-Form');
-    }else if (this.pqFormId && this.adminPqForm.valid) {
+    } else if (this.pqFormId && this.adminPqForm.valid) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constVariable.submitPQFormTitle, msg: this.constVariable.submitPQFormMsg }
       });

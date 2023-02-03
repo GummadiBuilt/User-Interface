@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, Input, OnInit, } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
@@ -19,7 +19,6 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/materia
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { DatePipe } from '@angular/common';
-import { CdkPortal } from '@angular/cdk/portal';
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
 
 const moment = _rollupMoment || _moment;
@@ -63,6 +62,23 @@ export class TenderApplicationFormComponent implements OnInit {
   public constantVariable = PageConstants;
   btnsDisable: boolean = false;
   public warningMessage!: string;
+
+  public gridApiTurnover!: GridApi;
+  public gridOptionsTurnover!: any;
+  public gridApiClientRef!: GridApi;
+  public columnApiClientRef!: any;
+  public gridApiSimilarNature!: GridApi;
+  public columnApiSimilarNature!: any;
+  public gridApiEmployeesStrength!: GridApi;
+  public gridOptionsEmployeesStrength!: any;
+  public gridApiCapitalEquipments!: GridApi;
+  public gridOptionsCapitalEquipments!: any;
+  public gridApiFinancialDetails!: GridApi;
+  public gridOptionsFinancialDetails!: any;
+  public gridApiCompanyBankersDetails!: GridApi;
+  public gridOptionsCompanyBankersDetails!: any;
+  public gridApiCompanyAuditorsDetails!: GridApi;
+  public gridOptionsCompanyAuditorsDetails!: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -187,13 +203,13 @@ export class TenderApplicationFormComponent implements OnInit {
       this.clientRefRowData = [];
     } else {
       // set the column headers from the data        
-      const colDefs = this.gridApiClientRef.getColumnDefs();
+      const colDefs = this.gridApiClientRef?.getColumnDefs();
       const dataRef = JSON.parse(data.clientReferences);
       const keys = Object.keys(dataRef[0]);
       if (colDefs?.length) {
         colDefs.length = 0;
         keys.forEach(key => colDefs?.push({ field: key }));
-        this.gridApiClientRef.setColumnDefs(colDefs);
+        this.gridApiClientRef?.setColumnDefs(colDefs);
         this.clientRefRowData = JSON.parse(data.clientReferences);
         if (colDefs.length == 4) {
           this.btnstate = true;
@@ -204,13 +220,13 @@ export class TenderApplicationFormComponent implements OnInit {
       this.similarNatureRowData = [];
     } else {
       // set the column headers from the data        
-      const colDefsSim = this.gridApiSimilarNature.getColumnDefs();
+      const colDefsSim = this.gridApiSimilarNature?.getColumnDefs();
       const dataSimRef = JSON.parse(data.similarProjectNature);
       const keys = Object.keys(dataSimRef[0]);
       if (colDefsSim?.length) {
         colDefsSim.length = 0;
         keys.forEach(key => colDefsSim?.push({ field: key }));
-        this.gridApiSimilarNature.setColumnDefs(colDefsSim);
+        this.gridApiSimilarNature?.setColumnDefs(colDefsSim);
         this.similarNatureRowData = JSON.parse(data.similarProjectNature);
       }
     }
@@ -251,6 +267,9 @@ export class TenderApplicationFormComponent implements OnInit {
       this.applicantPqForm.get('actionTaken')?.patchValue(data.actionTaken);
       this.tenderApplicantFormDisable();
     }
+    if (this.userRole?.includes('admin') || this.userRole?.includes('client')) {
+      this.tenderApplicantFormDisable();
+    }
   }
 
   step = 0;
@@ -269,7 +288,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public blob = new Blob();
   //Section B of PQ-Form: Turnover Details
   public turnoverColumnDefs: ColDef[] = [
-    { headerName: 'Year', field: 'year', cellEditor: NumericCellRendererComponent, maxWidth: 100,},
+    { headerName: 'Year', field: 'year', cellEditor: NumericCellRendererComponent, maxWidth: 100, },
     {
       headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell',
       cellEditor: NumericCellRendererComponent, maxWidth: 150,
@@ -297,8 +316,6 @@ export class TenderApplicationFormComponent implements OnInit {
     { year: '', revenue: '', row: 'YEAR_TWO', fileName: '' },
     { year: '', revenue: '', row: 'YEAR_THREE', fileName: '' },
   ];
-  private gridApiTurnover!: GridApi;
-  public gridOptionsTurnover!: any;
 
   onGridReadyTurnover(params: GridReadyEvent) {
     this.gridApiTurnover = params.api;
@@ -320,13 +337,13 @@ export class TenderApplicationFormComponent implements OnInit {
     }
     this.gridApiTurnover.refreshCells();
   }
- 
+
   //Section C of PQ-Form: Client References of 3 Major Projects
   public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
   ]
-  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details',editable: false, },
+  public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details', editable: false, },
   this.projectInfoColumnDef[0]];
 
 
@@ -335,9 +352,9 @@ export class TenderApplicationFormComponent implements OnInit {
     const value = this.getColumnDefs();
     // console.log('columns', value.length)
     if (value.length <= 4) {
-      this.gridApiClientRef.setColumnDefs(value);
+      this.gridApiClientRef?.setColumnDefs(value);
       // console.log('columns', this.gridApiClientRef.getColumnDefs())
-      this.gridApiSimilarNature.setColumnDefs(value);
+      this.gridApiSimilarNature?.setColumnDefs(value);
     } else {
       this.btnstate = true;
       this.toastr.error('A maximum of three client references are allowed');
@@ -345,8 +362,8 @@ export class TenderApplicationFormComponent implements OnInit {
   }
 
   private getColumnDefs() {
-    const cols = this.columnApiClientRef.getColumns()!;
-    const colDef = this.gridApiClientRef.getColumnDefs();
+    const cols = this.columnApiClientRef?.getColumns()!;
+    const colDef = this.gridApiClientRef?.getColumnDefs();
     this.project.forEach(item => {
       item.headerName = 'Project ' + colDef?.length,
         item.field = 'Project ' + colDef?.length
@@ -356,8 +373,6 @@ export class TenderApplicationFormComponent implements OnInit {
     return JSON.parse(JSON.stringify(colDef));
   }
 
-  gridApiClientRef!: GridApi;
-  columnApiClientRef!: ColumnApi;
   btnstate: boolean = false;
   onGridReadyClientRef(params: GridReadyEvent) {
     this.gridApiClientRef = params.api;
@@ -382,14 +397,17 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
-
+  onCellEditingStartedClientRef($event: any) {
+    if ($event.colDef.field === 'details') {
+      this.gridApiClientRef.stopEditing();
+    }
+  }
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
     { headerName: 'Details', field: 'details', editable: false },
     this.project[0]
   ];
-  gridApiSimilarNature!: GridApi;
-  columnApiSimilarNature!: ColumnApi;
+
   onGridReadySimilarNature(params: GridReadyEvent) {
     this.gridApiSimilarNature = params.api;
     this.columnApiSimilarNature = params.columnApi;
@@ -413,6 +431,11 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Contact details', 'Project 1': '' },
     { details: 'Remarks if any', 'Project 1': '' },
   ];
+  onCellEditingStartedSimilarNature($event: any) {
+    if ($event.colDef.field === 'details') {
+      this.gridApiSimilarNature.stopEditing();
+    }
+  }
 
   //Section C of PQ-Form: Statutory Compliances
   public statutoryCompliancesColumnDefs: ColDef[] = [
@@ -476,8 +499,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public employeesStrengthRowData: any[] = [
     { name: '', designation: '', qualification: '', totalExp: '', totalExpPresent: '', },
   ];
-  private gridApiEmployeesStrength!: GridApi;
-  public gridOptionsEmployeesStrength!: any;
+
   onGridReadyEmployeesStrength(params: GridReadyEvent) {
     this.gridApiEmployeesStrength = params.api;
     this.gridOptionsEmployeesStrength = params.columnApi;
@@ -570,8 +592,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public capitalEquipmentsRowData = [
     { description: '', quantity: '', own_rented: '', capacity_size: '', age_condition: '' },
   ];
-  private gridApiCapitalEquipments!: GridApi;
-  public gridOptionsCapitalEquipments!: any;
+
   onGridReadyCapitalEquipments(params: GridReadyEvent) {
     this.gridApiCapitalEquipments = params.api;
     this.gridOptionsCapitalEquipments = params.columnApi;
@@ -642,27 +663,27 @@ export class TenderApplicationFormComponent implements OnInit {
   public financialColumnDefs: ColDef[] = [
     { headerName: 'Year', field: 'f_year', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 100 },
     {
-      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.gross_turnover, ''),
     },
     {
-      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.net_profit, ''),
     },
     {
-      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.profit_after_tax, ''),
     },
     {
-      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.current_assets, ''),
     },
     {
-      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 200, cellClass: 'ag-right-aligned-cell',
+      headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
       valueFormatter: params => currencyFormatter(params.data.current_liabilities, ''),
     },
     {
-      headerName: "Action", colId: "action", flex: 1, minWidth: 150, editable: false, filter: false,
+      headerName: "Action", colId: "action", flex: 1, maxWidth: 150, editable: false, filter: false,
       cellRenderer: (params: any) => {
         let divElement = document.createElement("div");
         if (this.btnsDisable) {
@@ -697,8 +718,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public financialDetails = [
     { f_year: '', gross_turnover: '', net_profit: '', profit_after_tax: '', current_assets: '', current_liabilities: '', },
   ];
-  private gridApiFinancialDetails!: GridApi;
-  public gridOptionsFinancialDetails!: any;
+
   onGridReadyFinancialDetails(params: GridReadyEvent) {
     this.gridApiFinancialDetails = params.api;
     this.gridOptionsFinancialDetails = params.columnApi;
@@ -787,8 +807,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public companyBankersDetails = [
     { name: '', address: '', },
   ];
-  private gridApiCompanyBankersDetails!: GridApi;
-  public gridOptionsCompanyBankersDetails!: any;
+
   onGridReadyCompanyBankersDetails(params: GridReadyEvent) {
     this.gridApiCompanyBankersDetails = params.api;
     this.gridOptionsCompanyBankersDetails = params.columnApi;
@@ -877,8 +896,7 @@ export class TenderApplicationFormComponent implements OnInit {
   public companyAuditorsDetails = [
     { name: '', address: '', },
   ];
-  private gridApiCompanyAuditorsDetails!: GridApi;
-  public gridOptionsCompanyAuditorsDetails!: any;
+
   onGridReadyCompanyAuditorsDetails(params: GridReadyEvent) {
     this.gridApiCompanyAuditorsDetails = params.api;
     this.gridOptionsCompanyAuditorsDetails = params.columnApi;
@@ -933,7 +951,7 @@ export class TenderApplicationFormComponent implements OnInit {
   onSave() {
     this.applicantPqForm.controls['actionTaken'].setValue('DRAFT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
-   // this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
+    // this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
     this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
     this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
     this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
@@ -1017,33 +1035,33 @@ export class TenderApplicationFormComponent implements OnInit {
     }
   }
   tenderApplicantFormDisable() {
-    if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT') {
+    if (this.applicantPqForm.controls['actionTaken'].value == 'SUBMIT' || this.userRole?.includes('admin') || this.userRole?.includes('client')) {
       this.warningMessage = this.constantVariable.disabledWarningTenderApplicantMsg;
       this.btnstate = true;
       this.btnsDisable = true;
       this.applicantPqForm.disable();
-      this.gridOptionsTurnover.getColumns().forEach((colTurnover: any) => {
+      this.gridOptionsTurnover?.getColumns()?.forEach((colTurnover: any) => {
         colTurnover.colDef.editable = false;
       })
-      this.columnApiClientRef.getColumns()?.forEach((colClientRef: any) => {
+      this.columnApiClientRef?.getColumns()?.forEach((colClientRef: any) => {
         colClientRef.colDef.editable = false;
       })
-      this.columnApiSimilarNature.getColumns()?.forEach((colSimilarNature: any) => {
+      this.columnApiSimilarNature?.getColumns()?.forEach((colSimilarNature: any) => {
         colSimilarNature.colDef.editable = false;
       })
-      this.gridOptionsEmployeesStrength.getColumns().forEach((colEmployeesStrength: any) => {
+      this.gridOptionsEmployeesStrength?.getColumns()?.forEach((colEmployeesStrength: any) => {
         colEmployeesStrength.colDef.editable = false;
       })
-      this.gridOptionsCapitalEquipments.getColumns().forEach((colCapitalEquipments: any) => {
+      this.gridOptionsCapitalEquipments?.getColumns()?.forEach((colCapitalEquipments: any) => {
         colCapitalEquipments.colDef.editable = false;
       })
-      this.gridOptionsFinancialDetails.getColumns().forEach((colFinancialDetails: any) => {
+      this.gridOptionsFinancialDetails?.getColumns()?.forEach((colFinancialDetails: any) => {
         colFinancialDetails.colDef.editable = false;
       })
-      this.gridOptionsCompanyBankersDetails.getColumns().forEach((colCompanyBankers: any) => {
+      this.gridOptionsCompanyBankersDetails?.getColumns()?.forEach((colCompanyBankers: any) => {
         colCompanyBankers.colDef.editable = false;
       })
-      this.gridOptionsCompanyAuditorsDetails.getColumns().forEach((colCompanyAuditors: any) => {
+      this.gridOptionsCompanyAuditorsDetails?.getColumns()?.forEach((colCompanyAuditors: any) => {
         colCompanyAuditors.colDef.editable = false;
       })
     }

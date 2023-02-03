@@ -5,6 +5,9 @@ import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallba
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { DownloadButtonRendererComponent } from 'src/app/renderers/download-button-renderer/download-button-renderer.component';
+import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
+import { RadioButtonRendererComponent } from 'src/app/renderers/radio-button-renderer/radio-button-renderer.component';
 import { UnitCellRendererComponent } from 'src/app/renderers/unit-cell-renderer/unit-cell-renderer.component';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
@@ -24,6 +27,8 @@ export class ViewApplicantsComponent implements OnInit {
   public constantVariable = PageConstants;
   public userRole: string[] | undefined;
   public btnstate: boolean = false;
+  tenderStatus: any;
+  btnRecommendState: boolean = false;
 
   constructor(private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
     private toastr: ToastrService, protected keycloak: KeycloakService, private _formBuilder: FormBuilder,
@@ -42,31 +47,40 @@ export class ViewApplicantsComponent implements OnInit {
       this.toastr.error('Failed to load user details' + e);
     }
     this.getTenderApplicantsRankingData();
-    
+
   }
 
   getTenderApplicantsRankingData() {
     this.ApiServicesService.getTenderApplicantRanking(this.tenderId).subscribe((data: tenderApplicantRankingResopnse) => {
       this.rowData = data;
-     // console.log('tender applicants ranking', this.rowData);
-     if(this.userRole?.includes('client')){
-      this.disableViewApplicants();
-    }
+      this.tenderStatus = this.rowData[0].tenderStatus;
+      if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
+        this.disableViewApplicants();
+        if (this.rowData[0].tenderStatus === 'IN_REVIEW') {
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+        }
+        if (this.rowData[0].tenderStatus === 'RECOMMENDED') {
+          this.btnRecommendState = true;
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+        }
+      }
     });
   }
-  status = ['SHORTLISTED', 'NOT_SHORTLISTED']
+  status = ['QUALIFIED', 'NOT_QUALIFIED']
+  //this.rowData[0].tenderStatus == "IN_REVIEW"
+  public disableRadio: boolean = false;
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, autoHeight: true, wrapText: true,
+      headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, minWidth: 250, autoHeight: true, wrapText: true,
       checkboxSelection: checkboxSelection,
       headerCheckboxSelection: headerCheckboxSelection
     },
     {
-      headerName: 'Applicant Form',  flex: 1, 
+      headerName: 'Applicant Form', flex: 1,
       cellRenderer: (params: ICellRendererParams) => {
         const id = `<a href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank">View Application</a>`;
         return id
-       },
+      },
       filter: false,
       colId: "action",
     },
@@ -75,11 +89,10 @@ export class ViewApplicantsComponent implements OnInit {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
       valueFormatter: (params: any) => {
         let val!: any;
-        if(params.value == 'UNDER_PROCESS')
-        {
+        if (params.value == 'UNDER_PROCESS') {
           val = 'Select Status';
-        }else{
-          val= StatusValues[params.value as keyof typeof StatusValues];
+        } else {
+          val = StatusValues[params.value as keyof typeof StatusValues];
         }
         return val;
       },
@@ -89,6 +102,25 @@ export class ViewApplicantsComponent implements OnInit {
       }
     },
     { headerName: 'Note', field: 'justificationNote', filter: 'agTextColumnFilter', flex: 5, autoHeight: true, wrapText: true, editable: true },
+    {
+      headerName: 'Download', field: 'download', flex: 1, cellRenderer: DownloadButtonRendererComponent, hide: true,
+      cellRendererParams: {
+        context: this
+      },
+      filter: false,
+      colId: "download",
+      minWidth: 350,
+    },
+    {
+      headerName: 'Recommended', field: 'recommended', flex: 1, filter: false, autoHeight: true, wrapText: true, maxWidth: 150, hide: true,
+      // cellRenderer: function cellTitle(params: any) {
+      //   if (params.data.applicationStatus != "NOT_QUALIFIED") {
+      //     let cellValue = '<div class="ngSelectionCell"><input id=' + params.data.applicationFormId + ' name="selected" type="radio"></div>';
+      //     return cellValue;
+      //   } else return;
+      // },
+      cellRenderer: RadioButtonRendererComponent,
+    }
   ];
   public defaultColDef: ColDef = {
     minWidth: 200,
@@ -129,7 +161,7 @@ export class ViewApplicantsComponent implements OnInit {
   onSelect() {
     const selectedData = this.gridApi.getSelectedRows();
     let applicationFormIds = selectedData.map((i: { applicationFormId: any; }) => i.applicationFormId);
-    this.router.navigate(['/tenders', this.tenderId, 'compare-applicants', { applicationFormIds: applicationFormIds }]);
+    this.router.navigate(['/tenders', this.tenderId, 'view-applicants', 'compare-applicants', { applicationFormIds: applicationFormIds }]);
   }
 
   dragChanged(params: any) {
@@ -150,6 +182,9 @@ export class ViewApplicantsComponent implements OnInit {
   onRowDragMove(event: any) {
     // console.log('onRowDragMOVE', event);
   }
+  onCellValueChanged(event: CellValueChangedEvent) {
+
+  }
 
   onRowValueChanged(event: any) {
     var data = event.data;
@@ -166,7 +201,7 @@ export class ViewApplicantsComponent implements OnInit {
 
   onUpdate() {
     if (this.tenderId && this.userRole?.includes('admin')) {
-      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'DRAFT').subscribe({
+      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData, 'DRAFT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Updated');
         }),
@@ -182,9 +217,10 @@ export class ViewApplicantsComponent implements OnInit {
   }
   onSubmit() {
     if (this.tenderId && this.userRole?.includes('admin')) {
-      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData,'SUBMIT').subscribe({
+      this.ApiServicesService.updateTenderApplicantRanking(this.tenderId, this.rowData, 'SUBMIT').subscribe({
         next: (response => {
           this.toastr.success('Successfully Submitted');
+          this.disableViewApplicants();
         }),
         error: (error => {
           console.log(error);
@@ -196,7 +232,28 @@ export class ViewApplicantsComponent implements OnInit {
       this.toastr.error('Error in Submitting Applicant Details');
     }
   }
-  disableViewApplicants(){
+  onRecommend() {
+    const selectedData = this.gridApi.getSelectedRows();
+    let applicationFormId = parseInt(selectedData.map((i: any) => i.applicationFormId));
+    // console.log(applicationFormId);
+    if (this.tenderId && applicationFormId && this.userRole?.includes('admin')) {
+      this.ApiServicesService.recommendContractorForTender(this.tenderId, applicationFormId, selectedData).subscribe({
+        next: (response => {
+          this.toastr.success('Successfully Recommended');
+          this.disableViewApplicants();
+          this.btnRecommendState = true;
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      });
+    } else {
+      //error
+      console.log('error');
+      this.toastr.error('Error in Recommending Applicant');
+    }
+  }
+  disableViewApplicants() {
     this.btnstate = true;
     this.gridOptions.getColumns()?.forEach((colClientRef: any) => {
       colClientRef.colDef.editable = false;

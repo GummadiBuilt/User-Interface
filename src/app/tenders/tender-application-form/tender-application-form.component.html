@@ -1,13 +1,19 @@
 <div class="pq-form">
-    <div class="breadcrumbs">
-        <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
-            <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
-                <i *ngIf="info" class="icon-breadcrumb {{info}}"></i>
-                <ng-container>{{ breadcrumb | uppercase }}</ng-container>
-            </ng-container>
-        </xng-breadcrumb>
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
         <div fxLayoutAlign="center center">
-            <div class="warn" *ngIf="warningMessage && userRole?.includes('contractor')" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <xng-breadcrumb [separator]="separatorTemplate" id="titleCase">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <i *ngIf="info" class="icon-breadcrumb {{info}}"></i>
+                    <ng-container>{{ breadcrumb | uppercase }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
+        <div fxLayoutAlign="center center">
+            <div class="warn" *ngIf="warningMessage && userRole?.includes('contractor')" fxLayout="row"
+                fxLayoutAlign="center center" fxLayoutGap="8px">
                 <div>
                     <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
                 </div>
@@ -16,10 +22,8 @@
                 </div>
             </div>
         </div>
+        <div></div>
     </div>
-    <ng-template #separatorTemplate>
-        <i class="fa-solid fa-caret-right"></i>
-    </ng-template>
     <div class="pq-form-body">
         <div class="contractor-stepper">
             <mat-stepper #stepper [orientation]="(stepperOrientation | async)!">
@@ -64,7 +68,7 @@
                             <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Company Name in Full *</mat-label>
+                                    <mat-label> {{constantVariable.companyNameinFull}} *</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input formControlName="companyName" matInput placeholder="Company Name">
                                         <mat-error *ngIf="applicantPqForm.get('companyName')?.errors?.['required']">
@@ -78,7 +82,7 @@
 
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Year of Establishment *</mat-label>
+                                    <mat-label> {{constantVariable.yearOfEstablishment}} *</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput [matDatepicker]="dp" formControlName="yearOfEstablishment"
                                             readonly [matDatepickerFilter]="myDateFilter">
@@ -93,7 +97,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Type of Establishment *</mat-label>
+                                    <mat-label> {{constantVariable.typeOfEstablishment}} *</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input formControlName="typeOfEstablishment" matInput
                                             placeholder="Type of Establishment">
@@ -105,7 +109,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Postal Address [Corporate Office]</mat-label>
+                                    <mat-label> {{constantVariable.postalAddressCorporate}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input formControlName="corpOfficeAddress" matInput
                                             placeholder="Postal Address [Corporate Office]">
@@ -117,7 +121,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Postal Address [Local Office]</mat-label>
+                                    <mat-label> {{constantVariable.postalAddressLocal}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input formControlName="localOfficeAddress" matInput
                                             placeholder="Postal Address [Local Office]">
@@ -129,7 +133,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Telephone</mat-label>
+                                    <mat-label> {{constantVariable.telephone}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input numbersOnly formControlName="telephoneNum" matInput
                                             placeholder="Telephone">
@@ -144,7 +148,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Fax</mat-label>
+                                    <mat-label> {{constantVariable.fax}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput formControlName="faxNumber" placeholder="Fax">
                                     </mat-form-field>
@@ -158,7 +162,7 @@
                             <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Contact Person Name</mat-label>
+                                    <mat-label> {{constantVariable.contactPersonName}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput formControlName="contactName" placeholder="Contact Person">
                                         <mat-error *ngIf="applicantPqForm.get('contactName')?.errors?.['maxlength']">
@@ -168,7 +172,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Designation</mat-label>
+                                    <mat-label> {{constantVariable.designation}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput formControlName="contactDesignation" placeholder="Designation">
                                         <mat-error
@@ -179,7 +183,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Mobile / Tel.</mat-label>
+                                    <mat-label> {{constantVariable.mobileOrTel}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput numbersOnly formControlName="contactPhoneNum"
                                             placeholder="Mobile / Tel.">
@@ -195,7 +199,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Email ID</mat-label>
+                                    <mat-label> {{constantVariable.emailId}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput formControlName="contactEmailId" placeholder="Email ID">
                                         <mat-error
@@ -209,7 +213,7 @@
                             <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="12px grid">
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Name of Regional Head / Project Coordinator</mat-label>
+                                    <mat-label> {{constantVariable.nameOfRegionalHeadOrProjectCoordinator}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput formControlName="regionalHeadName"
                                             placeholder="Name of Regional Head / Project Coordinator">
@@ -221,7 +225,7 @@
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                                     fxLayout="column">
-                                    <mat-label>Mobile No.</mat-label>
+                                    <mat-label> {{constantVariable.mobileNo}}</mat-label>
                                     <mat-form-field appearance="outline">
                                         <input matInput numbersOnly formControlName="regionalHeadPhoneNum"
                                             placeholder="Mobile No.">
@@ -245,15 +249,6 @@
                                 </div>
                             </div>
                             <div>
-                                <!-- <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
-                                    fxLayoutGap="8px">
-                                    <button mat-stroked-button type="button"
-                                        (click)="accordionTurnover.openAll()">{{constantVariable.expandAllBtn}}
-                                    </button>
-                                    <button mat-stroked-button type="button"
-                                        (click)="accordionTurnover.closeAll()">{{constantVariable.collapseAllBtn}}
-                                    </button>
-                                </div> -->
                                 <mat-accordion class="example-headers-align" #accordionTurnover="matAccordion" multi>
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
@@ -276,31 +271,6 @@
                                             </ag-grid-angular>
                                         </div>
                                     </mat-expansion-panel>
-                                    <!-- <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-title>
-                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                    <i class="icon-20p fa-solid fa-layer-group"></i>
-                                                    <span>Similar Projects</span>
-                                                </div>
-                                            </mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        <div class="example-wrapper">
-                                            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
-                                                [columnDefs]="similarProjectsColumnDefs"
-                                                [defaultColDef]="similarProjectsDefaultColDef"
-                                                [rowData]="similarProjectsDetails" [domLayout]="domLayout"
-                                                [editType]="editType" (gridReady)="onGridReadySimilarProjects($event)"
-                                                (cellClicked)="onCellClickedSimilarProjects($event)"
-                                                (cellValueChanged)="onCellValueChangedSimilarProjects($event)"
-                                                (rowValueChanged)="onRowValueChangedSimilarProjects($event)"
-                                                (cellEditingStopped)="onCellEditingStoppedSimilarProjects($event)"
-                                                (rowEditingStarted)="onRowEditingStartedSimilarProjects($event)"
-                                                (rowEditingStopped)="onRowEditingStoppedSimilarProjects($event)"
-                                                [stopEditingWhenCellsLoseFocus]=true>
-                                            </ag-grid-angular>
-                                        </div>
-                                    </mat-expansion-panel> -->
                                 </mat-accordion>
                             </div>
                         </div>
@@ -373,7 +343,8 @@
                                             [columnDefs]="clientRefColumnDefs" [defaultColDef]="clientRefDefaultColDef"
                                             [rowData]="clientRefRowData" [domLayout]="domLayout"
                                             (gridReady)="onGridReadyClientRef($event)"
-                                            [stopEditingWhenCellsLoseFocus]=true>
+                                            [stopEditingWhenCellsLoseFocus]=true
+                                            (cellEditingStarted)="onCellEditingStartedClientRef($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>
@@ -399,7 +370,8 @@
                                             [defaultColDef]="similarNatureDefaultColDef"
                                             [rowData]="similarNatureRowData" [domLayout]="domLayout"
                                             (gridReady)="onGridReadySimilarNature($event)"
-                                            [stopEditingWhenCellsLoseFocus]=true>
+                                            [stopEditingWhenCellsLoseFocus]=true
+                                            (cellEditingStarted)="onCellEditingStartedSimilarNature($event)">
                                         </ag-grid-angular>
                                     </div>
                                 </mat-expansion-panel>

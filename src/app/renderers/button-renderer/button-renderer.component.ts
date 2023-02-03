@@ -21,27 +21,27 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   public applyBtnLabel!: string;
   public btnTenderApplnstate!: boolean;
   public disableMsg: string = '';
-  
+
   agInit(params: any): void {
     this.rowData = params.data;
     this.params = params;
     this.label = this.rowData.tender_document_name || null;
     if (this.rowData.pq_id != null && this.rowData.workflow_step == 'YET_TO_BE_PUBLISHED') {
       this.buttonLabel = this.constantVariables.editPQFormBtn;
-    } else if (this.rowData.pq_id != null && (this.rowData.workflow_step == 'PUBLISHED' || this.rowData.workflow_step == 'UNDER_PROCESS')) {
+    } else if (this.rowData.pq_id != null) {
       this.buttonLabel = this.constantVariables.viewPQFormBtn;
     }
     else {
       this.buttonLabel = this.constantVariables.createPQFormBtn;
     }
-    if (this.rowData.application_form_id != null && this.rowData.app_form_status!='DRAFT') {
+    if (this.rowData.application_form_id != null && this.rowData.app_form_status != 'DRAFT') {
       this.applyBtnLabel = this.constantVariables.viewBtn;
-    } else if(this.rowData.application_form_id != null && this.rowData.app_form_status!='SUBMIT') {
+    } else if (this.rowData.application_form_id != null && this.rowData.app_form_status != 'SUBMIT') {
       this.applyBtnLabel = this.constantVariables.editBtn;
-    } else{
+    } else {
       this.applyBtnLabel = this.constantVariables.applyBtn;
     }
-    if(this.applyBtnLabel == 'Apply' && this.rowData.workflow_step == 'UNDER_PROCESS'){
+    if (this.applyBtnLabel == this.constantVariables.applyBtn && this.rowData.workflow_step == 'UNDER_PROCESS') {
       this.btnTenderApplnstate = true;
       this.disableMsg = this.constantVariables.disabledMsgForTenderApplicant;
     }
@@ -58,8 +58,8 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     return false;
   }
   public userRole: string[] | undefined;
-  constructor(private ngZone: NgZone, private router: Router, protected keycloak: KeycloakService, 
-    private dialog: MatDialog,private toastr: ToastrService,) {
+  constructor(private ngZone: NgZone, private router: Router, protected keycloak: KeycloakService,
+    private dialog: MatDialog, private toastr: ToastrService,) {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
     } catch (e) {
@@ -74,9 +74,9 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
 
   navigateToPQForm() {
-    if (this.buttonLabel == 'Edit PQ-Form') {
+    if (this.buttonLabel == this.constantVariables.editPQFormBtn) {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-pq-form', this.rowData.pq_id]);
-    } else if (this.buttonLabel == 'View PQ-Form') {
+    } else if (this.buttonLabel == this.constantVariables.viewPQFormBtn) {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'view-pq-form', this.rowData.pq_id]);
     } else {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'create-pq-form']);
@@ -94,7 +94,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   }
   applyTenderApplicantForm() {
     //console.log(this.rowData)
-    if (this.applyBtnLabel == 'Apply' && this.rowData.workflow_step != 'UNDER_PROCESS') {
+    if (this.applyBtnLabel == this.constantVariables.applyBtn && this.rowData.workflow_step != 'UNDER_PROCESS') {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constantVariables.applyTenderMsg, msg: '' }
       });
@@ -104,23 +104,13 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         }
       });
     } else {
-      if(this.applyBtnLabel == 'View'){
-        if(this.rowData.application_form_id){
+      if (this.applyBtnLabel == this.constantVariables.viewBtn) {
+        if (this.rowData.application_form_id) {
           this.router.navigate(['/tenders', this.rowData.tender_id, 'view-tender-application-form', this.rowData.application_form_id]);
         }
-      }else{
+      } else {
         this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-tender-application-form', this.rowData.application_form_id]);
       }
-      
     }
   }
-  updatePQForm() {
-    console.log(this.rowData);
-    // if (this.rowData.pq_id != null) {
-    //   this.router.navigate(['/tenders', this.rowData.tender_id, 'edit-applicants-pq-form', this.rowData.applicant_id]);
-    // }
-  }
-  // navigateToApplicants(){
-  //   this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);
-  // }
 }
