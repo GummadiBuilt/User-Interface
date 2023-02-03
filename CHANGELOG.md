@@ -1,3 +1,33 @@
+# [1.8.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.7.0...v1.8.0) (2023-02-03)
+
+
+### Bug Fixes
+
+* **applied tenders, tenders, tender applicants:** role based enable of download tender file ([9c5bd61](https://github.com/GummadiBuilt/User-Interface/commit/9c5bd61b3b10f2df9dcdb52eded293433fc4a7e3))
+* **compare applicants:** added show more and less for finance bid in compare applicants ([fa5eab2](https://github.com/GummadiBuilt/User-Interface/commit/fa5eab27b7549a6ca17159c0982519a980dcfe18))
+* **create tender:** added financial bid for compare applicants and fixed total value for ag grid ([2b8568b](https://github.com/GummadiBuilt/User-Interface/commit/2b8568bf8daec2b0ccb05888a90a0fc71b728faa))
+* **hide notifications:** notifications icon hidden ([70a78ac](https://github.com/GummadiBuilt/User-Interface/commit/70a78acd652f0231d819aa82c6f258ce326f0b4d))
+* **tender applicants:** ag grid header non editable and user based enable and disable forms ([f0855ae](https://github.com/GummadiBuilt/User-Interface/commit/f0855ae94d64da7cb2c0f6f51510de5df6d7079c))
+* **tender applicants:** enable and disable based on roles in create tender and view applicants ([8620fd0](https://github.com/GummadiBuilt/User-Interface/commit/8620fd00452402ebc187611dcc236db82a58209e))
+
+
+### Features
+
+* **action-dropdown.ts:** added action dropdown component ([f69bd88](https://github.com/GummadiBuilt/User-Interface/commit/f69bd8894bc98adff4a4c43dc045b45f2715291b))
+* **compare applicants:** added export to excel functionality ([9fe1c88](https://github.com/GummadiBuilt/User-Interface/commit/9fe1c88523b0218182e411cf76c71b104b068672))
+* **compare-applicant.ts:** fixed breadcrumb, align status message ([e930f3f](https://github.com/GummadiBuilt/User-Interface/commit/e930f3f6e306a3e0a762913bfb2e78727ebb1632))
+* **compare-applicants.ts:** added rank text field ([15c3198](https://github.com/GummadiBuilt/User-Interface/commit/15c319815220cb3590f92ce8ed36529ef53c9549))
+* **compare-applicants.ts:** design fixes in financial bid in compare applicants ([b1a1e71](https://github.com/GummadiBuilt/User-Interface/commit/b1a1e719095d3fc2e4c7a2339a5f1c676896166e))
+* **compare-applicants.ts:** fixed export all data to excel ([6c70a0f](https://github.com/GummadiBuilt/User-Interface/commit/6c70a0fa3c212cacfdaf7e8573adc3cf070708d3))
+* **create tender:** for contractor enable financial bid and technical bid ([4c5ec3d](https://github.com/GummadiBuilt/User-Interface/commit/4c5ec3da33fd3938167bce046a33a6e510c69cb7))
+* **create-tender.ts:** added price and total columns in financial-bid ([b2749e2](https://github.com/GummadiBuilt/User-Interface/commit/b2749e2857cd44bee801cf6f8d1e001a7138c131))
+* **download-button.ts:** api integration for download contractor tech bid ([c8d79ea](https://github.com/GummadiBuilt/User-Interface/commit/c8d79ea9fd3f938487f2bea6b808a6b9948aef43))
+* **dropdown-actions.ts:** fetch tender data using observable in dropdown component ([0aff82d](https://github.com/GummadiBuilt/User-Interface/commit/0aff82d07185fb5e0cdba2f2737b11cc853bb015))
+* **technical-financial-bid.ts:** added technical financail bid component ([3cd011a](https://github.com/GummadiBuilt/User-Interface/commit/3cd011aa7d20ba596d57f14fa655f49abfbe0992))
+* **view applicants:** added download documents of technical and financial bid info for contractor ([ed0d3de](https://github.com/GummadiBuilt/User-Interface/commit/ed0d3de5870df1a4e5cf60c7729ca17a258e5605))
+* **view-applicants.ts:** api integration for recommend in view applicants ([cf0a153](https://github.com/GummadiBuilt/User-Interface/commit/cf0a153391002b9e690ad101dc98bdc8902abb23))
+* **view-applicants.ts:** disabled recommend radio depend on status ([063f441](https://github.com/GummadiBuilt/User-Interface/commit/063f4419f2f4f7e52d43ac2f20dc65b3311ae475))
+
 # [1.7.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.6.0...v1.7.0) (2023-01-18)
 
 
