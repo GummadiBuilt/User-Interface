@@ -81,6 +81,7 @@ export const PageConstants = {
     submitTenderApplicationMsg: `Submit action disables further editing of your application`,
     disabledWarningPQFormMsg: `Cannot edit the values because PQ-Form Published`,
     disabledWarningTenderMsg: `You cannot edit a tender when its in `,
+    disableContractorBidMsg:'You cannot edit tender bid is submitted',
     submitContractorBidTitle:'Are you sure you want to submit the bid?',
     submitContractorBidMsg:'Submitting this tender bid will disable further editing and will be sent to Admins for review'
 }

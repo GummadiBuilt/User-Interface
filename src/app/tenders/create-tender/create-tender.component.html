@@ -20,6 +20,15 @@
                     <span>{{warningMessage}}</span>
                 </div>
             </div>
+            <div class="warn" *ngIf="warningMessageCon && userRole?.includes('contractor')" fxLayout="row"
+                fxLayoutAlign="center center" fxLayoutGap="8px">
+                <div>
+                    <i class="icon-warning fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <span>{{warningMessageCon}}</span>
+                </div>
+            </div>
         </div>
         <div fxLayoutAlign="center center">
             <div class="status" *ngIf="this.tenderDetails.get('workflowStep')?.value">

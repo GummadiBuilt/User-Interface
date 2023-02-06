@@ -3,7 +3,10 @@
         <mat-select placeholder="Actions" (valueChange)="onSelected($event)">
             <mat-option value='PQForm'>PQ-Form</mat-option>
             <mat-option
-                *ngIf="!userRole?.includes('contractor') && this.tenderDetails?.get('workflowStep')?.value =='Under Process'"
+                *ngIf="(userRole?.includes('admin') || userRole?.includes('client')) && 
+                (this.tenderDetails?.get('workflowStep')?.value != 'DRAFT') && 
+                (this.tenderDetails?.get('workflowStep')?.value != 'YET_TO_BE_PUBLISHED') && 
+                (this.tenderDetails?.get('workflowStep')?.value != 'PUBLISHED')"
                 [routerLink]="['/tenders', tenderId, 'view-applicants']">
                 View Applicants
             </mat-option>

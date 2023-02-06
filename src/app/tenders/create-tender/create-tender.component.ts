@@ -50,6 +50,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public btnstate: boolean = false;
   public downloadBtnState: boolean = false;
   public warningMessage!: string;
+  public warningMessageCon!: string;
   public todayDate!: Date;
   public applicantLabel!: any;
   public optionApplnState!: boolean;
@@ -258,7 +259,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     },
     {
       field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120,
-      cellEditor: NumericCellRendererComponent
+      cellEditor: NumericCellRendererComponent,cellClass: 'ag-right-aligned-cell'
     },
     {
       headerName: "Action", flex: 1, minWidth: 120, maxWidth: 120,
@@ -367,7 +368,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         }
       });
       if (target[element]) {
-        target[element] = `Total: ${target[element]}`;
+        target[element] = `Total: ${currencyFormatter(target[element],'₹')}`;
       } else {
         target[element] = ``;
       }
@@ -657,6 +658,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
+    const warningMsg = this.constantVariable.disableContractorBidMsg;
     if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
       this.btnstate = true;
@@ -677,6 +679,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.warningMessage = warningMessage;
     } else if (this.userRole?.includes("contractor") && this.actionTaken == 'SUBMIT') {
       this.tenderDetails.disable();
+      this.warningMessageCon = warningMsg;
       this.btnConstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
       this.gridOptions.getColumn('Item Description').getColDef().editable = false;

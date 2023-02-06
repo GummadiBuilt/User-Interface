@@ -31,13 +31,13 @@
                 (cellValueChanged)="onCellValueChanged($event)">
             </ag-grid-angular>
             <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">
-                <button mat-button style="background-color: grey;" (click)="onUpdate()" disabled={{btnstate}}>
+                <button *ngIf="!btnstate" mat-button style="background-color: grey;" (click)="onUpdate()" disabled={{btnstate}}>
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                         <i class="icon-save fa-solid fa-floppy-disk"></i>
                         <div>{{constantVariable.saveBtn}}</div>
                     </div>
                 </button>
-                <button mat-button style="background-color: green;" (click)="onSubmit()" disabled={{btnstate}}>
+                <button *ngIf="!btnstate" mat-button style="background-color: green;" (click)="onSubmit()" disabled={{btnstate}}>
                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                         <i class="icon-submit fa-solid fa-paper-plane"></i>
                         <div>{{constantVariable.submitBtn}}</div>
