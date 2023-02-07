@@ -23,11 +23,10 @@
     <div>
         <mat-card fxLayout="column" fxLayoutGap="12px">
             <ag-grid-angular class="ag-theme-alpine" [animateRows]="true" [domLayout]="domLayout"
-                [columnDefs]="columnDefs" [rowData]="rowData" [defaultColDef]="defaultColDef" [rowDragEntireRow]="true"
-                [rowDragManaged]="true" (gridReady)="onGridReady($event)" (rowValueChanged)="onRowValueChanged($event)"
+                [columnDefs]="columnDefs" [rowData]="rowData" [defaultColDef]="defaultColDef" 
+                (gridReady)="onGridReady($event)" (rowValueChanged)="onRowValueChanged($event)"
                 [rowSelection]="rowSelection" (selectionChanged)="onSelectionChanged($event)"
-                (rowSelected)="onRowSelected($event)" (rowDragEnd)="onRowDragEnd($event)"
-                (rowDragMove)="onRowDragMove($event)" [stopEditingWhenCellsLoseFocus]=true
+                (rowSelected)="onRowSelected($event)" [stopEditingWhenCellsLoseFocus]=true
                 (cellValueChanged)="onCellValueChanged($event)">
             </ag-grid-angular>
             <div class="action-btn" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="24px">

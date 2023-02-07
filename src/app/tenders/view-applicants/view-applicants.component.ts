@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallbackParams, ColDef, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, ICellRendererParams, RowDragEndEvent, RowDragLeaveEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
+import {
+  CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallbackParams, ColDef, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, ICellRendererParams,
+  RowSelectedEvent, SelectionChangedEvent
+} from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -71,7 +74,7 @@ export class ViewApplicantsComponent implements OnInit {
   public disableRadio: boolean = false;
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, minWidth: 250, autoHeight: true, wrapText: true,
+      headerName: 'Contractor Name', field: 'companyName', filter: 'agTextColumnFilter', flex: 3, minWidth: 250, autoHeight: true, wrapText: true,
       checkboxSelection: checkboxSelection,
       headerCheckboxSelection: headerCheckboxSelection
     },
@@ -84,7 +87,7 @@ export class ViewApplicantsComponent implements OnInit {
       filter: false,
       colId: "action",
     },
-    { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
+    { headerName: 'Applicant Rank', field: 'applicantRank', sortable: true, sortingOrder: ['asc'], filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true, },
     {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
       valueFormatter: (params: any) => {
@@ -113,12 +116,6 @@ export class ViewApplicantsComponent implements OnInit {
     },
     {
       headerName: 'Recommended', field: 'recommended', flex: 1, filter: false, autoHeight: true, wrapText: true, maxWidth: 150, hide: true,
-      // cellRenderer: function cellTitle(params: any) {
-      //   if (params.data.applicationStatus != "NOT_QUALIFIED") {
-      //     let cellValue = '<div class="ngSelectionCell"><input id=' + params.data.applicationFormId + ' name="selected" type="radio"></div>';
-      //     return cellValue;
-      //   } else return;
-      // },
       cellRenderer: RadioButtonRendererComponent,
     }
   ];
@@ -136,7 +133,6 @@ export class ViewApplicantsComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
-    // this.gridApi.setSuppressRowDrag(true);
   }
 
   //to disable approve/reject buttons
@@ -163,27 +159,17 @@ export class ViewApplicantsComponent implements OnInit {
     let applicationFormIds = selectedData.map((i: { applicationFormId: any; }) => i.applicationFormId);
     this.router.navigate(['/tenders', this.tenderId, 'view-applicants', 'compare-applicants', { applicationFormIds: applicationFormIds }]);
   }
-
-  dragChanged(params: any) {
-    this.gridApi.refreshCells(params);
-  }
-
-  onRowDragLeave(e: RowDragLeaveEvent) {
-    console.log('onRowDragLeave', e);
-    console.log('rowIndex', e.node.rowIndex);
-  }
-  onRowDragEnd(e: any) {
-    this.gridApi.forEachNode((node: any, index: any) => {
-      const rank = index + 1;
-      node.setDataValue('applicantRank', rank);
-    });
-  }
-
-  onRowDragMove(event: any) {
-    // console.log('onRowDragMOVE', event);
-  }
   onCellValueChanged(event: CellValueChangedEvent) {
-
+    if (event.column.getColId() == "applicantRank") {
+      this.gridOptions.applyColumnState({
+        state: [{ colId: 'applicantRank', sort: 'asc' }],
+        defaultState: { sort: null },
+      });
+    }
+    const dataItem = [event.node.data];
+    this.gridApi.applyTransaction({
+      update: dataItem,
+    });
   }
 
   onRowValueChanged(event: any) {

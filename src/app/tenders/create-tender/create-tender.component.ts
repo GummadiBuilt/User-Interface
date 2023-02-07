@@ -396,14 +396,17 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         });
         this.gridApi.refreshCells();
       }
-
-      if (action === "delete") {
+      const rowLength = this.gridApi.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
         this.rowData.splice(params.rowIndex, 1);
         this.gridApi.refreshCells();
-      }
+      } 
     }
   }
   onCellEditingStarted(event: CellEditingStartedEvent) {

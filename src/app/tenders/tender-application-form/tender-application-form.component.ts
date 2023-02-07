@@ -312,9 +312,9 @@ export class TenderApplicationFormComponent implements OnInit {
   };
 
   public turnoverDetails = [
-    { year: '', revenue: '', row: 'YEAR_ONE', fileName: '' },
-    { year: '', revenue: '', row: 'YEAR_TWO', fileName: '' },
-    { year: '', revenue: '', row: 'YEAR_THREE', fileName: '' },
+    { year: '', revenue: 0, row: 'YEAR_ONE', fileName: '' },
+    { year: '', revenue: 0, row: 'YEAR_TWO', fileName: '' },
+    { year: '', revenue: 0, row: 'YEAR_THREE', fileName: '' },
   ];
 
   onGridReadyTurnover(params: GridReadyEvent) {
@@ -389,7 +389,7 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Scope of Contract:', 'Project 1': '' },
     { details: 'Built Up Area:', 'Project 1': '' },
     { details: 'Contract Duration:', 'Project 1': '' },
-    { details: 'Contract Value:', 'Project 1': '' },
+    { details: 'Contract Value:', 'Project 1': 0 },
     { details: 'Current Status (If completed date of completion):', 'Project 1': '' },
     { details: 'Employers Name & Address', 'Project 1': '' },
     { details: 'Referee’s Name', 'Project 1': '' },
@@ -423,7 +423,7 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Scope of Contract:', 'Project 1': '' },
     { details: 'Built Up Area:', 'Project 1': '' },
     { details: 'Contract Duration:', 'Project 1': '' },
-    { details: 'Contract Value:', 'Project 1': '' },
+    { details: 'Contract Value:', 'Project 1': 0 },
     { details: 'Current Status:', 'Project 1': '' },
     { details: 'Employers Name & Address', 'Project 1': '' },
     { details: 'Referee’s Name', 'Project 1': '' },
@@ -539,7 +539,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiEmployeesStrength.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         //console.log('delete');
         params.api.applyTransaction({
           remove: [params.node.data]
@@ -632,7 +636,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiCapitalEquipments.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -758,7 +766,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiFinancialDetails.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -847,7 +859,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiCompanyBankersDetails.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -936,7 +952,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiCompanyAuditorsDetails.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
