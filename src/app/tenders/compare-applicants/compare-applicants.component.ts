@@ -95,13 +95,13 @@ export class CompareApplicantsComponent implements OnInit {
     let tenderFinanceArr: any[] = [];
     let tenderFinancePricesArr: any[] = [];
     clientRowData.forEach((element: any) => {
-      clientArr.push(JSON.parse(element.applicationFormDto?.clientReferences));
-      simArr.push(JSON.parse(element.applicationFormDto?.similarProjectNature));
-      empStrengthsArr.push(JSON.parse(element.applicationFormDto?.employeesStrength));
-      capitalEquipArr.push(JSON.parse(element.applicationFormDto?.capitalEquipment));
-      finInfoArr.push(JSON.parse(element.applicationFormDto?.financialInformation));
-      compBankersArr.push(JSON.parse(element.applicationFormDto?.companyBankers));
-      compAuditorsArr.push(JSON.parse(element.applicationFormDto?.companyAuditors));
+      clientArr.push((typeof element.applicationFormDto?.clientReferences === 'string' ? JSON.parse(element.applicationFormDto?.clientReferences) : element.applicationFormDto?.clientReferences));
+      simArr.push((typeof element.applicationFormDto?.similarProjectNature === 'string' ? JSON.parse(element.applicationFormDto?.similarProjectNature) : element.applicationFormDto?.similarProjectNature));
+      empStrengthsArr.push((typeof element.applicationFormDto?.employeesStrength === 'string' ? JSON.parse(element.applicationFormDto?.employeesStrength) : element.applicationFormDto?.employeesStrength));
+      capitalEquipArr.push((typeof element.applicationFormDto?.capitalEquipment === 'string' ? JSON.parse(element.applicationFormDto?.capitalEquipment) : element.applicationFormDto?.capitalEquipment));
+      finInfoArr.push((typeof element.applicationFormDto?.financialInformation === 'string' ? JSON.parse(element.applicationFormDto?.financialInformation) : element.applicationFormDto?.financialInformation));
+      compBankersArr.push((typeof element.applicationFormDto?.companyBankers === 'string' ? JSON.parse(element.applicationFormDto?.companyBankers) : element.applicationFormDto?.companyBankers));
+      compAuditorsArr.push((typeof element.applicationFormDto?.companyAuditors === 'string' ? JSON.parse(element.applicationFormDto?.companyAuditors) : element.applicationFormDto?.companyAuditors));
       tenderFinanceArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
       tenderFinancePricesArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
     });
