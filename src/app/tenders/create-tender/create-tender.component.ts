@@ -488,7 +488,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   onSave() {
     console.log(this.tenderDetails.value.lastDateOfSubmission);
-    this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+    this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
     this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
       const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
@@ -542,7 +542,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
-          this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+          this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
           this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
           if (this.tenderDetails.value.lastDateOfSubmission) {
             const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
@@ -574,7 +574,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   onUpdate() {
     if (this.tenderId && this.tenderDetails.valid && this.userRole?.includes('admin')) {
-      this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+      this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
       this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
       if (this.tenderDetails.value.lastDateOfSubmission) {
         const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');

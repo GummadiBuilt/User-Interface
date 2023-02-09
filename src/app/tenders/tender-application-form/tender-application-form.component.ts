@@ -194,23 +194,19 @@ export class TenderApplicationFormComponent implements OnInit {
     if (data.turnOverDetails != null) {
       this.turnoverDetails = data.turnOverDetails;
     }
-    // if (Object.keys(data.similarProjects).length === 0) {
-    //   this.similarProjectsDetails = [];
-    // } else {
-    //   this.similarProjectsDetails = JSON.parse(data.similarProjects);
-    // }
     if (Object.keys(data.clientReferences).length === 0) {
       this.clientRefRowData = [];
     } else {
       // set the column headers from the data        
       const colDefs = this.gridApiClientRef?.getColumnDefs();
-      const dataRef = JSON.parse(data.clientReferences);
+      const clientRef = (typeof data.clientReferences === 'string' ? JSON.parse(data.clientReferences) : data.clientReferences)
+      const dataRef = clientRef;
       const keys = Object.keys(dataRef[0]);
       if (colDefs?.length) {
         colDefs.length = 0;
         keys.forEach(key => colDefs?.push({ field: key }));
         this.gridApiClientRef?.setColumnDefs(colDefs);
-        this.clientRefRowData = JSON.parse(data.clientReferences);
+        this.clientRefRowData = clientRef;
         if (colDefs.length == 4) {
           this.btnstate = true;
         }
@@ -221,39 +217,45 @@ export class TenderApplicationFormComponent implements OnInit {
     } else {
       // set the column headers from the data        
       const colDefsSim = this.gridApiSimilarNature?.getColumnDefs();
-      const dataSimRef = JSON.parse(data.similarProjectNature);
+      const similarProjNat = (typeof data.similarProjectNature === 'string' ? JSON.parse(data.similarProjectNature) : data.similarProjectNature)
+      const dataSimRef = similarProjNat;
       const keys = Object.keys(dataSimRef[0]);
       if (colDefsSim?.length) {
         colDefsSim.length = 0;
         keys.forEach(key => colDefsSim?.push({ field: key }));
         this.gridApiSimilarNature?.setColumnDefs(colDefsSim);
-        this.similarNatureRowData = JSON.parse(data.similarProjectNature);
+        this.similarNatureRowData = similarProjNat;
       }
     }
     if (Object.keys(data.employeesStrength).length === 0) {
       this.employeesStrengthRowData = [];
     } else {
-      this.employeesStrengthRowData = JSON.parse(data.employeesStrength);
+      const empStrength = (typeof data.employeesStrength === 'string' ? JSON.parse(data.employeesStrength) : data.employeesStrength);
+      this.employeesStrengthRowData = empStrength;
     }
     if (Object.keys(data.capitalEquipment).length === 0) {
       this.capitalEquipmentsRowData = [];
     } else {
-      this.capitalEquipmentsRowData = JSON.parse(data.capitalEquipment);
+      const capitalEquipment = (typeof data.capitalEquipment === 'string' ? JSON.parse(data.capitalEquipment) : data.capitalEquipment);
+      this.capitalEquipmentsRowData = capitalEquipment;
     }
     if (Object.keys(data.financialInformation).length === 0) {
       this.financialDetails = [];
     } else {
-      this.financialDetails = JSON.parse(data.financialInformation);
+      const financialInformation = (typeof data.financialInformation === 'string' ? JSON.parse(data.financialInformation) : data.financialInformation);
+      this.financialDetails = financialInformation;
     }
     if (Object.keys(data.companyBankers).length === 0) {
       this.companyBankersDetails = [];
     } else {
-      this.companyBankersDetails = JSON.parse(data.companyBankers);
+      const companyBankers = (typeof data.companyBankers === 'string' ? JSON.parse(data.companyBankers) : data.companyBankers);
+      this.companyBankersDetails = companyBankers;
     }
     if (Object.keys(data.companyAuditors).length === 0) {
       this.companyAuditorsDetails = [];
     } else {
-      this.companyAuditorsDetails = JSON.parse(data.companyAuditors);
+      const companyAuditors = (typeof data.companyAuditors === 'string' ? JSON.parse(data.companyAuditors) : data.companyAuditors);
+      this.companyAuditorsDetails = companyAuditors;
     }
 
     if (data.applicationId != 0) {
@@ -972,13 +974,13 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['actionTaken'].setValue('DRAFT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     // this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
-    this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
-    this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
-    this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
-    this.applicantPqForm.controls['companyBankers'].setValue(JSON.stringify(this.companyBankersDetails));
-    this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
-    this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
-    this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    this.applicantPqForm.controls['employeesStrength'].setValue(this.employeesStrengthRowData);
+    this.applicantPqForm.controls['capitalEquipment'].setValue(this.capitalEquipmentsRowData);
+    this.applicantPqForm.controls['financialInformation'].setValue(this.financialDetails);
+    this.applicantPqForm.controls['companyBankers'].setValue(this.companyBankersDetails);
+    this.applicantPqForm.controls['companyAuditors'].setValue(this.companyAuditorsDetails);
+    this.applicantPqForm.controls['clientReferences'].setValue(this.clientRefRowData);
+    this.applicantPqForm.controls['similarProjectNature'].setValue(this.similarNatureRowData);
     if (this.applicantPqForm.value.yearOfEstablishment) {
       const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
       this.applicantPqForm.value.yearOfEstablishment = dateTran;
@@ -1019,13 +1021,13 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     //this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
-    this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
-    this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
-    this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
-    this.applicantPqForm.controls['companyBankers'].setValue(JSON.stringify(this.companyBankersDetails));
-    this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
-    this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
-    this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    this.applicantPqForm.controls['employeesStrength'].setValue(this.employeesStrengthRowData);
+    this.applicantPqForm.controls['capitalEquipment'].setValue(this.capitalEquipmentsRowData);
+    this.applicantPqForm.controls['financialInformation'].setValue(this.financialDetails);
+    this.applicantPqForm.controls['companyBankers'].setValue(this.companyBankersDetails);
+    this.applicantPqForm.controls['companyAuditors'].setValue(this.companyAuditorsDetails);
+    this.applicantPqForm.controls['clientReferences'].setValue(this.clientRefRowData);
+    this.applicantPqForm.controls['similarProjectNature'].setValue(this.similarNatureRowData);
     if (this.applicantPqForm.value.yearOfEstablishment) {
       const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
       this.applicantPqForm.value.yearOfEstablishment = dateTran;
