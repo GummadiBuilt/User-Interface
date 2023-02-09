@@ -114,26 +114,6 @@
 						<i matTooltip="Mark All as Read" matTooltipPosition="left"
 							class="icon-read fa-solid fa-envelope-circle-check"></i>
 					</div>
-
-					<div *ngFor="let notificationData of resultData">
-						<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="12px">
-							<div>{{notificationData.date | dateAgo}}</div>
-							<div *ngFor="let notification of notificationData.notifications">
-								<div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="12px">
-									<div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="12px">
-										<div><i class="icon-6p fa-solid fa-circle"></i></div>
-										<div><i class="icon-warn icon-16p fa-regular fa-bell"></i></div>
-									</div>
-									<div fxLayout="column" fxLayoutAlign="start">
-										<div class="text-500">{{notification.header}}</div>
-										<div>{{notification.description}}</div>
-										<div>{{notification.date | dateAgo}}</div>
-									</div>
-								</div>
-								<mat-divider style="width: 100%; margin-top: 8px;"></mat-divider>
-							</div>
-						</div>
-					</div>
 				</div>
 			</mat-menu>
 
