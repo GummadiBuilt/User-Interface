@@ -4,6 +4,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions, KeycloakProfile, KeycloakRoles } from 'keycloak-js';
 import { Router } from '@angular/router';
 import { AppAuthGuard } from './guard/auth.guard';
+import { environment } from 'src/environments/environment';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
@@ -21,6 +22,7 @@ export class AppComponent {
   public userRole: boolean | undefined;
   public menuName = 'Login';
   public userRoleEnable: string[] | undefined;
+  redirectUrl: string = environment.redirectUrl;
 
   constructor(private readonly keycloak: KeycloakService, public router: Router, private authGuard: AppAuthGuard) {
     this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin');
@@ -38,7 +40,7 @@ export class AppComponent {
   }
 
   keycloakLoginOptions: KeycloakLoginOptions = {
-    redirectUri: 'http://localhost:4200/tenders'
+    redirectUri: this.redirectUrl
   }
 
   public async ngOnInit() {

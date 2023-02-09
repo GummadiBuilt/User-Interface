@@ -5,7 +5,8 @@ const environment = {
   KEYCLOAK_REALM: 'Local-Realm',
   KEYCLOAK_CLIENT_ID: 'gummadi-local',
   apiUrl: 'https://gummadibuilt.com/api/',
-  updatePwdUrl: 'https://gummadibuilt.com/realms/Local-Realm/protocol/openid-connect/auth?response_type=code&client_id=gummadi-local&redirect_uri=https://gummadibuilt.com&kc_action=UPDATE_PASSWORD'
+  updatePwdUrl: 'https://gummadibuilt.com/realms/Local-Realm/protocol/openid-connect/auth?response_type=code&client_id=gummadi-local&redirect_uri=https://gummadibuilt.com&kc_action=UPDATE_PASSWORD',
+  redirectUrl: 'https://gummadibuilt.com/tenders'
 };
 
 export { environment as environment }
