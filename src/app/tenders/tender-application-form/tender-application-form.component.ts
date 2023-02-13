@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
+import { CellEditingStartedEvent, CellEditingStoppedEvent, CellEditorSelectorResult, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, ICellEditorParams, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -203,8 +203,15 @@ export class TenderApplicationFormComponent implements OnInit {
       const dataRef = clientRef;
       const keys = Object.keys(dataRef[0]);
       if (colDefs?.length) {
-        colDefs.length = 0;
-        keys.forEach(key => colDefs?.push({ field: key }));
+       const colMaster:ColDef = colDefs[1];
+       const missingHeaders = keys.filter(item => !colDefs.map((col:ColDef) => col.field).includes(item));
+        missingHeaders.forEach(header =>{
+          const clonedObk = {...colMaster};
+          clonedObk.field = header;
+          clonedObk.colId = header;
+          clonedObk.headerName = header;
+          colDefs.push(clonedObk);
+        });
         this.gridApiClientRef?.setColumnDefs(colDefs);
         this.clientRefRowData = clientRef;
         if (colDefs.length == 4) {
@@ -221,8 +228,15 @@ export class TenderApplicationFormComponent implements OnInit {
       const dataSimRef = similarProjNat;
       const keys = Object.keys(dataSimRef[0]);
       if (colDefsSim?.length) {
-        colDefsSim.length = 0;
-        keys.forEach(key => colDefsSim?.push({ field: key }));
+       const colMasterSim:ColDef = colDefsSim[1];
+       const missingHeaders = keys.filter(item => !colDefsSim.map((col:ColDef) => col.field).includes(item));
+        missingHeaders.forEach(header =>{
+          const clonedObkSim = {...colMasterSim};
+          clonedObkSim.field = header;
+          clonedObkSim.colId = header;
+          clonedObkSim.headerName = header;
+          colDefsSim.push(clonedObkSim);
+        });
         this.gridApiSimilarNature?.setColumnDefs(colDefsSim);
         this.similarNatureRowData = similarProjNat;
       }
@@ -341,40 +355,32 @@ export class TenderApplicationFormComponent implements OnInit {
   }
 
   //Section C of PQ-Form: Client References of 3 Major Projects
-  public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
+  
+  public project: ColDef[] = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true,
+  cellEditorSelector: cellEditorSelector,
+  }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
   ]
   public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details', editable: false, },
-  this.projectInfoColumnDef[0]];
-
-
+  this.project[0]];
 
   onBtIncludeProject2Columns() {
-    const value = this.getColumnDefs();
-    // console.log('columns', value.length)
-    if (value.length <= 4) {
-      this.gridApiClientRef?.setColumnDefs(value);
-      // console.log('columns', this.gridApiClientRef.getColumnDefs())
-      this.gridApiSimilarNature?.setColumnDefs(value);
-    } else {
+    const colDef = this.gridApiClientRef?.getColumnDefs();
+    this.project.forEach(item => {
+      item.headerName = 'Project ' + colDef?.length,
+      item.field = 'Project ' + colDef?.length      
+      item.colId = 'Project ' +colDef?.length
+    });
+    colDef?.push(this.project[0]);
+    if(colDef?.length && colDef?.length<=4){
+      this.gridApiClientRef?.setColumnDefs(colDef);
+      this.gridApiSimilarNature?.setColumnDefs(colDef);
+    }else {
       this.btnstate = true;
       this.toastr.error('A maximum of three client references are allowed');
     }
   }
-
-  private getColumnDefs() {
-    const cols = this.columnApiClientRef?.getColumns()!;
-    const colDef = this.gridApiClientRef?.getColumnDefs();
-    this.project.forEach(item => {
-      item.headerName = 'Project ' + colDef?.length,
-        item.field = 'Project ' + colDef?.length
-    })
-    // console.log('project ',this.project[0]);
-    colDef?.push(this.project[0]);
-    return JSON.parse(JSON.stringify(colDef));
-  }
-
   btnstate: boolean = false;
   onGridReadyClientRef(params: GridReadyEvent) {
     this.gridApiClientRef = params.api;
@@ -403,6 +409,12 @@ export class TenderApplicationFormComponent implements OnInit {
     if ($event.colDef.field === 'details') {
       this.gridApiClientRef.stopEditing();
     }
+  }
+  onCellValueChangedClientRef(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiClientRef.applyTransaction({
+      update: dataItem,
+    });
   }
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
@@ -1098,4 +1110,13 @@ function currencyFormatter(currency: number, sign: string) {
     lastThree = ',' + lastThree;
   var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
   return sign + `${res}`;
+}
+ function cellEditorSelector(params: ICellEditorParams): CellEditorSelectorResult | undefined {
+    const type = params.data.details; 
+    if (type === 'Contract Value:') {
+        return {
+            component: NumericCellRendererComponent,
+        };
+    } 
+    return undefined;
 }

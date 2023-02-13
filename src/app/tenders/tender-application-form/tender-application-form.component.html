@@ -344,6 +344,7 @@
                                             [rowData]="clientRefRowData" [domLayout]="domLayout"
                                             (gridReady)="onGridReadyClientRef($event)"
                                             [stopEditingWhenCellsLoseFocus]=true
+                                            (cellValueChanged)="onCellValueChangedClientRef($event)"
                                             (cellEditingStarted)="onCellEditingStartedClientRef($event)">
                                         </ag-grid-angular>
                                     </div>
