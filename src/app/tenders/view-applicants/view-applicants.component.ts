@@ -84,9 +84,15 @@ export class ViewApplicantsComponent implements OnInit {
       },
       cellStyle: { textAlign: "left"  }
     },
-    { headerName: 'Turnover', field: 'totalRevenue', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three years turnover" },
-    { headerName: 'Agg. contract value', field: 'contractValue', flex: 1, hide: true,maxWidth: 200,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three client references contract value" },
-    { headerName: 'Total bid price', field: 'financialInfoTotal', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Total price quoted for the financial bid provided" },
+    { headerName: 'Turnover', field: 'totalRevenue', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three years turnover", editable: false,
+      valueFormatter: params => currencyFormatter(params.data.totalRevenue),
+    },
+    { headerName: 'Agg. contract value', field: 'contractValue', flex: 1, hide: true,maxWidth: 200,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three client references contract value",editable: false,
+      valueFormatter: params => currencyFormatter(params.data.contractValue),
+    },
+    { headerName: 'Total bid price', field: 'financialInfoTotal', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Total price quoted for the financial bid provided",editable: false,
+      valueFormatter: params => currencyFormatter(params.data.financialInfoTotal),
+    },
     { headerName: 'Applicant Rank', field: 'applicantRank', sortable: true, sortingOrder: ['asc'],maxWidth: 150, filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true, },
     {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
@@ -257,3 +263,9 @@ var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackP
   // we put checkbox on the name if we are not doing grouping
   return params.columnApi.getRowGroupColumns().length === 0;
 };
+
+//indian currency formatter
+function currencyFormatter(value: number) {
+  const formatter: Intl.NumberFormat = new Intl.NumberFormat('en-IN', { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+  return formatter.format(value);
+}
