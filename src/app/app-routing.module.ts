@@ -25,6 +25,7 @@ import { DeactivateGuard } from './shared/can-deactivate/deactivate.guard';
 import { TenderApplicationFormComponent } from './tenders/tender-application-form/tender-application-form.component';
 import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tenders.component';
 import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
+import { ReadMoreComponent } from './home/read-more/read-more.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'read-more', component: ReadMoreComponent },
   { path: 'about', component: AboutComponent },
   { path: 'service', component: ServiceComponent },
   { path: 'projects', component: ProjectsComponent },

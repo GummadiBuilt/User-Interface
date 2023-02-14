@@ -234,7 +234,7 @@ export class SignupComponent implements OnInit {
         (response => {
           if (response['status'] == 200) {
             console.log(response);
-            this.toastr.success('Successfully Registered');
+            this.toastr.success('Successfully Registered, login credentials will be sent to mail');
             this.router.navigate(['/home']);
           }
         }),
