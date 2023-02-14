@@ -150,7 +150,16 @@
                                     fxLayout="column">
                                     <mat-label> {{constantVariable.fax}}</mat-label>
                                     <mat-form-field appearance="outline">
-                                        <input matInput formControlName="faxNumber" placeholder="Fax">
+                                        <input numbersOnly matInput formControlName="faxNumber" placeholder="Fax">
+                                        <mat-error *ngIf="applicantPqForm.controls['faxNumber'].errors?.['pattern']">
+                                            Please enter valid fax number
+                                        </mat-error>
+                                        <mat-error *ngIf="applicantPqForm.controls['faxNumber'].errors?.['minlength']">
+                                            Fax number minimum 8 digits
+                                        </mat-error>
+                                        <mat-error *ngIf="applicantPqForm.controls['faxNumber'].errors?.['maxlength']">
+                                            Fax number maximum 14 digits
+                                        </mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
