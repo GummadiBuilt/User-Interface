@@ -118,7 +118,7 @@ export class TenderApplicationFormComponent implements OnInit {
       corpOfficeAddress: ['', Validators.maxLength(250)],
       localOfficeAddress: ['', Validators.maxLength(250)],
       telephoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-      faxNumber: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      faxNumber: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(8), Validators.maxLength(14)]],
       contactName: ['', Validators.maxLength(50)],
       contactDesignation: ['', Validators.maxLength(50)],
       contactPhoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],

@@ -1,13 +1,9 @@
 <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-
-    <!-- <label for="file" class="file-input">
-       
-    </label> -->
-    <input style="width: 20%;" id="files" type="file" class="form-control" (change)="onFileChange($event)" matTooltip=" "
-        [disabled]=fileUploadbtn>
-    <!-- <label class="icon-button" for="files" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-        <i class="fa-icons fa-icons fa-solid fa-file-arrow-up"></i>
-    </label> -->
+    <div>
+        <button (click)="fileInput.click()">Choose File</button>
+        <input style="display: none;" #fileInput type="file" class="file-input" (change)="onFileChange($event)"
+            [disabled]=fileUploadbtn>
+    </div>
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
         <div>
             <span *ngIf="!file?.name && !fileName">No file Choosen</span>

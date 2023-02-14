@@ -16,7 +16,7 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="2px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Registering as</mat-label>
+                            <mat-label>Registering as *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select formControlName="users" [(ngModel)]="roleId"
                                     (selectionChange)='onRegisterValueChange()'>
@@ -34,7 +34,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Company Name</mat-label>
+                            <mat-label>Company Name *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Company Name" minlength="3" maxlength="50" inputmode="tel"
                                     formControlName="companyName" #nameInput>
@@ -46,7 +46,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Year of Establishment</mat-label>
+                            <mat-label>Year of Establishment *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Year of Establishment"
                                     formControlName="yearOfEstablishment" numbersOnly>
@@ -61,7 +61,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="93%" fxFlex.xl="93%"
                             fxLayout="column" *ngIf="roleId == 2">
-                            <mat-label>Type of Establishment</mat-label>
+                            <mat-label>Type of Establishment *</mat-label>
                             <mat-form-field class="example-chip-list" appearance="outline">
                                 <mat-chip-list #chipList aria-label="Type of Establishment selection"
                                     formControlName="typeOfEstablishmentCtrl">
@@ -91,7 +91,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Address</mat-label>
+                            <mat-label>Address *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Company Address" formControlName="address">
                                 <mat-error *ngIf="companyDetails.get('address')?.errors?.['required']">
@@ -101,7 +101,7 @@
                         </div>
                         <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%"
                             fxFlex.xl="45%" fxLayout="column">
-                            <mat-label>Country</mat-label>
+                            <mat-label>Country *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select a Country" formControlName="country"
                                     (selectionChange)="onCountrySelectEvent($event.value)">
@@ -118,7 +118,7 @@
                         </div>
                         <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%"
                             fxFlex.xl="45%" fxLayout="column">
-                            <mat-label>State</mat-label>
+                            <mat-label>State *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select a State" formControlName="state"
                                     (selectionChange)="onStateSelectEvent($event.value)">
@@ -135,7 +135,7 @@
                         </div>
                         <div class="dependency-field" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%"
                             fxFlex.xl="45%" fxLayout="column">
-                            <mat-label>City</mat-label>
+                            <mat-label>City *</mat-label>
                             <mat-form-field appearance="outline">
                                 <mat-select placeholder="Select a City" formControlName="city">
                                     <mat-select-filter [placeholder]="'Search'" [displayMember]="'cityName'"
@@ -170,7 +170,7 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>First Name</mat-label>
+                            <mat-label>First Name *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Name" minlength="3" inputmode="tel"
                                     formControlName="contactFirstName" #nameInput>
@@ -186,7 +186,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Last Name</mat-label>
+                            <mat-label>Last Name *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Name" minlength="3" inputmode="tel"
                                     formControlName="contactLastName" #nameInput>
@@ -201,7 +201,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Designation</mat-label>
+                            <mat-label>Designation *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Designation" formControlName="contactDesignation">
                                 <mat-error *ngIf="personalDetails.controls['contactDesignation'].errors?.['required']">
@@ -211,7 +211,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Mobile</mat-label>
+                            <mat-label>Mobile *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
                                 <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
@@ -229,7 +229,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            <mat-label>Email Id</mat-label>
+                            <mat-label>Email Id *</mat-label>
                             <mat-form-field appearance="outline">
                                 <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
                                 <i matSuffix class="icon-20p icon-gray fa-regular fa-envelope"></i>
@@ -243,7 +243,7 @@
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
-                            
+
                         </div>
                     </div>
                     <div class="action-btn" fxLayout="row" fxLayoutAlign="space-between">
@@ -259,7 +259,6 @@
                     </div>
                 </form>
             </mat-step>
-
         </mat-stepper>
     </div>
 </div>

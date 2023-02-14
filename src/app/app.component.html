@@ -18,7 +18,7 @@
 					routerLinkActive="router-link-active">{{titles[i]}}</a>
 				<span class="nav-divider">|</span>
 			</div>
-			<div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
+			<div fxLayout="column" fxShow="true" fxHide.lt-md fxLayoutAlign="center start" fxLayoutGap="4px">
 				<a class="nav-links" mat-button *ngIf="!isLoggedIn" (click)="login()">Login</a>
 			</div>
 			<div fxShow="true" fxHide.lt-md fxLayoutAlign="center center" *ngIf="isLoggedIn">
@@ -67,13 +67,14 @@
 						(click)="isBadgeHidden = !isBadgeHidden" class="icon-24p fa-regular fa-bell"></i>
 				</div> -->
 				<mat-card style="display: none"></mat-card>
-				<div class="profile-icon bg-grey" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center" mat-card-avatar>
+				<div class="profile-icon bg-grey" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center"
+					mat-card-avatar>
 					<!-- <img src="{{photoUrl}}"> -->
 					<div class="initials">{{initials}}</div>
 				</div>
 			</div>
 			<mat-menu class="profile-menu" #userMenu="matMenu">
-				<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
+				<div (click)="clickHandler()" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
 					<div class="text-grey" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
 						<div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
 							<!-- <img src="{{photoUrl}}"> -->
@@ -127,6 +128,14 @@
 		<mat-sidenav #sidenav>
 			<mat-nav-list>
 				<div fxLayout="column" fxLayoutGap="12px">
+					<div *ngIf="isLoggedIn" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
+						<mat-card style="display: none"></mat-card>
+						<div class="profile-icon bg-grey" [matMenuTriggerFor]="userMenu" fxLayoutAlign="center center"
+							mat-card-avatar>
+							<!-- <img src="{{photoUrl}}"> -->
+							<div class="initials">{{initials}}</div>
+						</div>
+					</div>
 					<a (click)="clickHandler()" class="nav-links" *ngFor="let link of links; index as i" mat-button
 						[routerLink]="link" routerLinkActive="router-link-active">{{titles[i]}}</a>
 					<a (click)="clickHandler()" *ngIf="isLoggedIn" class="nav-links" mat-button routerLink="tenders"
