@@ -102,8 +102,12 @@ export class CompareApplicantsComponent implements OnInit {
       finInfoArr.push((typeof element.applicationFormDto?.financialInformation === 'string' ? JSON.parse(element.applicationFormDto?.financialInformation) : element.applicationFormDto?.financialInformation));
       compBankersArr.push((typeof element.applicationFormDto?.companyBankers === 'string' ? JSON.parse(element.applicationFormDto?.companyBankers) : element.applicationFormDto?.companyBankers));
       compAuditorsArr.push((typeof element.applicationFormDto?.companyAuditors === 'string' ? JSON.parse(element.applicationFormDto?.companyAuditors) : element.applicationFormDto?.companyAuditors));
-      tenderFinanceArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
-      tenderFinancePricesArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
+      if(element.tenderDetailsDto){
+        tenderFinanceArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
+        tenderFinancePricesArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
+      }else{
+        tenderFinancePricesArr.push(this.assignNull());
+      }
     });
     this.clientRefData = this.reduceArray(clientArr);
     this.projectSimilarData = this.reduceArray(simArr);
@@ -135,6 +139,11 @@ export class CompareApplicantsComponent implements OnInit {
     this.applicantRankForm = this._formBuilder.group({
       applicantRank: [''],
     });
+  }
+
+  assignNull():any {
+    const unit = [{'Unit Price':0,'Total Price': 0}];
+    return unit;
   }
 
   editData(data: any) {
