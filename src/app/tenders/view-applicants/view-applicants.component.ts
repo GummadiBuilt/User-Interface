@@ -60,11 +60,11 @@ export class ViewApplicantsComponent implements OnInit {
       if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
         this.disableViewApplicants();
         if (this.rowData[0].tenderStatus === 'IN_REVIEW') {
-          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended','contractValue','financialInfoTotal','totalRevenue'], true);
         }
         if (this.rowData[0].tenderStatus === 'RECOMMENDED') {
           this.btnRecommendState = true;
-          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended','contractValue','financialInfoTotal','totalRevenue'], true);
         }
       }
     });
@@ -76,18 +76,18 @@ export class ViewApplicantsComponent implements OnInit {
     {
       headerName: 'Contractor Name', field: 'companyName', filter: 'agTextColumnFilter', flex: 3, minWidth: 250, autoHeight: true, wrapText: true,
       checkboxSelection: checkboxSelection,
-      headerCheckboxSelection: headerCheckboxSelection
-    },
-    {
-      headerName: 'Applicant Form', flex: 1,
+      headerCheckboxSelection: headerCheckboxSelection,
+      tooltipField: 'localOfficeAddress',
       cellRenderer: (params: ICellRendererParams) => {
-        const id = `<a href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank">View Application</a>`;
-        return id
+        const id = `<a style='float:right;' href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank"> <i class="fa fa-external-link" title="Applicant Form"></i></a>`;
+        return params.data.companyName + id
       },
-      filter: false,
-      colId: "action",
+      cellStyle: { textAlign: "left"  }
     },
-    { headerName: 'Applicant Rank', field: 'applicantRank', sortable: true, sortingOrder: ['asc'], filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true, },
+    { headerName: 'Turnover', field: 'totalRevenue', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three years turnover" },
+    { headerName: 'Agg. contract value', field: 'contractValue', flex: 1, hide: true,maxWidth: 200,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three client references contract value" },
+    { headerName: 'Total bid price', field: 'financialInfoTotal', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Total price quoted for the financial bid provided" },
+    { headerName: 'Applicant Rank', field: 'applicantRank', sortable: true, sortingOrder: ['asc'],maxWidth: 150, filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true, },
     {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
       valueFormatter: (params: any) => {
