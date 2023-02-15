@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CellEditingStartedEvent, CellEditingStoppedEvent, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
+import { CellEditingStartedEvent, CellEditingStoppedEvent, CellEditorSelectorResult, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, ICellEditorParams, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -118,7 +118,7 @@ export class TenderApplicationFormComponent implements OnInit {
       corpOfficeAddress: ['', Validators.maxLength(250)],
       localOfficeAddress: ['', Validators.maxLength(250)],
       telephoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-      faxNumber: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      faxNumber: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(8), Validators.maxLength(14)]],
       contactName: ['', Validators.maxLength(50)],
       contactDesignation: ['', Validators.maxLength(50)],
       contactPhoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
@@ -194,23 +194,26 @@ export class TenderApplicationFormComponent implements OnInit {
     if (data.turnOverDetails != null) {
       this.turnoverDetails = data.turnOverDetails;
     }
-    // if (Object.keys(data.similarProjects).length === 0) {
-    //   this.similarProjectsDetails = [];
-    // } else {
-    //   this.similarProjectsDetails = JSON.parse(data.similarProjects);
-    // }
     if (Object.keys(data.clientReferences).length === 0) {
       this.clientRefRowData = [];
     } else {
       // set the column headers from the data        
       const colDefs = this.gridApiClientRef?.getColumnDefs();
-      const dataRef = JSON.parse(data.clientReferences);
+      const clientRef = (typeof data.clientReferences === 'string' ? JSON.parse(data.clientReferences) : data.clientReferences)
+      const dataRef = clientRef;
       const keys = Object.keys(dataRef[0]);
       if (colDefs?.length) {
-        colDefs.length = 0;
-        keys.forEach(key => colDefs?.push({ field: key }));
+       const colMaster:ColDef = colDefs[1];
+       const missingHeaders = keys.filter(item => !colDefs.map((col:ColDef) => col.field).includes(item));
+        missingHeaders.forEach(header =>{
+          const clonedObk = {...colMaster};
+          clonedObk.field = header;
+          clonedObk.colId = header;
+          clonedObk.headerName = header;
+          colDefs.push(clonedObk);
+        });
         this.gridApiClientRef?.setColumnDefs(colDefs);
-        this.clientRefRowData = JSON.parse(data.clientReferences);
+        this.clientRefRowData = clientRef;
         if (colDefs.length == 4) {
           this.btnstate = true;
         }
@@ -221,39 +224,52 @@ export class TenderApplicationFormComponent implements OnInit {
     } else {
       // set the column headers from the data        
       const colDefsSim = this.gridApiSimilarNature?.getColumnDefs();
-      const dataSimRef = JSON.parse(data.similarProjectNature);
+      const similarProjNat = (typeof data.similarProjectNature === 'string' ? JSON.parse(data.similarProjectNature) : data.similarProjectNature)
+      const dataSimRef = similarProjNat;
       const keys = Object.keys(dataSimRef[0]);
       if (colDefsSim?.length) {
-        colDefsSim.length = 0;
-        keys.forEach(key => colDefsSim?.push({ field: key }));
+       const colMasterSim:ColDef = colDefsSim[1];
+       const missingHeaders = keys.filter(item => !colDefsSim.map((col:ColDef) => col.field).includes(item));
+        missingHeaders.forEach(header =>{
+          const clonedObkSim = {...colMasterSim};
+          clonedObkSim.field = header;
+          clonedObkSim.colId = header;
+          clonedObkSim.headerName = header;
+          colDefsSim.push(clonedObkSim);
+        });
         this.gridApiSimilarNature?.setColumnDefs(colDefsSim);
-        this.similarNatureRowData = JSON.parse(data.similarProjectNature);
+        this.similarNatureRowData = similarProjNat;
       }
     }
     if (Object.keys(data.employeesStrength).length === 0) {
       this.employeesStrengthRowData = [];
     } else {
-      this.employeesStrengthRowData = JSON.parse(data.employeesStrength);
+      const empStrength = (typeof data.employeesStrength === 'string' ? JSON.parse(data.employeesStrength) : data.employeesStrength);
+      this.employeesStrengthRowData = empStrength;
     }
     if (Object.keys(data.capitalEquipment).length === 0) {
       this.capitalEquipmentsRowData = [];
     } else {
-      this.capitalEquipmentsRowData = JSON.parse(data.capitalEquipment);
+      const capitalEquipment = (typeof data.capitalEquipment === 'string' ? JSON.parse(data.capitalEquipment) : data.capitalEquipment);
+      this.capitalEquipmentsRowData = capitalEquipment;
     }
     if (Object.keys(data.financialInformation).length === 0) {
       this.financialDetails = [];
     } else {
-      this.financialDetails = JSON.parse(data.financialInformation);
+      const financialInformation = (typeof data.financialInformation === 'string' ? JSON.parse(data.financialInformation) : data.financialInformation);
+      this.financialDetails = financialInformation;
     }
     if (Object.keys(data.companyBankers).length === 0) {
       this.companyBankersDetails = [];
     } else {
-      this.companyBankersDetails = JSON.parse(data.companyBankers);
+      const companyBankers = (typeof data.companyBankers === 'string' ? JSON.parse(data.companyBankers) : data.companyBankers);
+      this.companyBankersDetails = companyBankers;
     }
     if (Object.keys(data.companyAuditors).length === 0) {
       this.companyAuditorsDetails = [];
     } else {
-      this.companyAuditorsDetails = JSON.parse(data.companyAuditors);
+      const companyAuditors = (typeof data.companyAuditors === 'string' ? JSON.parse(data.companyAuditors) : data.companyAuditors);
+      this.companyAuditorsDetails = companyAuditors;
     }
 
     if (data.applicationId != 0) {
@@ -312,9 +328,9 @@ export class TenderApplicationFormComponent implements OnInit {
   };
 
   public turnoverDetails = [
-    { year: '', revenue: '', row: 'YEAR_ONE', fileName: '' },
-    { year: '', revenue: '', row: 'YEAR_TWO', fileName: '' },
-    { year: '', revenue: '', row: 'YEAR_THREE', fileName: '' },
+    { year: '', revenue: 0, row: 'YEAR_ONE', fileName: '' },
+    { year: '', revenue: 0, row: 'YEAR_TWO', fileName: '' },
+    { year: '', revenue: 0, row: 'YEAR_THREE', fileName: '' },
   ];
 
   onGridReadyTurnover(params: GridReadyEvent) {
@@ -339,40 +355,32 @@ export class TenderApplicationFormComponent implements OnInit {
   }
 
   //Section C of PQ-Form: Client References of 3 Major Projects
-  public project = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true }];
+  
+  public project: ColDef[] = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true,
+  cellEditorSelector: cellEditorSelector,
+  }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
   ]
   public clientRefColumnDefs: ColDef[] = [{ headerName: 'Details', field: 'details', editable: false, },
-  this.projectInfoColumnDef[0]];
-
-
+  this.project[0]];
 
   onBtIncludeProject2Columns() {
-    const value = this.getColumnDefs();
-    // console.log('columns', value.length)
-    if (value.length <= 4) {
-      this.gridApiClientRef?.setColumnDefs(value);
-      // console.log('columns', this.gridApiClientRef.getColumnDefs())
-      this.gridApiSimilarNature?.setColumnDefs(value);
-    } else {
+    const colDef = this.gridApiClientRef?.getColumnDefs();
+    this.project.forEach(item => {
+      item.headerName = 'Project ' + colDef?.length,
+      item.field = 'Project ' + colDef?.length      
+      item.colId = 'Project ' +colDef?.length
+    });
+    colDef?.push(this.project[0]);
+    if(colDef?.length && colDef?.length<=4){
+      this.gridApiClientRef?.setColumnDefs(colDef);
+      this.gridApiSimilarNature?.setColumnDefs(colDef);
+    }else {
       this.btnstate = true;
       this.toastr.error('A maximum of three client references are allowed');
     }
   }
-
-  private getColumnDefs() {
-    const cols = this.columnApiClientRef?.getColumns()!;
-    const colDef = this.gridApiClientRef?.getColumnDefs();
-    this.project.forEach(item => {
-      item.headerName = 'Project ' + colDef?.length,
-        item.field = 'Project ' + colDef?.length
-    })
-    // console.log('project ',this.project[0]);
-    colDef?.push(this.project[0]);
-    return JSON.parse(JSON.stringify(colDef));
-  }
-
   btnstate: boolean = false;
   onGridReadyClientRef(params: GridReadyEvent) {
     this.gridApiClientRef = params.api;
@@ -389,7 +397,7 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Scope of Contract:', 'Project 1': '' },
     { details: 'Built Up Area:', 'Project 1': '' },
     { details: 'Contract Duration:', 'Project 1': '' },
-    { details: 'Contract Value:', 'Project 1': '' },
+    { details: 'Contract Value:', 'Project 1': 0 },
     { details: 'Current Status (If completed date of completion):', 'Project 1': '' },
     { details: 'Employers Name & Address', 'Project 1': '' },
     { details: 'Referee’s Name', 'Project 1': '' },
@@ -401,6 +409,12 @@ export class TenderApplicationFormComponent implements OnInit {
     if ($event.colDef.field === 'details') {
       this.gridApiClientRef.stopEditing();
     }
+  }
+  onCellValueChangedClientRef(event: CellValueChangedEvent) {
+    const dataItem = [event.node.data];
+    this.gridApiClientRef.applyTransaction({
+      update: dataItem,
+    });
   }
   //Section C of PQ-Form: Projects of similar Nature
   public similarNatureColumnDefs: ColDef[] = [
@@ -423,7 +437,7 @@ export class TenderApplicationFormComponent implements OnInit {
     { details: 'Scope of Contract:', 'Project 1': '' },
     { details: 'Built Up Area:', 'Project 1': '' },
     { details: 'Contract Duration:', 'Project 1': '' },
-    { details: 'Contract Value:', 'Project 1': '' },
+    { details: 'Contract Value:', 'Project 1': 0 },
     { details: 'Current Status:', 'Project 1': '' },
     { details: 'Employers Name & Address', 'Project 1': '' },
     { details: 'Referee’s Name', 'Project 1': '' },
@@ -539,7 +553,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiEmployeesStrength.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         //console.log('delete');
         params.api.applyTransaction({
           remove: [params.node.data]
@@ -632,7 +650,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiCapitalEquipments.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -758,7 +780,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiFinancialDetails.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -847,7 +873,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiCompanyBankersDetails.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -936,7 +966,11 @@ export class TenderApplicationFormComponent implements OnInit {
           colKey: params.columnApi.getDisplayedCenterColumns()[0].colId
         });
       }
-      if (action === "delete") {
+      const rowLength = this.gridApiCompanyAuditorsDetails.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
@@ -952,13 +986,13 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['actionTaken'].setValue('DRAFT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     // this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
-    this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
-    this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
-    this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
-    this.applicantPqForm.controls['companyBankers'].setValue(JSON.stringify(this.companyBankersDetails));
-    this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
-    this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
-    this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    this.applicantPqForm.controls['employeesStrength'].setValue(this.employeesStrengthRowData);
+    this.applicantPqForm.controls['capitalEquipment'].setValue(this.capitalEquipmentsRowData);
+    this.applicantPqForm.controls['financialInformation'].setValue(this.financialDetails);
+    this.applicantPqForm.controls['companyBankers'].setValue(this.companyBankersDetails);
+    this.applicantPqForm.controls['companyAuditors'].setValue(this.companyAuditorsDetails);
+    this.applicantPqForm.controls['clientReferences'].setValue(this.clientRefRowData);
+    this.applicantPqForm.controls['similarProjectNature'].setValue(this.similarNatureRowData);
     if (this.applicantPqForm.value.yearOfEstablishment) {
       const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
       this.applicantPqForm.value.yearOfEstablishment = dateTran;
@@ -999,13 +1033,13 @@ export class TenderApplicationFormComponent implements OnInit {
     this.applicantPqForm.controls['actionTaken'].setValue('SUBMIT');
     this.applicantPqForm.controls['turnOverDetails'].setValue(this.turnoverDetails);
     //this.applicantPqForm.controls['similarProjects'].setValue(JSON.stringify(this.similarProjectsDetails));
-    this.applicantPqForm.controls['employeesStrength'].setValue(JSON.stringify(this.employeesStrengthRowData));
-    this.applicantPqForm.controls['capitalEquipment'].setValue(JSON.stringify(this.capitalEquipmentsRowData));
-    this.applicantPqForm.controls['financialInformation'].setValue(JSON.stringify(this.financialDetails));
-    this.applicantPqForm.controls['companyBankers'].setValue(JSON.stringify(this.companyBankersDetails));
-    this.applicantPqForm.controls['companyAuditors'].setValue(JSON.stringify(this.companyAuditorsDetails));
-    this.applicantPqForm.controls['clientReferences'].setValue(JSON.stringify(this.clientRefRowData));
-    this.applicantPqForm.controls['similarProjectNature'].setValue(JSON.stringify(this.similarNatureRowData));
+    this.applicantPqForm.controls['employeesStrength'].setValue(this.employeesStrengthRowData);
+    this.applicantPqForm.controls['capitalEquipment'].setValue(this.capitalEquipmentsRowData);
+    this.applicantPqForm.controls['financialInformation'].setValue(this.financialDetails);
+    this.applicantPqForm.controls['companyBankers'].setValue(this.companyBankersDetails);
+    this.applicantPqForm.controls['companyAuditors'].setValue(this.companyAuditorsDetails);
+    this.applicantPqForm.controls['clientReferences'].setValue(this.clientRefRowData);
+    this.applicantPqForm.controls['similarProjectNature'].setValue(this.similarNatureRowData);
     if (this.applicantPqForm.value.yearOfEstablishment) {
       const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
       this.applicantPqForm.value.yearOfEstablishment = dateTran;
@@ -1076,4 +1110,13 @@ function currencyFormatter(currency: number, sign: string) {
     lastThree = ',' + lastThree;
   var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
   return sign + `${res}`;
+}
+ function cellEditorSelector(params: ICellEditorParams): CellEditorSelectorResult | undefined {
+    const type = params.data.details; 
+    if (type === 'Contract Value:') {
+        return {
+            component: NumericCellRendererComponent,
+        };
+    } 
+    return undefined;
 }

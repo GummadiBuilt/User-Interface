@@ -38,7 +38,7 @@
                                 <div fxLayout="column" fxLayoutGap="8px">
                                     <div class="bold-400">Company Name: <span
                                             class="bold-500">{{item?.tenderApplicantsDto?.companyName}}</span></div>
-                                    <form [formGroup]="applicantRankForm">
+                                    <!-- <form [formGroup]="applicantRankForm">
                                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                                             <mat-label class="bold-400">Rank:</mat-label>
                                             <mat-form-field appearance="outline">
@@ -48,7 +48,10 @@
                                             <i class="icon-update fa-solid fa-check" matTooltip="Update Rank"
                                                 (click)="onUpdate()"></i>
                                         </div>
-                                    </form>
+                                    </form> -->
+                                    <div class="bold-400">Rank: <span
+                                            class="bold-500">{{item?.tenderApplicantsDto?.applicantRank}}</span>
+                                    </div>
                                     <div class="bold-400">Status: <span
                                             class="bold-500">{{item?.tenderApplicantsDto?.applicationStatus}}</span>
                                     </div>
@@ -1235,7 +1238,7 @@
                                 <div style="width: 33%;" fxLayoutAlign="space-evenly center">
                                     {{item.tenderDetailsDto?.contractorDocumentName}}</div>
                             </div> -->
-                            <button mat-button
+                            <button mat-button *ngIf="item.tenderDetailsDto?.contractorDocumentName"
                                 (click)="tenderTechnicalDownload(item.tenderApplicantsDto?.applicationUserId)">
                                 {{item.tenderDetailsDto?.contractorDocumentName}} <i
                                     class="icon-download fa-solid fa-file-arrow-down"></i>
@@ -1259,40 +1262,43 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngFor="let finance of tenderFinanceData;let i=index">
-                        <td class="label">
-                            <div fxLayout="column">
-                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                    <div>&nbsp;</div>
-                                    <div>Item No <span class="bold-400"> {{finance['Item No']}}</span></div>
-                                    <div>Quantity <span class="bold-400"> {{finance['Quantity']}}</span></div>
-                                    <div>Unit <span class="bold-400"> {{finance['Unit']}}</span></div>
-                                </div>
-                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                    <div>&nbsp;</div>
-                                    <div>
-                                        <span class="bold-500">Item Description</span>&nbsp;
-                                        <span class="bold-400" [ngClass]="{'limitTextHeight': isReadMore[i]}">
-                                            {{finance['Item Description']}}
-                                        </span>
-                                        <button *ngIf="finance['Item Description'].length > 20" type="button" (click)="showText(i)">
-                                            {{ isReadMore[i] ? 'Read More': 'Read Less' }}
-                                          </button>
+                    <ng-container *ngIf="applicantsData?.expandFinanceDetails || applicantsData?.all">
+                        <tr *ngFor="let finance of tenderFinanceData;let i=index">
+                            <td class="label">
+                                <div fxLayout="column">
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                        <div>&nbsp;</div>
+                                        <div>Item No <span class="bold-400"> {{finance['Item No']}}</span></div>
+                                        <div>Quantity <span class="bold-400"> {{finance['Quantity']}}</span></div>
+                                        <div>Unit <span class="bold-400"> {{finance['Unit']}}</span></div>
+                                    </div>
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                        <div>&nbsp;</div>
+                                        <div>
+                                            <span class="bold-500">Item Description</span>&nbsp;
+                                            <span class="bold-400" [ngClass]="{'limitTextHeight': isReadMore[i]}">
+                                                {{finance['Item Description']}}
+                                            </span>
+                                            <button *ngIf="finance['Item Description'].length > 20" type="button"
+                                                (click)="showText(i)">
+                                                {{ isReadMore[i] ? 'Read More': 'Read Less' }}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td *ngFor="let prices of tenderFinancePricesData" class="alternate-color word-wrap">
-                            <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
-                                    {{prices[i]['Unit Price']}}
+                            </td>
+                            <td *ngFor="let prices of tenderFinancePricesData" class="alternate-color word-wrap">
+                                <div fxLayoutAlign="space-evenly center" fxLayoutGap="12px">
+                                    <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                        {{prices[i]?prices[i]['Unit Price']:0}}
+                                    </div>
+                                    <div style="width: 33%;" fxLayoutAlign="space-evenly center">
+                                        {{prices[i]?prices[i]['Total Price']:0}}
+                                    </div>
                                 </div>
-                                <div style="width: 33%;" fxLayoutAlign="space-evenly center">
-                                    {{prices[i]['Total Price']}}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>

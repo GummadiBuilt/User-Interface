@@ -50,6 +50,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public btnstate: boolean = false;
   public downloadBtnState: boolean = false;
   public warningMessage!: string;
+  public warningMessageCon!: string;
   public todayDate!: Date;
   public applicantLabel!: any;
   public optionApplnState!: boolean;
@@ -258,7 +259,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     },
     {
       field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120,
-      cellEditor: NumericCellRendererComponent
+      cellEditor: NumericCellRendererComponent,cellClass: 'ag-right-aligned-cell'
     },
     {
       headerName: "Action", flex: 1, minWidth: 120, maxWidth: 120,
@@ -367,7 +368,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         }
       });
       if (target[element]) {
-        target[element] = `Total: ${target[element]}`;
+        target[element] = `Total: ${currencyFormatter(target[element],'₹')}`;
       } else {
         target[element] = ``;
       }
@@ -395,14 +396,17 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         });
         this.gridApi.refreshCells();
       }
-
-      if (action === "delete") {
+      const rowLength = this.gridApi.getDisplayedRowCount();
+      if(rowLength == 1){
+        this.toastr.error('Row cannot be deleted');
+      }
+      if (action === "delete" && (rowLength > 1)) {
         params.api.applyTransaction({
           remove: [params.node.data]
         });
         this.rowData.splice(params.rowIndex, 1);
         this.gridApi.refreshCells();
-      }
+      } 
     }
   }
   onCellEditingStarted(event: CellEditingStartedEvent) {
@@ -484,7 +488,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   onSave() {
     console.log(this.tenderDetails.value.lastDateOfSubmission);
-    this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+    this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
     this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
       const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
@@ -538,7 +542,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       });
       dlg.afterClosed().subscribe((submit: boolean) => {
         if (submit) {
-          this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+          this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
           this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
           if (this.tenderDetails.value.lastDateOfSubmission) {
             const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
@@ -570,7 +574,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   }
   onUpdate() {
     if (this.tenderId && this.tenderDetails.valid && this.userRole?.includes('admin')) {
-      this.tenderDetails.controls['tenderFinanceInfo'].setValue(JSON.stringify(this.rowData));
+      this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
       this.tenderDetails.controls['workflowStep'].setValue('YET_TO_BE_PUBLISHED');
       if (this.tenderDetails.value.lastDateOfSubmission) {
         const dateTran = moment(this.tenderDetails.value.lastDateOfSubmission).format('DD/MM/YYYY');
@@ -657,6 +661,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   tenderFormDisable() {
     const workFlowStep = this.tenderDetails.get('workflowStep')?.value;
     const warningMessage = this.constantVariable.disabledWarningTenderMsg + workFlowStep + ' step';
+    const warningMsg = this.constantVariable.disableContractorBidMsg;
     if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
       this.btnstate = true;
@@ -677,6 +682,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.warningMessage = warningMessage;
     } else if (this.userRole?.includes("contractor") && this.actionTaken == 'SUBMIT') {
       this.tenderDetails.disable();
+      this.warningMessageCon = warningMsg;
       this.btnConstate = true;
       this.gridOptions.getColumn('Item No').getColDef().editable = false;
       this.gridOptions.getColumn('Item Description').getColDef().editable = false;

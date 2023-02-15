@@ -24,7 +24,7 @@ export class AuditApprovalsComponent implements OnInit {
   getAuditApprovalsdata() {
     this.ApiServicesService.getRegistrationAuditApproval().subscribe((data: registrationAuditResopnse) => {
       this.allAuditApprovals = data;
-      console.log(this.allAuditApprovals);
+     // console.log(this.allAuditApprovals);
     });
   }
 
@@ -32,7 +32,8 @@ export class AuditApprovalsComponent implements OnInit {
   public ColumnDefs: ColDef[] = [
     { headerName: 'Company Name', field: 'companyName', flex: 2 },
     { headerName: 'Year of Establishment', field: 'yearOfEstablishment', flex: 1, minWidth: 200, },
-    { headerName: 'Type of Establishment', field: 'typeOfEstablishment', flex: 2 },
+    { headerName: 'Role', field: 'applicationRole.roleName', flex: 2 },
+    { headerName: 'Type of Establishment', field: 'typeOfEstablishment', flex: 2 },    
     { headerName: 'Address', field: 'address', flex: 2 },
     { headerName: 'City', field: 'city.cityName', flex: 2 },
     { headerName: 'State', field: 'state.stateName', flex: 2 },

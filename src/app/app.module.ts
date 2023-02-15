@@ -66,6 +66,7 @@ import { MatInputRequiredDirective } from './directives/mat-input-required.direc
 import { DownloadButtonRendererComponent } from './renderers/download-button-renderer/download-button-renderer.component';
 import { RadioButtonRendererComponent } from './renderers/radio-button-renderer/radio-button-renderer.component';
 import { HighchartsComponent } from './shared/highcharts/highcharts.component';
+import { ReadMoreComponent } from './home/read-more/read-more.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -150,6 +151,7 @@ export const MY_DATE_FORMATS = {
     DownloadButtonRendererComponent,
     RadioButtonRendererComponent,
     HighchartsComponent,
+    ReadMoreComponent,
   ],
   imports: [
     BrowserModule,

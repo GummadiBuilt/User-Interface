@@ -5,7 +5,10 @@
 
 ::ng-deep .profile mat-card {
     border-radius: 0px !important;
-    padding: 48px !important;
+}
+
+.profile-info{
+    padding: 24px;
 }
 
 ::ng-deep .mat-stroked-button {
@@ -57,12 +60,12 @@
     height: calc(100vh - 256px) !important;
 }
 
-.profile .mat-drawer {
-    width: 25%;
-}
+// .profile .mat-drawer {
+//     width: 25%;
+// }
 
 .profile .mat-drawer-content {
-    width: 75%;
+    // width: 75%;
     background-color: white;
 }
 

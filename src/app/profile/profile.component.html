@@ -20,7 +20,7 @@
   <div>
     <mat-card>
       <mat-drawer-container class="example-container">
-        <mat-drawer class="mat-drawer" mode="side" opened>
+        <mat-drawer style="width: 25%;" fxShow fxHide.lt-md class="mat-drawer" mode="side" opened>
           <div class="profile-info" fxLayout="column" fxLayoutGap="28px">
             <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
               <div class="initials">{{initials}}</div>
@@ -45,6 +45,29 @@
           </div>
         </mat-drawer>
         <mat-drawer-content class="mat-drawer-content">
+          <div fxHide fxShow.lt-md class="profile-info" fxLayout="column" fxLayoutAlign="center center"
+            fxLayoutGap="28px">
+            <div class="bg-grey" fxLayoutAlign="center center" mat-card-avatar>
+              <div class="initials">{{initials}}</div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="48px">
+              <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+                <div class="bold-500 font-20p">{{userData?.contactFirstName+" "+userData?.contactLastName}}</div>
+                <div fxLayout="column" fxLayoutGap="4px">
+                  <div class="font-grey">Company Name</div>
+                  <div>{{userData?.companyName}}</div>
+                </div>
+                <div fxLayout="column" fxLayoutGap="4px">
+                  <div class="font-grey">Email Address</div>
+                  <div>{{userData?.contactEmailAddress}}</div>
+                </div>
+                <div fxLayout="column" fxLayoutGap="4px">
+                  <div class="font-grey">Designation</div>
+                  <div>{{userData?.contactDesignation}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="drawer-content">
             <form [formGroup]="editUserForm">
               <div class="drawer-content" fxLayout="column" fxLayoutGap="20px">

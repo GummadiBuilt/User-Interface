@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallbackParams, ColDef, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, ICellRendererParams, RowDragEndEvent, RowDragLeaveEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
+import {
+  CellEditingStoppedEvent, CellValueChangedEvent, CheckboxSelectionCallbackParams, ColDef, GridReadyEvent, HeaderCheckboxSelectionCallbackParams, ICellRendererParams,
+  RowSelectedEvent, SelectionChangedEvent
+} from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -57,11 +60,11 @@ export class ViewApplicantsComponent implements OnInit {
       if (this.userRole?.includes('client') || (this.userRole?.includes('admin') && this.rowData[0].tenderStatus != 'UNDER_PROCESS')) {
         this.disableViewApplicants();
         if (this.rowData[0].tenderStatus === 'IN_REVIEW') {
-          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended','contractValue','financialInfoTotal','totalRevenue'], true);
         }
         if (this.rowData[0].tenderStatus === 'RECOMMENDED') {
           this.btnRecommendState = true;
-          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended'], true);
+          this.gridOptions?.columnModel.setColumnsVisible(['download', 'recommended','contractValue','financialInfoTotal','totalRevenue'], true);
         }
       }
     });
@@ -71,20 +74,26 @@ export class ViewApplicantsComponent implements OnInit {
   public disableRadio: boolean = false;
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Contractor Name', field: 'companyName', rowDrag: true, filter: 'agTextColumnFilter', flex: 3, minWidth: 250, autoHeight: true, wrapText: true,
+      headerName: 'Contractor Name', field: 'companyName', filter: 'agTextColumnFilter', flex: 3, minWidth: 250, autoHeight: true, wrapText: true,
       checkboxSelection: checkboxSelection,
-      headerCheckboxSelection: headerCheckboxSelection
-    },
-    {
-      headerName: 'Applicant Form', flex: 1,
+      headerCheckboxSelection: headerCheckboxSelection,
+      tooltipField: 'localOfficeAddress',
       cellRenderer: (params: ICellRendererParams) => {
-        const id = `<a href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank">View Application</a>`;
-        return id
+        const id = `<a style='float:right;' href=/tenders/${params.data.tenderId}/view-tender-application-form/${params.data.applicationFormId} target="_blank"> <i class="fa fa-external-link" title="Applicant Form"></i></a>`;
+        return params.data.companyName + id
       },
-      filter: false,
-      colId: "action",
+      cellStyle: { textAlign: "left"  }
     },
-    { headerName: 'Applicant Rank', field: 'applicantRank', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, },
+    { headerName: 'Turnover', field: 'totalRevenue', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three years turnover", editable: false,
+      valueFormatter: params => currencyFormatter(params.data.totalRevenue),
+    },
+    { headerName: 'Agg. contract value', field: 'contractValue', flex: 1, hide: true,maxWidth: 200,cellClass: 'ag-right-aligned-cell',headerTooltip: "Sum of last three client references contract value",editable: false,
+      valueFormatter: params => currencyFormatter(params.data.contractValue),
+    },
+    { headerName: 'Total bid price', field: 'financialInfoTotal', flex: 1, hide: true,maxWidth: 150,cellClass: 'ag-right-aligned-cell',headerTooltip: "Total price quoted for the financial bid provided",editable: false,
+      valueFormatter: params => currencyFormatter(params.data.financialInfoTotal),
+    },
+    { headerName: 'Applicant Rank', field: 'applicantRank', sortable: true, sortingOrder: ['asc'],maxWidth: 150, filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true, },
     {
       headerName: 'Application Status', field: 'applicationStatus', filter: 'agTextColumnFilter', flex: 1, autoHeight: true, wrapText: true, editable: true,
       valueFormatter: (params: any) => {
@@ -113,12 +122,6 @@ export class ViewApplicantsComponent implements OnInit {
     },
     {
       headerName: 'Recommended', field: 'recommended', flex: 1, filter: false, autoHeight: true, wrapText: true, maxWidth: 150, hide: true,
-      // cellRenderer: function cellTitle(params: any) {
-      //   if (params.data.applicationStatus != "NOT_QUALIFIED") {
-      //     let cellValue = '<div class="ngSelectionCell"><input id=' + params.data.applicationFormId + ' name="selected" type="radio"></div>';
-      //     return cellValue;
-      //   } else return;
-      // },
       cellRenderer: RadioButtonRendererComponent,
     }
   ];
@@ -136,7 +139,6 @@ export class ViewApplicantsComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
-    // this.gridApi.setSuppressRowDrag(true);
   }
 
   //to disable approve/reject buttons
@@ -163,27 +165,17 @@ export class ViewApplicantsComponent implements OnInit {
     let applicationFormIds = selectedData.map((i: { applicationFormId: any; }) => i.applicationFormId);
     this.router.navigate(['/tenders', this.tenderId, 'view-applicants', 'compare-applicants', { applicationFormIds: applicationFormIds }]);
   }
-
-  dragChanged(params: any) {
-    this.gridApi.refreshCells(params);
-  }
-
-  onRowDragLeave(e: RowDragLeaveEvent) {
-    console.log('onRowDragLeave', e);
-    console.log('rowIndex', e.node.rowIndex);
-  }
-  onRowDragEnd(e: any) {
-    this.gridApi.forEachNode((node: any, index: any) => {
-      const rank = index + 1;
-      node.setDataValue('applicantRank', rank);
-    });
-  }
-
-  onRowDragMove(event: any) {
-    // console.log('onRowDragMOVE', event);
-  }
   onCellValueChanged(event: CellValueChangedEvent) {
-
+    if (event.column.getColId() == "applicantRank") {
+      this.gridOptions.applyColumnState({
+        state: [{ colId: 'applicantRank', sort: 'asc' }],
+        defaultState: { sort: null },
+      });
+    }
+    const dataItem = [event.node.data];
+    this.gridApi.applyTransaction({
+      update: dataItem,
+    });
   }
 
   onRowValueChanged(event: any) {
@@ -271,3 +263,9 @@ var headerCheckboxSelection = function (params: HeaderCheckboxSelectionCallbackP
   // we put checkbox on the name if we are not doing grouping
   return params.columnApi.getRowGroupColumns().length === 0;
 };
+
+//indian currency formatter
+function currencyFormatter(value: number) {
+  const formatter: Intl.NumberFormat = new Intl.NumberFormat('en-IN', { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+  return formatter.format(value);
+}

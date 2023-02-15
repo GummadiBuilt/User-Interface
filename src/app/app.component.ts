@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { KeycloakService } from 'keycloak-angular';
-import { KeycloakProfile, KeycloakRoles } from 'keycloak-js';
+import { KeycloakLoginOptions, KeycloakProfile, KeycloakRoles } from 'keycloak-js';
 import { Router } from '@angular/router';
 import { AppAuthGuard } from './guard/auth.guard';
+import { environment } from 'src/environments/environment';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
@@ -21,14 +22,10 @@ export class AppComponent {
   public userRole: boolean | undefined;
   public menuName = 'Login';
   public userRoleEnable: string[] | undefined;
-  badgeContent: number;
+  redirectUrl: string = environment.redirectUrl;
 
   constructor(private readonly keycloak: KeycloakService, public router: Router, private authGuard: AppAuthGuard) {
     this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin');
-    //console.log('ser Role in constructor', this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles.includes('admin'))
-    this.badgeContent = 10;
-
-    this.dataLoad();
   }
   @ViewChild('sidenav') sidenav!: MatSidenav;
   opened!: boolean;
@@ -42,25 +39,8 @@ export class AppComponent {
     this.sidenav.close();
   }
 
-  public notifications: any;
-  public resultData: any[] = [];
-  dataLoad() {
-    this.notifications = [
-      { date: '2022-12-27 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
-      { date: '2022-12-27 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
-      { date: '2022-12-26 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
-      { date: '2022-12-26 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender and submitted succesfully' },
-      { date: '2022-12-25 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender' },
-      { date: '2021-12-24 11:05:36.630', header: 'New tender applied', description: 'Client applied a new tender and submitted succesfully' },
-    ]
-
-    let data = new Set(this.notifications.map((item: any) => item.date));
-    data.forEach((date) => {
-      this.resultData.push({
-        date: date,
-        notifications: this.notifications.filter((i: any) => i.date === date)
-      });
-    });
+  keycloakLoginOptions: KeycloakLoginOptions = {
+    redirectUri: this.redirectUrl
   }
 
   public async ngOnInit() {
@@ -86,7 +66,7 @@ export class AppComponent {
     });
   }
   public login() {
-    this.keycloak.login();
+    this.keycloak.login(this.keycloakLoginOptions);
   }
 
   public logout() {
