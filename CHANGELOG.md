@@ -1,3 +1,25 @@
+# [1.9.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.8.0...v1.9.0) (2023-02-15)
+
+
+### Bug Fixes
+
+* **app.component.ts:** added redirect ([8e4fc66](https://github.com/GummadiBuilt/User-Interface/commit/8e4fc669523298173c93f31e7a0168280eca54bb))
+* **compare applicants:** added condition for parsing data for compare ([18106f7](https://github.com/GummadiBuilt/User-Interface/commit/18106f764cfebe85afb1daff8708a4280bb7f11d))
+* **compare applicants:** return 0 for finance if user selects not qualified contractor for compare ([54e8074](https://github.com/GummadiBuilt/User-Interface/commit/54e807449a56f487417c3e52d3075f4f7f532208))
+* **components:** ag grids rows cannot deleted when only one row and Rank in view applicants sorted ([0285300](https://github.com/GummadiBuilt/User-Interface/commit/0285300212a4c19b794aa25a0d33c9bc6ef3bdcf))
+* **create tender:** yellow banner,Hide Draft & Submit,view applicants option,application role ([49951d3](https://github.com/GummadiBuilt/User-Interface/commit/49951d371f833b6cb2edfc4e24e7f80c3545081c))
+* **environment:** redirect uri ([3cc047e](https://github.com/GummadiBuilt/User-Interface/commit/3cc047e0754475e2cdeb6257b33ee5c38e23d475))
+* **tender applicants:** removed stringify/parse for all ag grids tables ([2879648](https://github.com/GummadiBuilt/User-Interface/commit/28796486b99b1744130ba8b7ef96d0af54825b00))
+* **tender application:** added numeric type for contract value in clientRef and similar nature grids ([c5887f0](https://github.com/GummadiBuilt/User-Interface/commit/c5887f09ad619967b60ad157e55c225f9044c1f3))
+
+
+### Features
+
+* **app-component.ts:** bug fixes - added user profile in mobile view, hide login button ([1d793b4](https://github.com/GummadiBuilt/User-Interface/commit/1d793b4fea29a73342235850c63ed251ae9c5294))
+* **profile.component.ts:** fixed profile layout in mobile view ([55c7e4f](https://github.com/GummadiBuilt/User-Interface/commit/55c7e4fd519767e21ebf8f447ed0d0c09dd085aa))
+* **view applicants:** added currency format for currency fields in view applicants ([bf7253f](https://github.com/GummadiBuilt/User-Interface/commit/bf7253f5f523d4fcc6f00e5be8d9ff507a32b440))
+* **view applicants:** added few fields for view applicants ([f719932](https://github.com/GummadiBuilt/User-Interface/commit/f719932ce7726c39d45f53af0d388c71c946330c))
+
 # [1.8.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.7.0...v1.8.0) (2023-02-03)
 
 
