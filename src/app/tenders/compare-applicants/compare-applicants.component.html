@@ -1215,7 +1215,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
+                    <tr *ngIf="technicalDocumentData" (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
                                 <div *ngIf="!(applicantsData?.expandTenderDetails || applicantsData?.all)"><i
@@ -1245,7 +1245,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr (click)="applicantsData.expandFinanceDetails = !applicantsData.expandFinanceDetails">
+                    <tr *ngIf="tenderFinanceData" (click)="applicantsData.expandFinanceDetails = !applicantsData.expandFinanceDetails">
                         <td class="label">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
                                 <div *ngIf="!(applicantsData?.expandFinanceDetails || applicantsData?.all)"><i
