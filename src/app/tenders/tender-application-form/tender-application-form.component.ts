@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CellEditingStartedEvent, CellEditingStoppedEvent, CellEditorSelectorResult, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, ICellEditorParams, RowEditingStartedEvent, RowEditingStoppedEvent } from 'ag-grid-community';
+import { CellEditingStartedEvent, CellEditingStoppedEvent, CellEditorSelectorResult, CellValueChangedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, ICellEditorParams, RowEditingStartedEvent, RowEditingStoppedEvent, ValueFormatterParams } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { map, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -308,7 +308,7 @@ export class TenderApplicationFormComponent implements OnInit {
     {
       headerName: 'Rs in Crores', field: 'revenue', cellClass: 'ag-right-aligned-cell',
       cellEditor: NumericCellRendererComponent, maxWidth: 150,
-      valueFormatter: params => currencyFormatter(params.data.revenue, ''),
+      valueFormatter: params => currencyFormatter(params.data.revenue),
     },
     { headerName: 'row', field: 'row', hide: true },
     {
@@ -358,6 +358,7 @@ export class TenderApplicationFormComponent implements OnInit {
   
   public project: ColDef[] = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true,
   cellEditorSelector: cellEditorSelector,
+  valueFormatter:valueFormat,
   }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
@@ -686,23 +687,23 @@ export class TenderApplicationFormComponent implements OnInit {
     { headerName: 'Year', field: 'f_year', editable: true, cellEditor: NumericCellRendererComponent, maxWidth: 100 },
     {
       headerName: 'Gross turnover Rs.', field: 'gross_turnover', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
-      valueFormatter: params => currencyFormatter(params.data.gross_turnover, ''),
+      valueFormatter: params => currencyFormatter(params.data.gross_turnover),
     },
     {
       headerName: 'Net Profit before tax Rs.', field: 'net_profit', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
-      valueFormatter: params => currencyFormatter(params.data.net_profit, ''),
+      valueFormatter: params => currencyFormatter(params.data.net_profit),
     },
     {
       headerName: 'Profit After Tax Rs.', field: 'profit_after_tax', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
-      valueFormatter: params => currencyFormatter(params.data.profit_after_tax, ''),
+      valueFormatter: params => currencyFormatter(params.data.profit_after_tax),
     },
     {
       headerName: 'Current Assets Rs.', field: 'current_assets', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
-      valueFormatter: params => currencyFormatter(params.data.current_assets, ''),
+      valueFormatter: params => currencyFormatter(params.data.current_assets),
     },
     {
       headerName: 'Current Liabilities Rs.', field: 'current_liabilities', editable: true, cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell',
-      valueFormatter: params => currencyFormatter(params.data.current_liabilities, ''),
+      valueFormatter: params => currencyFormatter(params.data.current_liabilities),
     },
     {
       headerName: "Action", colId: "action", flex: 1, maxWidth: 150, editable: false, filter: false,
@@ -1101,17 +1102,12 @@ export class TenderApplicationFormComponent implements OnInit {
     }
   }
 }
-//indian currency formatter
-function currencyFormatter(currency: number, sign: string) {
-  var x = currency.toString();
-  var lastThree = x.substring(x.length - 3);
-  var otherNumbers = x.substring(0, x.length - 3);
-  if (otherNumbers != '')
-    lastThree = ',' + lastThree;
-  var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-  return sign + `${res}`;
+//Indian currency formatter
+function currencyFormatter(value: number) {
+  const formatter: Intl.NumberFormat = new Intl.NumberFormat('en-IN', { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+  return formatter.format(value);
 }
- function cellEditorSelector(params: ICellEditorParams): CellEditorSelectorResult | undefined {
+function cellEditorSelector(params: ICellEditorParams): CellEditorSelectorResult | undefined {
     const type = params.data.details; 
     if (type === 'Contract Value:') {
         return {
@@ -1119,4 +1115,12 @@ function currencyFormatter(currency: number, sign: string) {
         };
     } 
     return undefined;
+}
+function valueFormat(params: ValueFormatterParams) {
+  const type = params.data.details;
+  if (type === 'Contract Value:') {
+      return currencyFormatter(params.value);
+  }
+  else
+    return params.value
 }
