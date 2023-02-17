@@ -10,7 +10,8 @@ const environment = {
   KEYCLOAK_CLIENT_ID: 'gummadi-local',
   apiUrl: 'http://localhost:9001/api',
   updatePwdUrl: 'http://localhost:8080/realms/Local-Realm/protocol/openid-connect/auth?response_type=code&client_id=gummadi-local&redirect_uri=http://localhost:4200&kc_action=UPDATE_PASSWORD',
-  redirectUrl: 'http://localhost:4200/tenders'
+  redirectUrl: 'http://localhost:4200/tenders',
+  locationUrl:'https://maps.google.com/maps?q=104,+eSeva+Ln,+KPHB+Phase+III,+K+P+H+B+Phase+3,+Kukatpally,+Hyderabad,+Telangana+500072,+India/@17.488021,78.3937425&t=&z=13&ie=UTF8&iwloc=&output=embed',
 };
 
 export { environment as environment }

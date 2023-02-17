@@ -1,39 +1,176 @@
-<div class="contactus-page" fxLayout="column">
-    <div fxFlex="12">
-
+<div class="contactus-page">
+    <div class="title" fxLayout="row" fxLayoutAlign="center center">
+        <h1>{{constVariable.thankYouForReaching}}</h1>
     </div>
-    <div fxFlex="76" class="large-footer" fxLayout="row wrap" fxLayoutAlign="space-between start">
-        <div fxLayout="column">
-            <h2>COMPANY</h2>
-            <h5>About Houzz</h5>
-            <h5>In the News</h5>
-            <h5>Press Info</h5>
-            <h5>Careers</h5>
-            <h5>Contact Us</h5>
-            <h5>Terms & Privacy</h5>
-            <h5>Copyright & Trademark</h5>
+    <div class="contactus-body" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="12px grid">
+        <div fxFlex.xs="100%" fxFlex.sm="80%" fxFlex.md="40%">
+            <mat-card class="p-0">
+                <img mat-card-image src="assets/images/contact.jpg">
+            </mat-card>
         </div>
-        <div fxLayout="column">
-            <h2>EXPLORE</h2>
-            <h5>Buttons & Badges</h5>
-            <h5>Mobile Apps</h5>
-            <h5>For Brands</h5>
-            <h5>For Professionals</h5>
-            <h5>Review Professionals</h5>
-            <h5>Suggested Professionals</h5>
-        </div>
-        <div fxLayout="column">
-            <h2>CONNECT WITH US</h2>
-            <h5>Linkedin</h5>
-            <h5>Facebook</h5>
-            <h5>Instagram</h5>
-            <h5>Twitter</h5>
-        </div>
-        <div class="maps">
-
+        <div fxFlex.xs="100%" fxFlex.sm="80%" fxFlex.md="50%" fxFlex.lg="40%" fxFlex.xl="40%">
+            <mat-card>
+                <div class="color-grey">
+                    <h2>{{constVariable.lookForward}}</h2>
+                </div>
+                <form [formGroup]="contactUsForm" fxLayout="column" fxLayoutGap="4px">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="24px grid">
+                        <div fxLayout="column" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="50%"
+                            fxFlex.xl="50%">
+                            <div>
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <mat-label>{{constVariable.category}}</mat-label>
+                                    <mat-select formControlName="category">
+                                        <mat-option *ngFor="let category of categories" [value]="category.id">
+                                            {{category.roleName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="contactUsForm.controls['category'].errors?.['required']">
+                                        {{constVariable.selectCategory}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <mat-label>{{constVariable.name}}</mat-label>
+                                    <input matInput placeholder="Name" inputmode="tel" formControlName="name">
+                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['required']">
+                                        {{constVariable.nameRequired}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['minlength']">
+                                        {{constVariable.minThreeChar}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['maxlength']">
+                                        {{constVariable.maxFiftyChar}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <mat-label>{{constVariable.emailId}}</mat-label>
+                                    <input matInput placeholder="Email Id" formControlName="email">
+                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['required']">
+                                        {{constVariable.emailRequired}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['pattern']">
+                                        {{constVariable.validEmail}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="column" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" fxFlex.lg="50%"
+                            fxFlex.xl="50%">
+                            <div>
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <mat-label>{{constVariable.mobileNumber}}</mat-label>
+                                    <input numbersOnly matInput placeholder="Mobile Number" formControlName="phone">
+                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['required']">
+                                        {{constVariable.requireMobilenumber}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['pattern']">
+                                        {{constVariable.validMobileNumber}}
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="contactUsForm.controls['phone'].errors?.['minlength'] || contactUsForm.controls['phone'].errors?.['maxlength']">
+                                        {{constVariable.mobileTendDigits}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <mat-label>{{constVariable.detailsOfQuery}}</mat-label>
+                                    <textarea matInput placeholder="Details of Query" formControlName="description"
+                                        cols="20" rows="6"></textarea>
+                                    <mat-error *ngIf="contactUsForm.controls['description'].errors?.['required']">
+                                        {{constVariable.detailsRequired}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['description'].errors?.['maxlength']">
+                                        {{constVariable.max250Char}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div fxLayoutAlign="end center">
+                        <button class="submit-button" mat-stroked-button type="submit" (click)="onSubmit()">
+                            {{constVariable.getInTouchh}}
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
         </div>
     </div>
-    <div fxFlex="12" class="small-footer">
 
+    <div class="large-footer" fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="8px grid">
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.locateUs}}</h2>
+            </div>
+            <div>
+                <mat-card style="min-height: 200px;" class="p-0">
+                    <iframe width="100%" fxFlex frameBorder="0" [src]="locationUrl | safe"></iframe>
+                </mat-card>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.company}}</h2>
+            </div>
+            <h5><a href="/about">{{constVariable.aboutUs}}</a></h5>
+            <h5>{{constVariable.inTheNews}}</h5>
+            <h5>{{constVariable.pressInfo}}</h5>
+            <h5>{{constVariable.careers}}</h5>
+            <h5><a href="/contact">{{constVariable.contactUs}}</a></h5>
+            <h5>{{constVariable.termsPrivacy}}</h5>
+            <h5>{{constVariable.copyrightTrademark}}</h5>
+        </div>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.contactUs}}</h2>
+            </div>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <div><i class="icon-size-20 fa-solid fa-location-dot"></i></div>
+                <div>
+                    <p class="line-height">
+                        {{constVariable.address1Ofc}}<br>
+                        {{constVariable.address2Ofc}}<br>
+                        {{constVariable.address3Ofc}}<br>
+                        {{constVariable.address4Ofc}}<br>
+                    </p>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <div><i class="icon-size-20 fa-solid fa-phone-volume"></i></div>
+                <div>
+                    <p>{{constVariable.phoneOfc}}</p>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <div><i class="icon-size-20 fa-solid fa-envelope-open-text"></i></div>
+                <div>
+                    <p>{{constVariable.mailOfc}}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.getInTouch}}</h2>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px">
+                <div>
+                    <i class="icon-size-20 fa-brands fa-linkedin"></i>
+                </div>
+                <div>
+                    <i class="icon-size-20 fa-brands fa-facebook"></i>
+                </div>
+                <div>
+                    <i class="icon-size-20 fa-brands fa-instagram"></i>
+                </div>
+                <div>
+                    <i class="icon-size-20 fa-brands fa-twitter"></i>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
