@@ -37,7 +37,7 @@
                                 </div> -->
                                 <div fxLayout="column" fxLayoutGap="8px">
                                     <div class="bold-400">Company Name: <span
-                                            class="bold-500">{{item?.tenderApplicantsDto?.companyName}}</span></div>
+                                            class="bold-500">{{item?.applicationFormDto?.companyName}}</span></div>
                                     <!-- <form [formGroup]="applicantRankForm">
                                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                                             <mat-label class="bold-400">Rank:</mat-label>
@@ -1215,7 +1215,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr *ngIf="technicalDocumentData" (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
+                    <tr *ngIf="technicalDocumentData?.length" (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
                                 <div *ngIf="!(applicantsData?.expandTenderDetails || applicantsData?.all)"><i

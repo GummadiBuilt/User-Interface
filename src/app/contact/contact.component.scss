@@ -5,7 +5,7 @@
 
 .contactus-page {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background-color: white !important;
 }
 
@@ -18,6 +18,15 @@
 
 .large-footer h5 {
     font-size: 14px;
+}
+
+.large-footer a {
+    text-decoration: none;
+    color: white;
+}
+
+.large-footer a:hover {
+    color: rgb(106, 161, 245);
 }
 
 .small-footer {

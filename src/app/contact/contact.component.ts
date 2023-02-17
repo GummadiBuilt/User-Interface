@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
+import { PageConstants } from '../shared/application.constants';
 
 @Component({
   selector: 'app-contact',
@@ -8,7 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ContactComponent implements OnInit {
   contactUsForm!: FormGroup;
-  
+  locationUrl: string = environment.locationUrl;
+  public constVariable = PageConstants;
+  categories = [{ id: 'client', roleName: 'Client' }, { id: 'contractor', roleName: 'Contractor' }, { id: 'individual', roleName: 'Individual' }];
   constructor(private _formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {

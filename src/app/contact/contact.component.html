@@ -1,6 +1,6 @@
 <div class="contactus-page">
     <div class="title" fxLayout="row" fxLayoutAlign="center center">
-        <h1>Thank you for reaching out to us!</h1>
+        <h1>{{constVariable.thankYouForReaching}}</h1>
     </div>
     <div class="contactus-body" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="12px grid">
         <div fxFlex.xs="100%" fxFlex.sm="80%" fxFlex.md="40%">
@@ -11,7 +11,7 @@
         <div fxFlex.xs="100%" fxFlex.sm="80%" fxFlex.md="50%" fxFlex.lg="40%" fxFlex.xl="40%">
             <mat-card>
                 <div class="color-grey">
-                    <h2>We look forward to addressing your query.</h2>
+                    <h2>{{constVariable.lookForward}}</h2>
                 </div>
                 <form [formGroup]="contactUsForm" fxLayout="column" fxLayoutGap="4px">
                     <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="24px grid">
@@ -19,37 +19,41 @@
                             fxFlex.xl="50%">
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <mat-label>Category</mat-label>
+                                    <mat-label>{{constVariable.category}}</mat-label>
                                     <mat-select formControlName="category">
-                                        <mat-option value="client">Client</mat-option>
-                                        <mat-option value="contractor">Contractor</mat-option>
-                                        <mat-option value="individual">Individual</mat-option>
+                                        <mat-option *ngFor="let category of categories" [value]="category.id">
+                                            {{category.roleName}}
+                                        </mat-option>
                                     </mat-select>
-                                    <mat-error *ngIf="contactUsForm.controls['category'].errors?.['required']">Select
-                                        category</mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div>
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <mat-label>Name</mat-label>
-                                    <input matInput placeholder="Name" inputmode="tel" formControlName="name">
-                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['required']">Name is
-                                        required</mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['minlength']">Minimum 3
-                                        characters required
+                                    <mat-error *ngIf="contactUsForm.controls['category'].errors?.['required']">
+                                        {{constVariable.selectCategory}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['maxlength']">Maximum of
-                                        50 characters</mat-error>
                                 </mat-form-field>
                             </div>
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <mat-label>Email ID</mat-label>
+                                    <mat-label>{{constVariable.name}}</mat-label>
+                                    <input matInput placeholder="Name" inputmode="tel" formControlName="name">
+                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['required']">
+                                        {{constVariable.nameRequired}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['minlength']">
+                                        {{constVariable.minThreeChar}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['maxlength']">
+                                        {{constVariable.maxFiftyChar}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <mat-label>{{constVariable.emailId}}</mat-label>
                                     <input matInput placeholder="Email Id" formControlName="email">
-                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['required']">Email ID is
-                                        required</mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['pattern']">Please enter
-                                        valid email
+                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['required']">
+                                        {{constVariable.emailRequired}}
+                                    </mat-error>
+                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['pattern']">
+                                        {{constVariable.validEmail}}
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -58,40 +62,39 @@
                             fxFlex.xl="50%">
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <mat-label>Mobile Number</mat-label>
+                                    <mat-label>{{constVariable.mobileNumber}}</mat-label>
                                     <input numbersOnly matInput placeholder="Mobile Number" formControlName="phone">
-                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['required']">Mobile
-                                        Number is required
+                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['required']">
+                                        {{constVariable.requireMobilenumber}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['pattern']">Please enter
-                                        valid mobile number
+                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['pattern']">
+                                        {{constVariable.validMobileNumber}}
                                     </mat-error>
                                     <mat-error
-                                        *ngIf="contactUsForm.controls['phone'].errors?.['minlength'] || contactUsForm.controls['phone'].errors?.['maxlength']">Mobile
-                                        number should be 10 digits
+                                        *ngIf="contactUsForm.controls['phone'].errors?.['minlength'] || contactUsForm.controls['phone'].errors?.['maxlength']">
+                                        {{constVariable.mobileTendDigits}}
                                     </mat-error>
                                 </mat-form-field>
                             </div>
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <mat-label>Details of Query</mat-label>
+                                    <mat-label>{{constVariable.detailsOfQuery}}</mat-label>
                                     <textarea matInput placeholder="Details of Query" formControlName="description"
                                         cols="20" rows="6"></textarea>
-                                    <mat-error
-                                        *ngIf="contactUsForm.controls['description'].errors?.['required']">Details
-                                        required
+                                    <mat-error *ngIf="contactUsForm.controls['description'].errors?.['required']">
+                                        {{constVariable.detailsRequired}}
                                     </mat-error>
-                                    <mat-error
-                                        *ngIf="contactUsForm.controls['description'].errors?.['maxlength']">Maximum
-                                        of 250 characters
+                                    <mat-error *ngIf="contactUsForm.controls['description'].errors?.['maxlength']">
+                                        {{constVariable.max250Char}}
                                     </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                        <button class="submit-button" mat-stroked-button type="submit" (click)="onSubmit()">Get in
-                            Touch!</button>
+                        <button class="submit-button" mat-stroked-button type="submit" (click)="onSubmit()">
+                            {{constVariable.getInTouchh}}
+                        </button>
                     </div>
                 </form>
             </mat-card>
@@ -101,58 +104,58 @@
     <div class="large-footer" fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="8px grid">
         <div fxLayout="column" fxLayoutGap="8px">
             <div>
-                <h2 class="line">Company</h2>
+                <h2 class="line">{{constVariable.locateUs}}</h2>
             </div>
-            <h5>About Us</h5>
-            <h5>In the News</h5>
-            <h5>Press Info</h5>
-            <h5>Careers</h5>
-            <h5>Contact Us</h5>
-            <h5>Terms & Privacy</h5>
-            <h5>Copyright & Trademark</h5>
+            <div>
+                <mat-card style="min-height: 200px;" class="p-0">
+                    <iframe width="100%" fxFlex frameBorder="0" [src]="locationUrl | safe"></iframe>
+                </mat-card>
+            </div>
         </div>
         <div fxLayout="column" fxLayoutGap="8px">
             <div>
-                <h2 class="line">Contact Us</h2>
+                <h2 class="line">{{constVariable.company}}</h2>
+            </div>
+            <h5><a href="/about">{{constVariable.aboutUs}}</a></h5>
+            <h5>{{constVariable.inTheNews}}</h5>
+            <h5>{{constVariable.pressInfo}}</h5>
+            <h5>{{constVariable.careers}}</h5>
+            <h5><a href="/contact">{{constVariable.contactUs}}</a></h5>
+            <h5>{{constVariable.termsPrivacy}}</h5>
+            <h5>{{constVariable.copyrightTrademark}}</h5>
+        </div>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.contactUs}}</h2>
             </div>
             <div fxLayout="row" fxLayoutGap="12px">
                 <div><i class="icon-size-20 fa-solid fa-location-dot"></i></div>
                 <div>
                     <p class="line-height">
-                        8-2-293/82/A/471/1/3 F-2, <br>
-                        Plot No 471, 2nd Floor, <br>
-                        Road No 36, Jubilee Hills, <br>
-                        Hyderabad - 500033.
+                        {{constVariable.address1Ofc}}<br>
+                        {{constVariable.address2Ofc}}<br>
+                        {{constVariable.address3Ofc}}<br>
+                        {{constVariable.address4Ofc}}<br>
                     </p>
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="12px">
                 <div><i class="icon-size-20 fa-solid fa-phone-volume"></i></div>
                 <div>
-                    <p>+91 9988998800</p>
+                    <p>{{constVariable.phoneOfc}}</p>
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="12px">
                 <div><i class="icon-size-20 fa-solid fa-envelope-open-text"></i></div>
                 <div>
-                    <p>gummadibuilt@gmail.com</p>
+                    <p>{{constVariable.mailOfc}}</p>
                 </div>
             </div>
         </div>
+        
         <div fxLayout="column" fxLayoutGap="8px">
             <div>
-                <h2 class="line">Locate Us</h2>
-            </div>
-            <div>
-                <mat-card style="min-height: 200px;" class="p-0">
-                    <iframe width="100%" fxFlex frameBorder="0"
-                        src="https://maps.google.com/maps?q=104,+eSeva+Ln,+KPHB+Phase+III,+K+P+H+B+Phase+3,+Kukatpally,+Hyderabad,+Telangana+500072,+India/@17.488021,78.3937425&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
-                </mat-card>
-            </div>
-        </div>
-        <div fxLayout="column" fxLayoutGap="8px">
-            <div>
-                <h2 class="line">Get In Touch</h2>
+                <h2 class="line">{{constVariable.getInTouch}}</h2>
             </div>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px">
                 <div>
