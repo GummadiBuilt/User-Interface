@@ -24,14 +24,15 @@ export class CompareApplicantsComponent implements OnInit {
   public finInfoData: any;
   public compBankersData: any;
   public compAuditorsData: any;
+  public technicalDocumentData: any;
   public tenderFinanceData: any;
   public tenderFinancePricesData: any;
   /* the table reference */
   @ViewChild('userTable') userTable!: ElementRef;
-  isReadMore: boolean[]=[];
+  isReadMore: boolean[] = [];
 
 
-  showText(index:any) {
+  showText(index: any) {
     this.isReadMore[index] = !this.isReadMore[index]
   }
 
@@ -92,6 +93,7 @@ export class CompareApplicantsComponent implements OnInit {
     let finInfoArr: any[] = [];
     let compBankersArr: any[] = [];
     let compAuditorsArr: any[] = [];
+    let technicalDocArr: any[] = [];
     let tenderFinanceArr: any[] = [];
     let tenderFinancePricesArr: any[] = [];
     clientRowData.forEach((element: any) => {
@@ -102,10 +104,13 @@ export class CompareApplicantsComponent implements OnInit {
       finInfoArr.push((typeof element.applicationFormDto?.financialInformation === 'string' ? JSON.parse(element.applicationFormDto?.financialInformation) : element.applicationFormDto?.financialInformation));
       compBankersArr.push((typeof element.applicationFormDto?.companyBankers === 'string' ? JSON.parse(element.applicationFormDto?.companyBankers) : element.applicationFormDto?.companyBankers));
       compAuditorsArr.push((typeof element.applicationFormDto?.companyAuditors === 'string' ? JSON.parse(element.applicationFormDto?.companyAuditors) : element.applicationFormDto?.companyAuditors));
-      if(element.tenderDetailsDto){
+      if (element.tenderDetailsDto) {
+        technicalDocArr.push(element.tenderDetailsDto?.contractorDocumentName);
+      }
+      if (element.tenderDetailsDto) {
         tenderFinanceArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
         tenderFinancePricesArr.push((element.tenderDetailsDto?.tenderFinanceInfo));
-      }else{
+      } else {
         tenderFinancePricesArr.push(this.assignNull());
       }
     });
@@ -116,14 +121,15 @@ export class CompareApplicantsComponent implements OnInit {
     this.finInfoData = finInfoArr;
     this.compBankersData = compBankersArr;
     this.compAuditorsData = compAuditorsArr;
+    this.technicalDocumentData = technicalDocArr;
     this.tenderFinanceData = tenderFinanceArr[0];
     this.tenderFinancePricesData = tenderFinancePricesArr;
-    if(this.tenderFinanceData){
-      this.tenderFinanceData.forEach((i:any)=>{
+    if (this.tenderFinanceData) {
+      this.tenderFinanceData.forEach((i: any) => {
         this.isReadMore.push(true);
-      })      
+      })
     }
-    //console.log(this.applicantsData);
+    // console.log(this.applicantsData);
   }
 
   applicantRankForm!: FormGroup;
@@ -141,8 +147,8 @@ export class CompareApplicantsComponent implements OnInit {
     });
   }
 
-  assignNull():any {
-    const unit = [{'Unit Price':0,'Total Price': 0}];
+  assignNull(): any {
+    const unit = [{ 'Unit Price': 0, 'Total Price': 0 }];
     return unit;
   }
 
@@ -168,9 +174,12 @@ export class CompareApplicantsComponent implements OnInit {
   }
 
   exportToExcel(event: any) {
-    setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.userTable, 'compare.xlsx');
-    }, 500)
+    //this.applicationFormIds = params.get('applicationFormIds');
+      const applicantsArray = this.applicationFormIds.split(',');
+    this.ApiServicesService.exportExcelForCompareApplicants(this.tenderId, applicantsArray).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   statutoryCompliancesHeaders = ["ESI Registration", "EPF Registration", "GST Registration", "PAN Number",];

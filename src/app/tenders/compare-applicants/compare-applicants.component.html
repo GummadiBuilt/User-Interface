@@ -11,14 +11,14 @@
         <ng-template #separatorTemplate>
             <i class="fa-solid fa-caret-right"></i>
         </ng-template>
-        <!-- <div fxLayoutAlign="center center">
-            <button mat-raised-button (click)="applicantsData.all = !applicantsData.all; exportToExcel($event)">
+        <div fxLayoutAlign="center center">
+            <button mat-raised-button (click)="exportToExcel($event)">
                 <div fxLayout="row" fxLayoutGap="6px">
                     <div><i class="fa-solid fa-file-export"></i></div>
                     <div>Export to Excel</div>
                 </div>
             </button>
-        </div> -->
+        </div>
     </div>
     <div class="container">
         <div class="inner-container">
@@ -37,7 +37,7 @@
                                 </div> -->
                                 <div fxLayout="column" fxLayoutGap="8px">
                                     <div class="bold-400">Company Name: <span
-                                            class="bold-500">{{item?.tenderApplicantsDto?.companyName}}</span></div>
+                                            class="bold-500">{{item?.applicationFormDto?.companyName}}</span></div>
                                     <!-- <form [formGroup]="applicantRankForm">
                                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                                             <mat-label class="bold-400">Rank:</mat-label>
@@ -1215,7 +1215,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
+                    <tr *ngIf="technicalDocumentData?.length" (click)="applicantsData.expandTenderDetails = !applicantsData.expandTenderDetails">
                         <td class="label" colspan="5">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
                                 <div *ngIf="!(applicantsData?.expandTenderDetails || applicantsData?.all)"><i
@@ -1245,7 +1245,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr (click)="applicantsData.expandFinanceDetails = !applicantsData.expandFinanceDetails">
+                    <tr *ngIf="tenderFinanceData" (click)="applicantsData.expandFinanceDetails = !applicantsData.expandFinanceDetails">
                         <td class="label">
                             <div fxLayoutAlign="start center" fxLayoutGap="8px">
                                 <div *ngIf="!(applicantsData?.expandFinanceDetails || applicantsData?.all)"><i
