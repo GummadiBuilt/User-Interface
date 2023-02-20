@@ -1,5 +1,44 @@
-<div class="home-page" fxLayoutAlign="center center">
-    <div class="home-page-body" fxLayout="column" fxLayoutAlign="center center">
-        <h1>Read more page... under construction...</h1>
+<div class="home-page" fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="24px">
+        <div class="home-page-body" fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <div class="title" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
+                    <div>
+                        <h1>{{constVariable.gummadiBuilt}}</h1>
+                    </div>
+                    <div>
+                        <p>{{constVariable.titleMsg1}}</p>
+                        <p>{{constVariable.titleMsg2}}</p>
+                    </div>
+                </div>
+            </div>
+            <h1>{{constVariable.ourVision}}</h1>
+            <h5>{{constVariable.ourVisionMsg}}</h5>
+            <h1>{{constVariable.ourMission}}</h1>
+            <h5>{{constVariable.ourMissionMsg}}</h5>
+            <h1>{{constVariable.theProblem}}</h1>
+            <h5>{{constVariable.theProblemMsg}}</h5>
+            <h1>{{constVariable.solutionForClients}}</h1>
+            <h5>{{constVariable.solutionForClientsMsg}}</h5>
+            <h1>{{constVariable.valueAddition}}</h1>
+            <h5>{{constVariable.valueAdditonMsg}}</h5>
+            <h1>{{constVariable.solutionForContractors}}</h1>
+            <h5>{{constVariable.solutionForContractorsMsg}}</h5>
+            <div class="btn-group" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="24px grid">
+                <div>
+                    <button mat-raised-button (click)="goToSignUp()">{{constVariable.btnRegisterAsClient}}</button>
+                </div>
+                <div>
+                    <button mat-raised-button (click)="goToSignUp()">{{constVariable.btnRegisterAsIndividual}}</button>
+                </div>
+                <div>
+                    <button mat-raised-button (click)="goToSignUp()">{{constVariable.btnRegisterAsContractor}}</button>
+                </div>
+                <div>
+                    <button mat-raised-button
+                        (click)="goToSignUp()">{{constVariable.btnRegisterAsMaterialSupplier}}</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

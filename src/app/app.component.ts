@@ -14,8 +14,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 })
 export class AppComponent {
   title = 'gummadi-constructions';
-  links = ['home', 'about', 'service', 'projects', 'corevalues', 'contact'];
-  titles = ['Home', 'About Us', 'Service', 'Projects', 'Core Values', 'Contact Us'];
+  links = ['home', 'about', 'services', 'projects', 'contact'];
+  titles = ['Home', 'About Us', 'Services', 'Projects', 'Contact Us'];
   activeLink = this.links[0];
   public isLoggedIn = false;
   public userProfile: KeycloakProfile | any = null;

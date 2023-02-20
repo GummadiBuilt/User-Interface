@@ -11,7 +11,6 @@ import { PendingApprovalsComponent } from './pending-approvals/pending-approvals
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { TendersComponent } from './tenders/tender/tenders.component';
 import { ContactComponent } from './contact/contact.component';
-import { CorevaluesComponent } from './corevalues/corevalues.component';
 import { AppAuthGuard } from './guard/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
@@ -36,9 +35,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'read-more', component: ReadMoreComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'service', component: ServiceComponent },
+  { path: 'services', component: ServiceComponent },
   { path: 'projects', component: ProjectsComponent },
-  { path: 'corevalues', component: CorevaluesComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard], },
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },

@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
 import { ContactComponent } from './contact/contact.component';
 import { ServiceComponent } from './service/service.component';
-import { CorevaluesComponent } from './corevalues/corevalues.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -115,7 +114,6 @@ export const MY_DATE_FORMATS = {
     HomeComponent,
     ContactComponent,
     ServiceComponent,
-    CorevaluesComponent,
     ProjectsComponent,
     AboutComponent,
     LoginComponent,
