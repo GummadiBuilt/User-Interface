@@ -1,3 +1,18 @@
+# [1.10.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.9.0...v1.10.0) (2023-02-20)
+
+
+### Bug Fixes
+
+* **tender application:** added currency formats for ag grid values in tender application ([7cd7587](https://github.com/GummadiBuilt/User-Interface/commit/7cd7587e431529c27f5605c966e1d05d3fa1a37a))
+
+
+### Features
+
+* **compare applicants:** export excel for compare applicants ([117008c](https://github.com/GummadiBuilt/User-Interface/commit/117008c19ba2ff43f083ab900b496d689c69322b))
+* **compare-applicants.ts:** show/hide tender doc and fin info ([57d5b69](https://github.com/GummadiBuilt/User-Interface/commit/57d5b698e755b95fb8c8408706e67f1827e8acf0))
+* **contact.component.ts:** contact us page design ([5ff573d](https://github.com/GummadiBuilt/User-Interface/commit/5ff573d588f9e082f6cb46805413d3bb05adc270))
+* **contact.component.ts:** replaced labels with constant variables ([5293b91](https://github.com/GummadiBuilt/User-Interface/commit/5293b91b963100ebed242379c102af348b7772f9))
+
 # [1.9.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.8.0...v1.9.0) (2023-02-15)
 
 
