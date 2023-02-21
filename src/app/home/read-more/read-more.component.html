@@ -26,17 +26,10 @@
             <h5>{{constVariable.solutionForContractorsMsg}}</h5>
             <div class="btn-group" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="24px grid">
                 <div>
-                    <button mat-raised-button (click)="goToSignUp()">{{constVariable.btnRegisterAsClient}}</button>
+                    <button mat-raised-button (click)="goToSignUp(1)">{{constVariable.btnRegisterAsClient}}</button>
                 </div>
                 <div>
-                    <button mat-raised-button (click)="goToSignUp()">{{constVariable.btnRegisterAsIndividual}}</button>
-                </div>
-                <div>
-                    <button mat-raised-button (click)="goToSignUp()">{{constVariable.btnRegisterAsContractor}}</button>
-                </div>
-                <div>
-                    <button mat-raised-button
-                        (click)="goToSignUp()">{{constVariable.btnRegisterAsMaterialSupplier}}</button>
+                    <button mat-raised-button (click)="goToSignUp(2)">{{constVariable.btnRegisterAsContractor}}</button>
                 </div>
             </div>
         </div>

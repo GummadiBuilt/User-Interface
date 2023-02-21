@@ -18,7 +18,7 @@
                             fxLayout="column">
                             <mat-label>Registering as *</mat-label>
                             <mat-form-field appearance="outline">
-                                <mat-select formControlName="users" [(ngModel)]="roleId"
+                                <mat-select formControlName="users" [(value)]="roleId"
                                     (selectionChange)='onRegisterValueChange()'>
                                     <mat-option *ngFor="let role of applicationRoles" [value]="role.id">
                                         {{role.roleName}}

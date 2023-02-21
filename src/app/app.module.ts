@@ -67,6 +67,7 @@ import { RadioButtonRendererComponent } from './renderers/radio-button-renderer/
 import { HighchartsComponent } from './shared/highcharts/highcharts.component';
 import { ReadMoreComponent } from './home/read-more/read-more.component';
 import { SafePipe } from './shared/safe.pipe';
+import { EnquiriesComponent } from './enquiries/enquiries.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -152,6 +153,7 @@ export const MY_DATE_FORMATS = {
     HighchartsComponent,
     ReadMoreComponent,
     SafePipe,
+    EnquiriesComponent,
   ],
   imports: [
     BrowserModule,

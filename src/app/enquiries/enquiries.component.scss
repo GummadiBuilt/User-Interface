@@ -1,4 +1,4 @@
-.contractors {
+.enquiries {
     padding: 24px;
 }
 
@@ -23,7 +23,6 @@
     background-color: var(--ag-odd-row-background-color) !important;
 }
 
-//ag-grid cell text wrap in words
 ::ng-deep .ag-cell-wrap-text {
     word-break: break-word !important;
 }
@@ -60,7 +59,7 @@ mat-button-toggle {
     line-height: 32px !important;
 }
 
-.contractors-page mat-card {
+.enquiries-page mat-card {
     border-radius: 0px !important;
     padding: 24px !important;
 }

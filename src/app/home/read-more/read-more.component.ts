@@ -14,8 +14,11 @@ export class ReadMoreComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  goToSignUp() {
-    this.router.navigate(['/signup']);
+  goToSignUp(value: any) {
+    console.log(value);
+    let applicantRoleId = value;
+    // this.router.navigate(['/signup']);
+    this.router.navigate(['/signup', { userType: applicantRoleId }]);
   }
 
 }
