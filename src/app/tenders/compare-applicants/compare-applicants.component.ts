@@ -174,9 +174,12 @@ export class CompareApplicantsComponent implements OnInit {
   }
 
   exportToExcel(event: any) {
-    setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.userTable, 'compare.xlsx');
-    }, 500)
+    //this.applicationFormIds = params.get('applicationFormIds');
+      const applicantsArray = this.applicationFormIds.split(',');
+    this.ApiServicesService.exportExcelForCompareApplicants(this.tenderId, applicantsArray).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   statutoryCompliancesHeaders = ["ESI Registration", "EPF Registration", "GST Registration", "PAN Number",];
