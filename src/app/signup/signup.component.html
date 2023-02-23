@@ -30,7 +30,16 @@
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
-                            fxLayout="column">
+                            fxLayout="column" fxLayoutAlign="center start">
+                            <div class="info">
+                                <ul *ngIf="roleId == 1">
+                                    <li>Client will be able to create Tenders in the application</li>
+                                    <li>Approval of Final Tender Estimate by Client</li>
+                                </ul>
+                                <ul *ngIf="roleId == 2">
+                                    <li>Contractor who can bid on Tenders published</li>
+                                </ul>
+                            </div>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">

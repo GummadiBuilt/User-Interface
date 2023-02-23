@@ -43,7 +43,11 @@ export class ContactComponent implements OnInit {
       console.log(this.contactUsForm.value);
       this.ApiServicesService.enquiry(this.contactUsForm.value).subscribe({
         next: ((response: enquiryResopnse) => {
-          this.toastr.success('Successfully Submitted');
+          this.contactUsForm.reset();
+          Object.keys(this.contactUsForm.controls).forEach(key => {
+            this.contactUsForm.get(key)?.setErrors(null);
+          });
+          this.toastr.success('Thank you for reaching us out, will get back to you as soon as possible');
         }),
         error: (error => {
           console.log(error);

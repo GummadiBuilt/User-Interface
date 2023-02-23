@@ -49,6 +49,7 @@ export class PendingApprovalsComponent implements OnInit {
       headerCheckboxSelection: headerCheckboxSelection,
     },
     { headerName: 'Year of Establishment', field: 'yearOfEstablishment', flex: 2, minWidth: 200, },
+    { headerName: 'Role', field: 'applicationRole.roleName', flex: 2 },
     { headerName: 'Type of Establishment', field: 'typeOfEstablishment', flex: 4 },
     { headerName: 'Address', field: 'address', flex: 4 },
     { headerName: 'City', field: 'city.cityName', flex: 4 },

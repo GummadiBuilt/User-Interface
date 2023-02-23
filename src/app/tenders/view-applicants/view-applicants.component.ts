@@ -155,9 +155,9 @@ export class ViewApplicantsComponent implements OnInit {
     // console.log(params.data);
     var selectionCounts = this.gridApi.getSelectedNodes();
     let selectedRowsCount = selectionCounts.length;
-    if (selectedRowsCount > 5) {
+    if (selectedRowsCount > 10) {
       this.gridApi.deselectIndex(0, true);
-      this.toastr.warning('Only 5 Applicants to be Compared');
+      this.toastr.warning('Only 10 Applicants to be Compared');
     }
   }
   onSelect() {

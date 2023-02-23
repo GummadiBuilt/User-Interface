@@ -53,6 +53,10 @@ form mat-label {
     color: #841618;
 }
 
+.text-maroon {
+    color: #841618;
+}
+
 .register-form .mat-button {
     background-color: #841618;
     color: white;
@@ -109,4 +113,11 @@ form mat-label {
 .mat-step-header .mat-step-icon-state-edit {
     background-color: #841618 !important;
     color: white !important;
+}
+
+.info ul {
+    margin: 0px !important;
+    padding: 12px !important;
+    font-size: 12px !important;
+    color: #841618;
 }
