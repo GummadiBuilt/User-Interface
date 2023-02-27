@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
 import { ContactComponent } from './contact/contact.component';
 import { ServiceComponent } from './service/service.component';
-import { CorevaluesComponent } from './corevalues/corevalues.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -68,6 +67,7 @@ import { RadioButtonRendererComponent } from './renderers/radio-button-renderer/
 import { HighchartsComponent } from './shared/highcharts/highcharts.component';
 import { ReadMoreComponent } from './home/read-more/read-more.component';
 import { SafePipe } from './shared/safe.pipe';
+import { EnquiriesComponent } from './enquiries/enquiries.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -115,7 +115,6 @@ export const MY_DATE_FORMATS = {
     HomeComponent,
     ContactComponent,
     ServiceComponent,
-    CorevaluesComponent,
     ProjectsComponent,
     AboutComponent,
     LoginComponent,
@@ -154,6 +153,7 @@ export const MY_DATE_FORMATS = {
     HighchartsComponent,
     ReadMoreComponent,
     SafePipe,
+    EnquiriesComponent,
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,7 @@ import { contractorUsersResponse } from './contractorUsersResponse';
 import { userProfileResopnse } from '../profile/userProfileResponse';
 import { appliedTenderResopnse } from '../tenders/applied-tenders/appliedTenderResponse';
 import { tenderApplicantRankingResopnse } from '../tenders/view-applicants/tenderApplicantRankingResopnse';
+import { enquiryResopnse } from '../contact/enquiryResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -176,10 +177,10 @@ export class ApiServicesService {
     return this.httpClient.get<applicantsPqFormResponse>(this.url + '/tender-applicants/tender/' + tenderId + '/compare/' + applicantIds);
   }
 
-//Export to excel for compare applicants
-public exportExcelForCompareApplicants(tenderId: any, applicantIds: any) {
-  return this.httpClient.get(this.url + '/tender-applicants/tender/' + tenderId + '/export-to-excel/' + applicantIds);
-}
+  //Export to excel for compare applicants
+  public exportExcelForCompareApplicants(tenderId: any, applicantIds: any) {
+    return this.httpClient.get(this.url + '/tender-applicants/tender/' + tenderId + '/export-to-excel/' + applicantIds);
+  }
 
   // Post API that allow qualified contractors to save/submit Financial & Technical bid info
   public tenderBidInfo(tenderId: any, data: any): Observable<tenderResopnse> {
@@ -204,6 +205,16 @@ public exportExcelForCompareApplicants(tenderId: any, applicantIds: any) {
   //Recommend a Contractor for Tender
   public recommendContractorForTender(tenderId: any, applicationFormId: any, data: any) {
     return this.httpClient.put(this.url + '/tender-applicants/tender/' + tenderId + '/recommend/' + applicationFormId, data);
+  }
+
+  //Get all enquiries
+  public getEnquiries() {
+    return this.httpClient.get(this.url + '/enquiry');
+  }
+
+  // Post API that enquiry about application
+  public enquiry(data: any): Observable<enquiryResopnse> {
+    return this.httpClient.post<enquiryResopnse>(this.url + '/enquiry/', data);
   }
 
   //download files converstion

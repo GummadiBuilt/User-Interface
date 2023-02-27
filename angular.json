@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["moment","base64-js","js-sha256","lodash"],
+            "allowedCommonJsDependencies": ["moment","base64-js","js-sha256","lodash","highcharts"],
             "outputPath": "dist/user-interface",
             "index": "src/index.html",
             "main": "src/main.ts",

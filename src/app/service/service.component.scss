@@ -6,17 +6,31 @@
 .services-page {
     width: 100%;
     min-height: 100%;
+    background-color: white;
 }
 
 .services-body {
     padding: 24px 40px 40px 40px;
 }
 
-mat-card {
-    border-radius: 10px;
-    padding: 32px;
-    background-color: #F3F3F3;
-    height: 100% !important;
+.services-page h5 {
+    font-family: "Saira", sans-serif;
+    font-size: 20px !important;
+    font-weight: 480;
+    text-align: justify;
+    line-height: 28px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.w-40 {
+    width: 40px;
+}
+
+.w-1000 {
+    width: 1000px;
 }
 
 h1 {
@@ -37,31 +51,30 @@ h3 {
     text-align: center;
 }
 
-.services-footer {
-    background-color: #841618;
-    min-height: 120px;
-    opacity: 0.7;
-}
-
-.services-footer-bg {
-    margin-top: auto;
-    background-image: url('^assets/images/servicesfooterbg.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.services-footer h1 {
+td,
+th {
     font-family: "Saira", sans-serif;
-    color: white !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    font-weight: 700;
+    padding: 10px;
+    font-size: 16px;
 }
 
-.services-footer h3 {
-    font-family: "Saira", sans-serif;
-    color: white !important;
-    padding: 0;
+th {
+    color: #841618;
+    font-size: 16px;
     font-weight: 500;
+}
+
+.font-460 {
+    font-weight: 460 !important;
+}
+
+.font-600 {
+    font-weight: 600 !important;
+}
+
+table,
+th,
+td {
+    border: 1px solid #841618;
+    border-collapse: collapse;
 }

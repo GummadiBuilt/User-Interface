@@ -1,56 +1,179 @@
 <div class="services-page" fxLayout="column">
-    <div class="services-body" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="40px">
-        <h1>Services</h1>
-        <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="40px grid">
-            <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="40%">
-                <mat-card>
-                    <img mat-card-image src="assets/images/servicebg1.png">
-                    <mat-card-content fxLayoutAlign="center center">
-                        <h3>Appointment of Trade Contractors Through Online Portal</h3>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-            <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="40%">
-                <mat-card>
-                    <img mat-card-image src="assets/images/servicebg2.png">
-                    <mat-card-content fxLayoutAlign="center center">
-                        <h3>Selection & Purchase of Construction Equipments and Tools</h3>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-            <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="40%">
-                <mat-card>
-                    <img mat-card-image src="assets/images/servicebg1.png">
-                    <mat-card-content fxLayoutAlign="center center">
-                        <h3>Selection of Suppliers and Purchase of Materials Through Online Portal</h3>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-            <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="40%">
-                <mat-card>
-                    <img mat-card-image src="assets/images/servicebg4.png">
-                    <mat-card-content fxLayoutAlign="center center">
-                        <h3>Selection & Acquiring Construction Equipments Through Rental Agreements</h3>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </div>
+    <div class="services-body" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
+        <h1>{{constVariable.services}}</h1>
+        <h5>{{constVariable.servicesMsg1}}</h5>
+        <h5>{{constVariable.servicesMsg2}}</h5>
+        <table>
+            <thead>
+                <tr>
+                    <ng-container *ngFor="let item of tableHeaderData">
+                        <th [style]="item.width" [rowSpan]="item.rowspan" [colSpan]="item.colspan">
+                            {{item.name}}
+                        </th>
+                    </ng-container>
+                </tr>
+                <tr>
+                    <ng-container *ngFor="let item of tableHeaderData2">
+                        <th [style]="item.width">{{item.name}}</th>
+                    </ng-container>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="font-460" *ngFor="let item of tableData">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-600" *ngFor="let item of tableData3">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-460" *ngFor="let item of tableData3_1">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-600" *ngFor="let item of tableData4">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-460" *ngFor="let item of tableData4_1">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-600" *ngFor="let item of tableData5">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-460" *ngFor="let item of tableData5_1">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-600" *ngFor="let item of tableData6">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-460" *ngFor="let item of tableData6_1">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-600" *ngFor="let item of tableData7">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+                <tr class="font-460" *ngFor="let item of tableData7_1">
+                    <td class="w-40 text-center">
+                        {{item.position}}
+                    </td>
+                    <td class="w-1000">
+                        {{item.task}}
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.gummadi" class="fa-solid fa-check"></i>
+                    </td>
+                    <td class="w-40 text-center">
+                        <i *ngIf="item.client" class="fa-solid fa-check"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="services-footer-bg">
-        <div class="services-footer" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
-            <div fxLayout="column" fxLayoutAlign="center center">
-                <h1>100+</h1>
-                <h3>Finished Projects</h3>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="center center">
-                <h1>100+</h1>
-                <h3>Expert Developers</h3>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="center center">
-                <h1>250+</h1>
-                <h3>Expert Contractors</h3>
-            </div>
-        </div>
-    </div>
-
 </div>

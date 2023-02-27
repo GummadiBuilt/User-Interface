@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { ApiServicesService } from '../shared/api-services.service';
 import { PageConstants } from '../shared/application.constants';
+import { applicationRoles, registrationMasterData } from '../shared/responses';
+import { enquiryResopnse } from './enquiryResponse';
 
 @Component({
   selector: 'app-contact',
@@ -12,22 +16,47 @@ export class ContactComponent implements OnInit {
   contactUsForm!: FormGroup;
   locationUrl: string = environment.locationUrl;
   public constVariable = PageConstants;
-  categories = [{ id: 'client', roleName: 'Client' }, { id: 'contractor', roleName: 'Contractor' }, { id: 'individual', roleName: 'Individual' }];
-  constructor(private _formBuilder: FormBuilder,) { }
+  applicationRoles = new Array<applicationRoles>();
+
+  constructor(private _formBuilder: FormBuilder, private ApiServicesService: ApiServicesService, private toastr: ToastrService,) { }
 
   ngOnInit(): void {
     this.contactUsForm = this._formBuilder.group({
-      name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      category: [null, Validators.required],
-      email: [null, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      phone: [null, [Validators.required, Validators.pattern("^[0-9]*$"),
+      userName: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      applicationRole: [null, Validators.required],
+      emailAddress: [null, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      mobileNumber: [null, [Validators.required, Validators.pattern("^[0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
-      description: [null, [Validators.required, Validators.maxLength(250)]],
+      enquiryDescription: [null, [Validators.required, Validators.maxLength(250)]],
+    });
+    this.getMasterdata();
+  }
+
+  getMasterdata() {
+    this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
+      this.applicationRoles = data.applicationRoles.filter(item => item.displayToAll === true);
     });
   }
 
   onSubmit() {
-    console.log(this.contactUsForm.value);
+    if (this.contactUsForm.valid) {
+      console.log(this.contactUsForm.value);
+      this.ApiServicesService.enquiry(this.contactUsForm.value).subscribe({
+        next: ((response: enquiryResopnse) => {
+          this.contactUsForm.reset();
+          Object.keys(this.contactUsForm.controls).forEach(key => {
+            this.contactUsForm.get(key)?.setErrors(null);
+          });
+          this.toastr.success('Thank you for reaching us out, will get back to you as soon as possible');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
+    }
+    else {
+      console.log('Enquiry Form is invalid');
+    }
   }
 
 }

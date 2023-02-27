@@ -20,12 +20,12 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.category}}</mat-label>
-                                    <mat-select formControlName="category">
-                                        <mat-option *ngFor="let category of categories" [value]="category.id">
-                                            {{category.roleName}}
+                                    <mat-select formControlName="applicationRole">
+                                        <mat-option *ngFor="let role of applicationRoles" [value]="role.id">
+                                            {{role.roleName}}
                                         </mat-option>
                                     </mat-select>
-                                    <mat-error *ngIf="contactUsForm.controls['category'].errors?.['required']">
+                                    <mat-error *ngIf="contactUsForm.controls['applicationRole'].errors?.['required']">
                                         {{constVariable.selectCategory}}
                                     </mat-error>
                                 </mat-form-field>
@@ -33,14 +33,14 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.name}}</mat-label>
-                                    <input matInput placeholder="Name" inputmode="tel" formControlName="name">
-                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['required']">
+                                    <input matInput placeholder="Name" inputmode="tel" formControlName="userName">
+                                    <mat-error *ngIf="contactUsForm.controls['userName'].errors?.['required']">
                                         {{constVariable.nameRequired}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['minlength']">
+                                    <mat-error *ngIf="contactUsForm.controls['userName'].errors?.['minlength']">
                                         {{constVariable.minThreeChar}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['name'].errors?.['maxlength']">
+                                    <mat-error *ngIf="contactUsForm.controls['userName'].errors?.['maxlength']">
                                         {{constVariable.maxFiftyChar}}
                                     </mat-error>
                                 </mat-form-field>
@@ -48,11 +48,11 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.emailId}}</mat-label>
-                                    <input matInput placeholder="Email Id" formControlName="email">
-                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['required']">
+                                    <input matInput placeholder="Email Id" formControlName="emailAddress">
+                                    <mat-error *ngIf="contactUsForm.controls['emailAddress'].errors?.['required']">
                                         {{constVariable.emailRequired}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['email'].errors?.['pattern']">
+                                    <mat-error *ngIf="contactUsForm.controls['emailAddress'].errors?.['pattern']">
                                         {{constVariable.validEmail}}
                                     </mat-error>
                                 </mat-form-field>
@@ -63,15 +63,16 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.mobileNumber}}</mat-label>
-                                    <input numbersOnly matInput placeholder="Mobile Number" formControlName="phone">
-                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['required']">
+                                    <input numbersOnly matInput placeholder="Mobile Number"
+                                        formControlName="mobileNumber">
+                                    <mat-error *ngIf="contactUsForm.controls['mobileNumber'].errors?.['required']">
                                         {{constVariable.requireMobilenumber}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['phone'].errors?.['pattern']">
+                                    <mat-error *ngIf="contactUsForm.controls['mobileNumber'].errors?.['pattern']">
                                         {{constVariable.validMobileNumber}}
                                     </mat-error>
                                     <mat-error
-                                        *ngIf="contactUsForm.controls['phone'].errors?.['minlength'] || contactUsForm.controls['phone'].errors?.['maxlength']">
+                                        *ngIf="contactUsForm.controls['mobileNumber'].errors?.['minlength'] || contactUsForm.controls['mobileNumber'].errors?.['maxlength']">
                                         {{constVariable.mobileTendDigits}}
                                     </mat-error>
                                 </mat-form-field>
@@ -79,12 +80,14 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.detailsOfQuery}}</mat-label>
-                                    <textarea matInput placeholder="Details of Query" formControlName="description"
-                                        cols="20" rows="6"></textarea>
-                                    <mat-error *ngIf="contactUsForm.controls['description'].errors?.['required']">
+                                    <textarea matInput placeholder="Details of Query"
+                                        formControlName="enquiryDescription" cols="20" rows="6"></textarea>
+                                    <mat-error
+                                        *ngIf="contactUsForm.controls['enquiryDescription'].errors?.['required']">
                                         {{constVariable.detailsRequired}}
                                     </mat-error>
-                                    <mat-error *ngIf="contactUsForm.controls['description'].errors?.['maxlength']">
+                                    <mat-error
+                                        *ngIf="contactUsForm.controls['enquiryDescription'].errors?.['maxlength']">
                                         {{constVariable.max250Char}}
                                     </mat-error>
                                 </mat-form-field>
@@ -143,6 +146,7 @@
                 <div><i class="icon-size-20 fa-solid fa-phone-volume"></i></div>
                 <div>
                     <p>{{constVariable.phoneOfc}}</p>
+                    <p>{{constVariable.telOfc}}</p>
                 </div>
             </div>
             <div fxLayout="row" fxLayoutGap="12px">
@@ -152,7 +156,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div fxLayout="column" fxLayoutGap="8px">
             <div>
                 <h2 class="line">{{constVariable.getInTouch}}</h2>

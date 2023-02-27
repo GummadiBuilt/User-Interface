@@ -47,6 +47,7 @@ export class SignupComponent implements OnInit {
   typeOfEstablishmentCtrl = new FormControl('', Validators.required);
   private allowFreeTextAddTypeOfEst = false;
   roleId: any;
+  userType: any;
 
   @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete!: MatAutocomplete;
@@ -57,10 +58,16 @@ export class SignupComponent implements OnInit {
 
   stepperOrientation!: Observable<StepperOrientation>;
   constructor(private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
-    private ApiServicesService: ApiServicesService, private toastr: ToastrService, private router: Router) {
+    private ApiServicesService: ApiServicesService, private toastr: ToastrService, private router: Router, private route: ActivatedRoute,) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+
+    //Set default value on drop down when redirect from read more page
+    this.route.paramMap.subscribe(params => {
+      this.userType = params.get('userType');
+      this.roleId = parseInt(this.userType);
+    });
   }
 
   ngOnInit(): void {
@@ -83,7 +90,14 @@ export class SignupComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
     });
+    this.companyDetails.get('users')?.setValue(this.roleId);
     this.getMasterdata();
+    //Set default value on drop down when redirect from read more page
+    if (this.roleId !== 2) {
+      this.companyDetails.get('typeOfEstablishmentCtrl')?.disable()
+    } else {
+      this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();
+    }
     //mtachips
     this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
       startWith(null),
@@ -225,6 +239,7 @@ export class SignupComponent implements OnInit {
     }
   }
   onSubmit() {
+    console.log(this.companyDetails.value);
     this.companyDetails.controls['typeOfEstablishmentCtrl'].setValue(this.typeOfEstablishment.map(item => item.establishmentDescription));
     console.log('cntrl', this.typeOfEstablishmentCtrl);
     if (this.companyDetails.valid && this.personalDetails.valid) {
@@ -234,7 +249,7 @@ export class SignupComponent implements OnInit {
         (response => {
           if (response['status'] == 200) {
             console.log(response);
-            this.toastr.success('Successfully Registered, login credentials will be sent to mail');
+            this.toastr.success('Successfully Registered,your registration is submitted to admin for approval. Once approved you will receive temporary credentials to registered email address.');
             this.router.navigate(['/home']);
           }
         }),
