@@ -1,3 +1,12 @@
+# [1.11.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.10.0...v1.11.0) (2023-02-27)
+
+
+### Features
+
+* **contact.component.ts:** api integration in contact us page ([d23f82f](https://github.com/GummadiBuilt/User-Interface/commit/d23f82f26f2222d9063e981b6d39feabe566da47))
+* **home.component.ts:** changed page designs in home read more, services, about us ([6458382](https://github.com/GummadiBuilt/User-Interface/commit/64583829110fcf4a694ea9fdcf657e8c916cdc2e))
+* **signup.component.ts:** fixed message on submit in contact, info added in signup ([42d8bdc](https://github.com/GummadiBuilt/User-Interface/commit/42d8bdc945965dadd0c93d5be4c4a6611c6a0b32))
+
 # [1.10.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.9.0...v1.10.0) (2023-02-20)
 
 
