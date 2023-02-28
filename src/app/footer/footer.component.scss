@@ -1,0 +1,56 @@
+.large-footer {
+    background-color: #841618;
+    color: white;
+    padding: 24px;
+    width: 100%;
+}
+
+.large-footer h5 {
+    font-size: 14px;
+}
+
+.large-footer a {
+    text-decoration: none;
+    color: white;
+}
+
+.large-footer a:hover {
+    color: rgb(106, 161, 245);
+}
+
+::ng-deep .large-footer .p-0 {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+
+::ng-deep .large-footer .icon-size-20 {
+    font-size: 24px !important;
+}
+
+.fa-linkedin:hover {
+    color: #007bb6;
+    cursor: pointer;
+}
+
+.fa-facebook:hover {
+    color: #3b5998;
+    cursor: pointer;
+}
+
+.fa-instagram:hover {
+    color: #517fa4;
+    cursor: pointer;
+}
+
+.fa-twitter:hover {
+    color: #00aced;
+    cursor: pointer;
+}
+
+.line {
+    padding-bottom: 4px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    width: fit-content;
+}

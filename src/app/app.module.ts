@@ -68,6 +68,7 @@ import { HighchartsComponent } from './shared/highcharts/highcharts.component';
 import { ReadMoreComponent } from './home/read-more/read-more.component';
 import { SafePipe } from './shared/safe.pipe';
 import { EnquiriesComponent } from './enquiries/enquiries.component';
+import { FooterComponent } from './footer/footer.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -154,6 +155,7 @@ export const MY_DATE_FORMATS = {
     ReadMoreComponent,
     SafePipe,
     EnquiriesComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

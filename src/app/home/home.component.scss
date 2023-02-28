@@ -13,8 +13,8 @@
 }
 
 .home-page-body {
-    padding-top: 120px !important;
-    padding-left: 40px !important;
+    height: 100%;
+    padding: 100px 40px 40px 40px !important;
 }
 
 .home-page-body h1 {
@@ -22,13 +22,14 @@
     color: #841618;
     font-size: 50px;
     font-weight: 700;
+    line-height: 1;
 }
 
 .home-page-body h2 {
     max-width: 492px;
     font-family: 'Saira';
     font-size: 25px;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .home-page-body button {

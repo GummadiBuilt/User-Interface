@@ -14,7 +14,6 @@ import { enquiryResopnse } from './enquiryResponse';
 })
 export class ContactComponent implements OnInit {
   contactUsForm!: FormGroup;
-  locationUrl: string = environment.locationUrl;
   public constVariable = PageConstants;
   applicationRoles = new Array<applicationRoles>();
 
