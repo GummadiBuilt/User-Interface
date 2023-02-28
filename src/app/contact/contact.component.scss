@@ -9,26 +9,6 @@
     background-color: white !important;
 }
 
-.large-footer {
-    background-color: #841618;
-    color: white;
-    padding: 24px;
-    width: 100%;
-}
-
-.large-footer h5 {
-    font-size: 14px;
-}
-
-.large-footer a {
-    text-decoration: none;
-    color: white;
-}
-
-.large-footer a:hover {
-    color: rgb(106, 161, 245);
-}
-
 .small-footer {
     background-color: #545554;
     color: white;
@@ -93,31 +73,4 @@
 
 ::ng-deep .contactus-page .icon-size-20 {
     font-size: 24px !important;
-}
-
-.fa-linkedin:hover {
-    color: #007bb6;
-    cursor: pointer;
-}
-
-.fa-facebook:hover {
-    color: #3b5998;
-    cursor: pointer;
-}
-
-.fa-instagram:hover {
-    color: #517fa4;
-    cursor: pointer;
-}
-
-.fa-twitter:hover {
-    color: #00aced;
-    cursor: pointer;
-}
-
-.line {
-    padding-bottom: 4px;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    width: fit-content;
 }

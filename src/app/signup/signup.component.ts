@@ -90,7 +90,10 @@ export class SignupComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
     });
-    this.companyDetails.get('users')?.setValue(this.roleId);
+    window.setTimeout(() => {
+      this.companyDetails.get('users')?.patchValue(this.roleId);
+    }, 500)
+
     this.getMasterdata();
     //Set default value on drop down when redirect from read more page
     if (this.roleId !== 2) {

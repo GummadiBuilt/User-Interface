@@ -88,10 +88,12 @@
                                         [matChipInputAddOnBlur]=true (matChipInputTokenEnd)="add($event)">
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                    <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
-                                        [value]="typeOfEstab">
-                                        {{typeOfEstab}}
-                                    </mat-option>
+                                    <ng-container *ngIf="this.companyDetails.get('users')?.value == 2">
+                                        <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
+                                            [value]="typeOfEstab">
+                                            {{typeOfEstab}}
+                                        </mat-option>
+                                    </ng-container>
                                 </mat-autocomplete>
                                 <mat-error *ngIf="companyDetails.get('typeOfEstablishmentCtrl')?.errors?.['required']">
                                     Atleast 1 type should be selected
