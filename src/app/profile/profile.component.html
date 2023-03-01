@@ -161,34 +161,29 @@
                     <div *ngIf="userRole?.includes('contractor')" fxFlex="100%" fxLayout="column">
                       <mat-label>Type of Establishment</mat-label>
                       <mat-form-field class="example-chip-list" appearance="outline">
-                        <mat-chip-list #chipList aria-label="Type of Establishment selection"
-                          formControlName="typeOfEstablishment">
-                          <mat-chip *ngFor="let typeOfEst of typeOfEstablishments" [selectable]=true [removable]=true
-                            (removed)="remove(typeOfEst)">
-                            {{typeOfEst}}
+                        <mat-chip-list #chipList required formControlName="typeOfEstablishment">
+                          <mat-chip *ngFor="let toe of typeOfEstablishments" [removable]="removable"
+                            (removed)="remove(toe)">
+                            {{toe.establishmentDescription}}
                             <button matChipRemove>
                               <i class="fa-solid fa-xmark"></i>
                             </button>
                           </mat-chip>
-                          <input placeholder="Select type..." #typeOfEstablishmentInput matChipInput
-                            [formControl]="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
-                            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                            [matChipInputAddOnBlur]=true>
+                          <input #typeOfEstablishmentInput placeholder="Select type..." [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)" [matAutocomplete]="toeAutocomplete"
+                            formControlName="typeOfEstablishmentInput" />
                         </mat-chip-list>
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                          <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
-                            [value]="typeOfEstab">
-                            {{typeOfEstab}}
+                        <mat-autocomplete #toeAutocomplete="matAutocomplete" (optionSelected)="select($event);">
+                          <mat-option *ngFor="let toe of filteredTypeOfEstablishments | async" [value]="toe">
+                            {{toe.establishmentDescription}}
                           </mat-option>
                         </mat-autocomplete>
-                        <mat-error *ngIf="editUserForm.get('typeOfEstablishment')?.errors?.['required']">
-                          Atleast 1 type should be selected
-                        </mat-error>
+                        <mat-error>Atleast 1 type should be selected</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
                 </div>
-
                 <div fxLayout="column" fxLayoutGap="8px">
                   <div>
                     <h3>Contact Person Information</h3>

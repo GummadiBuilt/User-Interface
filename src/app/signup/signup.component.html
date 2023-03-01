@@ -71,33 +71,31 @@
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="93%" fxFlex.xl="93%"
                             fxLayout="column" *ngIf="roleId == 2">
                             <mat-label>Type of Establishment *</mat-label>
-                            <mat-form-field class="example-chip-list" appearance="outline">
-                                <mat-chip-list #chipList aria-label="Type of Establishment selection"
-                                    formControlName="typeOfEstablishmentCtrl">
-                                    <mat-chip *ngFor="let typeOfEst of typeOfEstablishment"
-                                        (removed)="remove(typeOfEst)">
-                                        {{typeOfEst.establishmentDescription}}
+                            <mat-form-field appearance="outline">
+                                <mat-chip-list #chipList required formControlName="typeOfEstablishmentCtrl">
+                                    <mat-chip *ngFor="let toe of typeOfEstablishments" [removable]="removable"
+                                        (removed)="remove(toe)">
+                                        {{toe.establishmentDescription}}
                                         <button matChipRemove>
                                             <i class="fa-solid fa-xmark"></i>
                                         </button>
                                     </mat-chip>
-                                    <input placeholder="Select type..." #typeOfEstablishmentInput
-                                        formControlName="typeOfEstablishmentCtrl" [matAutocomplete]="auto"
+                                    <input #typeOfEstablishmentInput placeholder="Select type..."
                                         [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]=true (matChipInputTokenEnd)="add($event)">
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)"
+                                        [matAutocomplete]="toeAutocomplete"
+                                        formControlName="typeOfEstablishmentInput" />
                                 </mat-chip-list>
-                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                <mat-autocomplete #toeAutocomplete="matAutocomplete" (optionSelected)="select($event);">
                                     <ng-container *ngIf="this.companyDetails.get('users')?.value == 2">
-                                        <mat-option *ngFor="let typeOfEstab of filteredTypeOfEstablishments | async"
-                                            [value]="typeOfEstab">
-                                            {{typeOfEstab}}
+                                        <mat-option *ngFor="let toe of filteredTypeOfEstablishments | async"
+                                            [value]="toe">
+                                            {{toe.establishmentDescription}}
                                         </mat-option>
                                     </ng-container>
                                 </mat-autocomplete>
-                                <mat-error *ngIf="companyDetails.get('typeOfEstablishmentCtrl')?.errors?.['required']">
-                                    Atleast 1 type should be selected
-                                </mat-error>
+                                <mat-error>Atleast 1 type should be selected</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
