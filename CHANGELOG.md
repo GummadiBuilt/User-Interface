@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.11.0...v1.12.0) (2023-02-28)
+
+
+### Features
+
+* **footer.component.ts:** added footer in all pages ([1e85167](https://github.com/GummadiBuilt/User-Interface/commit/1e85167a24c6be9ddebf60ea3097aeefc960231f))
+* **signup.component.ts:** fixed mat chips when redirecting from read more page ([d2091c1](https://github.com/GummadiBuilt/User-Interface/commit/d2091c1481feda6f1c9228add643fbf076bf6745))
+
 # [1.11.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.10.0...v1.11.0) (2023-02-27)
 
 
