@@ -2,7 +2,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +20,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import moment from 'moment';
+import { TypeOfEstablishment } from '../signup/type-of-establishment';
 
 const moment1 = _rollupMoment || _moment;
 export const MY_FORMATS1 = {
@@ -63,12 +64,13 @@ export class ProfileComponent implements OnInit {
   cities = new Array<registrationCitiesData>();
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  filteredTypeOfEstablishments: any;
+  allTypeOfEstablishments: typeOfEstablishment[] = [];
   typeOfEstablishments: any[] = [];
-  allTypeOfEstablishments: string[] = [];
-  filteredTypeOfEstablishments!: Observable<string[]>;
-  @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
-  typeOfEstablishmentCtrl = new FormControl();
+  public selectable = true;
+  public removable = true;
+  public addOnBlur = true;
+  @ViewChild("chipList") chipList!: MatChipList;
 
   countryList = new Array<countries>();
   statesList = new Array<registrationStatesData>();
@@ -97,7 +99,8 @@ export class ProfileComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      typeOfEstablishment: [''],
+      typeOfEstablishmentInput: [null],
+      typeOfEstablishment: [this.typeOfEstablishments, this.validateToe],
       yearOfEstablishment: new FormControl(moment1(), [Validators.required]),
       address: ['', Validators.required],
       countryIsoCode: ['', Validators.required],
@@ -108,13 +111,75 @@ export class ProfileComponent implements OnInit {
     this.getUserProfileData();
     this.getMasterdata();
     this.enableForm(false);
-    this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
-      startWith(''),
-      map((te: string | null) => te ? this._filter(te) : this.allTypeOfEstablishments.slice()));
+    this.filteredTypeOfEstablishments = this.editUserForm.get("typeOfEstablishmentInput")?.valueChanges.pipe(
+      startWith(""),
+      map(value => this.typeOfEstablishmentFilter(value))
+    );
   }
-  _filter(value: any): any[] {
-    const string = this.allTypeOfEstablishments.filter(te => te.toLowerCase().includes(value.toLowerCase()));
-    return string;
+  private typeOfEstablishmentFilter(value: any): TypeOfEstablishment[] {
+    const filterValue =
+      value === null || value instanceof Object ? "" : value.toLowerCase();
+    const matches = this.allTypeOfEstablishments.filter(typeOfEstablishment =>
+      typeOfEstablishment.establishmentDescription.toLowerCase().includes(filterValue)
+    );
+    const formValue = this.editUserForm.get("typeOfEstablishment")?.value;
+    return formValue === null
+      ? matches
+      : matches.filter(x => !formValue?.find((y: any) => y.establishmentDescription === x.establishmentDescription));
+  }
+
+  private validateToe(typeOfEstablishments: FormControl) {
+    if (typeOfEstablishments.value && typeOfEstablishments.value.length === 0) {
+      return {
+        validateTypeOfEstablishmentsArray: { valid: false }
+      };
+    }
+    return null;
+  }
+
+  public select(event: MatAutocompleteSelectedEvent): void {
+    if (!event.option) {
+      return;
+    }
+    const value = event.option.value;
+    if (value && value instanceof Object && !this.typeOfEstablishments?.includes(value)) {
+      this.typeOfEstablishments?.push(value);
+      this.editUserForm.get("typeOfEstablishment")?.setValue(this.typeOfEstablishments);
+      this.editUserForm.get("typeOfEstablishmentInput")?.setValue("");
+    }
+  }
+
+  public add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if (value.trim()) {
+      const matches = this.allTypeOfEstablishments.filter(
+        typeOfEstablishment => typeOfEstablishment.establishmentDescription.toLowerCase() === value
+      );
+      const formValue = this.editUserForm.get("typeOfEstablishment")?.value;
+      const matchesNotYetSelected =
+        formValue === null
+          ? matches
+          : matches.filter(x => !formValue.find((y: any) => y.establishmentDescription === x.establishmentDescription));
+      if (matchesNotYetSelected.length === 1) {
+        this.typeOfEstablishments?.push(matchesNotYetSelected[0]);
+        this.editUserForm.get("typeOfEstablishment")?.setValue(this.typeOfEstablishments);
+        this.editUserForm.get("typeOfEstablishmentInput")?.setValue("");
+      }
+    }
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  public remove(typeOfEstablishment: TypeOfEstablishment) {
+    const index = this.typeOfEstablishments?.indexOf(typeOfEstablishment)!;
+    if (index >= 0) {
+      this.typeOfEstablishments?.splice(index, 1);
+      this.editUserForm.get("typeOfEstablishment")?.setValue(this.typeOfEstablishments);
+      this.editUserForm.get("typeOfEstablishmentInput")?.setValue("");
+    }
   }
 
   chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
@@ -128,18 +193,24 @@ export class ProfileComponent implements OnInit {
   getUserProfileData() {
     this.ApiServicesService.getUserProfile().subscribe((data: any) => {
       this.userData = data;
+      console.log(this.userData);
       this.editUserForm.get('contactFirstName')?.patchValue(data.contactFirstName);
       this.editUserForm.get('contactLastName')?.patchValue(data.contactLastName);
       this.editUserForm.get('contactDesignation')?.patchValue(data.contactDesignation);
       this.editUserForm.get('contactPhoneNumber')?.patchValue(data.contactPhoneNumber);
       this.editUserForm.get('contactEmailAddress')?.patchValue(data.contactEmailAddress);
       this.editUserForm.get('companyName')?.patchValue(data.companyName);
-      this.typeOfEstablishments = data.typeOfEstablishment;
-      this.editUserForm.get('typeOfEstablishment')?.patchValue(data.typeOfEstablishment);
+      this.typeOfEstablishments = data.typeOfEstablishment.map((item: any) => {
+        const header = 'establishmentDescription';
+        const value = item;
+        return {
+          [header]: value
+        };
+      });
+      this.editUserForm.get('typeOfEstablishment')?.patchValue(this.typeOfEstablishments);
       const dateString = data.yearOfEstablishment;
-      const momentVariable = moment(dateString, 'YYYY'); 
+      const momentVariable = moment(dateString, 'YYYY');
       this.editUserForm.get('yearOfEstablishment')?.patchValue(momentVariable);
-      // console.log(this.editUserForm.get('yearOfEstablishment')?.value);
       this.editUserForm.get('address')?.patchValue(data.address);
       this.editUserForm.get('countryIsoCode')?.patchValue(data.country.countryIsoCode);
       this.onCountrySelectEvent(data.country.countryIsoCode);
@@ -150,20 +221,6 @@ export class ProfileComponent implements OnInit {
       const shortName = this.userData?.contactFirstName.substring(0, 1) + this.userData?.contactLastName.substring(0, 1);
       this.initials = shortName;
     });
-  }
-
-  //mat-chips
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.typeOfEstablishments.push(event.option.viewValue);
-    this.typeOfEstablishmentInput.nativeElement.value = '';
-    this.typeOfEstablishmentCtrl.setValue(null);
-  }
-
-  remove(chip: any): void {
-    const index = this.typeOfEstablishments.indexOf(chip);
-    if (index >= 0) {
-      this.typeOfEstablishments.splice(index, 1);
-    }
   }
 
   //disable form on page load and enable on button click
@@ -178,6 +235,13 @@ export class ProfileComponent implements OnInit {
   }
   //reset form
   reset() {
+    this.typeOfEstablishments = this.userData.typeOfEstablishment.map((item: any) => {
+      const header = 'establishmentDescription';
+      const value = item;
+      return {
+        [header]: value
+      };
+    });
     this.editUserForm.reset({
       contactFirstName: this.userData?.contactFirstName,
       contactLastName: this.userData?.contactLastName,
@@ -185,9 +249,8 @@ export class ProfileComponent implements OnInit {
       contactPhoneNumber: this.userData?.contactPhoneNumber,
       contactEmailAddress: this.userData?.contactEmailAddress,
       companyName: this.userData?.companyName,
-      typeOfEstablishment: this.userData?.typeOfEstablishment,
+      typeOfEstablishment: this.typeOfEstablishments,
       yearOfEstablishment: moment(this.userData?.yearOfEstablishment, 'YYYY'),
-      // yearOfEstablishment: this.userData?.yearOfEstablishment,
       address: this.userData?.address,
       countryIsoCode: this.userData?.country?.countryIsoCode,
       stateIsoCode: this.userData?.state?.stateIsoCode,
@@ -200,8 +263,7 @@ export class ProfileComponent implements OnInit {
 
   getMasterdata() {
     this.ApiServicesService.getRegistrationMasterData().subscribe((data: registrationMasterData) => {
-      this.allTypeOfEstablishments = data.typeOfEstablishments.map(establishment => establishment.establishmentDescription);
-      //this.filteredTypeOfEstablishments = data.typeOfEstablishments.map(establishment => establishment.establishmentDescription);
+      this.allTypeOfEstablishments = data.typeOfEstablishments;
       this.countries = data.countries;
       this.countryList = this.countries.slice();
     });
@@ -227,7 +289,8 @@ export class ProfileComponent implements OnInit {
     } else {
       this.toastr.error('Please Select Valid Year of Establishment');
     }
-    this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
+    // this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
+    this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments.map(item => item.establishmentDescription));
     if (this.editUserForm.valid) {
       this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({
         next: ((response: userProfileResopnse) => {

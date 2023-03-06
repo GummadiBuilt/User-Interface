@@ -1,9 +1,9 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, Directive, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-import { MatChipInput, MatChipInputEvent } from '@angular/material/chips';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 import { StepperOrientation } from '@angular/material/stepper';
 import { map, Observable, startWith } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -12,11 +12,11 @@ import { registrationMasterData, registrationStatesData, registrationCitiesData,
 import { typeOfEstablishment } from '../shared/responses';
 import { countries } from '../shared/responses';
 import { userRegistrationResopnse } from './signResponses';
-import { StatementVisitor } from '@angular/compiler';
 import { ToastrService } from 'ngx-toastr';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageConstants } from '../shared/application.constants';
+import { TypeOfEstablishment } from './type-of-establishment';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -37,20 +37,18 @@ export class SignupComponent implements OnInit {
   states = new Array<registrationStatesData>();
   cities = new Array<registrationCitiesData>();
   public constantVariable = PageConstants;
-
-  //matchips
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  filteredTypeOfEstablishments!: Observable<String[]>;
-  typeOfEstablishment: typeOfEstablishment[] = [];
-  allTypeOfEstablishments: typeOfEstablishment[] = [];
-  typeOfEstablishmentCtrl = new FormControl('', Validators.required);
-  private allowFreeTextAddTypeOfEst = false;
   roleId: any;
   userType: any;
 
-  @ViewChild('typeOfEstablishmentInput') typeOfEstablishmentInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete!: MatAutocomplete;
+  //matchips
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  filteredTypeOfEstablishments: any;
+  allTypeOfEstablishments: typeOfEstablishment[] = [];
+  typeOfEstablishments: any[] = [];
+  public selectable = true;
+  public removable = true;
+  public addOnBlur = true;
+  @ViewChild("chipList") chipList!: MatChipList;
 
   countryList = new Array<countries>();
   statesList = new Array<registrationStatesData>();
@@ -76,11 +74,12 @@ export class SignupComponent implements OnInit {
       companyName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       yearOfEstablishment: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(4), Validators.maxLength(4)]],
-      typeOfEstablishmentCtrl: [this.typeOfEstablishment, Validators.required],
       address: ['', [Validators.required]],
       country: ['', [Validators.required]],
       state: ['', [Validators.required]],
-      city: ['', [Validators.required]]
+      city: ['', [Validators.required]],
+      typeOfEstablishmentInput: [null],
+      typeOfEstablishmentCtrl: [this.typeOfEstablishments, this.validateToe]
     });
     this.personalDetails = this._formBuilder.group({
       contactFirstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
@@ -90,22 +89,109 @@ export class SignupComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
     });
+    
     window.setTimeout(() => {
       this.companyDetails.get('users')?.patchValue(this.roleId);
     }, 500)
 
     this.getMasterdata();
-    //Set default value on drop down when redirect from read more page
-    if (this.roleId !== 2) {
-      this.companyDetails.get('typeOfEstablishmentCtrl')?.disable()
-    } else {
-      this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();
-    }
-    //mtachips
-    this.filteredTypeOfEstablishments = this.typeOfEstablishmentCtrl.valueChanges.pipe(
-      startWith(null),
-      map(typeOfEstb => this.filterOnValueChange(typeOfEstb))
+
+    this.filteredTypeOfEstablishments = this.companyDetails.get("typeOfEstablishmentInput")?.valueChanges.pipe(
+      startWith(""),
+      map(value => this.typeOfEstablishmentFilter(value))
     );
+
+    if (this.roleId == 2) {
+      this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();
+      this.companyDetails.get("typeOfEstablishmentCtrl")?.statusChanges.subscribe(
+        status => (this.chipList.errorState = status === "INVALID")
+      );
+    } else {
+      window.setTimeout(() => {
+        this.companyDetails.get('typeOfEstablishmentCtrl')?.disable();
+      }, 500);
+
+    }
+  }
+
+  onRegisterValueChange() {
+    const registerValueSelected = this.companyDetails.get('users')?.value
+    if (registerValueSelected !== 2) {
+      this.companyDetails.get('typeOfEstablishmentCtrl')?.disable();
+    } else {
+      window.setTimeout(() => {
+        this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();
+        this.companyDetails.get("typeOfEstablishmentCtrl")?.statusChanges.subscribe(
+          status => (this.chipList.errorState = status === "INVALID")
+        );
+      }, 500);
+    }
+  }
+
+  private typeOfEstablishmentFilter(value: any): TypeOfEstablishment[] {
+    const filterValue =
+      value === null || value instanceof Object ? "" : value.toLowerCase();
+    const matches = this.allTypeOfEstablishments.filter(typeOfEstablishment =>
+      typeOfEstablishment.establishmentDescription.toLowerCase().includes(filterValue)
+    );
+    const formValue = this.companyDetails.get("typeOfEstablishmentCtrl")?.value;
+    return formValue === null
+      ? matches
+      : matches.filter(x => !formValue?.find((y: any) => y.establishmentDescription === x.establishmentDescription));
+  }
+
+  private validateToe(typeOfEstablishments: FormControl) {
+    if (typeOfEstablishments.value && typeOfEstablishments.value.length === 0) {
+      return {
+        validateTypeOfEstablishmentsArray: { valid: false }
+      };
+    }
+    return null;
+  }
+
+  public select(event: MatAutocompleteSelectedEvent): void {
+    if (!event.option) {
+      return;
+    }
+    const value = event.option.value;
+    if (value && value instanceof Object && !this.typeOfEstablishments?.includes(value)) {
+      this.typeOfEstablishments?.push(value);
+      this.companyDetails.get("typeOfEstablishmentCtrl")?.setValue(this.typeOfEstablishments);
+      this.companyDetails.get("typeOfEstablishmentInput")?.setValue("");
+    }
+  }
+
+  public add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if (value.trim()) {
+      const matches = this.allTypeOfEstablishments.filter(
+        typeOfEstablishment => typeOfEstablishment.establishmentDescription.toLowerCase() === value
+      );
+      const formValue = this.companyDetails.get("typeOfEstablishmentCtrl")?.value;
+      const matchesNotYetSelected =
+        formValue === null
+          ? matches
+          : matches.filter(x => !formValue.find((y: any) => y.establishmentDescription === x.establishmentDescription));
+      if (matchesNotYetSelected.length === 1) {
+        this.typeOfEstablishments?.push(matchesNotYetSelected[0]);
+        this.companyDetails.get("typeOfEstablishmentCtrl")?.setValue(this.typeOfEstablishments);
+        this.companyDetails.get("typeOfEstablishmentInput")?.setValue("");
+      }
+    }
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  public remove(typeOfEstablishment: TypeOfEstablishment) {
+    const index = this.typeOfEstablishments?.indexOf(typeOfEstablishment)!;
+    if (index >= 0) {
+      this.typeOfEstablishments?.splice(index, 1);
+      this.companyDetails.get("typeOfEstablishmentCtrl")?.setValue(this.typeOfEstablishments);
+      this.companyDetails.get("typeOfEstablishmentInput")?.setValue("");
+    }
   }
 
   getMasterdata() {
@@ -128,123 +214,11 @@ export class SignupComponent implements OnInit {
       this.citiesList = this.cities.slice();
     });
   }
-  onRegisterValueChange() {
-    const registerValueSelected = this.companyDetails.get('users')?.value
-    if (registerValueSelected !== 2) {
-      this.companyDetails.get('typeOfEstablishmentCtrl')?.disable()
-    } else {
-      this.companyDetails.get('typeOfEstablishmentCtrl')?.enable();
-    }
-  }
 
-  add(event: MatChipInputEvent): void {
-    // Clear the input value
-    if (!this.allowFreeTextAddTypeOfEst) {
-      // only allowed to select from the filtered autocomplete list
-      // console.log('allowFreeTextAddTypeOfEst is false');
-      return;
-    }
-    // Only add when MatAutocomplete is not open
-    // To make sure this does not conflict with OptionSelected Event
-    if (this.matAutocomplete.isOpen) {
-      return;
-    }
-
-    // Add TYPE OF ESTAB
-    const value = event.value;
-    if ((value || '').trim()) {
-      this.selectTypeOfEstByName(value.trim());
-    }
-
-    this.resetInputs();
-  }
-
-  remove(typeOfEstab: typeOfEstablishment): void {
-    const index = this.typeOfEstablishment.indexOf(typeOfEstab);
-    if (index >= 0) {
-      this.typeOfEstablishment.splice(index, 1);
-      this.resetInputs();
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectTypeOfEstByName(event.option.value);
-    this.resetInputs();
-  }
-  private resetInputs() {
-    // clear input element
-    this.typeOfEstablishmentInput.nativeElement.value = '';
-    // clear control value and trigger typeOfEstablishmentCtrl.valueChanges event 
-    this.typeOfEstablishmentCtrl.setValue(null);
-  }
-
-  // Compute a new autocomplete list each time control value changes
-  private filterOnValueChange(establishmentDescription: string | null): String[] {
-    let result: String[] = [];
-    // Remove the typeOfEstab we have already selected from all typeOfEstab to
-    // get a starting point for the autocomplete list.
-    let alltypeOfEstLessSelected = this.allTypeOfEstablishments.filter(toe => this.typeOfEstablishment.indexOf(toe) < 0);
-    if (establishmentDescription) {
-      result = this.filterTypeOfEstablish(alltypeOfEstLessSelected, establishmentDescription);
-    } else {
-      result = alltypeOfEstLessSelected.map(type => type.establishmentDescription);
-    }
-    return result;
-  }
-
-  private filterTypeOfEstablish(typeOfEstabList: typeOfEstablishment[], establishmentDescription: String): String[] {
-    let filteredtypeOfEstablishmentList: typeOfEstablishment[] = [];
-    const filterValue = establishmentDescription.toLowerCase();
-    let typeOfEstablishmentMatchingName = typeOfEstabList.filter(val => val.establishmentDescription.toLowerCase().indexOf(filterValue) === 0);
-    if (typeOfEstablishmentMatchingName.length || this.allowFreeTextAddTypeOfEst) {
-      //
-      // either the TypeOfEstablish name matched some autocomplete options 
-      // or the name didn't match but we're allowing 
-      // non-autocomplete TypeOfEstablish names to be entered
-      //
-      filteredtypeOfEstablishmentList = typeOfEstablishmentMatchingName;
-    } else {
-      //
-      // the TypeOfEstablish name didn't match the autocomplete list 
-      // and we're only allowing TypeOfEstablish to be selected from the list
-      // so we show the whole list
-      // 
-      filteredtypeOfEstablishmentList = typeOfEstabList;
-    }
-    //
-    // Convert filtered list of TypeOfEstablish objects to list of TypeOfEstablish 
-    // name strings and return it
-    //
-    return filteredtypeOfEstablishmentList.map(data => data.establishmentDescription);
-  }
-  private selectTypeOfEstByName(establishmentDescription: string) {
-    let foundTypeOfEstablish = this.allTypeOfEstablishments.filter(value => value.establishmentDescription == establishmentDescription);
-    if (foundTypeOfEstablish.length) {
-      // We found the TypeOfEstablish name in the allTypeOfEstablishments list
-      this.typeOfEstablishment.push(foundTypeOfEstablish[0]);
-    } else {
-      // Create a new TypeOfEstablishments
-      // This is the use case when allowFreeTextAddTypeOfEst is true
-      this.typeOfEstablishment.push({
-        establishmentDescription: establishmentDescription,
-        changeTracking: {
-          createdBy: '',
-          createdDate: 0,
-          modifiedBy: '',
-          modifiedDate: 0
-        },
-        active: false,
-        createdBy: '',
-        createdDate: 0,
-        modifiedBy: '',
-        modifiedDate: 0
-      });
-    }
-  }
   onSubmit() {
     console.log(this.companyDetails.value);
-    this.companyDetails.controls['typeOfEstablishmentCtrl'].setValue(this.typeOfEstablishment.map(item => item.establishmentDescription));
-    console.log('cntrl', this.typeOfEstablishmentCtrl);
+    this.companyDetails.controls['typeOfEstablishmentCtrl'].setValue(this.typeOfEstablishments.map(item => item.establishmentDescription));
+    // console.log('cntrl', this.typeOfEstablishmentCtrl);
     if (this.companyDetails.valid && this.personalDetails.valid) {
       const registrationObject = Object.assign({}, this.companyDetails.value, this.personalDetails.value);
       const resultRegistrationObject = new userRegistrationResopnse(registrationObject);
@@ -252,7 +226,7 @@ export class SignupComponent implements OnInit {
         (response => {
           if (response['status'] == 200) {
             console.log(response);
-            this.toastr.success('Successfully Registered,your registration is submitted to admin for approval. Once approved you will receive temporary credentials to registered email address.');
+            this.toastr.success('Successfully Registered, your registration is submitted to admin for approval. Once approved you will receive temporary credentials to registered email address.');
             this.router.navigate(['/home']);
           }
         }),
@@ -265,7 +239,6 @@ export class SignupComponent implements OnInit {
     else {
       console.log('Registration Form is invalid');
     }
-
   }
 }
 
