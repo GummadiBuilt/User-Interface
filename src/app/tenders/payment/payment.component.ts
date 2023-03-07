@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { GridApi, ColDef, SideBarDef, GridReadyEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
-import { ButtonRendererComponent } from 'src/app/renderers/button-renderer/button-renderer.component';
+import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
-import { StatusValues } from 'src/app/shared/status-values';
+import { clientContractors } from './clientContractors';
 
 @Component({
   selector: 'app-payment',
@@ -19,9 +20,16 @@ export class PaymentComponent implements OnInit {
   public rowData: any;
   public domLayout: any;
   public constVariable = PageConstants;
+  tenderId: any;
+  clientContractors = new Array<clientContractors>();
+  clientContractorsList = new Array<clientContractors>();
 
-  constructor(private _formBuilder: FormBuilder, protected keycloak: KeycloakService,) {
+  constructor(private _formBuilder: FormBuilder, protected keycloak: KeycloakService,
+    private ApiServicesService: ApiServicesService, private route: ActivatedRoute,) {
     this.domLayout = "autoHeight";
+    this.route.paramMap.subscribe(params => {
+      this.tenderId = params.get('tenderId');
+    });
   }
 
   ngOnInit(): void {
@@ -31,13 +39,29 @@ export class PaymentComponent implements OnInit {
       console.log('Failed to load user details', e);
     }
     this.paymentDetails = this._formBuilder.group({
+      roleId: ['', Validators.required],
       contactName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      contactEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
+      contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       contactPhoneNumber: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
       Validators.minLength(10), Validators.maxLength(10)]],
-      contactPaymentAmount: ['', [Validators.required]],
-      contactPaymentdescription: ['', [Validators.required]]
+      paymentAmount: ['', [Validators.required, Validators.min(100)]],
+      paymentDescription: ['', [Validators.required]],
+      notifyViaEmail: true,
+      notifyViaSms: true
     });
+    this.getTendersMasterData();
+  }
+  getTendersMasterData() {
+    this.ApiServicesService.getClientContractors(this.tenderId).subscribe((data: any) => {
+      console.log(data);
+      this.clientContractors = data;
+      this.clientContractorsList = this.clientContractors.slice();
+    });
+  }
+
+  onSelectValueChange() {
+    const valueSelected = this.paymentDetails.get('roleId')?.value;
+    console.log(valueSelected);
   }
   // Each Column Definition results in one Column.
   public gridApi!: GridApi;
@@ -63,32 +87,20 @@ export class PaymentComponent implements OnInit {
     this.gridApi = params.api;
     this.gridOptions = params.columnApi;
   }
-  getParams() {
-    let columnsForExport = { columnKeys: [''] };
-    const allColumns = this.gridOptions.getColumns();
-    allColumns.forEach((element: { colId: string; }) => {
-      if (this.userRole?.includes("client")) {
-        if (element.colId != "company_name" && element.colId != "action") {
-          columnsForExport.columnKeys.push(element.colId)
-        }
-      } else {
-        if (element.colId != "action") {
-          columnsForExport.columnKeys.push(element.colId)
-        }
-      }
-    });
-    //console.log(columnsForExport)
-    return columnsForExport;
-  }
-  exportTendersFile() {
-    this.gridApi.exportDataAsCsv(this.getParams());
-  }
 
   onSave() {
 
   }
 
   onSubmit() {
-
+    console.log(this.paymentDetails.value);
+    this.ApiServicesService.generatePaymentLink(this.tenderId, this.paymentDetails.value).subscribe({
+      next: ((response) => {
+        console.log(response);
+      }),
+      error: (error => {
+        console.log(error);
+      })
+    })
   }
 }

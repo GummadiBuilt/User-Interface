@@ -19,6 +19,7 @@ import { userProfileResopnse } from '../profile/userProfileResponse';
 import { appliedTenderResopnse } from '../tenders/applied-tenders/appliedTenderResponse';
 import { tenderApplicantRankingResopnse } from '../tenders/view-applicants/tenderApplicantRankingResopnse';
 import { enquiryResopnse } from '../contact/enquiryResponse';
+import { paymentResponse } from '../tenders/payment/paymentResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -215,6 +216,16 @@ export class ApiServicesService {
   // Post API that enquiry about application
   public enquiry(data: any): Observable<enquiryResopnse> {
     return this.httpClient.post<enquiryResopnse>(this.url + '/enquiry/', data);
+  }
+
+
+  //Get client and applying contractors for the given tender
+  public getClientContractors(tenderId: any) {
+    return this.httpClient.get(this.url + '/payment/' + tenderId);
+  }
+  // API generate payment links
+  public generatePaymentLink(tenderId: any, data: any): Observable<paymentResponse> {
+    return this.httpClient.post<paymentResponse>(this.url + '/payment/' + tenderId + '/generate-payment-link', data);
   }
 
   //download files converstion

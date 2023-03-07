@@ -20,10 +20,14 @@
                         fxLayout="column">
                         <mat-label>{{constantVariable.paymentSendto}}</mat-label>
                         <mat-form-field appearance="outline">
-                            <mat-select placeholder="Select">
-                                <mat-select-filter [placeholder]="'Search'">
+                            <mat-select placeholder="Select" formControlName="roleId" (selectionChange)="onSelectValueChange()">
+                                <mat-select-filter [placeholder]="'Search'" [displayMember]="'contactName'"
+                                    [array]="clientContractors" (filteredReturn)="clientContractorsList =$event">
                                 </mat-select-filter>
-                                <mat-option></mat-option>
+                                <mat-option *ngFor="let item of clientContractorsList"
+                                    [value]="item.applicationRole.id">
+                                    {{item.contactName}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -39,25 +43,24 @@
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Name" minlength="3" inputmode="tel"
                                 formControlName="contactName" #nameInput>
-                            <mat-error *ngIf="paymentDetails.controls['contactName'].errors?.['required']"> Name
-                                is
-                                required
+                            <mat-error *ngIf="paymentDetails.controls['contactName'].errors?.['required']">
+                                Name is required
                             </mat-error>
                             <mat-error *ngIf="paymentDetails.get('contactName')?.errors?.['minlength']">
-                                Name should
-                                be 3 character.</mat-error>
+                                Name should be 3 character.
+                            </mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
                         <mat-label>Email Id *</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput placeholder="Email Id" formControlName="contactEmail">
+                            <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
                             <i matSuffix class="icon-20p icon-gray fa-regular fa-envelope"></i>
-                            <mat-error *ngIf="paymentDetails.controls['contactEmail'].errors?.['required']">
+                            <mat-error *ngIf="paymentDetails.controls['contactEmailAddress'].errors?.['required']">
                                 Email ID is required
                             </mat-error>
-                            <mat-error *ngIf="paymentDetails.controls['contactEmail'].errors?.['pattern']">
+                            <mat-error *ngIf="paymentDetails.controls['contactEmailAddress'].errors?.['pattern']">
                                 Please enter valid email
                             </mat-error>
                         </mat-form-field>
@@ -84,9 +87,13 @@
                         fxLayout="column">
                         <mat-label>Payment Amount *</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput placeholder="Enter Amount" formControlName="contactPaymentAmount">
-                            <mat-error *ngIf="paymentDetails.controls['contactPaymentAmount'].errors?.['required']">
+                            <input matInput placeholder="Enter Amount" formControlName="paymentAmount" currencyFormatter
+                                numbersOnly>
+                            <mat-error *ngIf="paymentDetails.controls['paymentAmount'].errors?.['required']">
                                 Payment Amount is required
+                            </mat-error>
+                            <mat-error *ngIf="paymentDetails.get('paymentAmount')?.errors?.['min']">
+                                Minimum Rs. 100
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -94,9 +101,8 @@
                         fxLayout="column">
                         <mat-label>Payment Description*</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput placeholder="Payment Description"
-                                formControlName="contactPaymentdescription">
-                            <mat-error *ngIf="paymentDetails.controls['contactPaymentAmount'].errors?.['required']">
+                            <input matInput placeholder="Payment Description" formControlName="paymentDescription">
+                            <mat-error *ngIf="paymentDetails.controls['paymentDescription'].errors?.['required']">
                                 Payment Amount is required
                             </mat-error>
                         </mat-form-field>
