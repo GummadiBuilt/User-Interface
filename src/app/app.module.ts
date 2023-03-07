@@ -69,6 +69,7 @@ import { ReadMoreComponent } from './home/read-more/read-more.component';
 import { SafePipe } from './shared/safe.pipe';
 import { EnquiriesComponent } from './enquiries/enquiries.component';
 import { FooterComponent } from './footer/footer.component';
+import { PaymentComponent } from './tenders/payment/payment.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -156,6 +157,7 @@ export const MY_DATE_FORMATS = {
     SafePipe,
     EnquiriesComponent,
     FooterComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,

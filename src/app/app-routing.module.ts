@@ -26,6 +26,7 @@ import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tende
 import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
 import { ReadMoreComponent } from './home/read-more/read-more.component';
 import { EnquiriesComponent } from './enquiries/enquiries.component';
+import { PaymentComponent } from './tenders/payment/payment.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -55,6 +56,7 @@ const routes: Routes = [
         path: ':tenderId', data: { breadcrumb: {} },
         children: [
           { path: '', component: CreateTenderComponent, data: { breadcrumb: {} } },
+          { path: 'payment', component: PaymentComponent, canActivate: [AppAuthGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
           { path: 'create-pq-form', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
           { path: 'edit-pq-form/:pqId', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           {

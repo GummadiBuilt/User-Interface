@@ -1,0 +1,115 @@
+<div class="payment-form">
+    <div class="breadcrumbs" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="12px grid">
+        <div fxLayoutAlign="center center">
+            <xng-breadcrumb [separator]="separatorTemplate">
+                <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
+                    <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
+                    <ng-container>{{ breadcrumb }}</ng-container>
+                </ng-container>
+            </xng-breadcrumb>
+        </div>
+        <ng-template #separatorTemplate>
+            <i class="fa-solid fa-caret-right"></i>
+        </ng-template>
+    </div>
+    <mat-card>
+        <form [formGroup]="paymentDetails" autocomplete="off">
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayoutGap="12px grid">
+                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
+                    <mat-label>{{constantVariable.paymentSendto}}</mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-select placeholder="Select">
+                            <mat-select-filter [placeholder]="'Search'">
+                            </mat-select-filter>
+                            <mat-option></mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="12px grid">
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        fxLayout="column">
+                        <mat-label>Name *</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                                formControlName="contactName" #nameInput>
+                            <mat-error *ngIf="paymentDetails.controls['contactName'].errors?.['required']"> Name
+                                is
+                                required
+                            </mat-error>
+                            <mat-error *ngIf="paymentDetails.get('contactName')?.errors?.['minlength']">
+                                Name should
+                                be 3 character.</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        fxLayout="column">
+                        <mat-label>Email Id *</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Email Id" formControlName="contactEmail">
+                            <i matSuffix class="icon-20p icon-gray fa-regular fa-envelope"></i>
+                            <mat-error *ngIf="paymentDetails.controls['contactEmail'].errors?.['required']">
+                                Email ID is required
+                            </mat-error>
+                            <mat-error *ngIf="paymentDetails.controls['contactEmail'].errors?.['pattern']">
+                                Please enter valid email
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        fxLayout="column">
+                        <mat-label>Mobile *</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
+                            <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
+                            <mat-error *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['required']">
+                                Mobile Number is required
+                            </mat-error>
+                            <mat-error *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['pattern']">
+                                Please enter valid mobile number
+                            </mat-error>
+                            <mat-error
+                                *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['minlength'] || paymentDetails.controls['contactPhoneNumber'].errors?.['maxlength']">
+                                Mobile number should be 10 digits
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        fxLayout="column">
+                        <mat-label>Payment Amount*</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Enter Amount" formControlName="contactPaymentAmount">
+                            <mat-error *ngIf="paymentDetails.controls['contactPaymentAmount'].errors?.['required']">
+                                Payment Amount is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        fxLayout="column">
+                        <mat-label>Payment Description*</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Payment Description" formControlName="contactPaymentdescription">
+                            <mat-error *ngIf="paymentDetails.controls['contactPaymentAmount'].errors?.['required']">
+                                Payment Amount is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                        fxLayout="column">
+
+                    </div>
+                </div>
+            </div>
+            <div class="example-wrapper">
+                <mat-label>List of Payments</mat-label>
+                <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+                    [pagination]="true" [rowData]="rowData" [animateRows]="true" [sideBar]="sideBar"
+                    (gridReady)="onGridReady($event)" [domLayout]="domLayout">
+                </ag-grid-angular>
+            </div>
+        </form>
+
+    </mat-card>
+</div>
