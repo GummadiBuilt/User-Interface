@@ -4,7 +4,7 @@
             <xng-breadcrumb [separator]="separatorTemplate">
                 <ng-container *xngBreadcrumbItem="let breadcrumb; let info = info;">
                     <div><i *ngIf="info" class="icon-breadcrumb {{info}}"></i></div>
-                    <ng-container>{{ breadcrumb }}</ng-container>
+                    <ng-container>{{ breadcrumb | uppercase }}</ng-container>
                 </ng-container>
             </xng-breadcrumb>
         </div>
@@ -14,21 +14,26 @@
     </div>
     <mat-card>
         <form [formGroup]="paymentDetails" autocomplete="off">
-            <div fxLayout="column">
-                <div fxLayout="row wrap" fxLayoutGap="12px grid">
-                <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%" fxLayout="column">
-                    <mat-label>{{constantVariable.paymentSendto}}</mat-label>
-                    <mat-form-field appearance="outline">
-                        <mat-select placeholder="Select">
-                            <mat-select-filter [placeholder]="'Search'">
-                            </mat-select-filter>
-                            <mat-option></mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                </div>
-                <div fxLayout="row wrap" fxLayoutGap="12px grid">
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+            <div fxLayout="column" fxLayoutGap="12px">
+                <div class="payment-body" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="24px grid">
+                    <div fxFlex.xs="100%" fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
+                        fxLayout="column">
+                        <mat-label>{{constantVariable.paymentSendto}}</mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select placeholder="Select">
+                                <mat-select-filter [placeholder]="'Search'">
+                                </mat-select-filter>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxHide.xs fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%" fxLayout="column">
+                    </div>
+                    <div fxHide.xs fxHide.sm fxHide.md fxFlex.lg="25%" fxFlex.xl="25%" fxLayout="column">
+                    </div>
+                    <div fxHide.xs fxHide.sm fxHide.md fxFlex.lg="25%" fxFlex.xl="25%" fxLayout="column">
+                    </div>
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
                         <mat-label>Name *</mat-label>
                         <mat-form-field appearance="outline">
@@ -43,7 +48,7 @@
                                 be 3 character.</mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
                         <mat-label>Email Id *</mat-label>
                         <mat-form-field appearance="outline">
@@ -57,7 +62,7 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
                         <mat-label>Mobile *</mat-label>
                         <mat-form-field appearance="outline">
@@ -75,9 +80,9 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
-                        <mat-label>Payment Amount*</mat-label>
+                        <mat-label>Payment Amount *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Enter Amount" formControlName="contactPaymentAmount">
                             <mat-error *ngIf="paymentDetails.controls['contactPaymentAmount'].errors?.['required']">
@@ -85,31 +90,46 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="50%" fxFlex.xl="50%"
                         fxLayout="column">
                         <mat-label>Payment Description*</mat-label>
                         <mat-form-field appearance="outline">
-                            <input matInput placeholder="Payment Description" formControlName="contactPaymentdescription">
+                            <input matInput placeholder="Payment Description"
+                                formControlName="contactPaymentdescription">
                             <mat-error *ngIf="paymentDetails.controls['contactPaymentAmount'].errors?.['required']">
                                 Payment Amount is required
                             </mat-error>
                         </mat-form-field>
                     </div>
 
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="50%" fxFlex.xl="50%"
                         fxLayout="column">
 
                     </div>
                 </div>
-            </div>
-            <div class="example-wrapper">
-                <mat-label>List of Payments</mat-label>
-                <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
-                    [pagination]="true" [rowData]="rowData" [animateRows]="true" [sideBar]="sideBar"
-                    (gridReady)="onGridReady($event)" [domLayout]="domLayout">
-                </ag-grid-angular>
+                <div class="action-btn" *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
+                    fxLayoutAlign="end center" fxLayoutGap="24px">
+                    <button mat-button (click)="onSave()" style="background-color: grey; color: white;">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-save fa-solid fa-floppy-disk"></i>
+                            <div>{{constVariable.saveBtn}}</div>
+                        </div>
+                    </button>
+                    <button mat-button (click)="onSubmit()" style="background-color: green; color: white;">
+                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                            <i class="icon-submit fa-solid fa-paper-plane"></i>
+                            <div>{{constVariable.submitBtn}}</div>
+                        </div>
+                    </button>
+                </div>
+                <div class="example-wrapper">
+                    <mat-label>List of Payments</mat-label>
+                    <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+                        [pagination]="true" [rowData]="rowData" [animateRows]="true" [sideBar]="sideBar"
+                        (gridReady)="onGridReady($event)" [domLayout]="domLayout">
+                    </ag-grid-angular>
+                </div>
             </div>
         </form>
-
     </mat-card>
 </div>

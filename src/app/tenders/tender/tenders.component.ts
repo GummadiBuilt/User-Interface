@@ -129,7 +129,7 @@ export class TendersComponent implements OnInit {
       },
       filter: false,
       colId: "action",
-      minWidth: 350,
+      minWidth: 400,
     }
   ];
 

@@ -29,7 +29,7 @@
                     </mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
-            <button type="button" mat-icon-button matTooltip="Download Tender List" matTooltipPosition="left"
+            <button *ngIf="toggle" type="button" mat-icon-button matTooltip="Download Tender List" matTooltipPosition="left"
                 (click)="exportTendersFile()">
                 <i class="icon-size fa-solid fa-file-csv"></i>
             </button>
