@@ -200,7 +200,7 @@ export class ProfileComponent implements OnInit {
       this.editUserForm.get('contactPhoneNumber')?.patchValue(data.contactPhoneNumber);
       this.editUserForm.get('contactEmailAddress')?.patchValue(data.contactEmailAddress);
       this.editUserForm.get('companyName')?.patchValue(data.companyName);
-      this.typeOfEstablishments = data.typeOfEstablishment.map((item: any) => {
+      this.typeOfEstablishments = data.typeOfEstablishment?.map((item: any) => {
         const header = 'establishmentDescription';
         const value = item;
         return {
@@ -235,7 +235,7 @@ export class ProfileComponent implements OnInit {
   }
   //reset form
   reset() {
-    this.typeOfEstablishments = this.userData.typeOfEstablishment.map((item: any) => {
+    this.typeOfEstablishments = this.userData.typeOfEstablishment?.map((item: any) => {
       const header = 'establishmentDescription';
       const value = item;
       return {

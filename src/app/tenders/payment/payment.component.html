@@ -24,20 +24,16 @@
                                 <mat-select-filter [placeholder]="'Search'" [displayMember]="'companyName'"
                                     [array]="clientContractors" (filteredReturn)="clientContractorsList =$event">
                                 </mat-select-filter>
-                                <mat-option *ngFor="let item of clientContractorsList;let i =index"
-                                    [value]="i">
+                                <mat-option *ngFor="let item of clientContractorsList;let i =index" [value]="i">
                                     {{item.companyName}} ({{item.applicationRoleName}})
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+                        <div class="error-msg" *ngIf="submitted && paymentDetails.controls['roleId'].invalid">
+                            Select to send payment
+                        </div>
                     </div>
-                    <div fxHide.xs fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%" fxLayout="column">
-                    </div>
-                    <div fxHide.xs fxHide.sm fxHide.md fxFlex.lg="25%" fxFlex.xl="25%" fxLayout="column">
-                    </div>
-                    <div fxHide.xs fxHide.sm fxHide.md fxFlex.lg="25%" fxFlex.xl="25%" fxLayout="column">
-                    </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
+                    <div fxFlex.xs="100%" fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
                         <mat-label>Name *</mat-label>
                         <mat-form-field appearance="outline">
@@ -51,10 +47,12 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
+                    <div fxFlex.xs="100%" fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
-                        <input type="checkbox" value="Male" formControlName="notifyViaEmail">
-                        <mat-label>Email Id *</mat-label>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                            <input type="checkbox" value="Email" formControlName="notifyViaEmail">
+                            <mat-label>Email Id *</mat-label>
+                        </div>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
                             <i matSuffix class="icon-20p icon-gray fa-regular fa-envelope"></i>
@@ -65,18 +63,26 @@
                                 Please enter valid email
                             </mat-error>
                         </mat-form-field>
+                        <div class="error-msg" *ngIf="submitted && !paymentDetails.controls['contactEmailAddress'].errors?.['required'] && 
+                        !paymentDetails.controls['contactEmailAddress'].errors?.['pattern'] && paymentDetails.controls['notifyViaEmail'].invalid &&
+                             paymentDetails.controls['notifyViaSms'].invalid">
+                            Select Email or Mobile
+                        </div>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
+                    <div fxFlex.xs="100%" fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
-                        <input type="checkbox" value="Male" formControlName="notifyViaSms">
-                        <mat-label>Mobile *</mat-label>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+                            <input type="checkbox" value="Mobile" formControlName="notifyViaSms">
+                            <mat-label>Mobile *</mat-label>
+                        </div>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
                             <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
                             <mat-error *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['required']">
                                 Mobile Number is required
                             </mat-error>
-                            <mat-error *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['pattern']">
+                            <mat-error
+                                *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['pattern'] && !(paymentDetails.controls['contactPhoneNumber'].errors?.['minlength'] || paymentDetails.controls['contactPhoneNumber'].errors?.['maxlength'])">
                                 Please enter valid mobile number
                             </mat-error>
                             <mat-error
@@ -84,8 +90,15 @@
                                 Mobile number should be 10 digits
                             </mat-error>
                         </mat-form-field>
+                        <div class="error-msg"
+                            *ngIf="submitted && !paymentDetails.controls['contactPhoneNumber'].errors?.['required'] &&  
+                            !paymentDetails.controls['contactPhoneNumber'].errors?.['pattern'] && 
+                            !(paymentDetails.controls['contactPhoneNumber'].errors?.['minlength'] || paymentDetails.controls['contactPhoneNumber'].errors?.['maxlength'])
+                            && paymentDetails.controls['notifyViaEmail'].invalid && paymentDetails.controls['notifyViaSms'].invalid">
+                            Select Email or Mobile
+                        </div>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
+                    <div fxFlex.xs="100%" fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
                         <mat-label>Payment Amount *</mat-label>
                         <mat-form-field appearance="outline">
@@ -99,18 +112,17 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="50%" fxFlex.xl="50%"
+                    <div fxFlex.xs="100%" fxFlex.sm="49%" fxFlex.md="49%" fxFlex.lg="50%" fxFlex.xl="50%"
                         fxLayout="column">
-                        <mat-label>Payment Description*</mat-label>
+                        <mat-label>Payment Description *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Payment Description" formControlName="paymentDescription">
                             <mat-error *ngIf="paymentDetails.controls['paymentDescription'].errors?.['required']">
-                                Payment Amount is required
+                                Description is required
                             </mat-error>
                         </mat-form-field>
                     </div>
-
-                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="50%" fxFlex.xl="50%"
+                    <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
 
                     </div>

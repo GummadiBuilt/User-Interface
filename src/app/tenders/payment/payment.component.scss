@@ -153,3 +153,13 @@ input[type="file" i]:disabled {
 ::ng-deep .mat-select-panel {
     margin-top: 36px !important;
 }
+
+input[type="checkbox" i] {
+    margin: 0px 3px 3px 4px;
+}
+
+.error-msg {
+    font-size: 10.5px !important;
+    color: #f44336;
+    margin-left: 11px !important;
+}

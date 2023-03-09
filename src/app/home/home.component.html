@@ -1,8 +1,18 @@
 <div class="home-page">
     <div class="home-page-body" fxLayout="column">
-        <h1>Gummadi Built</h1>
-        <h2>Construction projects in India has been hugely delaying for multiple reasons.</h2>
-        <button mat-stroked-button routerLink="/read-more" routerLinkActive="router-link-active">Read More</button>
+        <div class="btn-group" fxLayout="row wrap" fxLayoutAlign="end" fxLayoutGap="24px grid">
+            <div>
+                <button mat-raised-button (click)="goToSignUp(1)">{{constVariable.btnRegisterAsClient}}</button>
+            </div>
+            <div class="last-button">
+                <button mat-raised-button (click)="goToSignUp(2)">{{constVariable.btnRegisterAsContractor}}</button>
+            </div>
+        </div>
+        <div fxLayout="column">
+            <h1>Gummadi Built</h1>
+            <h2>Construction projects in India has been hugely delaying for multiple reasons.</h2>
+            <button mat-stroked-button routerLink="/read-more" routerLinkActive="router-link-active">Read More</button>
+        </div>
     </div>
 </div>
 <app-footer></app-footer>

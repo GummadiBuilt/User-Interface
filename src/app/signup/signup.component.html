@@ -45,7 +45,7 @@
                             fxLayout="column">
                             <mat-label>Company Name *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Company Name" minlength="3" maxlength="50" inputmode="tel"
+                                <input matInput placeholder="Company Name" minlength="3" maxlength="50"
                                     formControlName="companyName" #nameInput>
                                 <mat-error *ngIf="companyDetails.get('companyName')?.errors?.['required']">Company Name
                                     is required</mat-error>
@@ -175,37 +175,32 @@
             <mat-step [stepControl]="personalDetails" errorMessage="Fill required contact details."
                 label="Contact Person Information" state="person_info" [completed]="false">
                 <form [formGroup]="personalDetails">
-
                     <div fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="12px grid">
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>First Name *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                                <input matInput placeholder="Name" minlength="3"
                                     formControlName="contactFirstName" #nameInput>
                                 <mat-error
                                     *ngIf="personalDetails.controls['contactFirstName'].errors?.['required']">First Name
-                                    is
-                                    required
+                                    is required
                                 </mat-error>
                                 <mat-error *ngIf="personalDetails.get('contactFirstName')?.errors?.['minlength']">First
-                                    Name should
-                                    be 3 character.</mat-error>
+                                    Name should be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
                             fxLayout="column">
                             <mat-label>Last Name *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                                <input matInput placeholder="Name" minlength="3"
                                     formControlName="contactLastName" #nameInput>
                                 <mat-error *ngIf="personalDetails.controls['contactLastName'].errors?.['required']">Last
-                                    Name is
-                                    required
+                                    Name is required
                                 </mat-error>
                                 <mat-error *ngIf="personalDetails.get('contactLastName')?.errors?.['minlength']">Last
-                                    Name should
-                                    be 3 character.</mat-error>
+                                    Name should be 3 character.</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="45%" fxFlex.lg="45%" fxFlex.xl="45%"
@@ -222,7 +217,7 @@
                             fxLayout="column">
                             <mat-label>Mobile *</mat-label>
                             <mat-form-field appearance="outline">
-                                <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
+                                <input matInput placeholder="Mobile" inputmode="tel" formControlName="contactPhoneNumber" numbersOnly>
                                 <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
                                 <mat-error *ngIf="personalDetails.controls['contactPhoneNumber'].errors?.['required']">
                                     Mobile Number is required

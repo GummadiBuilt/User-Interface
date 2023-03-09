@@ -13,8 +13,9 @@
 }
 
 .home-page-body {
-    height: 100%;
-    padding: 100px 40px 40px 40px !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 12px 24px 40px 40px !important;
 }
 
 .home-page-body h1 {
@@ -35,5 +36,20 @@
 .home-page-body button {
     width: 105px;
     color: white;
-    background-color: #841618;
+    background-color: #841618 !important;
+}
+
+.home-page-body .mat-raised-button {
+    background-color: #841618 !important;
+    color: white !important;
+    border-radius: 0px !important;
+    width: 100% !important;
+}
+
+.home-page-body .last-button {
+    margin-bottom: 12px !important;
+}
+
+.home-page-body .btn-group {
+    margin-top: 12px !important;
 }
