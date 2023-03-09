@@ -220,8 +220,8 @@ export class ApiServicesService {
 
 
   //Get client and applying contractors for the given tender
-  public getClientContractors(tenderId: any) {
-    return this.httpClient.get(this.url + '/payment/' + tenderId);
+  public getClientContractors(tenderId: any): Observable<paymentResponse>{
+    return this.httpClient.get<paymentResponse>(this.url + '/payment/' + tenderId);
   }
   // API generate payment links
   public generatePaymentLink(tenderId: any, data: any): Observable<paymentResponse> {

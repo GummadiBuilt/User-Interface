@@ -20,13 +20,13 @@
                         fxLayout="column">
                         <mat-label>{{constantVariable.paymentSendto}}</mat-label>
                         <mat-form-field appearance="outline">
-                            <mat-select placeholder="Select" formControlName="roleId" (selectionChange)="onSelectValueChange()">
-                                <mat-select-filter [placeholder]="'Search'" [displayMember]="'contactName'"
+                            <mat-select placeholder="Select" (selectionChange)="onSelectValueChange($event)">
+                                <mat-select-filter [placeholder]="'Search'" [displayMember]="'companyName'"
                                     [array]="clientContractors" (filteredReturn)="clientContractorsList =$event">
                                 </mat-select-filter>
-                                <mat-option *ngFor="let item of clientContractorsList"
-                                    [value]="item.applicationRole.id">
-                                    {{item.contactName}}
+                                <mat-option *ngFor="let item of clientContractorsList;let i =index"
+                                    [value]="i">
+                                    {{item.companyName}} ({{item.applicationRoleName}})
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -53,6 +53,7 @@
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
+                        <input type="checkbox" value="Male" formControlName="notifyViaEmail">
                         <mat-label>Email Id *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Email Id" formControlName="contactEmailAddress">
@@ -67,6 +68,7 @@
                     </div>
                     <div fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="49%" fxFlex.lg="25%" fxFlex.xl="25%"
                         fxLayout="column">
+                        <input type="checkbox" value="Male" formControlName="notifyViaSms">
                         <mat-label>Mobile *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
@@ -115,12 +117,6 @@
                 </div>
                 <div class="action-btn" *ngIf="userRole?.includes('admin')" class="action-btn" fxLayout="row"
                     fxLayoutAlign="end center" fxLayoutGap="24px">
-                    <button mat-button (click)="onSave()" style="background-color: grey; color: white;">
-                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                            <i class="icon-save fa-solid fa-floppy-disk"></i>
-                            <div>{{constVariable.saveBtn}}</div>
-                        </div>
-                    </button>
                     <button mat-button (click)="onSubmit()" style="background-color: green; color: white;">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-submit fa-solid fa-paper-plane"></i>

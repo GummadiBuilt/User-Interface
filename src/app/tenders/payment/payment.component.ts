@@ -5,7 +5,8 @@ import { GridApi, ColDef, SideBarDef, GridReadyEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
-import { clientContractors } from './clientContractors';
+import { applicationRole } from './clientContractors';
+import { paymentResponse } from './paymentResponse';
 
 @Component({
   selector: 'app-payment',
@@ -21,14 +22,29 @@ export class PaymentComponent implements OnInit {
   public domLayout: any;
   public constVariable = PageConstants;
   tenderId: any;
-  clientContractors = new Array<clientContractors>();
-  clientContractorsList = new Array<clientContractors>();
+  clientContractors!:any;
+  clientContractorsList!:any;
+  private emailValidators = [
+    Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")
+  ];
+  private phoneValidators = [
+    Validators.pattern("^[+][0-9]{12}$"),
+    Validators.minLength(13), 
+    Validators.maxLength(13)
+  ];
 
   constructor(private _formBuilder: FormBuilder, protected keycloak: KeycloakService,
     private ApiServicesService: ApiServicesService, private route: ActivatedRoute,) {
     this.domLayout = "autoHeight";
     this.route.paramMap.subscribe(params => {
-      this.tenderId = params.get('tenderId');
+      const id = params.get('tenderId');
+      this.tenderId = id;
+      if(id){
+        this.ApiServicesService.getClientContractors(id).subscribe((data: paymentResponse) => {
+          this.clientContractors = data;
+          this.clientContractorsList = this.clientContractors.slice();
+        });
+      }
     });
   }
 
@@ -41,35 +57,61 @@ export class PaymentComponent implements OnInit {
     this.paymentDetails = this._formBuilder.group({
       roleId: ['', Validators.required],
       contactName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
-      contactPhoneNumber: ['', [Validators.required, Validators.pattern("^[1-9][0-9]*$"),
-      Validators.minLength(10), Validators.maxLength(10)]],
+      contactEmailAddress: ['', this.emailValidators],
+      contactPhoneNumber: ['+91', this.phoneValidators],
       paymentAmount: ['', [Validators.required, Validators.min(100)]],
       paymentDescription: ['', [Validators.required]],
-      notifyViaEmail: true,
-      notifyViaSms: true
+      notifyViaEmail: [false, Validators.requiredTrue],
+      notifyViaSms: [false, Validators.requiredTrue]
     });
-    this.getTendersMasterData();
-  }
-  getTendersMasterData() {
-    this.ApiServicesService.getClientContractors(this.tenderId).subscribe((data: any) => {
-      console.log(data);
-      this.clientContractors = data;
-      this.clientContractorsList = this.clientContractors.slice();
+    this.paymentDetails.get('notifyViaEmail')?.valueChanges
+      .subscribe(value => {
+      if(value) {
+        this.paymentDetails.get('contactEmailAddress')?.setValidators(this.emailValidators.concat(Validators.required))
+        this.paymentDetails.get('contactEmailAddress')?.updateValueAndValidity();
+      } else {
+        this.paymentDetails.get('contactEmailAddress')?.setValidators(this.emailValidators);
+        this.paymentDetails.get('contactEmailAddress')?.updateValueAndValidity();
+      }
+    });
+    this.paymentDetails.get('notifyViaSms')?.valueChanges
+      .subscribe(value => {
+      if(value) {
+        this.paymentDetails.get('contactPhoneNumber')?.setValidators(this.phoneValidators.concat(Validators.required));
+        this.paymentDetails.get('contactPhoneNumber')?.updateValueAndValidity();
+      } else {
+        this.paymentDetails.get('contactPhoneNumber')?.setValidators(this.phoneValidators);
+        this.paymentDetails.get('contactPhoneNumber')?.updateValueAndValidity();
+      }
     });
   }
 
-  onSelectValueChange() {
-    const valueSelected = this.paymentDetails.get('roleId')?.value;
-    console.log(valueSelected);
+  onSelectValueChange(event:any) {
+    const index = event.value;
+    const dataValue = this.clientContractors[index];
+    this.paymentDetails.get('roleId')?.patchValue(dataValue.applicationRoleId);
+    this.paymentDetails.get('contactName')?.patchValue(dataValue.contactName);
+    this.paymentDetails.get('contactEmailAddress')?.patchValue(dataValue.contactEmailAddress);
+    this.paymentDetails.get('contactPhoneNumber')?.patchValue('+91'+dataValue.contactPhoneNumber);  
+    this.paymentDetails.get('notifyViaSms')?.setValue(false);
+    this.paymentDetails.get('notifyViaEmail')?.setValue(false);   
+    this.paymentDetails.get('paymentAmount')?.setValue(null);
+    this.paymentDetails.get('paymentDescription')?.setValue(null); 
   }
   // Each Column Definition results in one Column.
   public gridApi!: GridApi;
   public gridOptions!: any;
   public columnDefs: ColDef[] = [
-    { headerName: 'Tender ID', field: 'tender_id', flex: 1, filter: 'agTextColumnFilter', pinned: 'left' },
-    { headerName: 'Transaction Id', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter' },
-    { headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Reference ID', field: 'referenceId', flex: 1, filter: 'agTextColumnFilter', pinned: 'left' },
+    { headerName: 'Contact Name', field: 'contactName', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Phone Number', field: 'contactPhoneNumber', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Email Address', field: 'contactEmailAddress', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Application Role', field: 'applicationRole.roleName', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Payment ID', field: 'paymentId', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Payment Amount', field: 'paymentAmount', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Payment Description', field: 'paymentDescription', flex: 1, filter: 'agTextColumnFilter' },
+    { headerName: 'Payment URL', field: 'shortUrl', flex: 1, filter: 'agTextColumnFilter' },
+    
   ];
 
   // DefaultColDef sets props common to all Columns
@@ -88,15 +130,11 @@ export class PaymentComponent implements OnInit {
     this.gridOptions = params.columnApi;
   }
 
-  onSave() {
-
-  }
-
   onSubmit() {
     console.log(this.paymentDetails.value);
     this.ApiServicesService.generatePaymentLink(this.tenderId, this.paymentDetails.value).subscribe({
       next: ((response) => {
-        console.log(response);
+        this.rowData = response;
       }),
       error: (error => {
         console.log(error);
