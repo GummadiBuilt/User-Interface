@@ -33,7 +33,7 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.name}}</mat-label>
-                                    <input matInput placeholder="Name" inputmode="tel" formControlName="userName">
+                                    <input matInput placeholder="Name" formControlName="userName">
                                     <mat-error *ngIf="contactUsForm.controls['userName'].errors?.['required']">
                                         {{constVariable.nameRequired}}
                                     </mat-error>
@@ -63,7 +63,7 @@
                             <div>
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-label>{{constVariable.mobileNumber}}</mat-label>
-                                    <input numbersOnly matInput placeholder="Mobile Number"
+                                    <input numbersOnly matInput placeholder="Mobile Number" inputmode="tel"
                                         formControlName="mobileNumber">
                                     <mat-error *ngIf="contactUsForm.controls['mobileNumber'].errors?.['required']">
                                         {{constVariable.requireMobilenumber}}
