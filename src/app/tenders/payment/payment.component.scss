@@ -7,6 +7,15 @@
     font-size: 12px !important;
 }
 
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix {
+    place-self: center !important;
+    padding-bottom: 2px !important;
+}
+
+::ng-deep .mobile-prefix {
+    font-size: 11.6px !important;
+}
+
 ::ng-deep mat-card {
     border-radius: 0px !important;
     padding: 24px !important;

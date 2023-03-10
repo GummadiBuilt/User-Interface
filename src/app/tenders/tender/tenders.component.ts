@@ -1,15 +1,13 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridReadyEvent, SideBarDef } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastrService } from 'ngx-toastr';
 import { PageConstants } from 'src/app/shared/application.constants';
 import { StatusValues } from 'src/app/shared/status-values';
-import { BreadcrumbService } from 'xng-breadcrumb';
 import { ButtonRendererComponent } from '../../renderers/button-renderer/button-renderer.component';
 import { ApiServicesService } from '../../shared/api-services.service';
 import { tenderResopnse } from './tenderResponse';
@@ -109,7 +107,14 @@ export class TendersComponent implements OnInit {
     },
     { headerName: 'Last Date of Submission', field: 'last_date_of_submission', flex: 1, filter: 'agDateColumnFilter', filterParams: filterParams },
     {
-      headerName: 'Status', field: 'workflow_step', flex: 1, filter: 'agTextColumnFilter',
+      headerName: 'Status', field: 'workflow_step', flex: 1, filter: "agTextColumnFilter", filterParams: {
+        textFormatter: (r: any) => {
+          if (r == null) return null;
+          return r
+            .toLowerCase()
+            .replace(/[/_/]/g, ' ');
+        }
+      },
       cellRenderer: function (data: any) {
         return (data.value !== null && data.value !== undefined)
           ? StatusValues[data.value as keyof typeof StatusValues] : 'not found';

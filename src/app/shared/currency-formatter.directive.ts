@@ -60,7 +60,7 @@ export class CurrencyFormatterDirective implements OnInit,AfterViewInit, OnDestr
     return this.formatter.format(v);
   }
   unformatValue(v:any) {
-    return v.replace(/,/g, '');
+    return v?.replace(/,/g, '');
   }
 
   validateDecimalValue(v: any) {

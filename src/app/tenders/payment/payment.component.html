@@ -77,6 +77,9 @@
                         </div>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
+                            <div class="mobile-prefix" matPrefix>
+                                <span>+91</span>
+                            </div>
                             <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
                             <mat-error *ngIf="paymentDetails.controls['contactPhoneNumber'].errors?.['required']">
                                 Mobile Number is required
