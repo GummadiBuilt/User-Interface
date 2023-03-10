@@ -14,20 +14,47 @@
     padding: 40px;
 }
 
-mat-stepper {
-    border-radius: 20px;
-    padding: 0 16px 0 16px;
+@media (max-width:928px) {
+    .register-form {
+        padding: 12px !important;
+    }
 }
 
-::ng-deep .mat-step-header[aria-selected="true"] {
-    border-radius: 10px;
-    height: 40px;
+::ng-deep .mat-horizontal-stepper-header {
+    height: 44px !important;
+    margin: 12px 12px 12px 12px !important;
 }
 
-::ng-deep .mat-step-header:hover {
-    border-radius: 10px;
-    height: 40px;
-    margin: 16px 0 16px 0;
+::ng-deep .mat-horizontal-stepper-header[aria-selected="true"] {
+    height: 44px !important;
+    margin: 12px 12px 12px 12px !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header:hover {
+    height: 44px !important;
+    margin: 12px 12px 12px 12px !important;
+}
+
+::ng-deep mat-stepper {
+    padding-top: 12px !important;
+}
+
+::ng-deep .mat-vertical-stepper-header {
+    padding: 0px 24px 0px 24px !important;
+    height: 48px !important;
+    margin: 16px 12px 12px 12px !important;
+}
+
+::ng-deep .mat-vertical-stepper-header[aria-selected="true"] {
+    padding: 0px 24px 0px 24px !important;
+    height: 48px !important;
+    margin: 16px 12px 12px 12px !important;
+}
+
+::ng-deep .mat-vertical-stepper-header:hover {
+    padding: 0px 24px 0px 24px !important;
+    height: 48px !important;
+    margin: 16px 12px 12px 12px !important;
 }
 
 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
@@ -85,8 +112,7 @@ form mat-label {
 }
 
 ::ng-deep .mat-select-panel {
-    margin-left: 8px !important;
-    border-radius: 10px !important;
+    margin-top: 36px !important;
 }
 
 .icon-20p {
