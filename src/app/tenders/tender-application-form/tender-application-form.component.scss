@@ -200,3 +200,18 @@ input[type="file" i]:disabled {
     color: #841618;
     font-size: 18px;
 }
+
+.button-upload {
+    background-color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 4px 12px;
+    color: gray;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.icon-upload {
+    color: #841618;
+    font-size: 18px;
+}

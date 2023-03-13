@@ -396,58 +396,214 @@
                                     </mat-expansion-panel-header>
                                     <div>
                                         <ul>
-                                            <li>Give references to documents pertaining to statutory compliances here
-                                                Specify NA if not available or applicable.</li>
+                                            <li>Give references to documents pertaining to statutory compliances here.
+                                            </li>
                                         </ul>
                                     </div>
                                     <div fxLayout="row wrap" fxLayoutAlign="space-between center"
                                         fxLayoutGap="12px grid">
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>ESI Registration</mat-label>
+                                            <mat-label>ESI Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="ESI Registration"
                                                     formControlName="esiRegistration">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['required']">
+                                                    ESI Registration required
+                                                </mat-error>
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['maxlength']">
                                                     Enter only 50 characters
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label class="button-upload" for="ESIDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="ESIDocument" hidden>
+                                                    <input id="ESIDocument" type="file" class="form-control"
+                                                        (change)="onEsiFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!esiFile?.name && !esiFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="esiFileName">{{esiFileName}}</span>
+                                                        <span>{{esiFile?.name}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="esiFile?.name" type="button" mat-icon-button
+                                                            matTooltip="Remove Document" matTooltipPosition="right"
+                                                            (click)="removeSelectedEsiFile(esiFile)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="esiFileName" type="button" mat-button
+                                                            matTooltip="Download file" matTooltipPosition="right"
+                                                            (click)="downloadSelectedEsiFile(pqFormTenderId)">
+                                                            <div fxLayout="row" fxLayoutAlign="center center"
+                                                                fxLayoutGap="6px">
+                                                                <i class="fa-solid fa-file-arrow-down"></i>
+                                                                <div>Download</div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>EPF Registration</mat-label>
+                                            <mat-label>EPF Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="EPF Registration"
                                                     formControlName="epfRegistration">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['required']">
+                                                    EPF Registration required
+                                                </mat-error>
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['maxlength']">
                                                     Enter only 50 characters
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label class="button-upload" for="EPFDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="EPFDocument" hidden>
+                                                    <input id="EPFDocument" type="file" class="form-control"
+                                                        (change)="onEpfFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!epfFile?.name && !epfFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="epfFileName">{{epfFileName}}</span>
+                                                        <span>{{epfFile?.name}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="epfFile?.name" type="button" mat-icon-button
+                                                            matTooltip="Remove Document" matTooltipPosition="right"
+                                                            (click)="removeSelectedEpfFile(epfFile)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="esiFileName" type="button" mat-button
+                                                            matTooltip="Download file" matTooltipPosition="right"
+                                                            (click)="downloadSelectedEpfFile(pqFormTenderId)">
+                                                            <div fxLayout="row" fxLayoutAlign="center center"
+                                                                fxLayoutGap="6px">
+                                                                <i class="fa-solid fa-file-arrow-down"></i>
+                                                                <div>Download</div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>GST Registration</mat-label>
+                                            <mat-label>GST Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="GST Registration"
                                                     formControlName="gstRegistration">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['required']">
+                                                    GST Registration required
+                                                </mat-error>
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['maxlength']">
                                                     Enter only 50 characters
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label class="button-upload" for="GSTDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="GSTDocument" hidden>
+                                                    <input id="GSTDocument" type="file" class="form-control"
+                                                        (change)="onGstFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!gstFile?.name && !gstFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="gstFileName">{{gstFileName}}</span>
+                                                        <span>{{gstFile?.name}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="gstFile?.name" type="button" mat-icon-button
+                                                            matTooltip="Remove Document" matTooltipPosition="right"
+                                                            (click)="removeSelectedGstFile(gstFile)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="gstFileName" type="button" mat-button
+                                                            matTooltip="Download file" matTooltipPosition="right"
+                                                            (click)="downloadSelectedGstFile(pqFormTenderId)">
+                                                            <div fxLayout="row" fxLayoutAlign="center center"
+                                                                fxLayoutGap="6px">
+                                                                <i class="fa-solid fa-file-arrow-down"></i>
+                                                                <div>Download</div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>PAN Number</mat-label>
+                                            <mat-label>PAN Number *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="PAN Number" formControlName="panNumber">
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['required']">
+                                                    PAN number required
+                                                </mat-error>
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('panNumber')?.errors?.['maxlength']">
                                                     Enter only 50 characters
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label class="button-upload" for="PANDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="PANDocument" hidden>
+                                                    <input id="PANDocument" type="file" class="form-control"
+                                                        (change)="onPanFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!panFile?.name && !panFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="panFileName">{{panFileName}}</span>
+                                                        <span>{{panFile?.name}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="panFile?.name" type="button" mat-icon-button
+                                                            matTooltip="Remove Document" matTooltipPosition="right"
+                                                            (click)="removeSelectedPanFile(panFile)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="panFileName" type="button" mat-button
+                                                            matTooltip="Download file" matTooltipPosition="right"
+                                                            (click)="downloadSelectedPanFile(pqFormTenderId)">
+                                                            <div fxLayout="row" fxLayoutAlign="center center"
+                                                                fxLayoutGap="6px">
+                                                                <i class="fa-solid fa-file-arrow-down"></i>
+                                                                <div>Download</div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </mat-expansion-panel>

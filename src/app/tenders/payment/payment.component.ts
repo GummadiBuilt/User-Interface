@@ -3,8 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GridApi, ColDef, SideBarDef, GridReadyEvent } from 'ag-grid-community';
 import { KeycloakService } from 'keycloak-angular';
+import { ToastrService } from 'ngx-toastr';
 import { ApiServicesService } from 'src/app/shared/api-services.service';
 import { PageConstants } from 'src/app/shared/application.constants';
+import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { applicationRole } from './clientContractors';
 import { paymentResponse } from './paymentResponse';
 
@@ -13,7 +15,7 @@ import { paymentResponse } from './paymentResponse';
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss']
 })
-export class PaymentComponent implements OnInit {
+export class PaymentComponent implements OnInit, ComponentCanDeactivate {
 
   paymentDetails!: FormGroup;
   public constantVariable = PageConstants;
@@ -36,7 +38,7 @@ export class PaymentComponent implements OnInit {
   ];
   submitted = false;
   constructor(private _formBuilder: FormBuilder, protected keycloak: KeycloakService,
-    private ApiServicesService: ApiServicesService, private route: ActivatedRoute,) {
+    private ApiServicesService: ApiServicesService, private route: ActivatedRoute, private toastr: ToastrService,) {
     this.domLayout = "autoHeight";
     this.route.paramMap.subscribe(params => {
       const id = params.get('tenderId');
@@ -88,6 +90,10 @@ export class PaymentComponent implements OnInit {
       });
   }
 
+  canDeactivate(): boolean {
+    return this.paymentDetails.dirty;
+  }
+
   onSelectValueChange(event: any) {
     const index = event.value;
     const dataValue = this.clientContractors[index];
@@ -95,8 +101,8 @@ export class PaymentComponent implements OnInit {
     this.paymentDetails.get('contactName')?.patchValue(dataValue.contactName);
     this.paymentDetails.get('contactEmailAddress')?.patchValue(dataValue.contactEmailAddress);
     this.paymentDetails.get('contactPhoneNumber')?.patchValue(dataValue.contactPhoneNumber);
-    this.paymentDetails.get('notifyViaSms')?.setValue(false);
-    this.paymentDetails.get('notifyViaEmail')?.setValue(false);
+    this.paymentDetails.get('notifyViaSms')?.setValue(true);
+    this.paymentDetails.get('notifyViaEmail')?.setValue(true);
     this.paymentDetails.get('paymentAmount')?.setValue(null);
     this.paymentDetails.get('paymentDescription')?.setValue(null);
   }
@@ -140,6 +146,11 @@ export class PaymentComponent implements OnInit {
       this.ApiServicesService.generatePaymentLink(this.tenderId, this.paymentDetails.value).subscribe({
         next: ((response) => {
           this.rowData = response;
+          this.paymentDetails.reset();
+          Object.keys(this.paymentDetails.controls).forEach(key => {
+            this.paymentDetails.get(key)?.setErrors(null);
+          });
+          this.toastr.success('Payment link sent successfully');
         }),
         error: (error => {
           console.log(error);

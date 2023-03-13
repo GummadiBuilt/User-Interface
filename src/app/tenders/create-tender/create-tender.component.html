@@ -252,19 +252,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                    <div class="mb-24" fxHide.xs fxHide.sm fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px">
 
                     </div>
-                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                    <div class="mb-24" fxHide.xs fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px">
 
                     </div>
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px"
                         *ngIf="!downloadBtnState">
+                        <mat-label>{{constantVariable.financialBid}} *</mat-label>
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <mat-label>{{constantVariable.financialBid}} *</mat-label>
-                            <div fxLayout="row" fxLayoutGap="25%">
+                            <div fxLayout="row wrap" fxLayoutGap="12px" *ngIf="userRole?.includes('client')">
+                                <mat-label>Do you want to?</mat-label>
+                                <mat-radio-group (change)="toggleView($event)" aria-label="Select an option"
+                                    fxLayoutGap="12px">
+                                    <mat-radio-button value="1">Form Fill</mat-radio-button>
+                                    <mat-radio-button value="2">Upload File</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">
                                 <label class="button-upload" fxLayout="row" fxLayoutAlign="start center"
                                     fxLayoutGap="8px" *ngIf="!userRole?.includes('contractor')">
                                     <i class="fa-icons fa-solid fa-file-import"></i>
@@ -274,7 +282,7 @@
                                         accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
                             </div>
-                            <div fxLayout="row" fxLayoutGap="25%">
+                            <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">
                                 <button type="button" mat-button class="icon-approve" matTooltip="Download file"
                                     matTooltipPosition="right" (click)="exportExcelFile()">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
@@ -284,7 +292,8 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="example-wrapper">
+                        <div *ngIf="(toggle == 1 && userRole?.includes('client')) || !userRole?.includes('client')"
+                            class="example-wrapper">
                             <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"
                                 [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
                                 (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"
@@ -295,6 +304,52 @@
                                 (cellEditingStopped)="onCellEditingStopped($event)" [domLayout]="domLayout"
                                 [overlayLoadingTemplate]="overlayLoadingTemplate" [stopEditingWhenCellsLoseFocus]=true>
                             </ag-grid-angular>
+                        </div>
+                        <div *ngIf="toggle == 2 && userRole?.includes('client')" fxLayout="column">
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                <label class="button-upload" for="financeFile" fxLayout="row"
+                                    fxLayoutAlign="start center" fxLayoutGap="8px"
+                                    *ngIf="!userRole?.includes('contractor')">
+                                    <i class="fa-icons fa-solid fa-file-arrow-up"></i>
+                                    <span class="textLink">Upload File(s)</span>
+                                </label>
+                                <label for="financeFile" hidden>
+                                    <input id="financeFile" type="file" class="form-control" #attachments
+                                        (change)="onFinFileChange($event)" multiple hidden [disabled]="btnstate">
+                                </label>
+                                <span *ngIf="!listOfFiles.length">No file Choosen</span>
+                            </div>
+                            <div>
+                                <ng-container *ngIf="listOfFiles">
+                                    <ul class="list-files">
+                                        <li *ngFor="let item of listOfFiles; let index = index">
+                                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                {{item}}
+                                                <button type="button" mat-icon-button class="icon-approve"
+                                                    matTooltip="Remove Document" matTooltipPosition="right"
+                                                    (click)="removeSelectedFinFile(index)">
+                                                    <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </ng-container>
+                            </div>
+                            <!-- <div>
+                                <button type="button" mat-button class="icon-approve" matTooltip="Download file"
+                                    matTooltipPosition="right" (click)="downloadSelectedFinFile(tenderId)">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="fa-solid fa-file-arrow-down"></i>
+                                        <div>Download</div>
+                                    </div>
+                                </button>
+                            </div> -->
+                            <div
+                                *ngIf="isFinFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
+                                <div *ngIf="tenderDetails.get('file')?.errors?.['required']">
+                                    File Required
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -320,15 +375,16 @@
                             <div>{{constantVariable.updateBtn}}</div>
                         </div>
                     </button>
-                    <button *ngIf="userRole?.includes('contractor') && !downloadBtnState" mat-button style="background-color: grey ;"
-                        (click)="onSaveContractor()" [disabled]="btnConstate">
+                    <button *ngIf="userRole?.includes('contractor') && !downloadBtnState" mat-button
+                        style="background-color: grey ;" (click)="onSaveContractor()" [disabled]="btnConstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-save fa-solid fa-floppy-disk"></i>
                             <div>{{constantVariable.saveBtn}}</div>
                         </div>
                     </button>
-                    <button *ngIf="userRole?.includes('contractor') && this.contractorBidId && !downloadBtnState" mat-button
-                        (click)="onSubmitContractor()" style="background-color: green ;" [disabled]="btnConstate">
+                    <button *ngIf="userRole?.includes('contractor') && this.contractorBidId && !downloadBtnState"
+                        mat-button (click)="onSubmitContractor()" style="background-color: green ;"
+                        [disabled]="btnConstate">
                         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                             <i class="icon-submit fa-solid fa-paper-plane"></i>
                             <div>{{constantVariable.submitBtn}}</div>

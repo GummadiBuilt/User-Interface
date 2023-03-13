@@ -161,3 +161,17 @@ input[type="file" i]:disabled {
 ::ng-deep .mat-select-panel {
     margin-top: 36px !important;
 }
+
+//radio button
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #841618 !important;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #841618 !important;
+}
+
+.list-files {
+    list-style-type: none;
+    padding: 0px !important;
+}

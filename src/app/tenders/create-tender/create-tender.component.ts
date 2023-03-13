@@ -92,6 +92,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.tenderDataLoaded = true;
     // console.log(this.selectedTender$);
   }
+  isFormValid:any;
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
@@ -115,6 +116,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.getTendersMasterData();
     this.getCommonOptionsData();
     this.todayDate = new Date();
+    this.isFormValid=false;
   }
 
   canDeactivate(): boolean {
@@ -135,7 +137,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     });
   }
   editData(data: any) {
-     if (this.userRole?.includes('contractor') && (data.workflowStep == "Qualified" || data.workflowStep == 'In Review' || data.workflowStep == 'Recommended')) {
+    if (this.userRole?.includes('contractor') && (data.workflowStep == "Qualified" || data.workflowStep == 'In Review' || data.workflowStep == 'Recommended')) {
       const columnDefs = this.gridOptions.columnModel.getColumnDefs();
       //console.log(columnDefs)
       columnDefs.push({
@@ -144,7 +146,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         filter: 'agTextColumnFilter',
         cellEditor: NumericCellRendererComponent,
         cellClass: 'ag-right-aligned-cell'
-      },{
+      }, {
         field: 'Total Price', sortable: true, flex: 1, maxWidth: 200, autoHeight: true, wrapText: true,
         editable: false,
         filter: 'agTextColumnFilter',
@@ -155,7 +157,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions?.columnModel.setColumnsVisible(['action'], false);
       const pinnedBottomData = this.generatePinnedBottomData();
       this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
-    }else if (this.userRole?.includes('contractor')) {
+    } else if (this.userRole?.includes('contractor')) {
       this.downloadBtnState = true;
     }
     if (data.tenderId) {
@@ -235,6 +237,37 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     });
   }
 
+  //Toggle between form fill and upload file  
+  toggle: any;
+  toggleView(event: any) {
+    this.toggle = event.value;
+  }
+
+  //Financial bid multiple files upload
+  @ViewChild('attachments') attachment: any;
+  fileList: File[] = [];
+  listOfFiles: any[] = [];
+  isFinFileUploaded = false;
+  onFinFileChange(event: any) {
+    this.isFinFileUploaded = true;
+    for (var i = 0; i < event.target.files.length; i++) {
+      var selectedFile = event.target.files[i];
+      this.fileList.push(selectedFile);
+      this.listOfFiles.push(selectedFile.name)
+    }
+    console.log(this.attachment.nativeElement.value);
+    this.attachment.nativeElement.value = '';
+  }
+  removeSelectedFinFile(index: any) {
+    // Delete the item from fileNames list
+    this.listOfFiles.splice(index, 1);
+    // delete file from FileList
+    this.fileList.splice(index, 1);
+  }
+  downloadSelectedFinFile(id: any) {
+
+  }
+
   //AG GRID COMPONENTS
   public appHeaders = ["Item No", "Item Description", "Unit", "Quantity"]
   public gridApi!: GridApi;
@@ -259,7 +292,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     },
     {
       field: this.appHeaders[3], sortable: true, filter: 'agTextColumnFilter', flex: 1, minWidth: 120, maxWidth: 120,
-      cellEditor: NumericCellRendererComponent,cellClass: 'ag-right-aligned-cell'
+      cellEditor: NumericCellRendererComponent, cellClass: 'ag-right-aligned-cell'
     },
     {
       headerName: "Action", flex: 1, minWidth: 120, maxWidth: 120,
@@ -305,11 +338,11 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   onCellValueChanged(event: CellValueChangedEvent) {
     const dataItem = [event.node.data];
     if (this.userRole?.includes('contractor')) {
-      if(event.colDef.field == "Unit Price"){
+      if (event.colDef.field == "Unit Price") {
         let totalValue = 0;
         totalValue = (event.data['Quantity']) * (event.data['Unit Price'])
         event.data['Total Price'] = totalValue;
-      } 
+      }
       const pinnedBottomData = this.generatePinnedBottomData();
       this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
     }
@@ -342,7 +375,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridOptions = params.columnApi;
     setTimeout(() => {
       if (this.userRole?.includes('contractor') && ((this.tenderDetails.get('workflowStep')?.value == 'Qualified') ||
-      (this.tenderDetails.get('workflowStep')?.value == 'In Review') || (this.tenderDetails.get('workflowStep')?.value == 'Recommended'))) {
+        (this.tenderDetails.get('workflowStep')?.value == 'In Review') || (this.tenderDetails.get('workflowStep')?.value == 'Recommended'))) {
         const pinnedBottomData = this.generatePinnedBottomData();
         this.gridApi?.setPinnedBottomRowData([pinnedBottomData]);
       }
@@ -368,7 +401,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         }
       });
       if (target[element]) {
-        target[element] = `Total: ${currencyFormatter(target[element],'₹')}`;
+        target[element] = `Total: ${currencyFormatter(target[element], '₹')}`;
       } else {
         target[element] = ``;
       }
@@ -397,7 +430,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.gridApi.refreshCells();
       }
       const rowLength = this.gridApi.getDisplayedRowCount();
-      if(rowLength == 1){
+      if (rowLength == 1) {
         this.toastr.error('Row cannot be deleted');
       }
       if (action === "delete" && (rowLength > 1)) {
@@ -406,7 +439,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         });
         this.rowData.splice(params.rowIndex, 1);
         this.gridApi.refreshCells();
-      } 
+      }
     }
   }
   onCellEditingStarted(event: CellEditingStartedEvent) {

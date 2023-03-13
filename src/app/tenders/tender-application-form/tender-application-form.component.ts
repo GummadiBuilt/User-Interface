@@ -20,6 +20,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { DatePipe } from '@angular/common';
 import { NumericCellRendererComponent } from 'src/app/renderers/numeric-cell-renderer/numeric-cell-renderer.component';
+import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -52,7 +53,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class TenderApplicationFormComponent implements OnInit {
+export class TenderApplicationFormComponent implements OnInit, ComponentCanDeactivate {
   stepperOrientation!: Observable<StepperOrientation>;
   applicantPqForm!: FormGroup;
   public userRole: string[] | undefined;
@@ -131,10 +132,10 @@ export class TenderApplicationFormComponent implements OnInit {
       clientReferences: {},
       similarProjectNature: {},
 
-      esiRegistration: ['', Validators.maxLength(50)],
-      epfRegistration: ['', Validators.maxLength(50)],
-      gstRegistration: ['', Validators.maxLength(50)],
-      panNumber: ['', Validators.maxLength(50)],
+      esiRegistration: ['', [Validators.required, Validators.maxLength(50)]],
+      epfRegistration: ['', [Validators.required, Validators.maxLength(50)]],
+      gstRegistration: ['', [Validators.required, Validators.maxLength(50)]],
+      panNumber: ['', [Validators.required, Validators.maxLength(50)]],
 
       employeesStrength: {},
       capitalEquipment: {},
@@ -151,6 +152,9 @@ export class TenderApplicationFormComponent implements OnInit {
       underTaking: [true, Validators.required],
       actionTaken: ['']
     });
+  }
+  canDeactivate(): boolean {
+    return this.applicantPqForm.dirty;
   }
   chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
     const ctrlValue = this.applicantPqForm.controls['yearOfEstablishment'].value;
@@ -203,10 +207,10 @@ export class TenderApplicationFormComponent implements OnInit {
       const dataRef = clientRef;
       const keys = Object.keys(dataRef[0]);
       if (colDefs?.length) {
-       const colMaster:ColDef = colDefs[1];
-       const missingHeaders = keys.filter(item => !colDefs.map((col:ColDef) => col.field).includes(item));
-        missingHeaders.forEach(header =>{
-          const clonedObk = {...colMaster};
+        const colMaster: ColDef = colDefs[1];
+        const missingHeaders = keys.filter(item => !colDefs.map((col: ColDef) => col.field).includes(item));
+        missingHeaders.forEach(header => {
+          const clonedObk = { ...colMaster };
           clonedObk.field = header;
           clonedObk.colId = header;
           clonedObk.headerName = header;
@@ -228,10 +232,10 @@ export class TenderApplicationFormComponent implements OnInit {
       const dataSimRef = similarProjNat;
       const keys = Object.keys(dataSimRef[0]);
       if (colDefsSim?.length) {
-       const colMasterSim:ColDef = colDefsSim[1];
-       const missingHeaders = keys.filter(item => !colDefsSim.map((col:ColDef) => col.field).includes(item));
-        missingHeaders.forEach(header =>{
-          const clonedObkSim = {...colMasterSim};
+        const colMasterSim: ColDef = colDefsSim[1];
+        const missingHeaders = keys.filter(item => !colDefsSim.map((col: ColDef) => col.field).includes(item));
+        missingHeaders.forEach(header => {
+          const clonedObkSim = { ...colMasterSim };
           clonedObkSim.field = header;
           clonedObkSim.colId = header;
           clonedObkSim.headerName = header;
@@ -355,10 +359,11 @@ export class TenderApplicationFormComponent implements OnInit {
   }
 
   //Section C of PQ-Form: Client References of 3 Major Projects
-  
-  public project: ColDef[] = [{ headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true,
-  cellEditorSelector: cellEditorSelector,
-  valueFormatter:valueFormat,
+
+  public project: ColDef[] = [{
+    headerName: 'Project 1', field: 'Project 1', editable: true, wrapText: true,
+    cellEditorSelector: cellEditorSelector,
+    valueFormatter: valueFormat,
   }];
   public projectInfoColumnDef: ColDef[] = [
     this.project[0]
@@ -370,14 +375,14 @@ export class TenderApplicationFormComponent implements OnInit {
     const colDef = this.gridApiClientRef?.getColumnDefs();
     this.project.forEach(item => {
       item.headerName = 'Project ' + colDef?.length,
-      item.field = 'Project ' + colDef?.length      
-      item.colId = 'Project ' +colDef?.length
+        item.field = 'Project ' + colDef?.length
+      item.colId = 'Project ' + colDef?.length
     });
     colDef?.push(this.project[0]);
-    if(colDef?.length && colDef?.length<=4){
+    if (colDef?.length && colDef?.length <= 4) {
       this.gridApiClientRef?.setColumnDefs(colDef);
       this.gridApiSimilarNature?.setColumnDefs(colDef);
-    }else {
+    } else {
       this.btnstate = true;
       this.toastr.error('A maximum of three client references are allowed');
     }
@@ -555,7 +560,7 @@ export class TenderApplicationFormComponent implements OnInit {
         });
       }
       const rowLength = this.gridApiEmployeesStrength.getDisplayedRowCount();
-      if(rowLength == 1){
+      if (rowLength == 1) {
         this.toastr.error('Row cannot be deleted');
       }
       if (action === "delete" && (rowLength > 1)) {
@@ -652,7 +657,7 @@ export class TenderApplicationFormComponent implements OnInit {
         });
       }
       const rowLength = this.gridApiCapitalEquipments.getDisplayedRowCount();
-      if(rowLength == 1){
+      if (rowLength == 1) {
         this.toastr.error('Row cannot be deleted');
       }
       if (action === "delete" && (rowLength > 1)) {
@@ -782,7 +787,7 @@ export class TenderApplicationFormComponent implements OnInit {
         });
       }
       const rowLength = this.gridApiFinancialDetails.getDisplayedRowCount();
-      if(rowLength == 1){
+      if (rowLength == 1) {
         this.toastr.error('Row cannot be deleted');
       }
       if (action === "delete" && (rowLength > 1)) {
@@ -875,7 +880,7 @@ export class TenderApplicationFormComponent implements OnInit {
         });
       }
       const rowLength = this.gridApiCompanyBankersDetails.getDisplayedRowCount();
-      if(rowLength == 1){
+      if (rowLength == 1) {
         this.toastr.error('Row cannot be deleted');
       }
       if (action === "delete" && (rowLength > 1)) {
@@ -968,7 +973,7 @@ export class TenderApplicationFormComponent implements OnInit {
         });
       }
       const rowLength = this.gridApiCompanyAuditorsDetails.getDisplayedRowCount();
-      if(rowLength == 1){
+      if (rowLength == 1) {
         this.toastr.error('Row cannot be deleted');
       }
       if (action === "delete" && (rowLength > 1)) {
@@ -1005,6 +1010,7 @@ export class TenderApplicationFormComponent implements OnInit {
       this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
           //console.log(this.pqFormTenderId,this.applicantPqFormId);
+          this.applicantPqForm.markAsPristine();
           this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Updated');
         }),
@@ -1017,6 +1023,7 @@ export class TenderApplicationFormComponent implements OnInit {
         next: ((response: applicantsPqFormResponse) => {
           this.applicantPqFormId = response.applicationId;
           // console.log(this.pqFormTenderId,this.applicantPqFormId);
+          this.applicantPqForm.markAsPristine();
           this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
           this.toastr.success('Successfully Created');
         }),
@@ -1101,6 +1108,98 @@ export class TenderApplicationFormComponent implements OnInit {
       })
     }
   }
+
+  //ESI file upload
+  esiFile: any;
+  esiFileName: any;
+  isEsiFileUploaded = false;
+  onEsiFileChange(event: any) {
+    this.esiFileName = '';
+    this.isEsiFileUploaded = true;
+    if (event.target.files.length > 0) {
+      this.esiFile = event.target.files[0];
+    }
+    else {
+      this.esiFile = null;
+    }
+  }
+  removeSelectedEsiFile(f: any) {
+    if (f) {
+      this.esiFile = null;
+    }
+  }
+  downloadSelectedEsiFile(id: any) {
+    
+  }
+
+  //EPF file upload
+  epfFile: any;
+  epfFileName: any;
+  isEpfFileUploaded = false;
+  onEpfFileChange(event: any) {
+    this.epfFileName = '';
+    this.isEpfFileUploaded = true;
+    if (event.target.files.length > 0) {
+      this.epfFile = event.target.files[0];
+    }
+    else {
+      this.epfFile = null;
+    }
+  }
+  removeSelectedEpfFile(f: any) {
+    if (f) {
+      this.epfFile = null;
+    }
+  }
+  downloadSelectedEpfFile(id: any) {
+    
+  }
+
+  //GST file upload
+  gstFile: any;
+  gstFileName: any;
+  isGstFileUploaded = false;
+  onGstFileChange(event: any) {
+    this.gstFileName = '';
+    this.isGstFileUploaded = true;
+    if (event.target.files.length > 0) {
+      this.gstFile = event.target.files[0];
+    }
+    else {
+      this.gstFile = null;
+    }
+  }
+  removeSelectedGstFile(f: any) {
+    if (f) {
+      this.gstFile = null;
+    }
+  }
+  downloadSelectedGstFile(id: any) {
+    
+  }
+
+  //PAN file upload
+  panFile: any;
+  panFileName: any;
+  isPanFileUploaded = false;
+  onPanFileChange(event: any) {
+    this.panFileName = '';
+    this.isPanFileUploaded = true;
+    if (event.target.files.length > 0) {
+      this.panFile = event.target.files[0];
+    }
+    else {
+      this.panFile = null;
+    }
+  }
+  removeSelectedPanFile(f: any) {
+    if (f) {
+      this.panFile = null;
+    }
+  }
+  downloadSelectedPanFile(id: any) {
+    
+  }
 }
 //Indian currency formatter
 function currencyFormatter(value: number) {
@@ -1108,18 +1207,18 @@ function currencyFormatter(value: number) {
   return formatter.format(value);
 }
 function cellEditorSelector(params: ICellEditorParams): CellEditorSelectorResult | undefined {
-    const type = params.data.details; 
-    if (type === 'Contract Value:') {
-        return {
-            component: NumericCellRendererComponent,
-        };
-    } 
-    return undefined;
+  const type = params.data.details;
+  if (type === 'Contract Value:') {
+    return {
+      component: NumericCellRendererComponent,
+    };
+  }
+  return undefined;
 }
 function valueFormat(params: ValueFormatterParams) {
   const type = params.data.details;
   if (type === 'Contract Value:') {
-      return currencyFormatter(params.value);
+    return currencyFormatter(params.value);
   }
   else
     return params.value
