@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.12.0...v1.13.0) (2023-03-06)
+
+
+### Features
+
+* **signup.component.ts:** fixed search filter mat chips in sign up and profile ([abd9805](https://github.com/GummadiBuilt/User-Interface/commit/abd9805ba35a2b873c45562755a8bf1d85a629b9))
+
 # [1.12.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.11.0...v1.12.0) (2023-02-28)
 
 
