@@ -28,6 +28,7 @@
 ::ng-deep .mat-horizontal-stepper-header[aria-selected="true"] {
     height: 44px !important;
     margin: 12px 12px 12px 12px !important;
+    background-color: #ffeaea !important;
 }
 
 ::ng-deep .mat-horizontal-stepper-header:hover {
@@ -49,6 +50,7 @@
     padding: 0px 24px 0px 24px !important;
     height: 48px !important;
     margin: 16px 12px 12px 12px !important;
+    background-color: #ffeaea !important;
 }
 
 ::ng-deep .mat-vertical-stepper-header:hover {

@@ -2,6 +2,12 @@
     padding: 24px;
 }
 
+@media (max-width:928px) {
+    .pq-form {
+        padding: 12px !important;
+    }
+}
+
 form mat-label {
     color: #841618;
 }
@@ -82,6 +88,10 @@ form mat-label {
     margin: 24px 0px 24px 0px;
 }
 
+::ng-deep .undertaking .mat-radio-label {
+    white-space: normal !important;
+}
+
 .example-wrapper {
     margin-bottom: 24px;
 }
@@ -119,31 +129,45 @@ form mat-label {
     font-size: 20px;
 }
 
-
 //stepper custom css
-
-mat-stepper {
-    padding: 0 16px 0 16px;
+::ng-deep .mat-horizontal-stepper-header {
+    height: 44px !important;
+    margin: 12px 12px 12px 12px !important;
 }
 
-::ng-deep .mat-step-header[aria-selected="true"] {
-    height: 40px !important;
+::ng-deep .mat-horizontal-stepper-header[aria-selected="true"] {
+    height: 44px !important;
+    margin: 12px 12px 12px 12px !important;
     background-color: #ffeaea !important;
 }
 
-::ng-deep .mat-step-header:hover {
-    height: 40px !important;
-    margin: 16px 0 16px 0 !important;
+::ng-deep .mat-horizontal-stepper-header:hover {
+    height: 44px !important;
+    margin: 12px 12px 12px 12px !important;
 }
 
-// ::ng-deep .mat-vertical-stepper-header[aria-selected="true"] {
-//     height: 40px !important;
-//     background-color: #ffeaea !important;
-// }
+::ng-deep mat-stepper {
+    padding-top: 12px !important;
+}
 
-// ::ng-deep .mat-vertical-stepper-header:hover {
-//     height: 40px !important;
-// }
+::ng-deep .mat-vertical-stepper-header {
+    padding: 0px 24px 0px 24px !important;
+    height: 48px !important;
+    margin: 16px 12px 12px 12px !important;
+}
+
+::ng-deep .mat-vertical-stepper-header[aria-selected="true"] {
+    padding: 0px 24px 0px 24px !important;
+    height: 48px !important;
+    margin: 16px 12px 12px 12px !important;
+    background-color: #ffeaea !important;
+}
+
+::ng-deep .mat-vertical-stepper-header:hover {
+    padding: 0px 24px 0px 24px !important;
+    height: 48px !important;
+    margin: 16px 12px 12px 12px !important;
+}
 
 ::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
     color: #841618 !important;

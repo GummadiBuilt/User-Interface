@@ -111,7 +111,9 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       lastDateOfSubmission: [moment, [Validators.required]],
       estimatedBudget: ['', Validators.maxLength(20)],
       tenderFinanceInfo: [''],
-      workflowStep: ['']
+      workflowStep: [''],
+
+      typeOfFinancialInfo:['']
     });
     this.getTendersMasterData();
     this.getCommonOptionsData();
@@ -520,7 +522,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
   onSave() {
-    console.log(this.tenderDetails.value.lastDateOfSubmission);
+    console.log(this.tenderDetails.value);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
     this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {

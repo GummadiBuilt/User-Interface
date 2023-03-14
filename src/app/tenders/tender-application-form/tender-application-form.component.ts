@@ -132,10 +132,10 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
       clientReferences: {},
       similarProjectNature: {},
 
-      esiRegistration: ['', [Validators.required, Validators.maxLength(50)]],
-      epfRegistration: ['', [Validators.required, Validators.maxLength(50)]],
-      gstRegistration: ['', [Validators.required, Validators.maxLength(50)]],
-      panNumber: ['', [Validators.required, Validators.maxLength(50)]],
+      esiRegistration: ['', [Validators.required, Validators.maxLength(17), Validators.minLength(17)]],
+      epfRegistration: ['', [Validators.required, Validators.pattern("^[A-Z]{2}[\\s\\/]?[A-Z]{3}[\\s\\/]?[0-9]{7}[\\s\\/]?[0-9]{3}[\\s\\/]?[0-9]{7}$")]],
+      gstRegistration: ['', [Validators.required, Validators.minLength(15), Validators.maxLength(15), Validators.pattern("^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$")]],
+      panNumber: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[A-Z]{5}[0-9]{4}[A-Z]{1}")]],
 
       employeesStrength: {},
       capitalEquipment: {},
@@ -1129,7 +1129,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
   }
   downloadSelectedEsiFile(id: any) {
-    
+
   }
 
   //EPF file upload
@@ -1152,7 +1152,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
   }
   downloadSelectedEpfFile(id: any) {
-    
+
   }
 
   //GST file upload
@@ -1175,7 +1175,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
   }
   downloadSelectedGstFile(id: any) {
-    
+
   }
 
   //PAN file upload
@@ -1198,7 +1198,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
   }
   downloadSelectedPanFile(id: any) {
-    
+
   }
 }
 //Indian currency formatter

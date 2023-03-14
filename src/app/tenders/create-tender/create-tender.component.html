@@ -171,6 +171,7 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
+                    <!-- Technical Bid uploaded by Client -->
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px" *ngIf="!downloadBtnState">
                         <mat-label>{{constantVariable.technicalBid}} *</mat-label>
@@ -214,6 +215,22 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Admin Download financial bid document(s) uploaded by Client -->
+                    <!-- <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column" fxLayoutGap="4px" *ngIf="userRole?.includes('admin')">
+                        <mat-label>Financial Bid uploaded by Client</mat-label>
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                            <button *ngIf="fileName" type="button" mat-button class="icon-approve"
+                                matTooltip="Download file" matTooltipPosition="right"
+                                (click)="downloadSelectedFile(tenderId)">
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                    <i class="fa-solid fa-file-arrow-down"></i>
+                                    <div>Download</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div> -->
+                    <!-- Technical Bid uploaded by Contractor -->
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px"
                         *ngIf="userRole?.includes('contractor') && !downloadBtnState">
@@ -260,6 +277,8 @@
                         fxLayout="column" fxLayoutGap="4px">
 
                     </div>
+                    <!-- Financial Bid is Form Fill/Upload File(s) by Client, 
+                        If Fin Bid is a file(s), Admin will process to required format and import to ag-grid -->
                     <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px"
                         *ngIf="!downloadBtnState">
                         <mat-label>{{constantVariable.financialBid}} *</mat-label>
@@ -267,9 +286,9 @@
                             <div fxLayout="row wrap" fxLayoutGap="12px" *ngIf="userRole?.includes('client')">
                                 <mat-label>Do you want to?</mat-label>
                                 <mat-radio-group (change)="toggleView($event)" aria-label="Select an option"
-                                    fxLayoutGap="12px">
-                                    <mat-radio-button value="1">Form Fill</mat-radio-button>
-                                    <mat-radio-button value="2">Upload File</mat-radio-button>
+                                    fxLayoutGap="12px" formControlName="typeOfFinancialInfo">
+                                    <mat-radio-button value="formFill">Form Fill</mat-radio-button>
+                                    <mat-radio-button value="uploadFile">Upload File</mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">
@@ -277,12 +296,12 @@
                                     fxLayoutGap="8px" *ngIf="!userRole?.includes('contractor')">
                                     <i class="fa-icons fa-solid fa-file-import"></i>
                                     <span class="textLink">Import File</span>
-
                                     <input id="fileTender" type="file" (change)="importExcel($event)"
                                         accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
                             </div>
-                            <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">
+                            <div *ngIf="(toggle == 'formFill' && userRole?.includes('client')) || !userRole?.includes('client')"
+                                fxLayout="row" fxLayoutGap="25%">
                                 <button type="button" mat-button class="icon-approve" matTooltip="Download file"
                                     matTooltipPosition="right" (click)="exportExcelFile()">
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
@@ -292,7 +311,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div *ngIf="(toggle == 1 && userRole?.includes('client')) || !userRole?.includes('client')"
+                        <div *ngIf="(toggle == 'formFill' && userRole?.includes('client')) || !userRole?.includes('client')"
                             class="example-wrapper">
                             <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"
                                 [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
@@ -305,7 +324,8 @@
                                 [overlayLoadingTemplate]="overlayLoadingTemplate" [stopEditingWhenCellsLoseFocus]=true>
                             </ag-grid-angular>
                         </div>
-                        <div *ngIf="toggle == 2 && userRole?.includes('client')" fxLayout="column">
+                        <!-- Financial Bid, Client can upload multiple files -->
+                        <div *ngIf="toggle == 'uploadFile' && userRole?.includes('client')" fxLayout="column">
                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                                 <label class="button-upload" for="financeFile" fxLayout="row"
                                     fxLayoutAlign="start center" fxLayoutGap="8px"
@@ -330,20 +350,19 @@
                                                     (click)="removeSelectedFinFile(index)">
                                                     <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
                                                 </button>
+                                                <button type="button" mat-button class="icon-approve"
+                                                    matTooltip="Download file" matTooltipPosition="right"
+                                                    (click)="downloadSelectedFinFile(index)">
+                                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                                        <i class="fa-solid fa-file-arrow-down"></i>
+                                                        <div>Download</div>
+                                                    </div>
+                                                </button>
                                             </div>
                                         </li>
                                     </ul>
                                 </ng-container>
                             </div>
-                            <!-- <div>
-                                <button type="button" mat-button class="icon-approve" matTooltip="Download file"
-                                    matTooltipPosition="right" (click)="downloadSelectedFinFile(tenderId)">
-                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                        <i class="fa-solid fa-file-arrow-down"></i>
-                                        <div>Download</div>
-                                    </div>
-                                </button>
-                            </div> -->
                             <div
                                 *ngIf="isFinFileUploaded && tenderDetails.get('file')?.invalid && (tenderDetails.get('file')?.dirty || tenderDetails.get('file')?.touched)">
                                 <div *ngIf="tenderDetails.get('file')?.errors?.['required']">

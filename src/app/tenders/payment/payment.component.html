@@ -143,7 +143,7 @@
                     <mat-label>List of Payments</mat-label>
                     <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
                         [pagination]="true" [rowData]="rowData" [animateRows]="true" [sideBar]="sideBar"
-                        (gridReady)="onGridReady($event)" [domLayout]="domLayout">
+                        (gridReady)="onGridReady($event)" [domLayout]="domLayout" [enableCellTextSelection]="true">
                     </ag-grid-angular>
                 </div>
             </div>

@@ -60,8 +60,10 @@
                 <ng-template matStepperIcon="vendor_info">
                     <i class="fa-solid fa-city"></i>
                 </ng-template>
-                <mat-step [stepControl]="applicantPqForm" errorMessage="Fill required company details."
-                    label="Vendor's General Company Information" state="vendor_info" [completed]="false">
+                <mat-step
+                    [stepControl]="applicantPqForm.get('companyName')! && applicantPqForm.get('yearOfEstablishment')! && applicantPqForm.get('typeOfEstablishment')!"
+                    errorMessage="Fill required company details." label="Vendor's General Company Information"
+                    state="vendor_info" [completed]="false">
                     <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <h3 class="info-header">Company Details</h3>
@@ -311,7 +313,10 @@
                 <ng-template matStepperIcon="performance_pref">
                     <i class="fa-solid fa-check-double"></i>
                 </ng-template>
-                <mat-step label="Performance References" state="performance_pref" [completed]="false">
+                <mat-step
+                    [stepControl]="applicantPqForm.get('esiRegistration')! && applicantPqForm.get('epfRegistration')! && applicantPqForm.get('gstRegistration')! && applicantPqForm.get('panNumber')!"
+                    errorMessage="Fill required statutory compliances." label="Performance References"
+                    state="performance_pref" [completed]="false">
                     <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
@@ -407,14 +412,14 @@
                                             <mat-label>ESI Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="ESI Registration"
-                                                    formControlName="esiRegistration">
+                                                    formControlName="esiRegistration" numbersOnly>
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['required']">
                                                     ESI Registration required
                                                 </mat-error>
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['maxlength'] || applicantPqForm.get('esiRegistration')?.errors?.['minlength']">
+                                                    Enter 17 digits only
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -458,14 +463,15 @@
                                             <mat-label>EPF Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="EPF Registration"
-                                                    formControlName="epfRegistration">
+                                                    formControlName="epfRegistration"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['required']">
                                                     EPF Registration required
                                                 </mat-error>
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['pattern']">
+                                                    Enter valid EPF number
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -509,14 +515,19 @@
                                             <mat-label>GST Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="GST Registration"
-                                                    formControlName="gstRegistration">
+                                                    formControlName="gstRegistration"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['required']">
                                                     GST Registration required
                                                 </mat-error>
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="!applicantPqForm.get('gstRegistration')?.errors?.['pattern'] && (applicantPqForm.get('gstRegistration')?.errors?.['minlength'] || applicantPqForm.get('gstRegistration')?.errors?.['maxlength'])">
+                                                    GST Number should be 15 characters
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['pattern']">
+                                                    Enter valid GST Number
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -559,14 +570,19 @@
                                             fxFlex.xl="24%" fxLayout="column">
                                             <mat-label>PAN Number *</mat-label>
                                             <mat-form-field appearance="outline">
-                                                <input matInput placeholder="PAN Number" formControlName="panNumber">
+                                                <input matInput placeholder="PAN Number" formControlName="panNumber"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                                 <mat-error
                                                     *ngIf="applicantPqForm.get('panNumber')?.errors?.['required']">
                                                     PAN number required
                                                 </mat-error>
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="!applicantPqForm.get('panNumber')?.errors?.['pattern'] && (applicantPqForm.get('panNumber')?.errors?.['maxlength'] || applicantPqForm.get('panNumber')?.errors?.['minlength'])">
+                                                    Enter only 10 characters
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['pattern']">
+                                                    Enter valid PAN number
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
