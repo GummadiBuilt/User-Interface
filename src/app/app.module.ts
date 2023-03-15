@@ -70,6 +70,7 @@ import { SafePipe } from './shared/safe.pipe';
 import { EnquiriesComponent } from './enquiries/enquiries.component';
 import { FooterComponent } from './footer/footer.component';
 import { PaymentComponent } from './tenders/payment/payment.component';
+import { CopyButtonRendererComponent } from './renderers/copy-button-renderer/copy-button-renderer.component';
 //import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -158,6 +159,7 @@ export const MY_DATE_FORMATS = {
     EnquiriesComponent,
     FooterComponent,
     PaymentComponent,
+    CopyButtonRendererComponent,
   ],
   imports: [
     BrowserModule,

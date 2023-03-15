@@ -9,6 +9,7 @@ import { PageConstants } from 'src/app/shared/application.constants';
 import { ComponentCanDeactivate } from 'src/app/shared/can-deactivate/deactivate.guard';
 import { applicationRole } from './clientContractors';
 import { paymentResponse } from './paymentResponse';
+import { CopyButtonRendererComponent } from 'src/app/renderers/copy-button-renderer/copy-button-renderer.component';
 
 @Component({
   selector: 'app-payment',
@@ -118,7 +119,10 @@ export class PaymentComponent implements OnInit, ComponentCanDeactivate {
     { headerName: 'Payment ID', field: 'paymentId', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Payment Amount', field: 'paymentAmount', flex: 1, filter: 'agTextColumnFilter' },
     { headerName: 'Payment Description', field: 'paymentDescription', flex: 1, filter: 'agTextColumnFilter' },
-    { headerName: 'Payment URL', field: 'shortUrl', flex: 1, filter: 'agTextColumnFilter' },
+    {
+      headerName: 'Payment URL', field: 'shortUrl', flex: 1, filter: 'agTextColumnFilter',
+      cellRenderer: CopyButtonRendererComponent, minWidth: 350
+    },
   ];
 
   // DefaultColDef sets props common to all Columns
@@ -139,7 +143,7 @@ export class PaymentComponent implements OnInit, ComponentCanDeactivate {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.paymentDetails.value);
+    // console.log(this.paymentDetails.value);
     this.paymentDetails.value.contactPhoneNumber = '+91' + this.paymentDetails.get('contactPhoneNumber')?.value;
     console.log(this.paymentDetails.value.contactPhoneNumber);
     if (this.paymentDetails.value.notifyViaEmail || this.paymentDetails.value.notifyViaSms) {
