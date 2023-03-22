@@ -51,8 +51,7 @@ export class UploadButtonRendererComponent implements ICellRendererAngularComp {
     }
     let formData = new FormData();
     const blob = new Blob();
-    formData.append('yearDocument', this.file || blob);
-
+    formData.append('document', this.file || blob);
     if (pqFormTenderId && applicantPqFormId) {
       this.ApiServicesService.updateApplicantPQFormFile(pqFormTenderId, applicantPqFormId, yearRow, formData).subscribe({
         next: ((response) => {

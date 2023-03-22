@@ -100,6 +100,17 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
           //console.log(data);
           this.getApplicantPQForms(data);
         });
+      } else if(tenderId){
+          this.ApiServicesService.createApplicantPQForm(tenderId).subscribe({
+            next: ((response: applicantsPqFormResponse) => {
+              this.applicantPqFormId = response.applicationId;
+              this.applicantPqForm.markAsPristine();
+              this.router.navigate(['/tenders', tenderId, 'edit-tender-application-form', this.applicantPqFormId]);
+            }),
+            error: (error => {
+              console.log(error);
+            })
+          });
       }
     });
   }
@@ -198,7 +209,8 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     if (data.turnOverDetails != null) {
       this.turnoverDetails = data.turnOverDetails;
     }
-    if (Object.keys(data.clientReferences).length === 0) {
+    const cliRef = data.clientReferences || {};
+    if (Object.keys(cliRef).length === 0) {
       this.clientRefRowData = [];
     } else {
       // set the column headers from the data        
@@ -223,7 +235,8 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
         }
       }
     }
-    if (Object.keys(data.similarProjectNature).length === 0) {
+    const simNat = data.similarProjectNature || {};
+    if (Object.keys(simNat).length === 0) {
       this.similarNatureRowData = [];
     } else {
       // set the column headers from the data        
@@ -245,31 +258,36 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
         this.similarNatureRowData = similarProjNat;
       }
     }
-    if (Object.keys(data.employeesStrength).length === 0) {
+    const empStr = data.employeesStrength || {};
+    if (Object.keys(empStr).length === 0) {
       this.employeesStrengthRowData = [];
     } else {
       const empStrength = (typeof data.employeesStrength === 'string' ? JSON.parse(data.employeesStrength) : data.employeesStrength);
       this.employeesStrengthRowData = empStrength;
     }
-    if (Object.keys(data.capitalEquipment).length === 0) {
+    const capEqu = data.capitalEquipment || {};
+    if (Object.keys(capEqu).length === 0) {
       this.capitalEquipmentsRowData = [];
     } else {
       const capitalEquipment = (typeof data.capitalEquipment === 'string' ? JSON.parse(data.capitalEquipment) : data.capitalEquipment);
       this.capitalEquipmentsRowData = capitalEquipment;
     }
-    if (Object.keys(data.financialInformation).length === 0) {
+    const finInf = data.financialInformation || {};
+    if (Object.keys(finInf).length === 0) {
       this.financialDetails = [];
     } else {
       const financialInformation = (typeof data.financialInformation === 'string' ? JSON.parse(data.financialInformation) : data.financialInformation);
       this.financialDetails = financialInformation;
     }
-    if (Object.keys(data.companyBankers).length === 0) {
+    const comBan = data.companyBankers || {};
+    if (Object.keys(comBan).length === 0) {
       this.companyBankersDetails = [];
     } else {
       const companyBankers = (typeof data.companyBankers === 'string' ? JSON.parse(data.companyBankers) : data.companyBankers);
       this.companyBankersDetails = companyBankers;
     }
-    if (Object.keys(data.companyAuditors).length === 0) {
+    const comAud = data.companyAuditors || {};
+    if (Object.keys(comAud).length === 0) {
       this.companyAuditorsDetails = [];
     } else {
       const companyAuditors = (typeof data.companyAuditors === 'string' ? JSON.parse(data.companyAuditors) : data.companyAuditors);
@@ -1018,20 +1036,22 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
           console.log(error);
         })
       })
-    } else if (this.pqFormTenderId && this.applicantPqForm.valid) {
-      this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
-        next: ((response: applicantsPqFormResponse) => {
-          this.applicantPqFormId = response.applicationId;
-          // console.log(this.pqFormTenderId,this.applicantPqFormId);
-          this.applicantPqForm.markAsPristine();
-          this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
-          this.toastr.success('Successfully Created');
-        }),
-        error: (error => {
-          console.log(error);
-        })
-      });
-    } else {
+    } 
+    // else if (this.pqFormTenderId && this.applicantPqForm.valid) {
+    //   this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
+    //     next: ((response: applicantsPqFormResponse) => {
+    //       this.applicantPqFormId = response.applicationId;
+    //       // console.log(this.pqFormTenderId,this.applicantPqFormId);
+    //       this.applicantPqForm.markAsPristine();
+    //       this.router.navigate(['/tenders', this.pqFormTenderId, 'edit-tender-application-form', this.applicantPqFormId]);
+    //       this.toastr.success('Successfully Created');
+    //     }),
+    //     error: (error => {
+    //       console.log(error);
+    //     })
+    //   });
+    // } 
+    else {
       console.log('error');
       this.toastr.error('Error in Creation Applicant PQ Form');
     }

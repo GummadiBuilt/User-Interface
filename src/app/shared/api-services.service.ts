@@ -128,20 +128,20 @@ export class ApiServicesService {
     return this.httpClient.get<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId);
   }
   //Create Applicant PQ Form postAPI
-  public createApplicantPQForm(tenderId: any, data: any): Observable<applicantsPqFormResponse> {
-    return this.httpClient.post<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application', data);
+  public createApplicantPQForm(tenderId: any): Observable<applicantsPqFormResponse> {
+    return this.httpClient.post<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application',null);
   }
   //Update Applicant PQ Form putAPI
   public updateApplicantPQForm(tenderId: any, applicationId: any, data: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.put<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/update', data);
   }
   //file upload in update tender application form
-  public updateApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any, file: any) {
-    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/' + fileYear, file);
+  public updateApplicantPQFormFile(tenderId: any, applicationId: any, documentType: any, file: any) {
+    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/' + documentType, file);
   }
   //file download in update tender application form
-  public downloadApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any) {
-    return this.httpClient.get(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/download/' + fileYear);
+  public downloadApplicantPQFormFile(tenderId: any, applicationId: any, documentType: any) {
+    return this.httpClient.get(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/download/' + documentType);
   }
   //client users getAPI
   public getClientUsers(): Observable<clientUsersResponse> {
