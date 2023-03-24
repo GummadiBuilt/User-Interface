@@ -80,6 +80,12 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
   public gridOptionsCompanyBankersDetails!: any;
   public gridApiCompanyAuditorsDetails!: GridApi;
   public gridOptionsCompanyAuditorsDetails!: any;
+  tenderId: any;
+  applicationId: any;
+  esiFileName: any;
+  epfFileName: any;
+  gstFileName: any;
+  panFileName: any;
 
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
@@ -90,27 +96,27 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
     this.domLayout = "autoHeight";
     this.route.paramMap.subscribe(params => {
-      const tenderId = params.get('tenderId');
+      this.tenderId = params.get('tenderId');
       const pqFormId = params.get('pqId');
-      const applicationId = params.get('applicationId');
-      this.pqFormTenderId = tenderId;
+      this.applicationId = params.get('applicationId');
+      this.pqFormTenderId = this.tenderId;
       this.PQFormId = pqFormId;
-      if (tenderId && applicationId) {
-        this.ApiServicesService.getApplicantPQForm(tenderId, applicationId).subscribe((data: applicantsPqFormResponse) => {
-          //console.log(data);
+      if (this.tenderId && this.applicationId) {
+        this.ApiServicesService.getApplicantPQForm(this.tenderId, this.applicationId).subscribe((data: applicantsPqFormResponse) => {
+          // console.log(data);
           this.getApplicantPQForms(data);
         });
-      } else if(tenderId){
-          this.ApiServicesService.createApplicantPQForm(tenderId).subscribe({
-            next: ((response: applicantsPqFormResponse) => {
-              this.applicantPqFormId = response.applicationId;
-              this.applicantPqForm.markAsPristine();
-              this.router.navigate(['/tenders', tenderId, 'edit-tender-application-form', this.applicantPqFormId]);
-            }),
-            error: (error => {
-              console.log(error);
-            })
-          });
+      } else if (this.tenderId) {
+        this.ApiServicesService.createApplicantPQForm(this.tenderId).subscribe({
+          next: ((response: applicantsPqFormResponse) => {
+            this.applicantPqFormId = response.applicationId;
+            this.applicantPqForm.markAsPristine();
+            this.router.navigate(['/tenders', this.tenderId, 'edit-tender-application-form', this.applicantPqFormId]);
+          }),
+          error: (error => {
+            console.log(error);
+          })
+        });
       }
     });
   }
@@ -124,9 +130,9 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
 
     //Vendor General Company info & etc (Contractor)
     this.applicantPqForm = this._formBuilder.group({
-      companyName: ['', [Validators.required, Validators.maxLength(50)]],
-      yearOfEstablishment: new FormControl(moment(), [Validators.required]),
-      typeOfEstablishment: ['', [Validators.required,]],
+      companyName: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(50)]],
+      yearOfEstablishment: new FormControl({ value: moment(), disabled: true }, [Validators.required]),
+      typeOfEstablishment: [{ value: '', disabled: true }, [Validators.required,]],
       corpOfficeAddress: ['', Validators.maxLength(250)],
       localOfficeAddress: ['', Validators.maxLength(250)],
       telephoneNum: ['', [Validators.pattern("^[1-9][0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
@@ -180,7 +186,11 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     return year <= this.currentYear;
   }
   getApplicantPQForms(data: any) {
-    //console.log(data);
+    // console.log(data);
+    this.esiFileName = data.esiRegistrationFileName;
+    this.epfFileName = data.epfRegistrationFileName;
+    this.gstFileName = data.gstRegistrationFileName;
+    this.panFileName = data.panFileName;
     this.applicantPqForm.get('companyName')?.patchValue(data.companyName);
     const dateString = data.yearOfEstablishment;
     const momentVariable = moment(dateString, 'YYYY');
@@ -1017,13 +1027,14 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     this.applicantPqForm.controls['companyAuditors'].setValue(this.companyAuditorsDetails);
     this.applicantPqForm.controls['clientReferences'].setValue(this.clientRefRowData);
     this.applicantPqForm.controls['similarProjectNature'].setValue(this.similarNatureRowData);
-    if (this.applicantPqForm.value.yearOfEstablishment) {
-      const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
-      this.applicantPqForm.value.yearOfEstablishment = dateTran;
-    } else {
-      this.toastr.error('Please Select Valid Year of Establishment');
-    }
-    if (this.applicantPqFormId && this.applicantPqForm.valid) {
+    this.applicantPqForm.value.companyName = this.applicantPqForm.get('companyName')?.value;
+    const dateString = this.applicantPqForm.get('yearOfEstablishment')?.value.format('YYYY');
+    this.applicantPqForm.value.yearOfEstablishment = dateString;
+    this.applicantPqForm.value.typeOfEstablishment = this.applicantPqForm.get('typeOfEstablishment')?.value;
+
+    console.log(this.applicantPqForm.value);
+
+    if (this.applicantPqFormId) {
       //console.log('update form');
       this.ApiServicesService.updateApplicantPQForm(this.pqFormTenderId, this.applicantPqFormId, this.applicantPqForm.value).subscribe({
         next: ((response: applicantsPqFormResponse) => {
@@ -1036,7 +1047,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
           console.log(error);
         })
       })
-    } 
+    }
     // else if (this.pqFormTenderId && this.applicantPqForm.valid) {
     //   this.ApiServicesService.createApplicantPQForm(this.pqFormTenderId, this.applicantPqForm.value).subscribe({
     //     next: ((response: applicantsPqFormResponse) => {
@@ -1068,13 +1079,12 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     this.applicantPqForm.controls['companyAuditors'].setValue(this.companyAuditorsDetails);
     this.applicantPqForm.controls['clientReferences'].setValue(this.clientRefRowData);
     this.applicantPqForm.controls['similarProjectNature'].setValue(this.similarNatureRowData);
-    if (this.applicantPqForm.value.yearOfEstablishment) {
-      const dateTran = moment(this.applicantPqForm.value.yearOfEstablishment).format('YYYY');
-      this.applicantPqForm.value.yearOfEstablishment = dateTran;
-    } else {
-      this.toastr.error('Please Select Valid Year of Establishment');
-    }
-    if (this.applicantPqFormId && this.applicantPqForm.valid) {
+    this.applicantPqForm.value.companyName = this.applicantPqForm.get('companyName')?.value;
+    const dateString = this.applicantPqForm.get('yearOfEstablishment')?.value.format('YYYY');
+    this.applicantPqForm.value.yearOfEstablishment = dateString;
+    this.applicantPqForm.value.typeOfEstablishment = this.applicantPqForm.get('typeOfEstablishment')?.value;
+
+    if (this.applicantPqFormId && this.applicantPqForm.valid && this.esiFileName && this.epfFileName && this.gstFileName && this.panFileName) {
       const dlg = this.dialog.open(ConfirmationDlgComponent, {
         data: { title: this.constantVariable.submitTenderApplicationTitle, msg: this.constantVariable.submitTenderApplicationMsg }
       });
@@ -1092,6 +1102,11 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
           })
         }
       });
+    } else if (!this.applicantPqForm.value.esiRegistration || !this.applicantPqForm.value.epfRegistration ||
+      !this.applicantPqForm.value.gstRegistration || !this.applicantPqForm.value.panNumber) {
+      this.toastr.error('Statutory Compliances are required in Performance References');
+    } else if (!this.esiFileName || !this.epfFileName || !this.gstFileName || !this.panFileName) {
+      this.toastr.error('Statutory Compliances upload file required in Performance References');
     } else {
       this.toastr.error('Error in Submitting Applicant PQ-Form');
     }
@@ -1131,94 +1146,219 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
 
   //ESI file upload
   esiFile: any;
-  esiFileName: any;
   isEsiFileUploaded = false;
   onEsiFileChange(event: any) {
     this.esiFileName = '';
     this.isEsiFileUploaded = true;
+    const yearRow = 'ESI';
     if (event.target.files.length > 0) {
       this.esiFile = event.target.files[0];
+      this.esiFileName = event.target.files[0].name;
     }
     else {
       this.esiFile = null;
     }
+    let formData = new FormData();
+    const blob = new Blob();
+    formData.append('document', this.esiFile || blob);
+    if (this.tenderId && this.applicationId) {
+      this.ApiServicesService.updateApplicantPQFormFile(this.tenderId, this.applicationId, yearRow, formData).subscribe({
+        next: ((response) => {
+          this.toastr.success('File Uploaded Successfully');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
+    } else if (!this.applicationId) {
+      //error
+      this.esiFile = null;
+      this.esiFileName = '';
+      console.log('File upload error');
+      this.toastr.error('Please save the form before uploading the file');
+    } else {
+      //error
+      console.log('error');
+      this.esiFile = null;
+      this.esiFileName = '';
+      this.toastr.error('Please upload ESI document');
+    }
   }
+
   removeSelectedEsiFile(f: any) {
     if (f) {
       this.esiFile = null;
+      this.esiFileName = '';
     }
   }
-  downloadSelectedEsiFile(id: any) {
-
+  downloadSelectedEsiFile() {
+    const yearRow = 'ESI';
+    this.ApiServicesService.downloadApplicantPQFormFile(this.tenderId, this.applicationId, yearRow).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   //EPF file upload
   epfFile: any;
-  epfFileName: any;
   isEpfFileUploaded = false;
   onEpfFileChange(event: any) {
     this.epfFileName = '';
     this.isEpfFileUploaded = true;
+    const yearRow = 'EPF';
     if (event.target.files.length > 0) {
       this.epfFile = event.target.files[0];
+      this.epfFileName = event.target.files[0].name;
     }
     else {
       this.epfFile = null;
+    }
+    let formData = new FormData();
+    const blob = new Blob();
+    formData.append('document', this.epfFile || blob);
+    if (this.tenderId && this.applicationId) {
+      this.ApiServicesService.updateApplicantPQFormFile(this.tenderId, this.applicationId, yearRow, formData).subscribe({
+        next: ((response) => {
+          this.toastr.success('File Uploaded Successfully');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
+    } else if (!this.applicationId) {
+      //error
+      this.epfFile = null;
+      this.epfFileName = '';
+      console.log('File upload error');
+      this.toastr.error('Please save the form before uploading the file');
+    } else {
+      //error
+      console.log('error');
+      this.epfFile = null;
+      this.epfFileName = '';
+      this.toastr.error('Please upload EPF document');
     }
   }
   removeSelectedEpfFile(f: any) {
     if (f) {
       this.epfFile = null;
+      this.epfFileName = '';
     }
   }
-  downloadSelectedEpfFile(id: any) {
-
+  downloadSelectedEpfFile() {
+    const yearRow = 'EPF';
+    this.ApiServicesService.downloadApplicantPQFormFile(this.tenderId, this.applicationId, yearRow).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   //GST file upload
   gstFile: any;
-  gstFileName: any;
   isGstFileUploaded = false;
   onGstFileChange(event: any) {
     this.gstFileName = '';
     this.isGstFileUploaded = true;
+    const yearRow = 'GST';
     if (event.target.files.length > 0) {
       this.gstFile = event.target.files[0];
+      this.gstFileName = event.target.files[0].name;
     }
     else {
       this.gstFile = null;
+    }
+    let formData = new FormData();
+    const blob = new Blob();
+    formData.append('document', this.gstFile || blob);
+    if (this.tenderId && this.applicationId) {
+      this.ApiServicesService.updateApplicantPQFormFile(this.tenderId, this.applicationId, yearRow, formData).subscribe({
+        next: ((response) => {
+          this.toastr.success('File Uploaded Successfully');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
+    } else if (!this.applicationId) {
+      //error
+      this.gstFile = null;
+      this.gstFileName = '';
+      console.log('File upload error');
+      this.toastr.error('Please save the form before uploading the file');
+    } else {
+      //error
+      console.log('error');
+      this.gstFile = null;
+      this.gstFileName = '';
+      this.toastr.error('Please upload GST document');
     }
   }
   removeSelectedGstFile(f: any) {
     if (f) {
       this.gstFile = null;
+      this.gstFileName = '';
     }
   }
-  downloadSelectedGstFile(id: any) {
-
+  downloadSelectedGstFile() {
+    const yearRow = 'GST';
+    this.ApiServicesService.downloadApplicantPQFormFile(this.tenderId, this.applicationId, yearRow).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   //PAN file upload
   panFile: any;
-  panFileName: any;
   isPanFileUploaded = false;
   onPanFileChange(event: any) {
     this.panFileName = '';
     this.isPanFileUploaded = true;
+    const yearRow = 'PAN';
     if (event.target.files.length > 0) {
       this.panFile = event.target.files[0];
+      this.panFileName = event.target.files[0].name;
     }
     else {
       this.panFile = null;
+    }
+    let formData = new FormData();
+    const blob = new Blob();
+    formData.append('document', this.panFile || blob);
+    if (this.tenderId && this.applicationId) {
+      this.ApiServicesService.updateApplicantPQFormFile(this.tenderId, this.applicationId, yearRow, formData).subscribe({
+        next: ((response) => {
+          this.toastr.success('File Uploaded Successfully');
+        }),
+        error: (error => {
+          console.log(error);
+        })
+      })
+    } else if (!this.applicationId) {
+      //error
+      this.panFile = null;
+      this.panFileName = '';
+      console.log('File upload error');
+      this.toastr.error('Please save the form before uploading the file');
+    } else {
+      //error
+      console.log('error');
+      this.panFile = null;
+      this.panFileName = '';
+      this.toastr.error('Please upload PAN documnet');
     }
   }
   removeSelectedPanFile(f: any) {
     if (f) {
       this.panFile = null;
+      this.panFileName = '';
     }
   }
-  downloadSelectedPanFile(id: any) {
-
+  downloadSelectedPanFile() {
+    const yearRow = 'PAN';
+    this.ApiServicesService.downloadApplicantPQFormFile(this.tenderId, this.applicationId, yearRow).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 }
 //Indian currency formatter

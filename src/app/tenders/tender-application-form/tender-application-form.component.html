@@ -301,6 +301,15 @@
                                     </div>
                                 </div>
                             </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>{{constantVariable.submitBtn}}</div>
+                                    </div>
+                                </div>
+                            </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><span>{{constantVariable.nextBtn}}</span></div>
@@ -440,19 +449,17 @@
                                                         <span>{{esiFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="esiFile?.name" type="button" mat-icon-button
-                                                            matTooltip="Remove Document" matTooltipPosition="right"
-                                                            (click)="removeSelectedEsiFile(esiFile)">
+                                                        <button *ngIf="esiFile?.name || esiFileName" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedEsiFile(esiFile || esiFileName)">
                                                             <i class="icon-upload fa-solid fa-circle-xmark"></i>
                                                         </button>
-                                                        <button *ngIf="esiFileName" type="button" mat-button
-                                                            matTooltip="Download file" matTooltipPosition="right"
-                                                            (click)="downloadSelectedEsiFile(pqFormTenderId)">
-                                                            <div fxLayout="row" fxLayoutAlign="center center"
-                                                                fxLayoutGap="6px">
-                                                                <i class="fa-solid fa-file-arrow-down"></i>
-                                                                <div>Download</div>
-                                                            </div>
+                                                        <button *ngIf="esiFile?.name || esiFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedEsiFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -492,19 +499,17 @@
                                                         <span>{{epfFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="epfFile?.name" type="button" mat-icon-button
-                                                            matTooltip="Remove Document" matTooltipPosition="right"
-                                                            (click)="removeSelectedEpfFile(epfFile)">
+                                                        <button *ngIf="epfFile?.name || epfFileName" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedEpfFile(epfFile || epfFileName)">
                                                             <i class="icon-upload fa-solid fa-circle-xmark"></i>
                                                         </button>
-                                                        <button *ngIf="esiFileName" type="button" mat-button
-                                                            matTooltip="Download file" matTooltipPosition="right"
-                                                            (click)="downloadSelectedEpfFile(pqFormTenderId)">
-                                                            <div fxLayout="row" fxLayoutAlign="center center"
-                                                                fxLayoutGap="6px">
-                                                                <i class="fa-solid fa-file-arrow-down"></i>
-                                                                <div>Download</div>
-                                                            </div>
+                                                        <button *ngIf="epfFile?.name || epfFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedEpfFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -548,19 +553,17 @@
                                                         <span>{{gstFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="gstFile?.name" type="button" mat-icon-button
-                                                            matTooltip="Remove Document" matTooltipPosition="right"
-                                                            (click)="removeSelectedGstFile(gstFile)">
+                                                        <button *ngIf="gstFile?.name || gstFileName" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedGstFile(gstFile || gstFileName)">
                                                             <i class="icon-upload fa-solid fa-circle-xmark"></i>
                                                         </button>
-                                                        <button *ngIf="gstFileName" type="button" mat-button
-                                                            matTooltip="Download file" matTooltipPosition="right"
-                                                            (click)="downloadSelectedGstFile(pqFormTenderId)">
-                                                            <div fxLayout="row" fxLayoutAlign="center center"
-                                                                fxLayoutGap="6px">
-                                                                <i class="fa-solid fa-file-arrow-down"></i>
-                                                                <div>Download</div>
-                                                            </div>
+                                                        <button *ngIf="gstFile?.name || gstFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedGstFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -603,19 +606,17 @@
                                                         <span>{{panFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="panFile?.name" type="button" mat-icon-button
-                                                            matTooltip="Remove Document" matTooltipPosition="right"
-                                                            (click)="removeSelectedPanFile(panFile)">
+                                                        <button *ngIf="panFile?.name  || panFileName" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedPanFile(panFile|| panFileName)">
                                                             <i class="icon-upload fa-solid fa-circle-xmark"></i>
                                                         </button>
-                                                        <button *ngIf="panFileName" type="button" mat-button
-                                                            matTooltip="Download file" matTooltipPosition="right"
-                                                            (click)="downloadSelectedPanFile(pqFormTenderId)">
-                                                            <div fxLayout="row" fxLayoutAlign="center center"
-                                                                fxLayoutGap="6px">
-                                                                <i class="fa-solid fa-file-arrow-down"></i>
-                                                                <div>Download</div>
-                                                            </div>
+                                                        <button *ngIf="panFile?.name|| panFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedPanFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -764,6 +765,15 @@
                                     </div>
                                 </div>
                             </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>{{constantVariable.submitBtn}}</div>
+                                    </div>
+                                </div>
+                            </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><span>{{constantVariable.nextBtn}}</span></div>
@@ -887,6 +897,15 @@
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
                                         <div>{{constantVariable.saveBtn}}</div>
+                                    </div>
+                                </div>
+                            </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>{{constantVariable.submitBtn}}</div>
                                     </div>
                                 </div>
                             </button>
