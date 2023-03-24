@@ -286,9 +286,9 @@
                             <div fxLayout="row wrap" fxLayoutGap="12px" *ngIf="userRole?.includes('client')">
                                 <mat-label>Do you want to?</mat-label>
                                 <mat-radio-group (change)="toggleView($event)" aria-label="Select an option"
-                                    fxLayoutGap="12px" formControlName="typeOfFinancialInfo">
-                                    <mat-radio-button value="formFill">Form Fill</mat-radio-button>
-                                    <mat-radio-button value="uploadFile">Upload File</mat-radio-button>
+                                    fxLayoutGap="12px" formControlName="fileUpload">
+                                    <mat-radio-button value="false">Form Fill</mat-radio-button>
+                                    <mat-radio-button value="true">Upload File</mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">
@@ -300,7 +300,7 @@
                                         accept=".xlsx,.csv" hidden [disabled]="btnstate">
                                 </label>
                             </div>
-                            <div *ngIf="(toggle == 'formFill' && userRole?.includes('client')) || !userRole?.includes('client')"
+                            <div *ngIf="(toggle == 'false' && userRole?.includes('client')) || !userRole?.includes('client')"
                                 fxLayout="row" fxLayoutGap="25%">
                                 <button type="button" mat-button class="icon-approve" matTooltip="Download file"
                                     matTooltipPosition="right" (click)="exportExcelFile()">
@@ -311,7 +311,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div *ngIf="(toggle == 'formFill' && userRole?.includes('client')) || !userRole?.includes('client')"
+                        <div *ngIf="(toggle == 'false' && userRole?.includes('client')) || !userRole?.includes('client')"
                             class="example-wrapper">
                             <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs"
                                 [defaultColDef]="defaultColDef" [rowData]="rowData" [editType]="editType"
@@ -325,7 +325,7 @@
                             </ag-grid-angular>
                         </div>
                         <!-- Financial Bid, Client can upload multiple files -->
-                        <div *ngIf="toggle == 'uploadFile' && userRole?.includes('client')" fxLayout="column">
+                        <div *ngIf="toggle == 'true' && userRole?.includes('client')" fxLayout="column">
                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                                 <label class="button-upload" for="financeFile" fxLayout="row"
                                     fxLayoutAlign="start center" fxLayoutGap="8px"

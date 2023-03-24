@@ -113,7 +113,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       tenderFinanceInfo: [''],
       workflowStep: [''],
 
-      typeOfFinancialInfo:['']
+      fileUpload:['']
     });
     this.getTendersMasterData();
     this.getCommonOptionsData();
@@ -173,11 +173,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data.lastDateOfSubmission);
       this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
       this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
-      if (Object.keys(data.tenderFinanceInfo).length === 0) {
-        this.rowData = [];
-      } else {
-        this.rowData = (typeof data.tenderFinanceInfo === 'string' ? JSON.parse(data.tenderFinanceInfo) : data.tenderFinanceInfo);
-      }
       this.tenderId = data.tenderId;
       this.fileName = data.tenderDocumentName;
       if (data.contractorDocumentName) {
@@ -186,6 +181,11 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       if (data.contractorBidId) {
         this.contractorBidId = data.contractorBidId;
         this.actionTaken = data.contractorActionTaken;
+      }
+      if (Object.keys(data.tenderFinanceInfo).length === 0) {
+        this.rowData = [];
+      } else {
+        this.rowData = (typeof data.tenderFinanceInfo === 'string' ? JSON.parse(data.tenderFinanceInfo) : data.tenderFinanceInfo);
       }
     } else {
       this.toastr.error('No data to display');
@@ -257,7 +257,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.fileList.push(selectedFile);
       this.listOfFiles.push(selectedFile.name)
     }
-    console.log(this.attachment.nativeElement.value);
+    //console.log(this.attachment.nativeElement.value);
     this.attachment.nativeElement.value = '';
   }
   removeSelectedFinFile(index: any) {
@@ -522,7 +522,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
   onSave() {
-    console.log(this.tenderDetails.value);
+   // console.log(this.tenderDetails.value);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
     this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
@@ -534,6 +534,14 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     let formData = new FormData();
     const blob = new Blob();
     formData.append('tenderDocument', this.file || blob);
+    // let files: File[] = this.fileList;
+    // for (let i = 0; i < files.length; i++) {
+    //     let file: File = files[i];
+    //     formData.append("clientDocument", file, file.name);
+    // }
+    this.fileList.forEach((file) => {
+      formData.append('clientDocument', file  || blob);
+    });
     formData.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
     this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
