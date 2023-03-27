@@ -65,9 +65,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   private tender$ = new BehaviorSubject<any>({});
   selectedTender$ = this.tender$.asObservable();
   tenderDataLoaded = false;
-
-
-
+  fileUploadChecked: boolean = false;
 
   constructor(private _formBuilder: FormBuilder, private toastr: ToastrService,
     protected keycloak: KeycloakService, private ApiServicesService: ApiServicesService,
@@ -173,6 +171,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.get('lastDateOfSubmission')?.patchValue(data.lastDateOfSubmission);
       this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
       this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
+      this.tenderDetails.get('fileUpload')?.patchValue(data.fileUpload);
+      this.fileUploadChecked = data.fileUpload;
       this.tenderId = data.tenderId;
       this.fileName = data.tenderDocumentName;
       if (data.contractorDocumentName) {
@@ -182,11 +182,19 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.contractorBidId = data.contractorBidId;
         this.actionTaken = data.contractorActionTaken;
       }
-      if (Object.keys(data.tenderFinanceInfo).length === 0) {
-        this.rowData = [];
-      } else {
-        this.rowData = (typeof data.tenderFinanceInfo === 'string' ? JSON.parse(data.tenderFinanceInfo) : data.tenderFinanceInfo);
+      
+      if(data.tenderClientDocumentDto){
+        data.tenderClientDocumentDto.forEach((fileData:any)=>{
+          this.listOfFiles.push(fileData.fileName);
+        });
       }
+      //if(data.tenderFinanceInfo == false){
+        if (Object.keys(data.tenderFinanceInfo).length === 0) {
+          this.rowData = [];
+        } else {
+          this.rowData = (typeof data.tenderFinanceInfo === 'string' ? JSON.parse(data.tenderFinanceInfo) : data.tenderFinanceInfo);
+        }
+    //  }
     } else {
       this.toastr.error('No data to display');
     }
@@ -522,7 +530,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.gridApi.exportDataAsCsv(this.getParams());
   }
   onSave() {
-   // console.log(this.tenderDetails.value);
+    // console.log(this.tenderDetails.value);
     this.tenderDetails.controls['tenderFinanceInfo'].setValue(this.rowData);
     this.tenderDetails.controls['workflowStep'].setValue('DRAFT');
     if (this.tenderDetails.value.lastDateOfSubmission) {
@@ -534,14 +542,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     let formData = new FormData();
     const blob = new Blob();
     formData.append('tenderDocument', this.file || blob);
-    // let files: File[] = this.fileList;
-    // for (let i = 0; i < files.length; i++) {
-    //     let file: File = files[i];
-    //     formData.append("clientDocument", file, file.name);
-    // }
-    this.fileList.forEach((file) => {
-      formData.append('clientDocument', file  || blob);
-    });
+    if (this.fileList.length>0) {
+      this.fileList.forEach((file) => {
+        formData.append('clientDocument', file || blob);
+      });
+    } else {
+      formData.append('clientDocument', blob);
+    }
     formData.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
     this.loading = true;
     if (this.tenderId && this.tenderDetails.valid) {
