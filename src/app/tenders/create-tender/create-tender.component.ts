@@ -185,7 +185,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       
       if(data.tenderClientDocumentDto){
         data.tenderClientDocumentDto.forEach((fileData:any)=>{
-          this.listOfFiles.push(fileData.fileName);
+          this.listOfFiles.push(fileData);
         });
       }
       //if(data.tenderFinanceInfo == false){
@@ -234,7 +234,9 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     }
   }
   downloadSelectedFile(id: any) {
-    this.ApiServicesService.downloadTechnicalTenderDocument(id).subscribe((response) => {
+    const docId = 'n';
+    const docType = 'TECHNICAL';
+    this.ApiServicesService.downloadTenderDocuments(id,docId,docType).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });
@@ -263,19 +265,33 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     for (var i = 0; i < event.target.files.length; i++) {
       var selectedFile = event.target.files[i];
       this.fileList.push(selectedFile);
-      this.listOfFiles.push(selectedFile.name)
+      this.listOfFiles.push(selectedFile)
     }
     //console.log(this.attachment.nativeElement.value);
     this.attachment.nativeElement.value = '';
   }
-  removeSelectedFinFile(index: any) {
+  removeSelectedFinFile(index: any,id:any,tenderId:any) {
+    const formDataDelete = new FormData();
+    formDataDelete.append('documentId', id);
+    formDataDelete.append('tenderId', tenderId);
+    if(id && index){
+      this.ApiServicesService.deleteTenderDocuments(tenderId,id,formDataDelete).subscribe((response) => {
+        this.toastr.success('File Deleted successfully');
+      });
+    }else{
     // Delete the item from fileNames list
     this.listOfFiles.splice(index, 1);
     // delete file from FileList
     this.fileList.splice(index, 1);
+    }
   }
-  downloadSelectedFinFile(id: any) {
-
+  downloadSelectedFinFile(id: any,tenderId:any) {
+    const docId = id;
+    const docType = 'FINANCE';
+    this.ApiServicesService.downloadTenderDocuments(tenderId,docId,docType).subscribe((response) => {
+      this.ApiServicesService.downloadFile(response);
+      this.toastr.success('File Downloaded successfully');
+    });
   }
 
   //AG GRID COMPONENTS

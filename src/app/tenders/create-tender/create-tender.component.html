@@ -344,15 +344,15 @@
                                     <ul class="list-files">
                                         <li *ngFor="let item of listOfFiles; let index = index">
                                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                                {{item}}
+                                                {{item.name?item.name:item.fileName}}
                                                 <button type="button" mat-icon-button class="icon-approve"
                                                     matTooltip="Remove Document" matTooltipPosition="right"
-                                                    (click)="removeSelectedFinFile(index)">
+                                                    (click)="removeSelectedFinFile(index,item.id,tenderId)">
                                                     <i class="icon-20p text-maroon fa-solid fa-circle-xmark"></i>
                                                 </button>
-                                                <button type="button" mat-button class="icon-approve"
+                                                <button *ngIf="item.id" type="button" mat-button class="icon-approve"
                                                     matTooltip="Download file" matTooltipPosition="right"
-                                                    (click)="downloadSelectedFinFile(index)">
+                                                    (click)="downloadSelectedFinFile(item.id,tenderId)">
                                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                                         <i class="fa-solid fa-file-arrow-down"></i>
                                                         <div>Download</div>

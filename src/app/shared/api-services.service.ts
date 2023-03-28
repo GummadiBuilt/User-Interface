@@ -106,9 +106,17 @@ export class ApiServicesService {
   public getCommonOptionsData(): Observable<commonOptionsData> {
     return this.httpClient.get<commonOptionsData>(this.url + '/common-options');
   }
-  //Download Technical tender document
+  //Download Technical tender document and financial bid download
   public downloadTechnicalTenderDocument(id: any) {
     return this.httpClient.get(this.url + '/tender/download/' + id);
+  }
+  //Download Technical tender document and financial bid download
+  public downloadTenderDocuments(tenderId: any, documentId:any, documentType:any) {
+    return this.httpClient.get(this.url + '/tender/download/' + tenderId +'/id/'+ documentId + '/documentType/' + documentType);
+  }
+  //Delete financial bid documents 
+  public deleteTenderDocuments(tenderId: any, documentId:any, data:any) {
+    return this.httpClient.post(this.url + '/tender/' + tenderId +'/delete-document/'+ documentId,data);
   }
   //Get PQ Form by tender id
   public getPQForm(tenderId: any, pqId: any): Observable<pqFormResponse> {
