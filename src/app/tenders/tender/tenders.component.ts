@@ -140,7 +140,9 @@ export class TendersComponent implements OnInit {
 
   downloadDocument(data: any) {
     const downloadId = data.tender_id ? data.tender_id : data;
-    this.ApiServicesService.downloadTechnicalTenderDocument(downloadId).subscribe((response) => {
+    const docId = 'n';
+    const docType = 'TECHNICAL';
+    this.ApiServicesService.downloadTenderDocuments(downloadId,docId,docType).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });

@@ -216,20 +216,29 @@
                         </div>
                     </div>
                     <!-- Admin Download financial bid document(s) uploaded by Client -->
-                    <!-- <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px" *ngIf="userRole?.includes('admin')">
                         <mat-label>Financial Bid uploaded by Client</mat-label>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <button *ngIf="fileName" type="button" mat-button class="icon-approve"
-                                matTooltip="Download file" matTooltipPosition="right"
-                                (click)="downloadSelectedFile(tenderId)">
-                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                    <i class="fa-solid fa-file-arrow-down"></i>
-                                    <div>Download</div>
+                            <ng-container *ngIf="listOfFiles">
+                                <ul class="list-files">
+                            <li *ngFor="let item of listOfFiles; let index = index">
+                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                    {{item.fileName}}
+                                    <button *ngIf="item.id" type="button" mat-button class="icon-approve"
+                                        matTooltip="Download file" matTooltipPosition="right"
+                                        (click)="downloadSelectedFinFile(item.id,tenderId)">
+                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                            <i class="fa-solid fa-file-arrow-down"></i>
+                                            <div>Download</div>
+                                        </div>
+                                    </button>
                                 </div>
-                            </button>
+                            </li>
+                            </ul>
+                            </ng-container>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- Technical Bid uploaded by Contractor -->
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
                         fxLayout="column" fxLayoutGap="4px"

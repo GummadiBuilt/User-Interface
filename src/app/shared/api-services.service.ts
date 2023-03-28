@@ -107,10 +107,6 @@ export class ApiServicesService {
     return this.httpClient.get<commonOptionsData>(this.url + '/common-options');
   }
   //Download Technical tender document and financial bid download
-  public downloadTechnicalTenderDocument(id: any) {
-    return this.httpClient.get(this.url + '/tender/download/' + id);
-  }
-  //Download Technical tender document and financial bid download
   public downloadTenderDocuments(tenderId: any, documentId:any, documentType:any) {
     return this.httpClient.get(this.url + '/tender/download/' + tenderId +'/id/'+ documentId + '/documentType/' + documentType);
   }

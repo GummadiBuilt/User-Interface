@@ -188,13 +188,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           this.listOfFiles.push(fileData);
         });
       }
-      //if(data.tenderFinanceInfo == false){
+      if(data.tenderFinanceInfo){
         if (Object.keys(data.tenderFinanceInfo).length === 0) {
           this.rowData = [];
         } else {
           this.rowData = (typeof data.tenderFinanceInfo === 'string' ? JSON.parse(data.tenderFinanceInfo) : data.tenderFinanceInfo);
         }
-    //  }
+      }
     } else {
       this.toastr.error('No data to display');
     }
@@ -275,8 +275,12 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     formDataDelete.append('documentId', id);
     formDataDelete.append('tenderId', tenderId);
     if(id && index){
-      this.ApiServicesService.deleteTenderDocuments(tenderId,id,formDataDelete).subscribe((response) => {
-        this.toastr.success('File Deleted successfully');
+      this.ApiServicesService.deleteTenderDocuments(tenderId,id,formDataDelete).subscribe((response:any) => {
+        this.toastr.success('File Deleted successfully');        
+        // Delete the item from fileNames list
+        this.listOfFiles.splice(index, 1);
+        // delete file from FileList
+        this.fileList.splice(index, 1);
       });
     }else{
     // Delete the item from fileNames list
@@ -619,6 +623,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           let formDataSubmit = new FormData();
           const blob = new Blob();
           formDataSubmit.append('tenderDocument', this.file || blob);
+          if (this.fileList.length>0) {
+            this.fileList.forEach((file) => {
+              formDataSubmit.append('clientDocument', file || blob);
+            });
+          } else {
+            formDataSubmit.append('clientDocument', blob);
+          }
           formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
           this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
             next: (response => {
@@ -651,6 +662,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       let formDataSubmit = new FormData();
       const blob = new Blob();
       formDataSubmit.append('tenderDocument', this.file || blob);
+      if (this.fileList.length>0) {
+        this.fileList.forEach((file) => {
+          formDataSubmit.append('clientDocument', file || blob);
+        });
+      } else {
+        formDataSubmit.append('clientDocument', blob);
+      }
       formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
       this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
         next: (response => {
