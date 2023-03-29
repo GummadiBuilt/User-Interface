@@ -183,13 +183,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.actionTaken = data.contractorActionTaken;
       }
 
-      if (data.tenderClientDocumentDto) {
+      if ((data.tenderClientDocumentDto && data.fileUpload === true && this.userRole?.includes('admin')) || (data.tenderClientDocumentDto && this.userRole?.includes('client'))) {
         this.toggle = true;
         data.tenderClientDocumentDto.forEach((fileData: any) => {
           this.listOfFiles.push(fileData);
         });
       }
-      if (data.tenderFinanceInfo) {
+      if ((data.tenderFinanceInfo && data.fileUpload === false && this.userRole?.includes('admin')) || (data.tenderFinanceInfo && this.userRole?.includes('client'))) {
         if (Object.keys(data.tenderFinanceInfo).length === 0) {
           this.rowData = [];
         } else {
