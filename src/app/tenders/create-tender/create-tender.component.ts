@@ -90,7 +90,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     this.tenderDataLoaded = true;
     // console.log(this.selectedTender$);
   }
-  isFormValid:any;
+  isFormValid: any;
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
@@ -111,12 +111,12 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       tenderFinanceInfo: [''],
       workflowStep: [''],
 
-      fileUpload:['']
+      fileUpload: ['']
     });
     this.getTendersMasterData();
     this.getCommonOptionsData();
     this.todayDate = new Date();
-    this.isFormValid=false;
+    this.isFormValid = false;
   }
 
   canDeactivate(): boolean {
@@ -182,13 +182,14 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.contractorBidId = data.contractorBidId;
         this.actionTaken = data.contractorActionTaken;
       }
-      
-      if(data.tenderClientDocumentDto){
-        data.tenderClientDocumentDto.forEach((fileData:any)=>{
+
+      if (data.tenderClientDocumentDto) {
+        this.toggle = true;
+        data.tenderClientDocumentDto.forEach((fileData: any) => {
           this.listOfFiles.push(fileData);
         });
       }
-      if(data.tenderFinanceInfo){
+      if (data.tenderFinanceInfo) {
         if (Object.keys(data.tenderFinanceInfo).length === 0) {
           this.rowData = [];
         } else {
@@ -236,7 +237,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   downloadSelectedFile(id: any) {
     const docId = 'n';
     const docType = 'TECHNICAL';
-    this.ApiServicesService.downloadTenderDocuments(id,docId,docType).subscribe((response) => {
+    this.ApiServicesService.downloadTenderDocuments(id, docId, docType).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });
@@ -270,29 +271,29 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     //console.log(this.attachment.nativeElement.value);
     this.attachment.nativeElement.value = '';
   }
-  removeSelectedFinFile(index: any,id:any,tenderId:any) {
+  removeSelectedFinFile(index: any, id: any, tenderId: any) {
     const formDataDelete = new FormData();
     formDataDelete.append('documentId', id);
     formDataDelete.append('tenderId', tenderId);
-    if(id && index){
-      this.ApiServicesService.deleteTenderDocuments(tenderId,id,formDataDelete).subscribe((response:any) => {
-        this.toastr.success('File Deleted successfully');        
+    if (id && index) {
+      this.ApiServicesService.deleteTenderDocuments(tenderId, id, formDataDelete).subscribe((response: any) => {
+        this.toastr.success('File Deleted successfully');
         // Delete the item from fileNames list
         this.listOfFiles.splice(index, 1);
         // delete file from FileList
         this.fileList.splice(index, 1);
       });
-    }else{
-    // Delete the item from fileNames list
-    this.listOfFiles.splice(index, 1);
-    // delete file from FileList
-    this.fileList.splice(index, 1);
+    } else {
+      // Delete the item from fileNames list
+      this.listOfFiles.splice(index, 1);
+      // delete file from FileList
+      this.fileList.splice(index, 1);
     }
   }
-  downloadSelectedFinFile(id: any,tenderId:any) {
+  downloadSelectedFinFile(id: any, tenderId: any) {
     const docId = id;
     const docType = 'FINANCE';
-    this.ApiServicesService.downloadTenderDocuments(tenderId,docId,docType).subscribe((response) => {
+    this.ApiServicesService.downloadTenderDocuments(tenderId, docId, docType).subscribe((response) => {
       this.ApiServicesService.downloadFile(response);
       this.toastr.success('File Downloaded successfully');
     });
@@ -562,7 +563,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     let formData = new FormData();
     const blob = new Blob();
     formData.append('tenderDocument', this.file || blob);
-    if (this.fileList.length>0) {
+    if (this.fileList.length > 0) {
       this.fileList.forEach((file) => {
         formData.append('clientDocument', file || blob);
       });
@@ -623,7 +624,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           let formDataSubmit = new FormData();
           const blob = new Blob();
           formDataSubmit.append('tenderDocument', this.file || blob);
-          if (this.fileList.length>0) {
+          if (this.fileList.length > 0) {
             this.fileList.forEach((file) => {
               formDataSubmit.append('clientDocument', file || blob);
             });
@@ -662,7 +663,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       let formDataSubmit = new FormData();
       const blob = new Blob();
       formDataSubmit.append('tenderDocument', this.file || blob);
-      if (this.fileList.length>0) {
+      if (this.fileList.length > 0) {
         this.fileList.forEach((file) => {
           formDataSubmit.append('clientDocument', file || blob);
         });
@@ -749,11 +750,13 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
       this.btnstate = true;
-      this.gridOptions.getColumn('Item No').getColDef().editable = false;
-      this.gridOptions.getColumn('Item Description').getColDef().editable = false;
-      this.gridOptions.getColumn('Unit').getColDef().editable = false;
-      this.gridOptions.getColumn('Quantity').getColDef().editable = false;
-      this.gridApi.refreshCells();
+      if (!this.fileUploadChecked) {
+        this.gridOptions.getColumn('Item No').getColDef().editable = false;
+        this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+        this.gridOptions.getColumn('Unit').getColDef().editable = false;
+        this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+        this.gridApi.refreshCells();
+      }
       this.warningMessage = warningMessage;
     } else if (this.userRole?.includes("admin") && (workFlowStep != 'Yet to be published')) {
       this.tenderDetails.disable();
@@ -785,6 +788,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.gridOptions.getColumn('Unit').getColDef().editable = false;
       this.gridOptions.getColumn('Quantity').getColDef().editable = false;
       this.gridApi.refreshCells();
+    } else if (this.userRole?.includes("admin")) {
+      this.tenderDetails.controls['fileUpload']?.disable();
     }
   }
 }

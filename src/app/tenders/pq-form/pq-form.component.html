@@ -42,7 +42,7 @@
                         <mat-label>{{constVariable.lastDateforSubmissionOfFilledPqDocument}} *</mat-label>
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="picker2" placeholder="DD/MM/YYYY" (click)="picker2.open()"
-                                formControlName="pqLastDateOfSubmission" appDate [max]="tenderDate">
+                                formControlName="pqLastDateOfSubmission" appDate [min]="todayDate" [max]="tenderDate">
                             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                             <mat-datepicker #picker2></mat-datepicker>
                             <mat-error *ngIf="adminPqForm.get('pqLastDateOfSubmission')?.errors?.['required']">

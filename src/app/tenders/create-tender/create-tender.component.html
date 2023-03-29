@@ -40,7 +40,7 @@
     <mat-card>
         <form [formGroup]="tenderDetails" autocomplete="off">
             <div fxLayout="column">
-                <div class="actions-panel" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="actions-panel" fxLayout="row wrap" fxLayoutAlign="space-between center">
                     <h3>Tender Details: <span>{{tenderId?tenderId : ''}}</span></h3>
                     <app-action-dropdown *ngIf="tenderDataLoaded" [tenderData]="selectedTender$ | async"
                         [tenderDetails]="tenderDetails"></app-action-dropdown>
@@ -216,28 +216,28 @@
                         </div>
                     </div>
                     <!-- Admin Download financial bid document(s) uploaded by Client -->
-                    <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
-                        fxLayout="column" fxLayoutGap="4px" *ngIf="userRole?.includes('admin')">
+                    <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
+                        fxLayout="column" *ngIf="userRole?.includes('admin')">
                         <mat-label>Financial Bid uploaded by Client</mat-label>
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <ng-container *ngIf="listOfFiles">
-                                <ul class="list-files">
-                            <li *ngFor="let item of listOfFiles; let index = index">
-                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-                                    {{item.fileName}}
-                                    <button *ngIf="item.id" type="button" mat-button class="icon-approve"
-                                        matTooltip="Download file" matTooltipPosition="right"
-                                        (click)="downloadSelectedFinFile(item.id,tenderId)">
-                                        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
-                                            <i class="fa-solid fa-file-arrow-down"></i>
-                                            <div>Download</div>
+                        <ng-container *ngIf="listOfFiles">
+                            <ul class="list-files" fxLayout="column" fxLayoutGap="4px">
+                                <li *ngFor="let item of listOfFiles; let index = index">
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                        <div>{{item.fileName}}</div>
+                                        <div>
+                                            <button *ngIf="item.id" type="button" mat-button class="icon-approve"
+                                                matTooltip="Download file" matTooltipPosition="right"
+                                                (click)="downloadSelectedFinFile(item.id,tenderId)">
+                                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                                    <i class="fa-solid fa-file-arrow-down"></i>
+                                                    <div>Download</div>
+                                                </div>
+                                            </button>
                                         </div>
-                                    </button>
-                                </div>
-                            </li>
+                                    </div>
+                                </li>
                             </ul>
-                            </ng-container>
-                        </div>
+                        </ng-container>
                     </div>
                     <!-- Technical Bid uploaded by Contractor -->
                     <div class="mb-24" fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%" fxFlex.xl="24%"
@@ -288,16 +288,19 @@
                     </div>
                     <!-- Financial Bid is Form Fill/Upload File(s) by Client, 
                         If Fin Bid is a file(s), Admin will process to required format and import to ag-grid -->
-                    <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px"
+                    <div class="table mb-24" fxFlex="100%" fxLayout="column" fxLayoutGap="8px grid"
                         *ngIf="!downloadBtnState">
                         <mat-label>{{constantVariable.financialBid}} *</mat-label>
-                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-                            <div fxLayout="row wrap" fxLayoutGap="12px" *ngIf="userRole?.includes('client')">
+                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px grid">
+                            <div fxLayout="row wrap" fxLayoutGap="12px"
+                                *ngIf="userRole?.includes('client') || userRole?.includes('admin')">
                                 <mat-label>Do you want to?</mat-label>
                                 <mat-radio-group (change)="toggleView($event)" aria-label="Select an option"
                                     fxLayoutGap="12px" formControlName="fileUpload">
-                                    <mat-radio-button [value]="false"  [checked]="fileUploadChecked">Form Fill</mat-radio-button>
-                                    <mat-radio-button [value]="true"  [checked]="fileUploadChecked">Upload File</mat-radio-button>
+                                    <mat-radio-button [value]="false" [checked]="fileUploadChecked">Form
+                                        Fill</mat-radio-button>
+                                    <mat-radio-button [value]="true" [checked]="fileUploadChecked">Upload
+                                        File</mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">
@@ -334,7 +337,8 @@
                             </ag-grid-angular>
                         </div>
                         <!-- Financial Bid, Client can upload multiple files -->
-                        <div *ngIf="toggle == true && userRole?.includes('client')" fxLayout="column">
+                        <div *ngIf="((toggle == true) && userRole?.includes('client'))"
+                            fxLayout="column">
                             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                                 <label class="button-upload" for="financeFile" fxLayout="row"
                                     fxLayoutAlign="start center" fxLayoutGap="8px"

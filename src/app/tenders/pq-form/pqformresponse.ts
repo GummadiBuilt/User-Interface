@@ -8,7 +8,6 @@ export class pqFormResponse  {
     public pqDocumentIssueDate: string;
     public pqLastDateOfSubmission: string;
     public tentativeDateOfAward: string;
-    public scheduledCompletion: string;
     public workflowStep:string;
     public tenderSubmissionDate:string
 
@@ -22,7 +21,6 @@ export class pqFormResponse  {
         this.pqDocumentIssueDate = d.pqDocumentIssueDate;
         this.pqLastDateOfSubmission = d.pqLastDateOfSubmission;
         this.tentativeDateOfAward = d.tentativeDateOfAward;
-        this.scheduledCompletion = d.scheduledCompletion;
         this.workflowStep = d.workflowStep;
         this.tenderSubmissionDate = d.tenderSubmissionDate;
        }
