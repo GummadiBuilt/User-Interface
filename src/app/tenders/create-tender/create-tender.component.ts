@@ -77,6 +77,8 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       if (id) {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
           // console.log('Tender data by id', data);
+          this.fileUploadChecked = data.fileUpload;
+          console.log(this.fileUploadChecked);
           this.editData(data);
           this.tenderFormDisable();
           this.setTender(data);
@@ -172,7 +174,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderDetails.get('estimatedBudget')?.patchValue(data.estimatedBudget);
       this.tenderDetails.get('workflowStep')?.patchValue(data.workflowStep);
       this.tenderDetails.get('fileUpload')?.patchValue(data.fileUpload);
-      this.fileUploadChecked = data.fileUpload;
       this.tenderId = data.tenderId;
       this.fileName = data.tenderDocumentName;
       if (data.contractorDocumentName) {
@@ -182,9 +183,12 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
         this.contractorBidId = data.contractorBidId;
         this.actionTaken = data.contractorActionTaken;
       }
-
-      if ((data.tenderClientDocumentDto && data.fileUpload === true && this.userRole?.includes('admin')) || (data.tenderClientDocumentDto && this.userRole?.includes('client'))) {
+      if (data.fileUpload === true) {
         this.toggle = true;
+      } else {
+        this.toggle = false;
+      }
+      if ((data.tenderClientDocumentDto && data.fileUpload === true && this.userRole?.includes('admin')) || (data.tenderClientDocumentDto && this.userRole?.includes('client'))) {
         data.tenderClientDocumentDto.forEach((fileData: any) => {
           this.listOfFiles.push(fileData);
         });
@@ -750,13 +754,15 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     if ((this.userRole?.includes("client") && (workFlowStep != 'Draft'))) {
       this.tenderDetails.disable();
       this.btnstate = true;
-      if (!this.fileUploadChecked) {
-        this.gridOptions.getColumn('Item No').getColDef().editable = false;
-        this.gridOptions.getColumn('Item Description').getColDef().editable = false;
-        this.gridOptions.getColumn('Unit').getColDef().editable = false;
-        this.gridOptions.getColumn('Quantity').getColDef().editable = false;
-        this.gridApi.refreshCells();
-      }
+      setTimeout(() => {
+        if (this.toggle == false) {
+          this.gridOptions.getColumn('Item No').getColDef().editable = false;
+          this.gridOptions.getColumn('Item Description').getColDef().editable = false;
+          this.gridOptions.getColumn('Unit').getColDef().editable = false;
+          this.gridOptions.getColumn('Quantity').getColDef().editable = false;
+          this.gridApi.refreshCells();
+        }
+      }, 500);
       this.warningMessage = warningMessage;
     } else if (this.userRole?.includes("admin") && (workFlowStep != 'Yet to be published')) {
       this.tenderDetails.disable();
