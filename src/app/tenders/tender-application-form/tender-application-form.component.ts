@@ -221,7 +221,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
     const cliRef = data.clientReferences || {};
     if (Object.keys(cliRef).length === 0) {
-      this.clientRefRowData = [];
+      //this.clientRefRowData = [];
     } else {
       // set the column headers from the data        
       const colDefs = this.gridApiClientRef?.getColumnDefs();
@@ -247,7 +247,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
     const simNat = data.similarProjectNature || {};
     if (Object.keys(simNat).length === 0) {
-      this.similarNatureRowData = [];
+      //this.similarNatureRowData = [];
     } else {
       // set the column headers from the data        
       const colDefsSim = this.gridApiSimilarNature?.getColumnDefs();
@@ -270,35 +270,35 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
     const empStr = data.employeesStrength || {};
     if (Object.keys(empStr).length === 0) {
-      this.employeesStrengthRowData = [];
+      //this.employeesStrengthRowData = [];
     } else {
       const empStrength = (typeof data.employeesStrength === 'string' ? JSON.parse(data.employeesStrength) : data.employeesStrength);
       this.employeesStrengthRowData = empStrength;
     }
     const capEqu = data.capitalEquipment || {};
     if (Object.keys(capEqu).length === 0) {
-      this.capitalEquipmentsRowData = [];
+     // this.capitalEquipmentsRowData = [];
     } else {
       const capitalEquipment = (typeof data.capitalEquipment === 'string' ? JSON.parse(data.capitalEquipment) : data.capitalEquipment);
       this.capitalEquipmentsRowData = capitalEquipment;
     }
     const finInf = data.financialInformation || {};
     if (Object.keys(finInf).length === 0) {
-      this.financialDetails = [];
+     // this.financialDetails = [];
     } else {
       const financialInformation = (typeof data.financialInformation === 'string' ? JSON.parse(data.financialInformation) : data.financialInformation);
       this.financialDetails = financialInformation;
     }
     const comBan = data.companyBankers || {};
     if (Object.keys(comBan).length === 0) {
-      this.companyBankersDetails = [];
+     // this.companyBankersDetails = [];
     } else {
       const companyBankers = (typeof data.companyBankers === 'string' ? JSON.parse(data.companyBankers) : data.companyBankers);
       this.companyBankersDetails = companyBankers;
     }
     const comAud = data.companyAuditors || {};
     if (Object.keys(comAud).length === 0) {
-      this.companyAuditorsDetails = [];
+     // this.companyAuditorsDetails = [];
     } else {
       const companyAuditors = (typeof data.companyAuditors === 'string' ? JSON.parse(data.companyAuditors) : data.companyAuditors);
       this.companyAuditorsDetails = companyAuditors;
