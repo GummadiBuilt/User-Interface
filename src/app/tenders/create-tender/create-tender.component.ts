@@ -193,7 +193,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           this.listOfFiles.push(fileData);
         });
       }
-      if ((data.tenderFinanceInfo && this.userRole?.includes('admin')) || (data.tenderFinanceInfo && this.userRole?.includes('client'))) {
+      if (data.tenderFinanceInfo) {
         if (Object.keys(data.tenderFinanceInfo).length === 0) {
           this.rowData = [];
         } else {
@@ -311,7 +311,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   public rowData: any[] = [{ "Item No": 0, "Item Description": "", "Unit": "", "Quantity": 0 }];
   public rowSelection: 'single' | 'multiple' = 'single';
   public domLayout: any;
-  units = ['Ton', 'Square meter', 'Running meter'];
+  units = ['NOS', 'KGS', 'TON', 'SQM', 'SQFT', 'CUM', 'RMT', 'MTR', 'RM'];
   public overlayLoadingTemplate =
     '<span></span>';
   public columnDefs: ColDef[] = [

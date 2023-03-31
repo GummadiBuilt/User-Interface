@@ -432,7 +432,7 @@
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                                <label class="button-upload" for="ESIDocument" fxLayout="row"
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="ESIDocument" fxLayout="row"
                                                     fxLayoutAlign="start center" fxLayoutGap="8px">
                                                     <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
                                                     <span class="textLink">Upload File</span>
@@ -446,10 +446,9 @@
                                                         <span *ngIf="!esiFile?.name && !esiFileName">No file
                                                             Choosen</span>
                                                         <span *ngIf="esiFileName">{{esiFileName}}</span>
-                                                        <span>{{esiFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="esiFile?.name || esiFileName" type="button"
+                                                        <button *ngIf="(esiFile?.name || esiFileName) && !fileUploadbtn" type="button"
                                                             mat-icon-button matTooltip="Remove Document"
                                                             matTooltipPosition="right"
                                                             (click)="removeSelectedEsiFile(esiFile || esiFileName)">
@@ -482,7 +481,7 @@
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                                <label class="button-upload" for="EPFDocument" fxLayout="row"
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="EPFDocument" fxLayout="row"
                                                     fxLayoutAlign="start center" fxLayoutGap="8px">
                                                     <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
                                                     <span class="textLink">Upload File</span>
@@ -496,10 +495,9 @@
                                                         <span *ngIf="!epfFile?.name && !epfFileName">No file
                                                             Choosen</span>
                                                         <span *ngIf="epfFileName">{{epfFileName}}</span>
-                                                        <span>{{epfFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="epfFile?.name || epfFileName" type="button"
+                                                        <button *ngIf="(epfFile?.name || epfFileName) && !fileUploadbtn" type="button"
                                                             mat-icon-button matTooltip="Remove Document"
                                                             matTooltipPosition="right"
                                                             (click)="removeSelectedEpfFile(epfFile || epfFileName)">
@@ -536,7 +534,7 @@
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                                <label class="button-upload" for="GSTDocument" fxLayout="row"
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="GSTDocument" fxLayout="row"
                                                     fxLayoutAlign="start center" fxLayoutGap="8px">
                                                     <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
                                                     <span class="textLink">Upload File</span>
@@ -550,10 +548,9 @@
                                                         <span *ngIf="!gstFile?.name && !gstFileName">No file
                                                             Choosen</span>
                                                         <span *ngIf="gstFileName">{{gstFileName}}</span>
-                                                        <span>{{gstFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="gstFile?.name || gstFileName" type="button"
+                                                        <button *ngIf="(gstFile?.name || gstFileName) && !fileUploadbtn" type="button"
                                                             mat-icon-button matTooltip="Remove Document"
                                                             matTooltipPosition="right"
                                                             (click)="removeSelectedGstFile(gstFile || gstFileName)">
@@ -589,7 +586,7 @@
                                                 </mat-error>
                                             </mat-form-field>
                                             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
-                                                <label class="button-upload" for="PANDocument" fxLayout="row"
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="PANDocument" fxLayout="row"
                                                     fxLayoutAlign="start center" fxLayoutGap="8px">
                                                     <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
                                                     <span class="textLink">Upload File</span>
@@ -603,10 +600,9 @@
                                                         <span *ngIf="!panFile?.name && !panFileName">No file
                                                             Choosen</span>
                                                         <span *ngIf="panFileName">{{panFileName}}</span>
-                                                        <span>{{panFile?.name}}</span>
                                                     </div>
                                                     <div fxLayout="row" fxLayoutAlign="center">
-                                                        <button *ngIf="panFile?.name  || panFileName" type="button"
+                                                        <button *ngIf="(panFile?.name  || panFileName) && !fileUploadbtn" type="button"
                                                             mat-icon-button matTooltip="Remove Document"
                                                             matTooltipPosition="right"
                                                             (click)="removeSelectedPanFile(panFile|| panFileName)">

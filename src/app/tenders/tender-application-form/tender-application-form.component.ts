@@ -86,7 +86,7 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
   epfFileName: any;
   gstFileName: any;
   panFileName: any;
-
+  fileUploadbtn: boolean = false;
   constructor(private toastr: ToastrService, protected keycloak: KeycloakService,
     private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,
     private ApiServicesService: ApiServicesService, private route: ActivatedRoute,
@@ -105,6 +105,9 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
         this.ApiServicesService.getApplicantPQForm(this.tenderId, this.applicationId).subscribe((data: applicantsPqFormResponse) => {
           // console.log(data);
           this.getApplicantPQForms(data);
+          if (data.actionTaken == 'SUBMIT') {
+            this.fileUploadbtn = true;
+          }
         });
       } else if (this.tenderId) {
         this.ApiServicesService.createApplicantPQForm(this.tenderId).subscribe({
@@ -277,28 +280,28 @@ export class TenderApplicationFormComponent implements OnInit, ComponentCanDeact
     }
     const capEqu = data.capitalEquipment || {};
     if (Object.keys(capEqu).length === 0) {
-     // this.capitalEquipmentsRowData = [];
+      // this.capitalEquipmentsRowData = [];
     } else {
       const capitalEquipment = (typeof data.capitalEquipment === 'string' ? JSON.parse(data.capitalEquipment) : data.capitalEquipment);
       this.capitalEquipmentsRowData = capitalEquipment;
     }
     const finInf = data.financialInformation || {};
     if (Object.keys(finInf).length === 0) {
-     // this.financialDetails = [];
+      // this.financialDetails = [];
     } else {
       const financialInformation = (typeof data.financialInformation === 'string' ? JSON.parse(data.financialInformation) : data.financialInformation);
       this.financialDetails = financialInformation;
     }
     const comBan = data.companyBankers || {};
     if (Object.keys(comBan).length === 0) {
-     // this.companyBankersDetails = [];
+      // this.companyBankersDetails = [];
     } else {
       const companyBankers = (typeof data.companyBankers === 'string' ? JSON.parse(data.companyBankers) : data.companyBankers);
       this.companyBankersDetails = companyBankers;
     }
     const comAud = data.companyAuditors || {};
     if (Object.keys(comAud).length === 0) {
-     // this.companyAuditorsDetails = [];
+      // this.companyAuditorsDetails = [];
     } else {
       const companyAuditors = (typeof data.companyAuditors === 'string' ? JSON.parse(data.companyAuditors) : data.companyAuditors);
       this.companyAuditorsDetails = companyAuditors;
