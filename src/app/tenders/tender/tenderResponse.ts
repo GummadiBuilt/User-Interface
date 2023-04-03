@@ -22,6 +22,7 @@ export class tenderResopnse  {
     public contractorBidId:number;
     public contractorActionTaken:string;
     public fileUpload:boolean;
+    public tenderClientDocumentDto: Array<any>
 
      constructor(d: any) {
         this.contractDuration = d.contractDuration;
@@ -45,5 +46,6 @@ export class tenderResopnse  {
         this.contractorBidId = d.contractorBidId;
         this.contractorActionTaken = d.contractorActionTaken;
         this.fileUpload = d.fileUpload;
+        this.tenderClientDocumentDto = d.tenderClientDocumentDto;
        }
  }
