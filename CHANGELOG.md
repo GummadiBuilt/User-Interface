@@ -1,3 +1,35 @@
+# [1.14.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.13.0...v1.14.0) (2023-04-03)
+
+
+### Bug Fixes
+
+* **create tender:** condition based enable/disable financial bid table or files for admin/client ([028ee41](https://github.com/GummadiBuilt/User-Interface/commit/028ee41307f38d1074f67d52994d896da0265e20))
+* **create tender:** if grids are empty error resolved in tender applicants ([73e2196](https://github.com/GummadiBuilt/User-Interface/commit/73e2196401c735113c2f158c3c3d4e78ecc81169))
+
+
+### Features
+
+* **contact.component.ts:** fixed contact input values ([b599552](https://github.com/GummadiBuilt/User-Interface/commit/b599552006846cf2beeeae57e87117211c0a43d4))
+* **create tender:** api changes for technical and financial bid download delete changes ([5aa4554](https://github.com/GummadiBuilt/User-Interface/commit/5aa4554a0e3576f773de035f41a8701f89554bb6))
+* **create tender:** api integration for download and delete financial bid ([0a05c54](https://github.com/GummadiBuilt/User-Interface/commit/0a05c546fa251bff4025582432421c2372c2ad0e))
+* **create tender:** create tender api integration for multiple files ([884dec2](https://github.com/GummadiBuilt/User-Interface/commit/884dec207ccdb870be1454272af04854a0861d4c))
+* **create tender:** uploads for create tender ([0186769](https://github.com/GummadiBuilt/User-Interface/commit/018676911c928bb6bb67ceb66987709dc176e4a0))
+* **create-tender.component.ts:** added form control to radio buttons in client view ([60bec12](https://github.com/GummadiBuilt/User-Interface/commit/60bec121b4fa8e4fb20e043c997c4f1f814fe095))
+* **create-tender.component.ts:** changed layout to choice of form fill or upld file in create tndr ([da935b3](https://github.com/GummadiBuilt/User-Interface/commit/da935b3cc2d48a5734c6707cf36453effa99e37a))
+* **create-tender.component.ts:** fixed show/hide file downloads ([ff72832](https://github.com/GummadiBuilt/User-Interface/commit/ff72832f4f11432451fbc9b479bf07924f30a18a))
+* **create-tender.component.ts:** upload files bug fixes and design changes ([1a2e095](https://github.com/GummadiBuilt/User-Interface/commit/1a2e095533edf6262a9c7c0ef215df86645daed4))
+* **payment component:** payment api integration ([0e6e443](https://github.com/GummadiBuilt/User-Interface/commit/0e6e443b4332b66fb3bc6ba326edcdc9a43bccd9))
+* **payment.component.ts:** added copy to clipboard functionality in payments page ([c579f3d](https://github.com/GummadiBuilt/User-Interface/commit/c579f3dc2f50d1a4e85aaabd290898b01a742ede))
+* **payment.component.ts:** api integration in payment ([002e915](https://github.com/GummadiBuilt/User-Interface/commit/002e9152112758b67bc5d6c96003b66ec989bbf4))
+* **payment.component.ts:** design fixes in payment form ([e7f46f6](https://github.com/GummadiBuilt/User-Interface/commit/e7f46f647a7730320b40dbe27c446b8739289543))
+* **payment.component.ts:** fixed currency format error and added +91 disable ([155e93a](https://github.com/GummadiBuilt/User-Interface/commit/155e93a3db3ed13ba885413ad65755c3b183defd))
+* **payment.component.ts:** validation for check box and css alignment ([fdafdd9](https://github.com/GummadiBuilt/User-Interface/commit/fdafdd9a58a21ccb888f8c3043a32673d454a98c))
+* **payment:** added payment page ([a61c890](https://github.com/GummadiBuilt/User-Interface/commit/a61c89031ff29ea330f1966a9f92e055855e37e7))
+* **signup.component.ts:** fix responsive issue in mobile view ([8ad075c](https://github.com/GummadiBuilt/User-Interface/commit/8ad075c6680b5ace72d171481bfd5dc244776e99))
+* **tender applicant form:** added upload downloads and tender applicants creation ([987ef25](https://github.com/GummadiBuilt/User-Interface/commit/987ef25fa1388d2f730f29a46bff5cc8fa27c161))
+* **tender-applicants.component.ts:** file upload download functionalities added in tender applicant ([528762e](https://github.com/GummadiBuilt/User-Interface/commit/528762e8f04ddfce76aa103aa62efa463cab3af9))
+* **tender-application.component.ts:** hide file upload and remove buttons after submit ([b1f0ed2](https://github.com/GummadiBuilt/User-Interface/commit/b1f0ed2f51a8e1792526e27e624a850ec8e237e6))
+
 # [1.13.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.12.0...v1.13.0) (2023-03-06)
 
 
