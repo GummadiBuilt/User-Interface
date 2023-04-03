@@ -299,12 +299,15 @@
                             <div fxLayout="row wrap" fxLayoutGap="12px"
                                 *ngIf="userRole?.includes('client') || userRole?.includes('admin')">
                                 <mat-label>Do you want to?</mat-label>
-                                <mat-radio-group (change)="toggleView($event)" aria-label="Select an option"
+                                <mat-radio-group [required]="true" (change)="toggleView($event)" aria-label="Select an option"
                                     fxLayoutGap="12px" formControlName="fileUpload">
                                     <mat-radio-button [value]="false" [checked]="fileUploadChecked">Form
                                         Fill</mat-radio-button>
                                     <mat-radio-button [value]="true" [checked]="fileUploadChecked">Upload
                                         File</mat-radio-button>
+                                        <mat-error *ngIf="tenderDetails.get('fileUpload')?.errors?.['required'] && tenderDetails.get('fileUpload')?.touched">
+                                            {{constantVariable.financialRadioErrorMsg}}
+                                        </mat-error>
                                 </mat-radio-group>
                             </div>
                             <div fxLayout="row" fxLayoutGap="25%" *ngIf="!userRole?.includes('client')">

@@ -76,9 +76,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.tenderId = id;
       if (id) {
         this.ApiServicesService.getTendersDatabyId(id).subscribe((data: tenderResopnse) => {
-          // console.log('Tender data by id', data);
           this.fileUploadChecked = data.fileUpload;
-          console.log(this.fileUploadChecked);
           this.editData(data);
           this.tenderFormDisable();
           this.setTender(data);
@@ -96,7 +94,6 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
   ngOnInit(): void {
     try {
       this.userRole = this.keycloak.getKeycloakInstance().tokenParsed?.realm_access?.roles
-      // console.log('user role', this.userRole);
     } catch (e) {
       this.toastr.error('Failed to load user details' + e);
     }
@@ -112,8 +109,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       estimatedBudget: ['', Validators.maxLength(20)],
       tenderFinanceInfo: [''],
       workflowStep: [''],
-
-      fileUpload: ['']
+      fileUpload: ['',Validators.required]
     });
     this.getTendersMasterData();
     this.getCommonOptionsData();
@@ -279,7 +275,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
     const formDataDelete = new FormData();
     formDataDelete.append('documentId', id);
     formDataDelete.append('tenderId', tenderId);
-    if (id && index) {
+    if (id) {
       this.ApiServicesService.deleteTenderDocuments(tenderId, id, formDataDelete).subscribe((response: any) => {
         this.toastr.success('File Deleted successfully');
         // Delete the item from fileNames list
@@ -571,6 +567,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       this.fileList.forEach((file) => {
         formData.append('clientDocument', file || blob);
       });
+      this.fileList = [];
     } else {
       formData.append('clientDocument', blob);
     }
@@ -580,6 +577,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       // console.log('update form');
       this.ApiServicesService.updateTender(this.tenderId, formData).subscribe({
         next: ((response: tenderResopnse) => {
+          this.listOfFiles = [];
+          response.tenderClientDocumentDto.forEach((fileData: any) => {
+            this.listOfFiles.push(fileData);
+          });
           this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
           this.toastr.success('Successfully Updated');
         }),
@@ -603,10 +604,11 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       })
     } else if (!this.tenderId && !this.file) {
       //error
+      this.tenderDetails.markAllAsTouched();
       this.toastr.error('Please upload the Technical Tender Document');
     } else {
       //error
-      console.log('error');
+      this.tenderDetails.markAllAsTouched();
       this.toastr.error('Error in Creation Tender Form');
     }
   }
@@ -638,6 +640,10 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
           formDataSubmit.append('tenderInfo', JSON.stringify(this.tenderDetails.value));
           this.ApiServicesService.updateTender(this.tenderId, formDataSubmit).subscribe({
             next: (response => {
+              this.listOfFiles = [];
+              response.tenderClientDocumentDto.forEach((fileData: any) => {
+                this.listOfFiles.push(fileData);
+              });
               this.tenderDetails.controls['workflowStep'].setValue(response.workflowStep);
               this.toastr.success('Successfully Submitted');
               this.tenderFormDisable();
@@ -650,7 +656,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       });
     } else {
       //error
-      console.log('error');
+      this.tenderDetails.markAllAsTouched();
       this.toastr.error('Error in Submitting Tender Form');
     }
   }
@@ -687,7 +693,7 @@ export class CreateTenderComponent implements OnInit, ComponentCanDeactivate {
       });
     } else {
       //error
-      console.log('error');
+      this.tenderDetails.markAllAsTouched();
       this.toastr.error('Error in Submitting Tender Form');
     }
   }

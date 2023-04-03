@@ -146,5 +146,6 @@ export const PageConstants = {
     servicesMsg1: 'The Chart below shows a typical step-by-step process involved in using this platform by our registered customers. The Scope and Methodology of our services and deliverables thereof have also been indicated. The scope and methodology shall be customized to suit specific customer requirements.',
     servicesMsg2: 'Gummadi Built shall facilitate the signing of the Main Construction Contract Agreement between the Client and Contractor/Vendor, without being a party to the contract. Gummadi Built shall have separate service contract agreements executed with the client and contractor, obligating each party of their responsibilities in providing and availing the services through Gummadi Built Web Portal.',
     buttonPayment: 'Payment',
-    paymentSendto: 'Send Payment to:'
+    paymentSendto: 'Send Payment to:',
+    financialRadioErrorMsg: 'Please choose an option for Financial bid.'
 }
