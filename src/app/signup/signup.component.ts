@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageConstants } from '../shared/application.constants';
 import { TypeOfEstablishment } from './type-of-establishment';
+import { ComponentCanDeactivate } from '../shared/can-deactivate/deactivate.guard';
 
 @Component({
   selector: 'app-signup',
@@ -28,7 +29,7 @@ import { TypeOfEstablishment } from './type-of-establishment';
     },
   ],
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, ComponentCanDeactivate {
   companyDetails!: FormGroup;
   personalDetails!: FormGroup;
   //projectDetails!: FormGroup;
@@ -89,7 +90,7 @@ export class SignupComponent implements OnInit {
       Validators.minLength(10), Validators.maxLength(10)]],
       contactEmailAddress: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
     });
-    
+
     window.setTimeout(() => {
       this.companyDetails.get('users')?.patchValue(this.roleId);
     }, 500)
@@ -113,7 +114,13 @@ export class SignupComponent implements OnInit {
 
     }
   }
-
+  canDeactivate(): boolean {
+    if (this.companyDetails.dirty) {
+      return this.companyDetails.dirty;
+    } else {
+      return this.personalDetails.dirty;
+    }
+  }
   onRegisterValueChange() {
     const registerValueSelected = this.companyDetails.get('users')?.value
     if (registerValueSelected !== 2) {
@@ -226,6 +233,8 @@ export class SignupComponent implements OnInit {
         (response => {
           if (response['status'] == 200) {
             console.log(response);
+            this.companyDetails.markAsPristine();
+            this.personalDetails.markAsPristine();
             this.toastr.success('Successfully Registered, your registration is submitted to admin for approval. Once approved you will receive temporary credentials to registered email address.');
             this.router.navigate(['/home']);
           }

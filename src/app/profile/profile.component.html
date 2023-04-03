@@ -193,7 +193,7 @@
                       fxLayout="column">
                       <mat-label>First Name</mat-label>
                       <mat-form-field appearance="outline">
-                        <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                        <input matInput placeholder="Name" minlength="3"
                           formControlName="contactFirstName" #nameInput>
                         <mat-error *ngIf="editUserForm.controls['contactFirstName'].errors?.['required']">First Name
                           is required
@@ -206,7 +206,7 @@
                       fxLayout="column">
                       <mat-label>Last Name</mat-label>
                       <mat-form-field appearance="outline">
-                        <input matInput placeholder="Name" minlength="3" inputmode="tel"
+                        <input matInput placeholder="Name" minlength="3"
                           formControlName="contactLastName" #nameInput>
                         <mat-error *ngIf="editUserForm.controls['contactLastName'].errors?.['required']">Last
                           Name is required
@@ -219,7 +219,7 @@
                       fxLayout="column">
                       <mat-label>Mobile</mat-label>
                       <mat-form-field appearance="outline">
-                        <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" numbersOnly>
+                        <input matInput placeholder="Mobile" formControlName="contactPhoneNumber" inputmode="tel" numbersOnly>
                         <i matSuffix class="icon-20p icon-gray fa-solid fa-mobile-screen"></i>
                         <mat-error *ngIf="editUserForm.controls['contactPhoneNumber'].errors?.['required']">
                           Mobile Number is required

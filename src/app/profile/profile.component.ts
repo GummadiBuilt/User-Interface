@@ -21,6 +21,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import moment from 'moment';
 import { TypeOfEstablishment } from '../signup/type-of-establishment';
+import { ComponentCanDeactivate } from '../shared/can-deactivate/deactivate.guard';
 
 const moment1 = _rollupMoment || _moment;
 export const MY_FORMATS1 = {
@@ -47,7 +48,7 @@ export const MY_FORMATS1 = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS1 },
   ],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, ComponentCanDeactivate {
   userRole: any;
   photoUrl!: string;
   public initials!: string;
@@ -116,6 +117,11 @@ export class ProfileComponent implements OnInit {
       map(value => this.typeOfEstablishmentFilter(value))
     );
   }
+
+  canDeactivate(): boolean {
+    return this.editUserForm.dirty;
+  }
+
   private typeOfEstablishmentFilter(value: any): TypeOfEstablishment[] {
     const filterValue =
       value === null || value instanceof Object ? "" : value.toLowerCase();
@@ -200,7 +206,7 @@ export class ProfileComponent implements OnInit {
       this.editUserForm.get('contactPhoneNumber')?.patchValue(data.contactPhoneNumber);
       this.editUserForm.get('contactEmailAddress')?.patchValue(data.contactEmailAddress);
       this.editUserForm.get('companyName')?.patchValue(data.companyName);
-      this.typeOfEstablishments = data.typeOfEstablishment.map((item: any) => {
+      this.typeOfEstablishments = data.typeOfEstablishment?.map((item: any) => {
         const header = 'establishmentDescription';
         const value = item;
         return {
@@ -235,7 +241,7 @@ export class ProfileComponent implements OnInit {
   }
   //reset form
   reset() {
-    this.typeOfEstablishments = this.userData.typeOfEstablishment.map((item: any) => {
+    this.typeOfEstablishments = this.userData.typeOfEstablishment?.map((item: any) => {
       const header = 'establishmentDescription';
       const value = item;
       return {

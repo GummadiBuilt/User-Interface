@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PageConstants } from '../shared/application.constants';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
-  constructor() { }
+  public constVariable = PageConstants;
+  constructor(private router: Router,) { }
 
   ngOnInit(): void {
+  }
+
+  goToSignUp(value: any) {
+    console.log(value);
+    let applicantRoleId = value;
+    this.router.navigate(['/signup', { userType: applicantRoleId }]);
   }
 
 }

@@ -19,6 +19,7 @@ import { userProfileResopnse } from '../profile/userProfileResponse';
 import { appliedTenderResopnse } from '../tenders/applied-tenders/appliedTenderResponse';
 import { tenderApplicantRankingResopnse } from '../tenders/view-applicants/tenderApplicantRankingResopnse';
 import { enquiryResopnse } from '../contact/enquiryResponse';
+import { paymentResponse } from '../tenders/payment/paymentResponse';
 export interface toastPayload {
   message: string;
   title: string;
@@ -105,9 +106,13 @@ export class ApiServicesService {
   public getCommonOptionsData(): Observable<commonOptionsData> {
     return this.httpClient.get<commonOptionsData>(this.url + '/common-options');
   }
-  //Download Technical tender document
-  public downloadTechnicalTenderDocument(id: any) {
-    return this.httpClient.get(this.url + '/tender/download/' + id);
+  //Download Technical tender document and financial bid download
+  public downloadTenderDocuments(tenderId: any, documentId:any, documentType:any) {
+    return this.httpClient.get(this.url + '/tender/download/' + tenderId +'/id/'+ documentId + '/documentType/' + documentType);
+  }
+  //Delete financial bid documents 
+  public deleteTenderDocuments(tenderId: any, documentId:any, data:any) {
+    return this.httpClient.post(this.url + '/tender/' + tenderId +'/delete-document/'+ documentId,data);
   }
   //Get PQ Form by tender id
   public getPQForm(tenderId: any, pqId: any): Observable<pqFormResponse> {
@@ -127,20 +132,20 @@ export class ApiServicesService {
     return this.httpClient.get<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId);
   }
   //Create Applicant PQ Form postAPI
-  public createApplicantPQForm(tenderId: any, data: any): Observable<applicantsPqFormResponse> {
-    return this.httpClient.post<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application', data);
+  public createApplicantPQForm(tenderId: any): Observable<applicantsPqFormResponse> {
+    return this.httpClient.post<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application',null);
   }
   //Update Applicant PQ Form putAPI
   public updateApplicantPQForm(tenderId: any, applicationId: any, data: any): Observable<applicantsPqFormResponse> {
     return this.httpClient.put<applicantsPqFormResponse>(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/update', data);
   }
   //file upload in update tender application form
-  public updateApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any, file: any) {
-    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/' + fileYear, file);
+  public updateApplicantPQFormFile(tenderId: any, applicationId: any, documentType: any, file: any) {
+    return this.httpClient.put(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/upload/' + documentType, file);
   }
   //file download in update tender application form
-  public downloadApplicantPQFormFile(tenderId: any, applicationId: any, fileYear: any) {
-    return this.httpClient.get(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/download/' + fileYear);
+  public downloadApplicantPQFormFile(tenderId: any, applicationId: any, documentType: any) {
+    return this.httpClient.get(this.url + '/tender/' + tenderId + '/application/' + applicationId + '/download/' + documentType);
   }
   //client users getAPI
   public getClientUsers(): Observable<clientUsersResponse> {
@@ -215,6 +220,16 @@ export class ApiServicesService {
   // Post API that enquiry about application
   public enquiry(data: any): Observable<enquiryResopnse> {
     return this.httpClient.post<enquiryResopnse>(this.url + '/enquiry/', data);
+  }
+
+
+  //Get client and applying contractors for the given tender
+  public getClientContractors(tenderId: any): Observable<paymentResponse>{
+    return this.httpClient.get<paymentResponse>(this.url + '/payment/' + tenderId);
+  }
+  // API generate payment links
+  public generatePaymentLink(tenderId: any, data: any): Observable<paymentResponse> {
+    return this.httpClient.post<paymentResponse>(this.url + '/payment/' + tenderId + '/generate-payment-link', data);
   }
 
   //download files converstion

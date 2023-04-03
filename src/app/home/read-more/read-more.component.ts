@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { PageConstants } from 'src/app/shared/application.constants';
 
 @Component({
@@ -9,16 +8,10 @@ import { PageConstants } from 'src/app/shared/application.constants';
 })
 export class ReadMoreComponent implements OnInit {
   public constVariable = PageConstants;
-  constructor(private router: Router,) { }
+
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  goToSignUp(value: any) {
-    console.log(value);
-    let applicantRoleId = value;
-    // this.router.navigate(['/signup']);
-    this.router.navigate(['/signup', { userType: applicantRoleId }]);
   }
 
 }

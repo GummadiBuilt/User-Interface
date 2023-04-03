@@ -26,11 +26,12 @@ import { AppliedTendersComponent } from './tenders/applied-tenders/applied-tende
 import { CompareApplicantsComponent } from './tenders/compare-applicants/compare-applicants.component';
 import { ReadMoreComponent } from './home/read-more/read-more.component';
 import { EnquiriesComponent } from './enquiries/enquiries.component';
+import { PaymentComponent } from './tenders/payment/payment.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'login', component: AppComponent, canActivate: [AppAuthGuard] },
-  { path: 'signup', component: SignupComponent },
+  { path: 'signup', component: SignupComponent, canDeactivate: [DeactivateGuard], },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'home', component: HomeComponent },
@@ -38,8 +39,8 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'services', component: ServiceComponent },
   { path: 'projects', component: ProjectsComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AppAuthGuard], },
+  { path: 'contact', component: ContactComponent, canDeactivate: [DeactivateGuard], },
+  { path: 'profile', component: ProfileComponent, canDeactivate: [DeactivateGuard], canActivate: [AppAuthGuard], },
   { path: 'clients', component: ClientsComponent, data: { breadcrumb: 'Clients' } },
   { path: 'contractors', component: ContractorsComponent, data: { breadcrumb: 'Contractors' } },
   { path: 'enquiries', component: EnquiriesComponent, data: { breadcrumb: 'Enquiries' } },
@@ -55,19 +56,20 @@ const routes: Routes = [
         path: ':tenderId', data: { breadcrumb: {} },
         children: [
           { path: '', component: CreateTenderComponent, data: { breadcrumb: {} } },
+          { path: 'payment', component: PaymentComponent, canActivate: [AppAuthGuard], canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
           { path: 'create-pq-form', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
           { path: 'edit-pq-form/:pqId', component: PQFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           {
             path: 'view-pq-form/:pqId', data: { breadcrumb: {} },
             children: [
               { path: '', component: PQFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
-              { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
-              { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+              { path: 'tender-application-form', component: TenderApplicationFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+              { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
               { path: 'view-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
             ]
           },
-          { path: 'tender-application-form', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
-          { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
+          { path: 'tender-application-form', component: TenderApplicationFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-square-plus' } } },
+          { path: 'edit-tender-application-form/:applicationId', component: TenderApplicationFormComponent, canDeactivate: [DeactivateGuard], data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           { path: 'view-tender-application-form/:applicationId', component: TenderApplicationFormComponent, data: { breadcrumb: { info: 'fa-solid fa-pen-to-square' } } },
           {
             path: 'view-applicants', data: { breadcrumb: {} },

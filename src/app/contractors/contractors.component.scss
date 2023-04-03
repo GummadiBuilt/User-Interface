@@ -32,10 +32,6 @@
     font-size: 20px;
 }
 
-.toggle-group {
-    margin-bottom: 4px;
-}
-
 mat-button-toggle {
     color: #841618;
     background-color: white;
@@ -58,6 +54,10 @@ mat-button-toggle {
 
 ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
     line-height: 32px !important;
+}
+
+.contractors-page {
+    margin-top: 6px !important;
 }
 
 .contractors-page mat-card {

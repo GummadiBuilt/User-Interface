@@ -92,6 +92,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
       this.router.navigate(['/tenders', this.rowData.tender_id, 'view-applicants']);
     }
   }
+  navigateToPayments(){
+    if (this.rowData.tender_id != null) {
+      this.router.navigate(['/tenders', this.rowData.tender_id, 'payment']);
+    }
+  }
   applyTenderApplicantForm() {
     //console.log(this.rowData)
     if (this.applyBtnLabel == this.constantVariables.applyBtn && this.rowData.workflow_step != 'UNDER_PROCESS') {

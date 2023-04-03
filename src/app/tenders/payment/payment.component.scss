@@ -1,15 +1,19 @@
-@font-face {
-    font-family: 'Saira';
-    src: url(/assets/font/Saira/Saira-VariableFont_wdth,wght.ttf) format("truetype");
-}
-
-.tender-form {
+.payment-form {
     padding: 24px;
 }
 
 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
     padding: 0.4em 0px 0.8em 0px !important;
     font-size: 12px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix {
+    place-self: center !important;
+    padding-bottom: 2px !important;
+}
+
+::ng-deep .mobile-prefix {
+    font-size: 11.6px !important;
 }
 
 ::ng-deep mat-card {
@@ -26,9 +30,8 @@ mat-label {
     color: #841618;
 }
 
-.tender-form .mat-button {
-    background-color: #841618;
-    color: white;
+mat-error {
+    margin-top: 20px !important;
 }
 
 .material-icons {
@@ -50,16 +53,6 @@ mat-label {
     font-size: 18px;
 }
 
-.button-upload {
-    background-color: white;
-    font-weight: 400;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 4px 12px;
-    color: gray;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-}
-
 ::ng-deep .icon-button {
     cursor: pointer !important;
 }
@@ -76,7 +69,7 @@ mat-header-row {
     min-height: 40px;
 }
 
-::ng-deep .table .mat-form-field-wrapper {
+::ng-deep .payment-body .mat-form-field-wrapper {
     padding-bottom: 0 !important;
 }
 
@@ -124,6 +117,14 @@ mat-header-row {
 }
 
 //ag-grid cell text wrap in words
+::ng-deep ag-grid-angular {
+    width: 100% !important;
+}
+
+::ng-deep .ag-root-wrapper-body.ag-layout-normal.ag-focus-managed {
+    height: 100% !important;
+}
+
 ::ng-deep .ag-cell-wrap-text {
     word-break: break-word !important;
 }
@@ -162,20 +163,12 @@ input[type="file" i]:disabled {
     margin-top: 36px !important;
 }
 
-//radio button
-::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-    border-color: #841618 !important;
+input[type="checkbox" i] {
+    margin: 0px 3px 3px 4px;
 }
 
-::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
-    background-color: #841618 !important;
-}
-
-.list-files {
-    list-style-type: none;
-    padding: 0px !important;
-}
-
-.action-btn {
-    margin-top: 8px !important;
+.error-msg {
+    font-size: 10.5px !important;
+    color: #f44336;
+    margin-left: 11px !important;
 }

@@ -21,6 +21,7 @@ export class tenderResopnse  {
     public applicationFormStatus:string;
     public contractorBidId:number;
     public contractorActionTaken:string;
+    public fileUpload:boolean;
 
      constructor(d: any) {
         this.contractDuration = d.contractDuration;
@@ -43,5 +44,6 @@ export class tenderResopnse  {
         this.applicationFormStatus = d.applicationFormStatus;
         this.contractorBidId = d.contractorBidId;
         this.contractorActionTaken = d.contractorActionTaken;
+        this.fileUpload = d.fileUpload;
        }
  }

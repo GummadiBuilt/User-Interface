@@ -60,8 +60,10 @@
                 <ng-template matStepperIcon="vendor_info">
                     <i class="fa-solid fa-city"></i>
                 </ng-template>
-                <mat-step [stepControl]="applicantPqForm" errorMessage="Fill required company details."
-                    label="Vendor's General Company Information" state="vendor_info" [completed]="false">
+                <mat-step
+                    [stepControl]="applicantPqForm.get('companyName')! && applicantPqForm.get('yearOfEstablishment')! && applicantPqForm.get('typeOfEstablishment')!"
+                    errorMessage="Fill required company details." label="Vendor's General Company Information"
+                    state="vendor_info" [completed]="false">
                     <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <h3 class="info-header">Company Details</h3>
@@ -299,6 +301,15 @@
                                     </div>
                                 </div>
                             </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>{{constantVariable.submitBtn}}</div>
+                                    </div>
+                                </div>
+                            </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><span>{{constantVariable.nextBtn}}</span></div>
@@ -311,7 +322,10 @@
                 <ng-template matStepperIcon="performance_pref">
                     <i class="fa-solid fa-check-double"></i>
                 </ng-template>
-                <mat-step label="Performance Preferences" state="performance_pref" [completed]="false">
+                <mat-step
+                    [stepControl]="applicantPqForm.get('esiRegistration')! && applicantPqForm.get('epfRegistration')! && applicantPqForm.get('gstRegistration')! && applicantPqForm.get('panNumber')!"
+                    errorMessage="Fill required statutory compliances." label="Performance References"
+                    state="performance_pref" [completed]="false">
                     <form [formGroup]="applicantPqForm" autocomplete="off">
                         <div>
                             <div class="expansion-panel-buttons" fxLayout="row" fxLayoutAlign="end center"
@@ -396,58 +410,213 @@
                                     </mat-expansion-panel-header>
                                     <div>
                                         <ul>
-                                            <li>Give references to documents pertaining to statutory compliances here
-                                                Specify NA if not available or applicable.</li>
+                                            <li>Give references to documents pertaining to statutory compliances here.
+                                            </li>
                                         </ul>
                                     </div>
                                     <div fxLayout="row wrap" fxLayoutAlign="space-between center"
                                         fxLayoutGap="12px grid">
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>ESI Registration</mat-label>
+                                            <mat-label>ESI Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="ESI Registration"
-                                                    formControlName="esiRegistration">
+                                                    formControlName="esiRegistration" numbersOnly>
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['required']">
+                                                    ESI Registration required
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('esiRegistration')?.errors?.['maxlength'] || applicantPqForm.get('esiRegistration')?.errors?.['minlength']">
+                                                    Enter 17 digits only
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="ESIDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="ESIDocument" hidden>
+                                                    <input id="ESIDocument" type="file" class="form-control"
+                                                        (change)="onEsiFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!esiFile?.name && !esiFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="esiFileName">{{esiFileName}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="(esiFile?.name || esiFileName) && !fileUploadbtn" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedEsiFile(esiFile || esiFileName)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="esiFile?.name || esiFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedEsiFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>EPF Registration</mat-label>
+                                            <mat-label>EPF Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="EPF Registration"
-                                                    formControlName="epfRegistration">
+                                                    formControlName="epfRegistration"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['required']">
+                                                    EPF Registration required
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('epfRegistration')?.errors?.['pattern']">
+                                                    Enter valid EPF number
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="EPFDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="EPFDocument" hidden>
+                                                    <input id="EPFDocument" type="file" class="form-control"
+                                                        (change)="onEpfFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!epfFile?.name && !epfFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="epfFileName">{{epfFileName}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="(epfFile?.name || epfFileName) && !fileUploadbtn" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedEpfFile(epfFile || epfFileName)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="epfFile?.name || epfFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedEpfFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>GST Registration</mat-label>
+                                            <mat-label>GST Registration *</mat-label>
                                             <mat-form-field appearance="outline">
                                                 <input matInput placeholder="GST Registration"
-                                                    formControlName="gstRegistration">
+                                                    formControlName="gstRegistration"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['required']">
+                                                    GST Registration required
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="!applicantPqForm.get('gstRegistration')?.errors?.['pattern'] && (applicantPqForm.get('gstRegistration')?.errors?.['minlength'] || applicantPqForm.get('gstRegistration')?.errors?.['maxlength'])">
+                                                    GST Number should be 15 characters
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('gstRegistration')?.errors?.['pattern']">
+                                                    Enter valid GST Number
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="GSTDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="GSTDocument" hidden>
+                                                    <input id="GSTDocument" type="file" class="form-control"
+                                                        (change)="onGstFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!gstFile?.name && !gstFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="gstFileName">{{gstFileName}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="(gstFile?.name || gstFileName) && !fileUploadbtn" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedGstFile(gstFile || gstFileName)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="gstFile?.name || gstFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedGstFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div fxFlex.xs="100%" fxFlex.sm="48%" fxFlex.md="24%" fxFlex.lg="24%"
                                             fxFlex.xl="24%" fxLayout="column">
-                                            <mat-label>PAN Number</mat-label>
+                                            <mat-label>PAN Number *</mat-label>
                                             <mat-form-field appearance="outline">
-                                                <input matInput placeholder="PAN Number" formControlName="panNumber">
+                                                <input matInput placeholder="PAN Number" formControlName="panNumber"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                                 <mat-error
-                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['maxlength']">
-                                                    Enter only 50 characters
+                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['required']">
+                                                    PAN number required
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="!applicantPqForm.get('panNumber')?.errors?.['pattern'] && (applicantPqForm.get('panNumber')?.errors?.['maxlength'] || applicantPqForm.get('panNumber')?.errors?.['minlength'])">
+                                                    Enter only 10 characters
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="applicantPqForm.get('panNumber')?.errors?.['pattern']">
+                                                    Enter valid PAN number
                                                 </mat-error>
                                             </mat-form-field>
+                                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="12px">
+                                                <label *ngIf="!fileUploadbtn" class="button-upload" for="PANDocument" fxLayout="row"
+                                                    fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <i class="icon-upload fa-icons fa-solid fa-file-arrow-up"></i>
+                                                    <span class="textLink">Upload File</span>
+                                                </label>
+                                                <label for="PANDocument" hidden>
+                                                    <input id="PANDocument" type="file" class="form-control"
+                                                        (change)="onPanFileChange($event)" hidden>
+                                                </label>
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                                                    <div>
+                                                        <span *ngIf="!panFile?.name && !panFileName">No file
+                                                            Choosen</span>
+                                                        <span *ngIf="panFileName">{{panFileName}}</span>
+                                                    </div>
+                                                    <div fxLayout="row" fxLayoutAlign="center">
+                                                        <button *ngIf="(panFile?.name  || panFileName) && !fileUploadbtn" type="button"
+                                                            mat-icon-button matTooltip="Remove Document"
+                                                            matTooltipPosition="right"
+                                                            (click)="removeSelectedPanFile(panFile|| panFileName)">
+                                                            <i class="icon-upload fa-solid fa-circle-xmark"></i>
+                                                        </button>
+                                                        <button *ngIf="panFile?.name|| panFileName" type="button"
+                                                            mat-icon-button matTooltip="Download file"
+                                                            matTooltipPosition="right"
+                                                            (click)="downloadSelectedPanFile()">
+                                                            <i class="icon-upload fa-solid fa-file-arrow-down"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </mat-expansion-panel>
@@ -592,6 +761,15 @@
                                     </div>
                                 </div>
                             </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>{{constantVariable.submitBtn}}</div>
+                                    </div>
+                                </div>
+                            </button>
                             <button mat-button matStepperNext>
                                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
                                     <div><span>{{constantVariable.nextBtn}}</span></div>
@@ -715,6 +893,15 @@
                                     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
                                         <i class="icon-save fa-solid fa-floppy-disk"></i>
                                         <div>{{constantVariable.saveBtn}}</div>
+                                    </div>
+                                </div>
+                            </button>
+                            <button *ngIf="applicantPqFormId" mat-button style="background-color: green;"
+                                (click)="onSubmit()" disabled={{btnsDisable}}>
+                                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="6px">
+                                        <i class="icon-submit fa-solid fa-paper-plane"></i>
+                                        <div>{{constantVariable.submitBtn}}</div>
                                     </div>
                                 </div>
                             </button>

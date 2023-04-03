@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiServicesService } from '../shared/api-services.service';
 import { PageConstants } from '../shared/application.constants';
+import { ComponentCanDeactivate } from '../shared/can-deactivate/deactivate.guard';
 import { applicationRoles, registrationMasterData } from '../shared/responses';
 import { enquiryResopnse } from './enquiryResponse';
 
@@ -12,7 +13,7 @@ import { enquiryResopnse } from './enquiryResponse';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, ComponentCanDeactivate {
   contactUsForm!: FormGroup;
   public constVariable = PageConstants;
   applicationRoles = new Array<applicationRoles>();
@@ -29,6 +30,10 @@ export class ContactComponent implements OnInit {
       enquiryDescription: [null, [Validators.required, Validators.maxLength(250)]],
     });
     this.getMasterdata();
+  }
+
+  canDeactivate(): boolean {
+    return this.contactUsForm.dirty;
   }
 
   getMasterdata() {

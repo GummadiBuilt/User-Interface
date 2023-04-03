@@ -16,4 +16,5 @@
    </button>
    <button *ngIf="userRole?.includes('contractor')" mat-stroked-button (click)="applyTenderApplicantForm()"
       [disabled]="btnTenderApplnstate" matTooltip="{{disableMsg}}">{{applyBtnLabel}}</button>
+      <button mat-stroked-button *ngIf="userRole?.includes('admin')" (click)="navigateToPayments()">{{constantVariables.buttonPayment}}</button>
 </div>
