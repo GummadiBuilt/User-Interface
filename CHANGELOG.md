@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/GummadiBuilt/User-Interface/compare/v1.14.0...v1.14.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* **create tender:** files delete & errors validation for financial bid option ([4c79fae](https://github.com/GummadiBuilt/User-Interface/commit/4c79fae10dc28bb6705ed60d330ddfc3454bbd44))
+
 # [1.14.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.13.0...v1.14.0) (2023-04-03)
 
 
