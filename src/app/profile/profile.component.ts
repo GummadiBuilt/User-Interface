@@ -296,7 +296,7 @@ export class ProfileComponent implements OnInit, ComponentCanDeactivate {
       this.toastr.error('Please Select Valid Year of Establishment');
     }
     // this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments);
-    this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments.map(item => item.establishmentDescription));
+    this.editUserForm.controls['typeOfEstablishment'].setValue(this.typeOfEstablishments?.map(item => item.establishmentDescription));
     if (this.editUserForm.valid) {
       this.ApiServicesService.updateUserProfile(this.editUserForm.value).subscribe({
         next: ((response: userProfileResopnse) => {
