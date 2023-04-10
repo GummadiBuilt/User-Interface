@@ -1,4 +1,4 @@
-<div class="large-footer" fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="8px grid">
+<!-- <div class="large-footer" fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="8px grid">
     
     <div fxLayout="column" fxLayoutGap="8px">
         <div>
@@ -70,6 +70,92 @@
             </div>
             <div>
                 <i class="icon-size-20 fa-brands fa-twitter"></i>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="large-footer" fxLayout="row wrap" fxLayoutAlign="space-evenly" fxLayoutGap="8px grid">
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="50%" fxLayoutAlign.xs="start" fxLayoutAlign.sm="start"
+        fxLayoutAlign.md="start">
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.locateUs}}</h2>
+            </div>
+            <div>
+                <mat-card style="min-height: 240px;" class="p-0">
+                    <iframe width="100%" fxFlex frameBorder="0" [src]="locationUrl | safe"></iframe>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="50%" fxLayoutAlign.xs="start" fxLayoutAlign.sm="start"
+        fxLayoutAlign.md="start" fxLayoutAlign="center">
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.company}}</h2>
+            </div>
+            <h5><a href="/about">{{constVariable.aboutUs}}</a></h5>
+            <h5><a href="#">{{constVariable.inTheNews}}</a></h5>
+            <h5><a href="#">{{constVariable.pressInfo}}</a></h5>
+            <h5><a href="#">{{constVariable.careers}}</a></h5>
+            <h5><a href="/contact">{{constVariable.contactUs}}</a></h5>
+            <h5><a href="#">{{constVariable.termsPrivacy}}</a></h5>
+            <h5><a href="#">{{constVariable.copyrightTrademark}}</a></h5>
+        </div>
+    </div>
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="50%" fxLayoutAlign.xs="start" fxLayoutAlign.sm="start"
+        fxLayoutAlign.md="start" fxLayoutAlign="center">
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.contactUs}}</h2>
+            </div>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <div><i class="icon-size-20 fa-solid fa-location-dot"></i></div>
+                <div>
+                    <p class="line-height">
+                        {{constVariable.address1Ofc}}<br>
+                        {{constVariable.address2Ofc}}<br>
+                        {{constVariable.address3Ofc}}<br>
+                        {{constVariable.address4Ofc}}<br>
+                    </p>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <div><i class="icon-size-20 fa-solid fa-phone-volume"></i></div>
+                <div>
+                    <p>{{constVariable.phoneOfc}}</p>
+                    <p>{{constVariable.telOfc}}</p>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <div><i class="icon-size-20 fa-solid fa-envelope-open-text"></i></div>
+                <div>
+                    <p>
+                        <a href="mailto:gummadibuilt@gmail.com">{{constVariable.mailOfc}}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="50%" fxLayoutAlign.xs="start" fxLayoutAlign.sm="start"
+        fxLayoutAlign.md="start" fxLayoutAlign="center">
+        <div fxLayout="column" fxLayoutGap="8px">
+            <div>
+                <h2 class="line">{{constVariable.getInTouch}}</h2>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px">
+                <div>
+                    <i class="icon-size-20 fa-brands fa-linkedin"></i>
+                </div>
+                <div>
+                    <i class="icon-size-20 fa-brands fa-facebook"></i>
+                </div>
+                <div>
+                    <i class="icon-size-20 fa-brands fa-instagram"></i>
+                </div>
+                <div>
+                    <i class="icon-size-20 fa-brands fa-twitter"></i>
+                </div>
             </div>
         </div>
     </div>
