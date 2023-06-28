@@ -78,3 +78,37 @@ td {
     border: 1px solid #841618;
     border-collapse: collapse;
 }
+
+
+//accordion or Expansion Panel
+.example-headers-align {
+    width: 90% !important;
+}
+
+@media (max-width:928px) {
+    .example-headers-align {
+        width: 100% !important;
+    }
+}
+
+.example-headers-align p {
+    text-align: justify
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mat-expansion-panel-header-title {
+    color: #841618;
+    font-weight: 500;
+}
+
+::ng-deep .mat-expansion-panel {
+    border: rgb(211, 211, 211) 1px solid !important;
+}

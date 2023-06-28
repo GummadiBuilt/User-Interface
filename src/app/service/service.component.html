@@ -1,7 +1,7 @@
 <div class="services-page" fxLayout="column">
-    <div class="services-body" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
-        <h1>{{constVariable.services}}</h1>
-        <h5>{{constVariable.servicesMsg1}}</h5>
+  <div class="services-body" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
+    <h1>{{ constVariable.services }}</h1>
+    <!-- <h5>{{constVariable.servicesMsg1}}</h5>
         <h5>{{constVariable.servicesMsg2}}</h5>
         <table>
             <thead>
@@ -174,7 +174,205 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
-    </div>
+        </table> -->
+    <mat-accordion class="example-headers-align">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.earthWorkCutting }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.earthWorkCuttingDescription1 }}</p>
+          <p>{{ constVariable.earthWorkCuttingDescription2 }}</p>
+          <p class="text-bold">{{ constVariable.earthWorkCuttingSubHeading1 }}</p>
+          <p>{{ constVariable.earthWorkCuttingSubHeading1Description }}</p>
+          <ul>
+            <li>{{ constVariable.earthWorkCuttingSubHeading1List1 }}</li>
+            <li>{{ constVariable.earthWorkCuttingSubHeading1List2 }}</li>
+            <li>{{ constVariable.earthWorkCuttingSubHeading1List3 }}</li>
+            <li>{{ constVariable.earthWorkCuttingSubHeading1List4 }}</li>
+          </ul>
+          <p class="text-bold">{{ constVariable.earthWorkCuttingSubHeading2 }}</p>
+          <p>{{ constVariable.earthWorkCuttingSubHeading2Description }}</p>
+          <p class="text-bold">{{ constVariable.earthWorkCuttingSubHeading3 }}</p>
+          <p>{{ constVariable.earthWorkCuttingSubHeading3Description1 }}</p>
+          <p>{{ constVariable.earthWorkCuttingSubHeading3Description2 }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.projectDesign }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.projectDesignDescription }}</p>
+          <p class="text-bold">{{ constVariable.projectDesignSubHeading1 }}</p>
+          <p>{{ constVariable.projectDesignSubHeading1Description }}</p>
+          <ol>
+            <li>{{ constVariable.projectDesignSubHeading1List1 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List2 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List3 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List4 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List5 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List6 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List7 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List8 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List9 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List10 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading1List11 }}</li>
+          </ol>
+          <p class="text-bold">{{ constVariable.projectDesignSubHeading2 }}</p>
+          <p>{{ constVariable.projectDesignSubHeading2Description }}</p>
+          <ul>
+            <li>{{ constVariable.projectDesignSubHeading2Lis1 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading2Lis2 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading2Lis3 }}</li>
+            <li>{{ constVariable.projectDesignSubHeading2Lis4 }}</li>
+          </ul>
+          <p class="text-bold">{{ constVariable.projectDesignSubHeading3 }}</p>
+          <p>{{ constVariable.projectDesignSubHeading3Description }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.landSurveying }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.landSurveyingDescription }}</p>
+          <p class="text-bold">{{ constVariable.landSurveyingSubHeading1 }}</p>
+          <p>{{ constVariable.landSurveyingSubHeading1Description }}</p>
+          <p class="text-bold">{{ constVariable.landSurveyingSubHeading2 }}</p>
+          <p>{{ constVariable.landSurveyingSubHeading2Description }}</p>
+          <ul>
+            <li class="text-bold">{{ constVariable.landSurveyingSubHeading2List1 }}</li>
+            <p>{{ constVariable.landSurveyingSubHeading2List1Description }}</p>
+            <li class="text-bold">{{ constVariable.landSurveyingSubHeading2List2 }}</li>
+            <p>{{ constVariable.landSurveyingSubHeading2List2Description }}</p>
+            <li class="text-bold">{{ constVariable.landSurveyingSubHeading2List3 }}</li>
+            <p>{{ constVariable.landSurveyingSubHeading2List3Description }}</p>
+            <li class="text-bold">{{ constVariable.landSurveyingSubHeading2List4 }}</li>
+            <p>{{ constVariable.landSurveyingSubHeading2List4Description }}</p>
+          </ul>
+          <p class="text-bold">{{ constVariable.landSurveyingSubHeading3 }}</p>
+          <p>{{ constVariable.landSurveyingSubHeading3Description1 }}</p>
+          <p>{{ constVariable.landSurveyingSubHeading3Description2 }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.geoTechnical }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.geoTechnicalDescription }}</p>
+          <p class="text-bold">{{ constVariable.geoTechnicalSubHeading1 }}</p>
+          <p>{{ constVariable.geoTechnicalSubHeading1Description }}</p>
+          <p class="text-bold">{{ constVariable.geoTechnicalSubHeading2 }}</p>
+          <p>{{ constVariable.geoTechnicalSubHeading2Description }}</p>
+          <ul *ngFor="let item of constVariable.geoTechnicalSubHeading2List">
+            <li>
+              <span class="text-bold">{{ item.name }}</span> {{ item.description }}
+            </li>
+          </ul>
+          <p class="text-bold">{{ constVariable.geoTechnicalSubHeading3 }}</p>
+          <p>{{ constVariable.geoTechnicalSubHeading3Description1 }}</p>
+          <p>{{ constVariable.geoTechnicalSubHeading3Description2 }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.buildingStrengthening }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.buildingStrengtheningDescription }}</p>
+          <p class="text-bold">{{ constVariable.buildingStrengtheningSubHeading1 }}</p>
+          <p>{{ constVariable.buildingStrengtheningSubHeading1Description }}</p>
+          <ul *ngFor="let item of constVariable.buildingStrengtheningSubHeading1List">
+            <li>
+              <span class="text-bold">{{ item.name }} </span> {{ item.description }}
+            </li>
+          </ul>
+          <p class="text-bold">{{ constVariable.buildingStrengtheningSubHeading2 }}</p>
+          <p>{{ constVariable.buildingStrengtheningSubHeading2Description1 }}</p>
+          <p>{{ constVariable.buildingStrengtheningSubHeading2Description2 }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.qualityTesting }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.qualityTestingDescription }}</p>
+          <p class="text-bold">{{ constVariable.qualityTestingSubHeading }}</p>
+          <p>{{ constVariable.qualityTestingSubHeadingDescription }}</p>
+          <ul *ngFor="let item of constVariable.qualityTestingSubHeadingList">
+            <li>
+              <span class="text-bold">{{ item.name }}</span> {{ item.description }}
+            </li>
+          </ul>
+          <p>{{ constVariable.qualityTestingDescription2 }}</p>
+          <p>{{ constVariable.qualityTestingDescription3 }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.nonDestructiveTesting }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.nonDestructiveTestingDescription }}</p>
+          <p class="text-bold">{{ constVariable.nonDestructiveTestingSubHeading }}</p>
+          <p>{{ constVariable.nonDestructiveTestingSubHeadingDescription }}</p>
+          <ul *ngFor="let item of constVariable.nonDestructiveTestingSubHeadingList">
+            <li>
+              <span class="text-bold">{{ item.name }}</span
+              >{{ item.description }}
+            </li>
+          </ul>
+          <p>{{ constVariable.nonDestructiveTestingDescription2 }}</p>
+          <p>{{ constVariable.nonDestructiveTestingDescription3 }}</p>
+          <p>{{ constVariable.nonDestructiveTestingDescription4 }}</p>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span>{{ constVariable.pileFoundations }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <p>{{ constVariable.pileFoundationsDescription }}</p>
+          <p class="text-bold">{{ constVariable.pileFoundationsSubHeading }}</p>
+          <p>{{ constVariable.pileFoundationsSubHeadingDescription }}</p>
+          <ul *ngFor="let item of constVariable.pileFoundationsSubHeadingList">
+            <li>
+              <span class="text-bold">{{ item.name }}</span> {{ item.description }}
+            </li>
+          </ul>
+          <p class="text-bold">{{ constVariable.pileFoundationsSubHeading2 }}</p>
+          <p>{{ constVariable.pileFoundationsSubHeading2Description1 }}</p>
+          <p>{{ constVariable.pileFoundationsSubHeading2Description2 }}</p>
+          <p>{{ constVariable.pileFoundationsSubHeading2Description3 }}</p>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
 </div>
 <app-footer></app-footer>
