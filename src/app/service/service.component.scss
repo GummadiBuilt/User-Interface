@@ -112,3 +112,11 @@ td {
 ::ng-deep .mat-expansion-panel {
     border: rgb(211, 211, 211) 1px solid !important;
 }
+
+mat-expansion-panel {
+    mat-expansion-panel-header {
+      height: auto!important; 
+      padding-top: 12px !important;
+      padding-bottom: 12px !important;
+    }
+}
