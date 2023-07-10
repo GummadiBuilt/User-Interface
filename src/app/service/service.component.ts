@@ -8,6 +8,7 @@ import { PageConstants } from '../shared/application.constants';
 })
 export class ServiceComponent implements OnInit {
   public constVariable = PageConstants;
+  panelOpenState = false;
   constructor() { }
 
   ngOnInit(): void {
