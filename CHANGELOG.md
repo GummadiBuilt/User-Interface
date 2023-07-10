@@ -1,3 +1,14 @@
+# [1.15.0](https://github.com/GummadiBuilt/User-Interface/compare/v1.14.1...v1.15.0) (2023-07-10)
+
+
+### Features
+
+* **home.component.ts:** added marquee for free registration ([8c759da](https://github.com/GummadiBuilt/User-Interface/commit/8c759dacda4d55c19ef4dd28a27fbbd899c324cf))
+* **profile.component.ts:** fixed error in edit profile ([b2f74c8](https://github.com/GummadiBuilt/User-Interface/commit/b2f74c81b49c85a26cf6795abd796aec5f097620))
+* **service.component.html:** added content in services ([9542898](https://github.com/GummadiBuilt/User-Interface/commit/95428983a92a28484c14ef09f6a08dff6583f291))
+* **service.component.html:** added given content to services page ([0253fff](https://github.com/GummadiBuilt/User-Interface/commit/0253fffaf522d81bfa38a13a4a43a8405dfe1331))
+* **services.component.html:** added content to services page ([e4ce44d](https://github.com/GummadiBuilt/User-Interface/commit/e4ce44dbd857e4dff2dfe23e1e61ada8743dab40))
+
 ## [1.14.1](https://github.com/GummadiBuilt/User-Interface/compare/v1.14.0...v1.14.1) (2023-04-03)
 
 
